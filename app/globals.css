@@ -4,8 +4,8 @@
   @apply bg-blue-950 hover:bg-blue-400 hover:scale-115 cursor-pointer rounded-full border-2 text-blue-50 scale-105 p-2 m-2 w-32;
 }
 
-.Xbtn{
-  @apply text-blue-950 hover:scale-200 scale-125;
+.xBtn{
+  @apply text-blue-950 hover:scale-150 scale-125;
 }
 
 
@@ -26,7 +26,7 @@
   @apply space-y-2 px-2;
 }
 .formInput{
-  @apply w-full focus:to-indigo-400 block bg-blue-950 text-blue-50;
+  @apply w-full rounded focus:to-indigo-400 block bg-blue-950 text-blue-50;
 }
 
 
