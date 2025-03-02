@@ -1,101 +1,123 @@
-import Image from "next/image";
+'use client'
+import {useState} from 'react'
+import '@/app/globals.css'
+
+
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [about, setAbout] = useState(false);
+  const [login, setLogin] = useState(false);
+  const [signUp, setSignUp] = useState(false); 
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  function handleClick({action} : {action: string}){
+    if(action === "login"){
+      setLogin(true);
+      setSignUp(false);
+      setAbout(false);
+    }
+    else if(action === "signUp"){
+      setSignUp(true);
+      setLogin(false);
+      setAbout(false);
+    }
+    else if(action === "about"){
+      setAbout(true);
+      setLogin(false);
+      setSignUp(false);
+    }
+    else 
+      throw new Error('prop can be only login or signUp');
+  }
+
+  return (
+    
+    <div className="flex flex-col justify-center items-center">
+     <div className="mt-60">
+       <h1 className="w-100 text-2xl text-center hover:underline textThemeColor"> Interactive dictionary </h1>
+     </div>  
+
+     {
+     about ? <>
+
+           <div className="w-[420px] h-[660px] bg-blue-400 rounded-2xl border-2 border-blue-50 overflow-auto">
+            <div className="flex justify-end bg-blue-500">
+             <button className="Xbtn mr-3" onClick={() => setAbout(false)}> <b>x</b> </button>
+            </div>
+            <div>
+             <p>
+               Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus
+               Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus
+               Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus
+               Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus
+             </p>
+            </div>
+           </div>
+
+         </>
+        : 
+
+       <div className="">
+         <div className="center">
+           <button className="primaryBtn" onClick={() => handleClick({action: "about"})}>About app</button> 
+         </div>
+       </div>
+       }
+
+       {
+        login ?
+        <div className="flex justify-center bg-blue-400 rounded-2xl border-2 border-blue-50">
+          <form className="form" action="">
+            <div>
+                <label htmlFor="email">Email: </label>
+                <input className="formInput" type="text" name="email"/>
+            </div>
+            <div>
+                <label htmlFor="password">Password: </label>
+                <input className="formInput" type="password" name="password"/>
+            </div>
+            <div className="center">
+                <button className="primaryBtn" >Log in</button>
+            </div>
+          </form>
+        </div> 
+        :  
+        <div className="center">
+          <button className="primaryBtn" onClick={() => handleClick({action: "login"})}> Log in </button> 
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+       }
+      
+       {
+        signUp ?
+        <div className="flex justify-center bg-blue-400 rounded-2xl border-2 border-blue-50">
+          <form className="form" action="">
+          <div>
+              <label htmlFor="name">Name: </label>
+              <input className="formInput" type="text" name="name"/>
+          </div>            
+          <div>
+              <label htmlFor="lastName">Last name: </label>
+              <input className="formInput" type="text" name="lastName"/>
+          </div>                    
+          <div>
+              <label htmlFor="email">Email: </label>
+              <input className="formInput" type="text" name="email"/>
+          </div>
+          <div>
+              <label htmlFor="password">Password: </label>
+              <input className="formInput" type="password" name="password"/>
+          </div>
+          <div className="center">
+              <button className="primaryBtn" >Log in</button>
+          </div>
+          </form>
+        </div> 
+        :  
+        <div className="center">
+          <button className="primaryBtn" onClick={() => handleClick({action: "signUp"})}> Sign up </button>
+        </div>
+       } 
     </div>
-  );
+    );
 }
+
+
