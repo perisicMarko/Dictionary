@@ -17,13 +17,16 @@
   color: #066cb1;
 }
 
+.error{
+  @apply text-red-500 italic;
+}
 
 .center{
   @apply flex justify-center items-center;
 }
 
 .form{
-  @apply space-y-2 px-2;
+  @apply space-x-2 space-y-2;
 }
 .formInput{
   @apply w-full rounded focus:to-indigo-400 block bg-blue-950 text-blue-50;
