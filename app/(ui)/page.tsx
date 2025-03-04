@@ -1,13 +1,14 @@
+"use client"
 import '@/app/globals.css';
 import Link from 'next/link';
+import { useEffect } from 'react'
 
 export default function Home() {
   
-  return (
-    
+  return (  
     <>
      <div className="mt-60">
-       <h1 className="w-100 text-2xl text-center hover:underline textThemeColor"> <i>"Learning a new language takes time, so take it step by step."</i> </h1>
+       <h1 className="w-100 text-2xl text-center hover:underline textThemeColor"><i>&quot;Learning a new language takes time, so take it step by step.&quot;</i></h1>
      </div>  
        
       <div className="center primaryBtn">

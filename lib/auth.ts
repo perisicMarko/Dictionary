@@ -1,6 +1,8 @@
 "use server"
-
 import { SignUpSchema, LogInSchema } from '@/lib/rules';
+import { GetUserInfo, InsertUserInfo } from '@/lib/db';
+import { redirect } from 'next/navigation';
+import bcrypt from 'bcrypt';
 
 
 export async function authenticateSignUp(state, formData){
@@ -14,9 +16,37 @@ export async function authenticateSignUp(state, formData){
     });
 
     if(!validatedFields.success){
-        return {
-            errors: validatedFields.error.flatten().fieldErrors
+        const retObj = {
+            errors: validatedFields.error.flatten().fieldErrors,
+            name: "",
+            lastName: "", 
+            email: ""
         };
+
+        if(!retObj.errors?.name)
+            retObj.name = formData.get('name');
+    
+        if(!retObj.errors?.lastName)
+            retObj.lastName = formData.get('lastName');
+    
+        if(!retObj.errors?.email)
+            retObj.email = formData.get('email');
+
+        return retObj;
+    }
+
+    const {name, lastName, email} = validatedFields.data;
+    let {password} = validatedFields.data;
+    password = await bcrypt.hash(password, 10);
+
+    const status = await InsertUserInfo({name, lastName, email, password});
+
+    if(status){
+        console.log('New User signed up!');
+        redirect('/logIn');}
+    else{
+        window.alert('Fill the form with valid inputs.')
+        redirect('/signUp');
     }
 }
 
@@ -27,8 +57,33 @@ export async function authenticateLogIn(state, formData){
     });
 
     if(!validatedFields.success){
-        return {
-            errors: validatedFields.error.flatten().fieldErrors
+        const retObj = {
+            errors: validatedFields.error.flatten().fieldErrors,
+            email: ""
         };
+
+        if(!retObj.errors?.email)   
+            retObj.email = formData.get('email');
+    
+        return retObj;
+    }
+
+    const {email, password} : {email: string, password: string} = validatedFields.data;
+    const tmp : any = await GetUserInfo({email});
+    const user = (await tmp.json())[0]; // retrieve the first and only row
+    
+    if(user && user.length > 1)
+        throw new Error("Result from database should be [] or only one user!, bad sign up logic.");
+
+    let cmpStatus : any;
+    if(password != null && user?.password != null)
+        cmpStatus = await bcrypt.compare(password, user?.password);
+
+    if(cmpStatus){
+        redirect('/user/' + user.id);
+    }
+    else {
+        // implement logic for teling the client to show alert that email or password is wrong
+        redirect('/logIn');
     }
 }
