@@ -26,7 +26,6 @@ export async function GetUserInfo({email} : {email: string}){
   
       db.end();
 
-      console.log('log rezultata iz db.ts:' + results);
       return NextResponse.json(results);
       
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -3,7 +3,7 @@ import { authenticateLogIn } from '@/lib/auth';
 import Link from 'next/link';
 import { useActionState } from 'react';
 
-export default function Page(){
+export default function LogIn(){
     const [state, action, isPending] = useActionState(authenticateLogIn, undefined);
     
     return (

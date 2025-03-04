@@ -4,7 +4,7 @@ import { useActionState } from 'react'
 import { authenticateSignUp } from '@/lib/auth'
 
 
-export default function Page(){
+export default function SignUp(){
     const [state, action, isPending] = useActionState(authenticateSignUp, undefined);
     return (
         <div className="mt-50 w-[500px] h-1/2 bg-blue-400 rounded-2xl border-2 border-blue-50">

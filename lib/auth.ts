@@ -4,9 +4,10 @@ import { SignUpSchema, LogInSchema } from '@/lib/rules';
 import { GetUserInfo, InsertUserInfo } from '@/lib/db';
 import { redirect } from 'next/navigation';
 import bcrypt from 'bcrypt';
+import { createSession } from './session';
 
 
-export async function authenticateSignUp(state: any, formData: { get: (arg0: string) => string; }){
+export async function authenticateSignUp(state: any, formData: any){
 
     const validatedFields = SignUpSchema.safeParse({
         name: formData.get("name"),
@@ -71,20 +72,25 @@ export async function authenticateLogIn(state: any, formData : any){
 
     const {email, password} : {email: string, password: string} = validatedFields.data;
     const tmp : any = await GetUserInfo({email});
-    const user = (await tmp.json())[0]; // retrieve the first and only row
+    let user = (await tmp.json()); // retrieve the first and only row
     
     if(user && user.length > 1)
         throw new Error("Result from database should be [] or only one user!, bad sign up logic.");
 
-    let cmpStatus : any;
-    if(password != null && user?.password != null)
-        cmpStatus = await bcrypt.compare(password, user?.password);
+    if(user.length === 0 || user.length === undefined) return {errors: {password: 'Wrong email.'}}; 
 
-    if(cmpStatus){
-        redirect('/user/' + user.id);
-    }
-    else {
-        // implement logic for teling the client to show alert that email or password is wrong
-        redirect('/logIn');
-    }
+    console.log('ispis usera iz aut.ts' + user + "ispis duzine " + user.length);
+    user = user[0];
+
+    console.log(password + " " + user?.password);
+    const cmpStatus = await bcrypt.compare(password, user?.password);
+    if(!cmpStatus) 
+        return {
+            errors: {password: 'Wrong password'},
+            email: email
+        };
+
+    await createSession(user.id);
+
+    redirect('/user/' + user.id);
 }
