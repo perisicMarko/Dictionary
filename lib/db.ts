@@ -29,6 +29,7 @@ export async function GetUserInfo({email} : {email: string}){
       console.log('log rezultata iz db.ts:' + results);
       return NextResponse.json(results);
       
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error : any) {
       console.log('ERROR: API - ', error.message)
       return NextResponse.json({error: error.message })
@@ -47,6 +48,7 @@ export async function InsertUserInfo({name, lastName, email, password} : {name: 
 
     return NextResponse.json(results)
     
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error : any) {
     console.log('ERROR: API - ', error.message)
 

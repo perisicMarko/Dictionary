@@ -23,7 +23,7 @@ export default function Page(){
             <div className="mt-3">
                 <label htmlFor="lastName">Last name: </label>
                 <input className="formInput" type="text" name="lastName" defaultValue={state?.lastName}/>
-                {state?.errors?.lastName && <p className="error" key="lastName">lastName needs to be:</p>}
+                {state?.errors?.lastName && <p className="error" key="lastName">Last name needs to be:</p>}
                 <ul className='list-disc'>{state?.errors?.lastName && state?.errors?.lastName.map((e) => <li key={e} className="error ml-6">{e}</li>)}</ul>
             </div>                    
             <div className="mt-3">

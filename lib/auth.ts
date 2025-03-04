@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server"
 import { SignUpSchema, LogInSchema } from '@/lib/rules';
 import { GetUserInfo, InsertUserInfo } from '@/lib/db';
@@ -5,7 +6,7 @@ import { redirect } from 'next/navigation';
 import bcrypt from 'bcrypt';
 
 
-export async function authenticateSignUp(state, formData){
+export async function authenticateSignUp(state: any, formData: { get: (arg0: string) => string; }){
 
     const validatedFields = SignUpSchema.safeParse({
         name: formData.get("name"),
@@ -50,7 +51,7 @@ export async function authenticateSignUp(state, formData){
     }
 }
 
-export async function authenticateLogIn(state, formData){
+export async function authenticateLogIn(state: any, formData : any){
     const validatedFields = LogInSchema.safeParse({
         email: formData.get("email"),
         password: formData.get("password"),

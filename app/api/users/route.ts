@@ -13,6 +13,7 @@ export async function GET() {
 
     return NextResponse.json(results)
     
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error : any) {
     console.log('ERROR: API - ', error.message)
 
@@ -21,17 +22,19 @@ export async function GET() {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function POST(request: Request) {
   try {
 
     const db = await createConnection();
-    const _query = 'SELECT * FROM korisnici k where ' + request.id + " = k.id"; 
+    const _query = 'SELECT * FROM clients;'; 
     const [results] = await db.query(_query)
 
     db.end()
 
     return NextResponse.json(results)
     
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error : any) {
     console.log('ERROR: API - ', error.message)
 
