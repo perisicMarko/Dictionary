@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server"
 import mysql from "mysql2/promise";
 import { NextResponse } from "next/server";
@@ -30,6 +31,32 @@ export async function GetUserInfo({email} : {email: string}){
       console.log('ERROR: API - ', error.message)
       return NextResponse.json({error: error.message })
     }
+}
+
+export async function GetUserInfoById(userId : any){
+  
+  try {
+    const db = await pool.getConnection(); 
+    const _query = 'SELECT * FROM clients as c where c.id = ?';
+    const [results] = await db.query(_query, [userId]);
+
+    db.release();
+
+  
+    const tmp = NextResponse.json(results);
+    console.log(tmp);
+    // const retVal = {
+    //   name: tmp.firstame,
+    //   lastName
+    // }
+
+    return tmp;
+    
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error : any) {
+    console.log('ERROR: API - ', error.message)
+    return NextResponse.json({error: error.message })
+  }
 }
 
 

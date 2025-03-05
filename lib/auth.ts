@@ -47,7 +47,6 @@ export async function authenticateSignUp(state: any, formData: any){
         console.log('New User signed up!');
         redirect('/logIn');}
     else{
-        window.alert('Fill the form with valid inputs.')
         redirect('/signUp');
     }
 }
@@ -81,11 +80,10 @@ export async function authenticateLogIn(state: any, formData : any){
 
     user = user[0];
 
-    console.log(password + " " + user?.password);
     const cmpStatus = await bcrypt.compare(password, user?.password);
     if(!cmpStatus) 
         return {
-            errors: {password: 'Wrong password'},
+            errors: {password: 'Wrong password.'},
             email: email
         };
 

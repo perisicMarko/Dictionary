@@ -32,5 +32,9 @@
   @apply block w-full rounded focus:to-indigo-400 block bg-blue-950 text-blue-50;
 }
 
+.background{
+  background-image: url('@/public/bg-dictionary.png');
+
+}
 
 
