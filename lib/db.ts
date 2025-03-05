@@ -2,29 +2,26 @@
 import mysql from "mysql2/promise";
 import { NextResponse } from "next/server";
 
-let connection : mysql.Connection;
-export const createConnection = async () => {
 
-  if(!connection){
-    connection = await mysql.createConnection({
-      host: process.env.DB_HOST,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME
-    });
-  }
-  return connection;
-}
+const pool = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
+});
 
 
 export async function GetUserInfo({email} : {email: string}){
 
     try {
-      const db = await createConnection();
+      const db = await pool.getConnection(); 
       const _query = 'SELECT * FROM clients as c where c.email = ?';
       const [results] = await db.query(_query, [email]);
   
-      db.end();
+      db.release();
 
       return NextResponse.json(results);
       
@@ -39,11 +36,11 @@ export async function GetUserInfo({email} : {email: string}){
 export async function InsertUserInfo({name, lastName, email, password} : {name: string, lastName: string, email: string, password: string}){
   try {
   
-    const db = await createConnection();
+    const db = await pool.getConnection();
     const _query = 'INSERT INTO clients (first_name, last_name, email, password) VALUES (?, ?, ?, ?);';
     const [results] = await db.query(_query, [name, lastName, email, password]);
 
-    db.end()
+    db.release();
 
     return NextResponse.json(results)
     

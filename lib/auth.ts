@@ -79,7 +79,6 @@ export async function authenticateLogIn(state: any, formData : any){
 
     if(user.length === 0 || user.length === undefined) return {errors: {password: 'Wrong email.'}}; 
 
-    console.log('ispis usera iz aut.ts' + user + "ispis duzine " + user.length);
     user = user[0];
 
     console.log(password + " " + user?.password);
