@@ -5,6 +5,7 @@ import { GetUserInfo, InsertUserInfo } from '@/lib/db';
 import { redirect } from 'next/navigation';
 import bcrypt from 'bcrypt';
 import { createSession } from './session';
+import { cookies } from 'next/headers';
 
 
 export async function authenticateSignUp(state: any, formData: any){
@@ -90,4 +91,11 @@ export async function authenticateLogIn(state: any, formData : any){
     await createSession(user.id);
 
     redirect('/user/' + user.id);
+}
+
+
+export async function logOut(){
+    const cookieStore = await cookies();
+    cookieStore.delete('session');
+    redirect('/');
 }
