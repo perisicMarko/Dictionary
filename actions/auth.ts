@@ -4,7 +4,7 @@ import { SignUpSchema, LogInSchema } from '@/lib/rules';
 import { GetUserInfo, InsertUserInfo } from '@/lib/db';
 import { redirect } from 'next/navigation';
 import bcrypt from 'bcrypt';
-import { createSession } from './session';
+import { createSession } from '../lib/session';
 import { cookies } from 'next/headers';
 
 
@@ -90,7 +90,7 @@ export async function authenticateLogIn(state: any, formData : any){
 
     await createSession(user.id);
 
-    redirect('/user/' + user.id);
+    redirect('/user');
 }
 
 

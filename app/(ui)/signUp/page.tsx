@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link';
 import { useActionState } from 'react'
-import { authenticateSignUp } from '@/lib/auth'
+import { authenticateSignUp } from '@/actions/auth'
 
 
 export default function SignUp(){

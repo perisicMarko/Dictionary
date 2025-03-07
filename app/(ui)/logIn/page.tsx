@@ -1,5 +1,5 @@
 'use client'
-import { authenticateLogIn } from '@/lib/auth';
+import { authenticateLogIn } from '@/actions/auth';
 import Link from 'next/link';
 import { useActionState } from 'react';
 

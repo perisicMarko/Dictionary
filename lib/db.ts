@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server"
 import mysql from "mysql2/promise";
@@ -78,4 +79,8 @@ export async function InsertUserInfo({name, lastName, email, password} : {name: 
 
     return NextResponse.json({error: error.message })
   }
+}
+
+export async function ImportNotes(note : any){
+  
 }

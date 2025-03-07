@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: "Dictionary",
   description: "",
   icons: {
-    icon: "/", 
+    icon: "/favi.svg", 
   },
 };
 
