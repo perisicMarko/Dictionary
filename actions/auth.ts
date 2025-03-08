@@ -89,6 +89,16 @@ export async function authenticateLogIn(state: any, formData : any){
         };
 
     await createSession(user.id);
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+    const cookieStore = await cookies();
+   
+    cookieStore.set('userId', user.id, {
+      httpOnly: false, 
+      secure: true,
+      expires: expiresAt,
+      sameSite: 'lax',
+      path: '/',
+    });
 
     redirect('/user');
 }
@@ -97,5 +107,6 @@ export async function authenticateLogIn(state: any, formData : any){
 export async function logOut(){
     const cookieStore = await cookies();
     cookieStore.delete('session');
+    cookieStore.delete('userId');
     redirect('/');
 }

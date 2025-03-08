@@ -45,7 +45,6 @@ export async function GetUserInfoById(userId : any){
 
   
     const tmp = NextResponse.json(results);
-    console.log(tmp);
     // const retVal = {
     //   name: tmp.firstame,
     //   lastName
@@ -53,11 +52,28 @@ export async function GetUserInfoById(userId : any){
 
     return tmp;
     
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error : any) {
     console.log('ERROR: API - ', error.message)
     return NextResponse.json({error: error.message })
   }
+}
+
+export async function GetNotes(){
+  try {
+  
+    const db = await pool.getConnection();
+    const _query = 'SELECT * FROM words;';
+    const [results] = await db.query(_query);
+
+    db.release();
+
+    return NextResponse.json(results)
+    
+  } catch (error : any) {
+    console.log('ERROR: API - ', error.message)
+
+    return NextResponse.json({error: error.message })
+  } 
 }
 
 
@@ -72,15 +88,26 @@ export async function InsertUserInfo({name, lastName, email, password} : {name: 
 
     return NextResponse.json(results)
     
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error : any) {
     console.log('ERROR: API - ', error.message)
-
 
     return NextResponse.json({error: error.message })
   }
 }
 
 export async function ImportNotes(note : any){
-  
+  try{
+    const db = await pool.getConnection();
+    const _query = 'INSERT INTO words (notes, learned, user_id) VALUES (?, ?, ?);'
+    const [results] = await db.query(_query, [JSON.stringify(note.notes), note.learned, note.userId]);
+
+    db.release();
+
+    return NextResponse.json(results);
+  } catch(error: any){
+    console.log('ERROR: API - ' + error.message);
+
+    return NextResponse.json({error: error.message});
+  }
 }
+
