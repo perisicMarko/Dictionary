@@ -8,7 +8,7 @@ export default function Words({props} : {props : any}){
         <>
         {
             props.map((w : any) => {
-                return <Note key={w.id} notes={w} ></Note>
+                return <Note key={w.id} {...w}></Note>
             })
         }
         </>

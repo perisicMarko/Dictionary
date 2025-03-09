@@ -41,4 +41,7 @@
   white-space: pre-line;
 }
 
+.title{
+  @apply text-center font-bold hover:underline mt-3;
+}
 

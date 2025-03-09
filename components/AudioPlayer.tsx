@@ -20,11 +20,12 @@ export default function AudioPlayer({src} : {src: string}){
       classString += ' bg-red-700';
       isDisabled = true;
     }
-    const title = (isDisabled ? 'Sorry, no sound for this one.' : '');
+    const title = (isDisabled ? 'Sorry, no sound for this one.' : 'Click it to hear it.');
+    const srcAtt = (src === '' ? null : src);
 
     return (
         <>
-            <audio src={src} ref={audioRef} className='inline-block'></audio>
+            <audio src={srcAtt} ref={audioRef} className='inline-block'></audio>
             <Image className={classString} title={title} width={20} height={20} src='/pronuanciation.svg' onClick={(e) => {
               if(!isDisabled) 
                 handleClick(e)

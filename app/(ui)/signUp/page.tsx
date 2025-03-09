@@ -12,7 +12,7 @@ export default function SignUp(){
 
     return (
         <div className="mt-80 w-[500px] h-1/2 bg-blue-400 rounded-2xl border-2 border-blue-50">
-          <div className='flex justify-end items-start'>
+          <div className='flex justify-end items-start bg-blue-500 border-blue-50 rounded-t-2xl'>
             <Link className="xBtn mr-3" href="/"><b>x</b></Link>
           </div>
 

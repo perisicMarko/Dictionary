@@ -3,11 +3,11 @@
 import AudioPlayer from "./AudioPlayer";
 import { useState } from 'react';
 
-export default function Note(prop : any){
+export default function Note(note : any){
 
     const [drop, setDrop] = useState(false);
     
-    const tmp = prop.notes.notes;
+    const tmp = note.notes;
     const title = (drop ? 'Click to collapse.' : 'Click for notes.');
 
     return (

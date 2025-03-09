@@ -8,7 +8,7 @@ export default function LogIn(){
     
     return (
         <div className="mt-90 bg-blue-400 rounded-2xl border-2 border-blue-50 w-[500px] h-[300px]">
-            <div className='flex justify-end items-start'>
+            <div className='flex justify-end items-start bg-blue-500 border-blue-50 rounded-t-2xl'>
                 <Link className="xBtn mr-3" href="/"><b>x</b></Link>
             </div>
             <form className="form mt-7 ml-6 w-[450px]" action={action}>
