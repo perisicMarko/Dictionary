@@ -1,4 +1,3 @@
-"use server"
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 import getAuthUser from '@/actions/getAuthUser';
 import { redirect } from 'next/navigation';
@@ -14,6 +13,7 @@ export default async function User(){
 
     return (
             
-        <UserInput></UserInput>
+        <UserInput>
+        </UserInput>
     );
 }

@@ -41,7 +41,7 @@ export default function UserInput(){
     const userId = Cookie.get('userId');
     const isDisabled = word.trim() === '';
 
-    function cleanUp(flag : any){  
+    function cleanUp(flag : any){  // when flag is 1 it should return <></> cause inside {} in return it is expected to return something
       setHelp(false);
       setGenerate(false);
       setRequest(false);

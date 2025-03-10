@@ -100,7 +100,7 @@ export async function authenticateLogIn(state: any, formData : any){
       path: '/',
     });
 
-    redirect('/user');
+    redirect('/user/' + user.id);
 }
 
 
