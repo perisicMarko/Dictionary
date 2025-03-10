@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use server'
 import { ImportNotes, GetNotes } from '@/lib/db';
-
+import { TDBNoteEntry, TGeneratedNote, TGMeaning, TGPhonetic, TWordApp } from '@/lib/types';
 
 
 export async function saveNotes(formData : FormData){ 
-
 
   const notes = {
     word: formData.get('word'),
@@ -27,46 +25,47 @@ export async function saveNotes(formData : FormData){
 
 }
 
-export async function generateNotes(rawNotes : any){
-  if(rawNotes?.title)
+export async function generateNotes(rawNotes : TGeneratedNote[]){
+  const tmp = rawNotes[0];
+  if(tmp?.word === undefined)
     return {error: 'Hm, that word has no definitions.'};
-  const notes = filterApiNotes(rawNotes[0]);
+  const notes = filterApiNotes(tmp);
 
   return notes
 }
 
+type GDefinition = { definition: string; example?: string; synonyms?: string[]; antonyms?: string[] };
+
 // refacotring the http response to structure that is more suitable for my interface
-function filterApiNotes(data : any){
-  const retVal = {
-    word: "",
-    phonetic: "",
-    sound: "",
-    meanings: [] as { partOfSpeech: string; definitions: { definition: string; example: string }[] }[],
-    parsedNote: ""
+function filterApiNotes(data : TGeneratedNote){
+  const retVal : TWordApp = {
+    word: data.word,
+    sound: data.phonetics.filter((p: TGPhonetic) => p.audio != undefined && p.audio != '')[0]?.audio,
+    meanings: data.meanings.map((e: TGMeaning) => {
+      const res: {
+        partOfSpeech: string;
+        definitions: { definition: string; example: string | undefined; }[];
+      } = {
+        partOfSpeech: "",
+        definitions: [] as { definition: string; example: string; }[]
+      };
+      res.partOfSpeech = e.partOfSpeech;
+      res.definitions = e.definitions.map((d: GDefinition) => {
+        const tmp: {
+          definition: string;
+          example: string | undefined;
+        } = { definition: "", example: "" };
+
+        tmp.definition = d.definition;
+        tmp.example = d.example;
+        return tmp;
+      });
+      return res;
+    }),
+    parsedNote: ''
   };
 
-  retVal.word = data.word;
-  retVal.phonetic = data.phonetic;
-  retVal.sound = data.phonetics.filter((p : any) => p.audio != undefined && p.audio != '')[0]?.audio;
   
-
-  retVal.meanings = data.meanings.map((e : any) => {
-    const res = {
-      partOfSpeech: "",
-      definitions: [] as {definition: string; example: string}[]
-    };
-    res.partOfSpeech = e.partOfSpeech;
-    res.definitions = e.definitions.map((d : any) => {
-      const tmp = {
-        definition: "",
-        example: ""
-      };
-      tmp.definition = d.definition;
-      tmp.example = d.example;
-      return tmp;
-    });
-    return res;
-  });
 
   retVal.parsedNote = stringifyNote(retVal);
 
@@ -74,7 +73,7 @@ function filterApiNotes(data : any){
 }
 
 
-function stringifyNote(noteObj : any){
+function stringifyNote(noteObj : TWordApp){
   let res = noteObj.word + ': ' + '\n';
   
   for(let i = 0; i < noteObj.meanings.length; i++){
@@ -91,22 +90,22 @@ function stringifyNote(noteObj : any){
 }
 
 
-export async function getUsersNotes(userId : any){
+export async function getUsersNotes(userId : number){
   const tmp = await GetNotes();
   const words = await tmp.json();
 
-  return words.filter((w : any) => {
+  return words.filter((w : TDBNoteEntry) => {
     const res = w.learned == 0 && w.user_id == userId;
     return res;
   });
 }
 
 
-export async function getUsersHistory(userId : any){
+export async function getUsersHistory(userId : number){
   const tmp = await GetNotes();
   const words = await tmp.json();
 
-  return words.filter((w : any) => {
+  return words.filter((w : TDBNoteEntry) => {
     const res = w.learned == 1 && w.user_id == userId;
     return res;
   });

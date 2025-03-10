@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 import getAuthUser from '@/actions/getAuthUser';
 import { redirect } from 'next/navigation';
 import React from 'react';

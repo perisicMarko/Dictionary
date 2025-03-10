@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server"
 import { SignUpSchema, LogInSchema } from '@/lib/rules';
 import { GetUserInfo, InsertUserInfo } from '@/lib/db';
@@ -6,9 +5,29 @@ import { redirect } from 'next/navigation';
 import bcrypt from 'bcrypt';
 import { createSession } from '../lib/session';
 import { cookies } from 'next/headers';
+import { TUser } from '@/lib/types';
+import { NextResponse } from 'next/server';
 
 
-export async function authenticateSignUp(state: any, formData: any){
+type stateType = { 
+    errors: {
+        email?: string[] | undefined;
+        password?: string[] | undefined;
+    };
+    email: string;
+} | {
+    errors: {
+        password: string;
+    };
+    email?: undefined;
+} | {
+    errors: {
+        password: string;
+    };
+    email: string;
+} | undefined;
+
+export async function authenticateSignUp(state: stateType, formData: FormData){
 
     const validatedFields = SignUpSchema.safeParse({
         name: formData.get("name"),
@@ -24,16 +43,20 @@ export async function authenticateSignUp(state: any, formData: any){
             name: "",
             lastName: "", 
             email: ""
-        };
+        } ;
+        
 
-        if(!retObj.errors?.name)
-            retObj.name = formData.get('name');
+        const nameError = formData.get('name')?.toString();
+        if(!retObj.errors?.name && nameError)
+            retObj.name = nameError;
     
-        if(!retObj.errors?.lastName)
-            retObj.lastName = formData.get('lastName');
+        const lastNameError = formData.get('lastName')?.toString();
+        if(!retObj.errors?.lastName && lastNameError)
+            retObj.lastName = lastNameError;
     
-        if(!retObj.errors?.email)
-            retObj.email = formData.get('email');
+        const emailError = formData.get('email')?.toString();
+        if(!retObj.errors?.email && emailError)
+            retObj.email = emailError;
 
         return retObj;
     }
@@ -52,7 +75,7 @@ export async function authenticateSignUp(state: any, formData: any){
     }
 }
 
-export async function authenticateLogIn(state: any, formData : any){
+export async function authenticateLogIn(state : stateType, formData : FormData){
     const validatedFields = LogInSchema.safeParse({
         email: formData.get("email"),
         password: formData.get("password"),
@@ -64,22 +87,23 @@ export async function authenticateLogIn(state: any, formData : any){
             email: ""
         };
 
-        if(!retObj.errors?.email)   
-            retObj.email = formData.get('email');
+        const emailError = formData.get('email')?.toString();
+        if(!retObj.errors?.email && emailError)   
+            retObj.email = emailError;
     
         return retObj;
     }
 
     const {email, password} : {email: string, password: string} = validatedFields.data;
-    const tmp : any = await GetUserInfo({email});
-    let user = (await tmp.json()); // retrieve the first and only row
+    const tmp : NextResponse = await GetUserInfo({email});
+    const tmp1 : TUser[] = (await tmp.json()); // retrieve the first and only row
     
-    if(user && user.length > 1)
+    if(tmp1 && tmp1.length > 1)
         throw new Error("Result from database should be [] or only one user!, bad sign up logic.");
 
-    if(user.length === 0 || user.length === undefined) return {errors: {password: 'Wrong email.'}}; 
+    if(tmp1.length === 0 || tmp1.length === undefined) return {errors: {password: 'Wrong email.'}}; 
 
-    user = user[0];
+    const user : TUser = tmp1[0];
 
     const cmpStatus = await bcrypt.compare(password, user?.password);
     if(!cmpStatus) 
@@ -88,11 +112,11 @@ export async function authenticateLogIn(state: any, formData : any){
             email: email
         };
 
-    await createSession(user.id);
+    await createSession(user.id.toString());
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
     const cookieStore = await cookies();
    
-    cookieStore.set('userId', user.id, {
+    cookieStore.set('userId', user.id.toString(), {
       httpOnly: false, 
       secure: true,
       expires: expiresAt,
