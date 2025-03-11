@@ -33,7 +33,7 @@
 }
 
 .background{
-  background-image: url('@/public/bgDictionary.png');
+  background-image: url('/bgDictionary.png');
 
 }
 
