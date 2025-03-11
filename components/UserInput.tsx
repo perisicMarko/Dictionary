@@ -15,7 +15,7 @@ export default function UserInput(){
     const [request, setRequest] = useState(false); // semaphore for requesting just once when button is clicked
     const [userNotes, setUserNotes] = useState(''); // for custom notes from user
     const [error, setError] = useState('');
-    const wordInputRef = useRef(null);
+    const wordInputRef = useRef<HTMLInputElement>(null);
 
 
     useEffect(() => {
@@ -29,6 +29,7 @@ export default function UserInput(){
           const tmp = await generateNotes(result);
           setNote(tmp);
           setRequest(false);
+          setError('');
         } catch (error) {
           console.error('Error fetching data:', error);
         }
