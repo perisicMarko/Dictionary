@@ -5,6 +5,7 @@ import { useActionState } from 'react';
 
 export default function LogIn(){
     const [state, action, isPending] = useActionState(authenticateLogIn, undefined);
+
     
     return (
         <div className="mt-90 bg-blue-400 rounded-2xl border-2 border-blue-50 w-[500px] h-[300px]">
@@ -15,11 +16,12 @@ export default function LogIn(){
                 <div className="flex flex-col justify-center">
                     <label htmlFor="email">Email: </label>
                     <input className="formInput" type="text" name="email" defaultValue={state?.email}/>
+                    {state?.errors?.email != '' && <p className='error ml-1'>{state?.errors.email}</p>}
                 </div>
                 <div className='flex flex-col justify-center'>
                     <label htmlFor="password">Password: </label>
                     <input className="formInput" type="password" name="password"/>
-                    {state?.errors?.password && <p className='error ml-1'>-{state.errors.password}</p> }
+                    {state?.errors?.password && <p className='error ml-1'>{state.errors.password}</p> }
                 </div>
                 <div className='center'>
                     <button disabled={isPending} className="primaryBtn">{isPending ? "Loading" : "Log in"}</button>

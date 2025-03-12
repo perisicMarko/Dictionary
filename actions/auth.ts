@@ -96,24 +96,23 @@ export async function authenticateLogIn(state : stateType, formData : FormData){
 
     const {email, password} : {email: string, password: string} = validatedFields.data;
     const tmp : NextResponse | NextResponse<{ error: string; }> | undefined = await GetUserInfo({email});
-    const tmp1 : TUser[] = (await (tmp!= undefined && tmp.json())); // retrieve the first and only row
-    
+    const tmp1 : TUser[] = (await (tmp!= undefined && tmp.json()));
     if(tmp1 && tmp1.length > 1)
         throw new Error("Result from database should be [] or only one user!, bad sign up logic.");
 
-    if(tmp1.length === 0 || tmp1.length === undefined) return {errors: {password: 'Wrong email.'}}; 
+    if(tmp1.length === 0 || tmp1.length === undefined) return {errors: {email: '-Wrong email.', password: ''}}; 
 
     const user : TUser = tmp1[0];
 
     const cmpStatus = await bcrypt.compare(password, user?.password);
     if(!cmpStatus) 
         return {
-            errors: {password: 'Wrong password.'},
+            errors: {password: '-Wrong password.', email: ''},
             email: email
         };
 
     await createSession(user.id.toString());
-    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+    const expiresAt = new Date(Date.now() + 5 * 60 * 60 * 1000)
     const cookieStore = await cookies();
    
     cookieStore.set('userId', user.id.toString(), {

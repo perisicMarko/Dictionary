@@ -22,7 +22,7 @@ export default function YourWords(){
     }, [userId]);
     
 
-    const index : number = words?.findIndex((word : TDBNoteEntry) => word.notes.word.toLowerCase().trim() === search.toLowerCase().trim());
+    const index : number = words?.findIndex((word : TDBNoteEntry) => word.word.toLowerCase().trim() === search.toLowerCase().trim());
     
     return (
         <>

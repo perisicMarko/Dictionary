@@ -19,7 +19,7 @@ export async function GetUserInfo({email} : {email: string}){
 
     try {
       const db = await pool.getConnection(); 
-      const _query = 'SELECT * FROM clients as c where c.email = ?';
+      const _query = 'SELECT * FROM users as u where u.email = ?';
       const [results] = await db.query(_query, [email]);
   
       db.release();
@@ -39,7 +39,7 @@ export async function GetUserInfoById(userId : number){
   
   try {
     const db = await pool.getConnection(); 
-    const _query = 'SELECT * FROM clients as c where c.id = ?';
+    const _query = 'SELECT * FROM users as u where u.id = ?';
     const [results] = await db.query(_query, [userId]);
 
     db.release();
@@ -85,7 +85,7 @@ export async function InsertUserInfo({name, lastName, email, password} : {name: 
   try {
   
     const db = await pool.getConnection();
-    const _query = 'INSERT INTO clients (first_name, last_name, email, password) VALUES (?, ?, ?, ?);';
+    const _query = 'INSERT INTO users (first_name, last_name, email, password) VALUES (?, ?, ?, ?);';
     const [results] = await db.query(_query, [name, lastName, email, password]);
 
     db.release();
@@ -103,8 +103,9 @@ export async function InsertUserInfo({name, lastName, email, password} : {name: 
 export async function ImportNotes(note : TDBNoteEntry){
   try{
     const db = await pool.getConnection();
-    const _query = 'INSERT INTO words (notes, learned, user_id) VALUES (?, ?, ?);'
-    const [results] = await db.query(_query, [JSON.stringify(note.notes), note.learned, note.user_id]);
+    const _query = 'INSERT INTO words (user_id, word, status, language, user_notes, generated_notes, audio, repetitions, days, ease_factor, review_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
+    const [results] = await db.query(_query, [note.user_id, note.word, note.status, note.language, note.user_notes, note.generated_notes, note.audio,
+       note.repetitions, note.days, note.ease_factor, note.review_date]);
 
     db.release();
 
@@ -117,4 +118,3 @@ export async function ImportNotes(note : TDBNoteEntry){
     }
   }
 }
-

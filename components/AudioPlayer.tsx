@@ -5,7 +5,6 @@ import Image from 'next/image';
 export default function AudioPlayer({src} : {src: string}){
     const audioRef = useRef<HTMLAudioElement>(null);
 
-
     function handleClick(e : React.MouseEvent<HTMLImageElement>){
         e.stopPropagation();
         if (audioRef.current) {
@@ -26,6 +25,7 @@ export default function AudioPlayer({src} : {src: string}){
         <>
             <audio src={srcAtt} ref={audioRef} className='inline-block'></audio>
             <Image className={classString} title={title} width={20} height={20} src='/pronuanciation.svg' onClick={(e) => {
+              e.stopPropagation();
               if(!isDisabled) 
                 handleClick(e)
               else window.alert('Sorry, no sound for this word.')

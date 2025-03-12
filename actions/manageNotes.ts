@@ -1,34 +1,36 @@
 'use server'
 import { ImportNotes, GetNotes } from '@/lib/db';
-import { TDBNote, TDBNoteEntry, TGeneratedNote, TGMeaning, TGPhonetic, TWordApp } from '@/lib/types';
+import { TDBNoteEntry, TGeneratedNote, TGMeaning, TGPhonetic, TWordApp } from '@/lib/types';
+import { addDays, format } from 'date-fns';
 
+export async function saveNotes(formData : FormData){
 
-export async function saveNotes(formData : FormData){ 
+  const word = formData.get('word')?.toString();
+  const audio = formData.get('audio')?.toString();
+  const user_notes = formData.get('userNotes')?.toString();
+  const generated_notes = formData.get('generatedNotes')?.toString();
 
-    const word = formData.get('word')?.toString();
-    const sound = formData.get('audio')?.toString();
-    const user_notes = formData.get('userNotes')?.toString();
-    const generated = formData.get('generate')?.toString();
-    const generated_notes = formData.get('generatedNotes')?.toString();
-  const notes : TDBNote = {
-    word: (word != undefined ? word : ''), 
-    sound: (sound != undefined ? sound : ''),
-    user_notes: (user_notes != undefined ? user_notes : ''),
-    generated: (generated != undefined ? generated : ''),
-    generated_notes: (generated_notes != undefined ? generated_notes : '')
-  };
-  
+  const now = new Date();
   const dbInput : TDBNoteEntry = {
     id : 0,
     user_id : Number(formData.get('userId')),
-    notes : notes,
-    learned: false
+    word: (word === undefined ? '' : word),
+    status: false, //false meaning word is not learned 
+    language: 'english',
+    user_notes: (user_notes === undefined ? '' : user_notes),
+    generated_notes: (generated_notes === undefined ? '' : generated_notes),
+    audio: (audio === undefined ? '' : audio),
+    repetitions: 0,
+    days: 1,
+    ease_factor: 2.5,
+    review_date: format(addDays(now, 1), 'yyyy-MM-dd')
   };
+
+  console.log(dbInput.review_date);
 
   const retVal = await ImportNotes(dbInput);
   if(!retVal)
     throw new Error('Word is not imported in database, smth is wrong. Check manageNotes/saveNotes -> db/ImportNotes');
-
 }
 
 export async function generateNotes(rawNotes : TGeneratedNote[]){
@@ -42,12 +44,12 @@ export async function generateNotes(rawNotes : TGeneratedNote[]){
 
 type GDefinition = { definition: string; example?: string; synonyms?: string[]; antonyms?: string[] };
 
-// refacotring the http response to structure that is more suitable for my interface
+// refacotring the http response to structure that is more suitable to work with
 function filterApiNotes(data : TGeneratedNote){
   const tmpSound = data.phonetics.filter((p: TGPhonetic) => p.audio != undefined && p.audio != '')[0]?.audio;
   const retVal : TWordApp = {
     word: data.word,
-    sound: (tmpSound != undefined ? tmpSound : ''),
+    audio: (tmpSound != undefined ? tmpSound : ''),
     meanings: data.meanings.map((e: TGMeaning) => {
       const res: {
         partOfSpeech: string;
@@ -71,8 +73,6 @@ function filterApiNotes(data : TGeneratedNote){
     }),
     parsedNote: ''
   };
-
-  
 
   retVal.parsedNote = stringifyNote(retVal);
 
@@ -102,7 +102,7 @@ export async function getUsersNotes(userId : number){
   const words = await (tmp != undefined && tmp.json());
 
   return words.filter((w : TDBNoteEntry) => {
-    const res = w.learned == false && w.user_id == userId;
+    const res = w.status == false && w.user_id == userId;
     return res;
   });
 }
@@ -112,7 +112,7 @@ export async function getUsersHistory(userId : number){
   const tmp = await GetNotes();
   const words = await (tmp != undefined && tmp.json());
   return words.filter((w : TDBNoteEntry) => {
-    const res = w.learned == true && w.user_id == userId;
+    const res = w.status == true && w.user_id == userId;
     return res;
   });
 }

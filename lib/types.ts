@@ -51,15 +51,17 @@ export type TMeaning = {
   
 export type TWordApp = {
     word: string;
-    sound: string;
+    audio: string;
     meanings: TMeaning[];
     parsedNote: string;
 };
 
 
+
+// ovo hocu da izbacim da ne koristim vise
 export type TDBNote = {
     word: string;
-    sound: string;
+    audio: string;
     generated: string | null;
     user_notes: string;
     generated_notes: string;
@@ -67,7 +69,15 @@ export type TDBNote = {
   
 export type TDBNoteEntry = {
     id: number;
-    notes: TDBNote;
     user_id: number;
-    learned: boolean;
+    word: string
+    status: boolean;
+    language: string;
+    user_notes: string;
+    generated_notes: string;
+    audio: string;
+    repetitions: number;
+    days: number;
+    ease_factor: number;
+    review_date: string;
 };

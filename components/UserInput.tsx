@@ -59,20 +59,22 @@ export default function UserInput(){
       return note != null && "error" in note;
     };
 
+    wordInputRef.current?.focus();
+
     return (
         <>
         {!help ?
         <div key='input' className="flex flex-col justify-center items-center mt-60 w-[500px] h-[200px]">
                 <div className="flex flex-col justify-center items-center">
-                    <form action={(e) => { cleanUp(0); saveNotes(e);}} className='w-[450px] bg-blue-400 rounded-4xl p-2 flex flex-col justify-center items-center'>
+                    <form action={(e) => {cleanUp(0); saveNotes(e);} } className='w-[450px] bg-blue-400 rounded-4xl p-2 flex flex-col justify-center items-center'>
                         <input key="userId" type='text' hidden name="userId" defaultValue={userId} />
                         <span className="hover:underline cursor-pointer text-blue-950" onClick={() => setHelp(!help)}><b>Help</b></span> 
                         <input ref={wordInputRef} key='userWord' className='text-blue-50 formInput mt-8 mb-3' type="text" name="word" value={word} onChange={(e) => setWord(e.target.value)} placeholder='Enter new word here...'/>
                         {error && <p className='error'>{error}</p>}
                         {note != null && isErrorNote(note) && note?.error && cleanUp(1)}
                         <div className="flex justify-start">
-                          <input key="audioInput" type="text" hidden name="audio" defaultValue={isErrorNote(note) || note === null ? undefined : note?.sound}/>
-                          {note != null && !isErrorNote(note) && note?.parsedNote ? <p className='text-start'>Pronounciation: <AudioPlayer src={isErrorNote(note) || note === null ? '' : note!.sound} ></AudioPlayer></p> : <></>}
+                          <input key="audioInput" type="text" hidden name="audio" defaultValue={isErrorNote(note) || note === null ? undefined : note?.audio}/>
+                          {note != null && !isErrorNote(note) && note?.parsedNote ? <p className='text-start'>Pronounciation: <AudioPlayer src={isErrorNote(note) || note === null ? '' : note!.audio} ></AudioPlayer></p> : <></>}
                         </div>
                         {generate && 
                         <div>
