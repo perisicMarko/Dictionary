@@ -1,13 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import { useRef } from 'react';
 import Image from 'next/image';
 
 export default function AudioPlayer({src} : {src: string}){
-    const audioRef = useRef(null);
+    const audioRef = useRef<HTMLAudioElement>(null);
 
 
-    function handleClick(e : any){
+    function handleClick(e : React.MouseEvent<HTMLImageElement>){
         e.stopPropagation();
         if (audioRef.current) {
           audioRef.current.play(); // Play the audio
@@ -21,7 +20,7 @@ export default function AudioPlayer({src} : {src: string}){
       isDisabled = true;
     }
     const title = (isDisabled ? 'Sorry, no sound for this one.' : 'Click it to hear it.');
-    const srcAtt = (src === '' ? null : src);
+    const srcAtt = (src === '' ? undefined: src);
 
     return (
         <>

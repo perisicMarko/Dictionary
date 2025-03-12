@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
+import { TDBNoteEntry } from '@/lib/types';
 import AudioPlayer from "./AudioPlayer";
 import { useState } from 'react';
 
-export default function Note(note : any){
+export default function Note(note : TDBNoteEntry){
 
     const [drop, setDrop] = useState(false);
     

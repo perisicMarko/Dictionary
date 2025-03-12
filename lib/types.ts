@@ -1,17 +1,3 @@
-// export type TNote = {
-//     word: string;
-//     sound: string;
-//     generated: string | null;
-//     user_notes: string;
-//     generated_notes: string;
-// };
-  
-// export type TNoteEntry = {
-//     id: number;
-//     notes: TNote;
-//     user_id: number;
-//     learned: number;
-// };
 
 export type TUser = {
     id: number;
@@ -65,7 +51,7 @@ export type TMeaning = {
   
 export type TWordApp = {
     word: string;
-    sound: string | undefined;
+    sound: string;
     meanings: TMeaning[];
     parsedNote: string;
 };
@@ -83,5 +69,5 @@ export type TDBNoteEntry = {
     id: number;
     notes: TDBNote;
     user_id: number;
-    learned: number;
+    learned: boolean;
 };

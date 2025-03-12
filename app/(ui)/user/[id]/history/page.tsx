@@ -12,7 +12,7 @@ export default function History(){
     
     useEffect(() => {
         async function fetchNotes() {
-            const data = await getUsersHistory(userId);
+            const data = await getUsersHistory(Number(userId));
             setWords(data);
         }
         fetchNotes();

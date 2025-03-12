@@ -1,20 +1,26 @@
 'use server'
 import { ImportNotes, GetNotes } from '@/lib/db';
-import { TDBNoteEntry, TGeneratedNote, TGMeaning, TGPhonetic, TWordApp } from '@/lib/types';
+import { TDBNote, TDBNoteEntry, TGeneratedNote, TGMeaning, TGPhonetic, TWordApp } from '@/lib/types';
 
 
 export async function saveNotes(formData : FormData){ 
 
-  const notes = {
-    word: formData.get('word'),
-    sound: formData.get('audio'),
-    user_notes: formData.get('userNotes'),
-    generated: formData.get('generate'),
-    generated_notes: formData.get('generatedNotes')
+    const word = formData.get('word')?.toString();
+    const sound = formData.get('audio')?.toString();
+    const user_notes = formData.get('userNotes')?.toString();
+    const generated = formData.get('generate')?.toString();
+    const generated_notes = formData.get('generatedNotes')?.toString();
+  const notes : TDBNote = {
+    word: (word != undefined ? word : ''), 
+    sound: (sound != undefined ? sound : ''),
+    user_notes: (user_notes != undefined ? user_notes : ''),
+    generated: (generated != undefined ? generated : ''),
+    generated_notes: (generated_notes != undefined ? generated_notes : '')
   };
   
-  const dbInput = {
-    userId : formData.get('userId'),
+  const dbInput : TDBNoteEntry = {
+    id : 0,
+    user_id : Number(formData.get('userId')),
     notes : notes,
     learned: false
   };
@@ -38,9 +44,10 @@ type GDefinition = { definition: string; example?: string; synonyms?: string[]; 
 
 // refacotring the http response to structure that is more suitable for my interface
 function filterApiNotes(data : TGeneratedNote){
+  const tmpSound = data.phonetics.filter((p: TGPhonetic) => p.audio != undefined && p.audio != '')[0]?.audio;
   const retVal : TWordApp = {
     word: data.word,
-    sound: data.phonetics.filter((p: TGPhonetic) => p.audio != undefined && p.audio != '')[0]?.audio,
+    sound: (tmpSound != undefined ? tmpSound : ''),
     meanings: data.meanings.map((e: TGMeaning) => {
       const res: {
         partOfSpeech: string;
@@ -92,10 +99,10 @@ function stringifyNote(noteObj : TWordApp){
 
 export async function getUsersNotes(userId : number){
   const tmp = await GetNotes();
-  const words = await tmp.json();
+  const words = await (tmp != undefined && tmp.json());
 
   return words.filter((w : TDBNoteEntry) => {
-    const res = w.learned == 0 && w.user_id == userId;
+    const res = w.learned == false && w.user_id == userId;
     return res;
   });
 }
@@ -103,10 +110,9 @@ export async function getUsersNotes(userId : number){
 
 export async function getUsersHistory(userId : number){
   const tmp = await GetNotes();
-  const words = await tmp.json();
-
+  const words = await (tmp != undefined && tmp.json());
   return words.filter((w : TDBNoteEntry) => {
-    const res = w.learned == 1 && w.user_id == userId;
+    const res = w.learned == true && w.user_id == userId;
     return res;
   });
 }

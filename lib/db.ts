@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server"
 import mysql from "mysql2/promise";
 import { NextResponse } from "next/server";
+import { TDBNoteEntry } from "./types";
 
 
 const pool = mysql.createPool({
@@ -27,14 +26,16 @@ export async function GetUserInfo({email} : {email: string}){
 
       return NextResponse.json(results);
       
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error : any) {
-      console.log('ERROR: API - ', error.message)
-      return NextResponse.json({error: error.message })
+  
+    } catch (error) {
+      if(error instanceof Error){
+        console.log('ERROR: API - ', error?.message)
+        return NextResponse.json({error: error.message })
+      }
     }
 }
 
-export async function GetUserInfoById(userId : any){
+export async function GetUserInfoById(userId : number){
   
   try {
     const db = await pool.getConnection(); 
@@ -52,9 +53,11 @@ export async function GetUserInfoById(userId : any){
 
     return tmp;
     
-  } catch (error : any) {
-    console.log('ERROR: API - ', error.message)
-    return NextResponse.json({error: error.message })
+  } catch (error) {
+    if(error instanceof Error){
+      console.log('ERROR: API - ', error?.message);
+      return NextResponse.json({error: error.message });
+    }
   }
 }
 
@@ -69,11 +72,12 @@ export async function GetNotes(){
 
     return NextResponse.json(results)
     
-  } catch (error : any) {
-    console.log('ERROR: API - ', error.message)
-
-    return NextResponse.json({error: error.message })
-  } 
+  } catch (error) {
+    if(error instanceof Error){
+      console.log('ERROR: API - ', error?.message);
+      return NextResponse.json({error: error.message });
+    }
+  }
 }
 
 
@@ -88,26 +92,29 @@ export async function InsertUserInfo({name, lastName, email, password} : {name: 
 
     return NextResponse.json(results)
     
-  } catch (error : any) {
-    console.log('ERROR: API - ', error.message)
-
-    return NextResponse.json({error: error.message })
+  } catch (error) {
+    if(error instanceof Error){
+      console.log('ERROR: API - ', error.message);
+      return NextResponse.json({error: error.message });
+    }
   }
 }
 
-export async function ImportNotes(note : any){
+export async function ImportNotes(note : TDBNoteEntry){
   try{
     const db = await pool.getConnection();
     const _query = 'INSERT INTO words (notes, learned, user_id) VALUES (?, ?, ?);'
-    const [results] = await db.query(_query, [JSON.stringify(note.notes), note.learned, note.userId]);
+    const [results] = await db.query(_query, [JSON.stringify(note.notes), note.learned, note.user_id]);
 
     db.release();
 
     return NextResponse.json(results);
-  } catch(error: any){
-    console.log('ERROR: API - ' + error.message);
+  } catch(error){
 
-    return NextResponse.json({error: error.message});
+    if(error instanceof Error){
+      console.log('ERROR: API - ' + error.message);
+      return NextResponse.json({error: error.message});      
+    }
   }
 }
 

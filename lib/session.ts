@@ -1,13 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import "server-only"
-import { SignJWT, jwtVerify } from 'jose'
+import { JWTPayload, SignJWT, jwtVerify } from 'jose'
 import { cookies } from 'next/headers'
 
  
 const secretKey = process.env.SESSION_SECRET
 const encodedKey = new TextEncoder().encode(secretKey)
  
-export async function encrypt(payload: any) {
+export async function encrypt(payload: JWTPayload | undefined) {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
@@ -21,7 +20,7 @@ export async function decrypt(session: string | undefined = '') {
       algorithms: ['HS256'],
     })
     return payload
-  } catch (error : any) {
+  } catch (error) {
     console.log('Failed to verify session, error: ' + error);
   }
 }

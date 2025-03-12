@@ -95,8 +95,8 @@ export async function authenticateLogIn(state : stateType, formData : FormData){
     }
 
     const {email, password} : {email: string, password: string} = validatedFields.data;
-    const tmp : NextResponse = await GetUserInfo({email});
-    const tmp1 : TUser[] = (await tmp.json()); // retrieve the first and only row
+    const tmp : NextResponse | NextResponse<{ error: string; }> | undefined = await GetUserInfo({email});
+    const tmp1 : TUser[] = (await (tmp!= undefined && tmp.json())); // retrieve the first and only row
     
     if(tmp1 && tmp1.length > 1)
         throw new Error("Result from database should be [] or only one user!, bad sign up logic.");
