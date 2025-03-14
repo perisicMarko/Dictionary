@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 .primaryBtn{
-  @apply bg-blue-950 hover:bg-blue-400 hover:scale-115 cursor-pointer rounded-full border-2 text-blue-50 scale-105 p-2 m-2 w-32;
+  @apply bg-blue-950 hover:bg-blue-400 sm:hover:scale-110 cursor-pointer rounded-full border-2 text-blue-50 sm:scale-105 p-2 m-2 w-32;
 }
 
 .xBtn{
@@ -29,12 +29,12 @@
   @apply space-x-2 space-y-2;
 }
 .formInput{
-  @apply block w-full rounded focus:to-indigo-400 block bg-blue-950 text-blue-50;
+  @apply block w-full rounded focus:to-indigo-400 bg-blue-950 text-blue-50;
 }
 
 .background{
   background-image: url('/bgDictionary.png');
-
+  background-size: cover;
 }
 
 .whiteSpaces{

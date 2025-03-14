@@ -11,13 +11,13 @@ export default function SignUp(){
         window.alert('You signed in successfuly. Now log in your account.');
 
     return (
-        <div className="mt-80 w-[500px] h-1/2 bg-blue-400 rounded-2xl border-2 border-blue-50">
+        <div className="mt-80 w-[350px] sm:w-[500px] h-1/2 bg-blue-400 rounded-2xl border-2 border-blue-50">
           <div className='flex justify-end items-start bg-blue-500 border-blue-50 rounded-t-2xl'>
             <Link className="xBtn mr-3" href="/"><b>x</b></Link>
           </div>
 
           <div className="flex justify-center">
-            <form className="form w-[450px]" action={action}>
+            <form className="form w-[330px] sm:w-[450px]" action={action}>
             <div className="mt-3">
                 <label htmlFor="name">Name: </label>
                 <input className="formInput" type="text" name="name" defaultValue={state?.name}/>
@@ -48,7 +48,7 @@ export default function SignUp(){
                 {state?.errors?.confirmPassword && <p className="error">{state.errors.confirmPassword}</p>}
             </div>
             <div className="center">
-                <button disabled={isPending} className="primaryBtn">{isPending ? "Loading..." : "Sign up"}</button>
+                <button disabled={isPending} className="scale-90 primaryBtn">{isPending ? "Loading..." : "Sign up"}</button>
                 <div className='inline-block hover:scale-105 ml-1'>
                     <Link href="logIn"><i><u>Or log in here</u></i></Link>  
                 </div>

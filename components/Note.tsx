@@ -10,7 +10,7 @@ export default function Note(note : TDBNoteEntry){
     const title = (drop ? 'Click to collapse.' : 'Click for notes.');
 
     return (
-        <div className="bg-blue-400 w-[600px] max-h-[800px] rounded-4xl mt-8 overflow-auto" title={title} onClick={() => setDrop(!drop)}>
+        <div className="bg-blue-400 w-[350px] sm:w-[600px] max-h-[720px] sm:max-h-[800px] rounded-4xl mt-8 overflow-auto" title={title} onClick={() => setDrop(!drop)}>
             <h1 className="text-center mb-3" title="word"><u><b>{note.word}</b></u></h1>
             <div className="flex flex-col justify-center items-center">
                 <span className="mr-3">Hear it:</span><AudioPlayer src={note.audio}></AudioPlayer>
@@ -18,10 +18,12 @@ export default function Note(note : TDBNoteEntry){
             </div>
             {drop && 
             <>
-            <h2 className='mt-2'>Your notes:</h2>
-            <p className="whiteSpaces">{note.user_notes ? note.user_notes : 'You have not inserted yor notes.'}</p> 
-            <h2 className="mt-2">Generated notes:</h2>
-            <p className="whiteSpaces">{note.generated_notes}</p>
+            <div className='p-4'>
+                <h2 className='mt-2'>Your notes:</h2>
+                <p className="whiteSpaces">{note.user_notes ? note.user_notes : 'You have not inserted yor notes.'}</p> 
+                <h2 className="mt-2">Generated notes:</h2>
+                <p className="whiteSpaces">{note.generated_notes}</p>
+            </div>
             </>
             }
         </div>

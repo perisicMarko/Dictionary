@@ -8,11 +8,11 @@ export default function LogIn(){
 
     
     return (
-        <div className="mt-90 bg-blue-400 rounded-2xl border-2 border-blue-50 w-[500px] h-[300px]">
+        <div className="mt-90 bg-blue-400 rounded-2xl border-2 border-blue-50 w-[380px] h-[300px] sm:w-[500px] sm:h-[300px]">
             <div className='flex justify-end items-start bg-blue-500 border-blue-50 rounded-t-2xl'>
                 <Link className="xBtn mr-3" href="/"><b>x</b></Link>
             </div>
-            <form className="form mt-7 ml-6 w-[450px]" action={action}>
+            <form className="form mt-7 ml-12 sm:ml-6 w-[270px] sm:w-[450px]" action={action}>
                 <div className="flex flex-col justify-center">
                     <label htmlFor="email">Email: </label>
                     <input className="formInput" type="text" name="email" defaultValue={state?.email}/>
@@ -27,7 +27,7 @@ export default function LogIn(){
                     <button disabled={isPending} className="primaryBtn">{isPending ? "Loading" : "Log in"}</button>
                 </div>
                 <div className='center my-1'>
-                    <p className="mr-6 hover:underline">You do not have an account yet?</p>
+                    <p className="center text-xs sm:text-base mr-3 sm:mr-6 hover:underline">You do not have an account yet?</p>
                     <Link href="/signUp" className='hover:scale-115'><i><u>Sign up here</u></i></Link>
                 </div>
             </form>

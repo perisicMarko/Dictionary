@@ -65,9 +65,9 @@ export default function UserInput(){
     return (
         <>
         {!help ?
-        <div key='input' className="flex flex-col justify-center items-center mt-60 w-[500px] h-[200px]">
+        <div key='input' className="flex flex-col justify-center items-center mt-80 sm:mt-80 w-[400px] sm:w-[500px] h-[200px]">
                 <div className="flex flex-col justify-center items-center">
-                    <form action={(e) => {cleanUp(0); saveNotes(e);} } className='w-[450px] bg-blue-400 rounded-4xl p-2 flex flex-col justify-center items-center'>
+                    <form action={(e) => {cleanUp(0); saveNotes(e);} } className='w-[400px] sm:w-[450px] bg-blue-400 rounded-4xl p-2 flex flex-col justify-center items-center'>
                         <input key="userId" type='text' hidden name="userId" defaultValue={userId} />
                         <span className="hover:underline cursor-pointer text-blue-950" onClick={() => setHelp(!help)}><b>Help</b></span> 
                         <input ref={wordInputRef} key='userWord' className='text-blue-50 formInput mt-8 mb-3' type="text" name="word" value={word} onChange={(e) => setWord(e.target.value)} placeholder='Enter new word here...'/>
@@ -79,12 +79,12 @@ export default function UserInput(){
                         </div>
                         {generate && 
                         <div>
-                            <textarea  rows={5} cols={40} placeholder='Type your notes here...' className='mt-2 max-h-50' name='userNotes' onChange={(e) => setUserNotes(e.target.value)} key="userNotes" defaultValue={userNotes}/>
+                            <textarea  rows={5} cols={40} placeholder='Type your notes here...' className='mt-2 max-h-40 sm:max-h-70' name='userNotes' onChange={(e) => setUserNotes(e.target.value)} key="userNotes" defaultValue={userNotes}/>
                         </div>     
                         }
                         {generate && 
-                        <div>
-                             <textarea  rows={5} cols={40} placeholder='Notes will be generated here...' className='mt-2 max-h-50' name='generatedNotes' key="genNotes" value={(isErrorNote(note) || note === null || note === undefined ? "" : note!.parsedNote)}
+                        <div className='p-3'>
+                             <textarea  rows={5} cols={40} placeholder='Notes will be generated here...' className='mt-2 h-100 sm:max-h-70 px-1' name='generatedNotes' key="genNotes" value={(isErrorNote(note) || note === null || note === undefined ? "" : note!.parsedNote)}
                              onChange={(e) => {const tmp = note; if(!isErrorNote(tmp) && tmp != null) tmp.parsedNote = (isErrorNote(tmp) || tmp === null || tmp === undefined ? '' : e.target.value); setNote(tmp)}}/>
                          </div>
                         }
@@ -106,19 +106,19 @@ export default function UserInput(){
                 </div>
         </div>
         :
-        <div key='help' className="w-[700px] h-[400] rounded-4xl mt-65 p-3"  id='help'>
+        <div key='help' className="w-[400px] sm:w-[700px] h-[400] rounded-4xl mt-10 sm:mt-50 p-3"  id='help'>
           <div className='center rounded-t-2xl mb-5'>
           <h1 className="hover:underline cursor-pointer bg-blue-400 text-blue-950 w-1/4 text-center rounded-2xl" onClick={() => setHelp(!help)}><b>Help</b></h1> 
           </div>
           <div>
             <Image className="inline-block rounded-2xl ml-3 border-2 border-blue-300 mr-3" width={350} height={280} src='/wordInput.png' alt='picture of word input'></Image>
-            <p className="inline-block bg-blue-400 rounded-2xl p-1 w-[200px]">     
+            <p className="inline-block bg-blue-400 rounded-2xl p-1 sm:w-[200px]">     
                 Input word you would like to remember, then click on &quot;Generate&quot; button. 
             </p>
           </div>
           <div className='mt-5'>
             <Image className="inline-block rounded-2xl ml-3 border-2 border-blue-300 mr-3" width={350} height={250} src='/generateNotes.png' alt='generate notes'></Image>
-            <p className='inline-block bg-blue-400 rounded-2xl w-[200px] p-1'>
+            <p className='inline-block bg-blue-400 rounded-2xl sm:w-[200px] p-1'>
             Two textareas will pop up, one filled with generated notes from the app and empty one reserved for your personal notes.
             </p>
           </div>

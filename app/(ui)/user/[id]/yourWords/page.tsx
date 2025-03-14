@@ -29,7 +29,7 @@ export default function YourWords(){
     
     return (
         <>
-        <div className='rounded-4xl mt-10 b-2 text0-blue-950 bg-blue-400 b-blue-950'>
+        <div className='rounded-4xl mt-10 b-2 text-blue-950 bg-blue-400 border-blue-950'>
             <input className="bg-blue-400 text-blue-950 rounded-4xl p-2" type="text" name="search" placeholder="Search words here..." value={search} onChange={(e) => { setSearch(e.target.value) }}/>
         </div>
         {index === -1 && search != '' && <p className=' mt-3 bg-blue-400 rounded-full p-2'>{'No word like that within your words'}</p>}
