@@ -2,11 +2,11 @@ import Link from 'next/link';
 
 export default function Page(){
     return (
-        <div className="mt-60 w-[650px] h-[560px]d bg-blue-400 rounded-2xl border-2 border-blue-50 overflow-auto">
+        <div className="mt-60 w-[380px] sm:w-[650px] h-[560px]d bg-blue-400 rounded-2xl border-2 border-blue-50 overflow-auto">
             <div className="flex justify-end bg-blue-500">
                 <Link className="xBtn mr-4" href="/"><b>x</b></Link>
             </div>
-            <div>
+            <div className='p-2'>
                 <h2 className='title'>What does this app do?</h2>
                 <p>
                     This app should help you actively recall words you would like to learn by following the forgetting curve, technique spaced repetition.
