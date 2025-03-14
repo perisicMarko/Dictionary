@@ -8,6 +8,7 @@ export async function GET() {
   
   const tmp = await GetNotes();
   const notes = await (tmp != undefined && tmp.json());
+  //delte this console.log
   console.log(notes);
   const  currentDate = new Date();
   const users = new Map<number, boolean>();
@@ -23,6 +24,8 @@ export async function GET() {
     to += mail + ', ';
   }
 
+  //delte this console.log
+  console.log(to);
   to = to.trim().substring(0, to.length - 1); // omitting the last comma
 
    // Kreiranje transportera sa SMTP podešavanjima

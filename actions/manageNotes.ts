@@ -1,7 +1,9 @@
 'use server'
-import { ImportNotes, GetNotes } from '@/lib/db';
+import { ImportNotes, GetNotes, GetNoteById, UpdateNote, DeleteNote, EditNote } from '@/lib/db';
 import { TDBNoteEntry, TGeneratedNote, TGMeaning, TGPhonetic, TWordApp } from '@/lib/types';
-import { addDays, format } from 'date-fns';
+import { addDays, format, isBefore } from 'date-fns';
+import calc from '@/lib/spacedRepetition';
+import { redirect } from 'next/navigation';
 
 export async function saveNotes(formData : FormData){
 
@@ -26,7 +28,6 @@ export async function saveNotes(formData : FormData){
     review_date: format(addDays(now, 1), 'yyyy-MM-dd')
   };
 
-  console.log(dbInput.review_date);
 
   const retVal = await ImportNotes(dbInput);
   if(!retVal)
@@ -98,10 +99,10 @@ function stringifyNote(noteObj : TWordApp){
 
 
 export async function getUsersNotes(userId : number){
-  const tmp = await GetNotes();
-  const words = await (tmp != undefined && tmp.json());
+  const res = await GetNotes();
+  const notes = await (res != undefined && res.json());
 
-  return words.filter((w : TDBNoteEntry) => {
+  return notes.filter((w : TDBNoteEntry) => {
     const res = w.status == false && w.user_id == userId;
     return res;
   });
@@ -110,9 +111,64 @@ export async function getUsersNotes(userId : number){
 
 export async function getUsersHistory(userId : number){
   const tmp = await GetNotes();
-  const words = await (tmp != undefined && tmp.json());
-  return words.filter((w : TDBNoteEntry) => {
+  const notes = await (tmp != undefined && tmp.json());
+  return notes.filter((w : TDBNoteEntry) => {
     const res = w.status == true && w.user_id == userId;
     return res;
   });
+}
+
+export async function getRecallNotes(userId : number){
+  const res = await GetNotes();
+  const notes = await (res != undefined && res.json());
+
+  const currentDate = new Date().toISOString();
+  return notes.filter((n : TDBNoteEntry) => {
+    const res = n.status == false && n.user_id == userId && isBefore(n.review_date, currentDate);
+    return res;
+  });
+}
+
+
+type stateType = void | undefined;
+  
+export async function updateReviewDate(state : stateType, formData : FormData){
+  const res = await GetNoteById(Number(formData.get('wordId')));
+  const tmp = await (res != undefined && res.json());
+  const note = tmp[0];
+
+  const quality = Number(formData.get('recall'));
+  const retVal = calc(quality, note.days, note.repetitions, note.ease_factor);
+
+  note.days = retVal.days;
+  note.repetitions = retVal.repetitions;
+  note.ease_factor = retVal.easeFactor;
+  note.review_date = addDays(new Date(), note.days);
+
+  UpdateNote(note);
+}
+
+export async function deleteNote(formData : FormData){
+  console.log('hello');
+  DeleteNote(Number(formData.get('noteId'))); 
+}
+
+export async function editNote(state: void | undefined, formData : FormData){
+  const userNotes = formData.get('userNotes')?.toString();
+  const generatedNotes = formData.get('generatedNotes')?.toString();
+  const retVal = EditNote((userNotes ? userNotes : ''), (generatedNotes ? generatedNotes : ''), Number(formData.get('noteId')));
+
+  if(!retVal)
+    throw new Error('Note with noteId is missing in database check manageNotes and edit/[noteId]');
+
+  const userId = Number(formData.get('userId'));
+
+  redirect('/user/' + userId + '/recall');
+}
+
+export async function getNoteById(noteId : number){
+  const data = await GetNoteById(noteId);
+  const note = await (data != undefined && data.json());
+
+  return note[0];
 }

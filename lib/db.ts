@@ -118,3 +118,78 @@ export async function ImportNotes(note : TDBNoteEntry){
     }
   }
 }
+
+export async function GetNoteById(noteId : number){
+  try{
+    console.log(noteId);
+    const db = await pool.getConnection();
+    const _query = 'select * from words as w where w.id = ?;'
+    const [results] = await db.query(_query, [noteId]);
+
+    db.release();
+
+    return NextResponse.json(results);
+  } catch(error){
+
+    if(error instanceof Error){
+      console.log('ERROR: API - ' + error.message);
+      return NextResponse.json({error: error.message});      
+    }
+  }
+}
+
+export async function UpdateNote(note : TDBNoteEntry){
+  try{
+    const db = await pool.getConnection();
+    const _query = 'UPDATE words SET days = ?, repetitions = ?, ease_factor = ?, review_date = ? where id = ?;'
+    const [results] = await db.query(_query, [note.days, note.repetitions, note.ease_factor, note.review_date, note.id]);
+
+    db.release();
+
+    return NextResponse.json(results);
+  } catch(error){
+
+    if(error instanceof Error){
+      console.log('ERROR: API - ' + error.message);
+      return NextResponse.json({error: error.message});      
+    }
+  }
+}
+
+
+export async function DeleteNote(noteId : number){
+  try{
+    const db = await pool.getConnection();
+    const _query = 'DELETE FROM words where id = ?;'
+    const [results] = await db.query(_query, [noteId]);
+    console.log(noteId);
+
+    db.release();
+
+    return NextResponse.json(results);
+  } catch(error){
+
+    if(error instanceof Error){
+      console.log('ERROR: API - ' + error.message);
+      return NextResponse.json({error: error.message});      
+    }
+  }
+}
+
+export async function EditNote(userNotes : string, generatedNotes : string, noteId : number){
+  try{
+    const db = await pool.getConnection();
+    const _query = 'UPDATE words SET user_notes = ?, generated_notes = ? where id = ?;'
+    const [results] = await db.query(_query, [userNotes, generatedNotes, noteId]);
+
+    db.release();
+
+    return NextResponse.json(results);
+  } catch(error){
+
+    if(error instanceof Error){
+      console.log('ERROR: API - ' + error.message);
+      return NextResponse.json({error: error.message});      
+    }
+  }
+}

@@ -69,7 +69,8 @@ export async function authenticateSignUp(state: stateType, formData: FormData){
 
     if(status){
         console.log('New User signed up!');
-        redirect('/logIn');}
+        redirect('/logIn');
+    }
     else{
         redirect('/signUp');
     }

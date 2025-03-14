@@ -2,9 +2,9 @@
 import { useEffect, useState, useRef } from 'react';
 import { saveNotes, generateNotes } from '@/actions/manageNotes';
 import AudioPlayer from './AudioPlayer';
-import Cookie from 'js-cookie';
 import Image from 'next/image';
 import { TWordApp } from '@/lib/types';
+import Cookie from 'js-cookie';
 
 
 export default function UserInput(){
@@ -39,6 +39,7 @@ export default function UserInput(){
     
     });
     
+
     const userId = Cookie.get('userId');
     const isDisabled = word.trim() === '';
 
