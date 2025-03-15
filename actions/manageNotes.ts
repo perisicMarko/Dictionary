@@ -148,9 +148,8 @@ export async function updateReviewDate(state : stateType, formData : FormData){
   UpdateNote(note);
 }
 
-export async function deleteNote(formData : FormData){
-  console.log('hello');
-  DeleteNote(Number(formData.get('noteId'))); 
+export async function deleteNote(formData : FormData, status : boolean){
+  DeleteNote(Number(formData.get('noteId')), status); 
 }
 
 export async function editNote(state: void | undefined, formData : FormData){

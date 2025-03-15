@@ -157,11 +157,12 @@ export async function UpdateNote(note : TDBNoteEntry){
 }
 
 
-export async function DeleteNote(noteId : number){
+
+export async function DeleteNote(noteId : number, status : boolean){
   try{
     const db = await pool.getConnection();
-    const _query = 'DELETE FROM words where id = ?;'
-    const [results] = await db.query(_query, [noteId]);
+    const _query = 'UPDATE words SET status = ? where id = ?;'
+    const [results] = await db.query(_query, [status, noteId]);
     console.log(noteId);
 
     db.release();

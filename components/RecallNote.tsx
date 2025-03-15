@@ -25,7 +25,7 @@ export default function RecallNote({note, handle} : {note : TDBNoteEntry, handle
                     <form className="center" action={'/edit/' + note.id}>
                         <button type='submit'><Image className="scale-75 hover:scale-90 cursor-pointer" title='edit note' src='/edit.svg' width={30} height={30} alt='edit icon'></Image></button>
                     </form>
-                    <form className="center" action={(e) => {setMenu(!menu); deleteNote(e)}}>
+                    <form className="center" action={(e) => {setMenu(!menu); deleteNote(e, false)}}>
                         <input type="text" name='noteId' defaultValue={note.id} hidden/>
                         <input type="text" name='userNotes' defaultValue={note.user_notes} hidden/>
                         <input type="text" name='generatedNotes' defaultValue={note.generated_notes} hidden/>
