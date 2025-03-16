@@ -18,14 +18,15 @@ export default function RecallNote({note, handle} : {note : TDBNoteEntry, handle
     return (
     <>
         <div className='relative top-0'> 
-            <div className="absolute left-18 sm:left-56.5 top-10 rounded-2xl w-[55px] h-[110px]">
+            <div className="absolute left-16 sm:left-56.5 top-10 rounded-2xl w-[55px] h-[110px]">
             <Image className="justify-self-end ml-3 scale-75 hover:scale-90" title='options' src='/menu.svg' width={30} height={30} alt='menu icon' onClick={(e) => {e.stopPropagation(); setMenu(!menu);}}></Image>
             {menu && 
             <div className='bg-blue-300/80 rounded-2xl'>
                 <form className="center" action={'/edit/' + note.id}>
                     <button type='submit'><Image className="scale-75 hover:scale-90 cursor-pointer" title='edit note' src='/edit.svg' width={30} height={30} alt='edit icon'></Image></button>
                 </form>
-                <form className="center" action={(e) => {setMenu(!menu); deleteNote(e, false)}}>
+                <form className="center" action={async (e) => {setMenu(!menu); await deleteNote(e, true); handle();}}>
+                    <input type="text" name='userId' defaultValue={note.user_id} hidden/>
                     <input type="text" name='noteId' defaultValue={note.id} hidden/>
                     <input type="text" name='userNotes' defaultValue={note.user_notes} hidden/>
                     <input type="text" name='generatedNotes' defaultValue={note.generated_notes} hidden/>
@@ -61,7 +62,7 @@ export default function RecallNote({note, handle} : {note : TDBNoteEntry, handle
           </>
       : 
               <div className='center'>
-                  <form className='border-2 border-blue-950 rounded-2xl flex flex-col justify-center items-center w-1/2 py-2' action={(e) => { if(![0, 1, 2, 3, 4, 5].includes(quality)) return; setQuality(-1); handle(); action(e);}}>
+                  <form className='border-2 border-blue-950 rounded-2xl flex flex-col justify-center items-center w-1/2 py-2' action={(e) => { if(![0, 1, 2, 3, 4, 5].includes(quality)) {return;} setQuality(-1); action(e); handle();}}>
                       <input type="text" name='note.user_id' defaultValue={note.user_id} hidden/>
                       <input type='text' name='wordId' defaultValue={note.id} hidden/>
                       <label htmlFor="recall" className="text-center">Can you recall:</label>
@@ -74,7 +75,7 @@ export default function RecallNote({note, handle} : {note : TDBNoteEntry, handle
                           <option value="4">4(correct response, after hestitation)</option>
                           <option value="5">5(perfect response)</option>
                       </select>
-                      {quality != -1 && <button className='bg-blue-950 hover:bg-blue-400 hover:scale-115 cursor-pointer rounded-full border-2 text-blue-50 px-2 mt-2'>Grade</button>}
+                      {quality != -1 && <button className='bg-blue-950 hover:bg-blue-400 hover:scale-115 cursor-pointer rounded-full border-2 text-blue-50 px-2 mt-2'>{isPending ? 'Grading' : 'Grade'}</button>}
                   </form>
               </div>
           

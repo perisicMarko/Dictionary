@@ -1,6 +1,6 @@
 "use server"
 import { SignUpSchema, LogInSchema } from '@/lib/rules';
-import { GetUserInfo, InsertUserInfo } from '@/lib/db';
+import { GetUserInfoByEmail, InsertUserInfo } from '@/lib/db';
 import { redirect } from 'next/navigation';
 import bcrypt from 'bcrypt';
 import { createSession } from '../lib/session';
@@ -25,7 +25,7 @@ type stateType = {
         password: string;
     };
     email: string;
-} | undefined;
+} | undefined | {error : string};
 
 export async function authenticateSignUp(state: stateType, formData: FormData){
 
@@ -42,7 +42,8 @@ export async function authenticateSignUp(state: stateType, formData: FormData){
             errors: validatedFields.error.flatten().fieldErrors,
             name: "",
             lastName: "", 
-            email: ""
+            email: "", 
+            error: ""
         } ;
         
 
@@ -59,6 +60,21 @@ export async function authenticateSignUp(state: stateType, formData: FormData){
             retObj.email = emailError;
 
         return retObj;
+    }else{
+        const tmp = formData.get('email')?.toString();
+        const res = await GetUserInfoByEmail({email: (tmp ? tmp : '')});
+        const alreadyExist = await (res != undefined && res.json());
+        if(alreadyExist.length != 0 && validatedFields.success){
+            const retObj = {
+                errors: null,
+                lastName: "", 
+                name: "",
+                email: "",
+                error: 'Email already used.'
+            } ;
+
+        return retObj;
+        }   
     }
 
     const {name, lastName, email} = validatedFields.data;
@@ -96,7 +112,7 @@ export async function authenticateLogIn(state : stateType, formData : FormData){
     }
 
     const {email, password} : {email: string, password: string} = validatedFields.data;
-    const tmp : NextResponse | NextResponse<{ error: string; }> | undefined = await GetUserInfo({email});
+    const tmp : NextResponse | NextResponse<{ error: string; }> | undefined = await GetUserInfoByEmail({email});
     const tmp1 : TUser[] = (await (tmp!= undefined && tmp.json()));
     if(tmp1 && tmp1.length > 1)
         throw new Error("Result from database should be [] or only one user!, bad sign up logic.");

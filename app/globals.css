@@ -34,7 +34,9 @@
 
 .background{
   background-image: url('/bgDictionary.png');
-  background-size: cover;
+  background-size: contain;
+  background-attachment: fixed;
+  background-blend-mode:soft-light;
 }
 
 .whiteSpaces{

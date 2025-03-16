@@ -15,7 +15,27 @@ const pool = mysql.createPool({
 });
 
 
-export async function GetUserInfo({email} : {email: string}){
+export async function GetUserInfoById(id : number){
+
+  try {
+    const db = await pool.getConnection(); 
+    const _query = 'SELECT * FROM users as u where u.id = ?';
+    const [results] = await db.query(_query, [id]);
+
+    db.release();
+
+    return NextResponse.json(results);
+    
+
+  } catch (error) {
+    if(error instanceof Error){
+      console.log('ERROR: API - ', error?.message)
+      return NextResponse.json({error: error.message })
+    }
+  }
+}
+
+export async function GetUserInfoByEmail({email} : {email: string}){
 
     try {
       const db = await pool.getConnection(); 
@@ -33,32 +53,6 @@ export async function GetUserInfo({email} : {email: string}){
         return NextResponse.json({error: error.message })
       }
     }
-}
-
-export async function GetUserInfoById(userId : number){
-  
-  try {
-    const db = await pool.getConnection(); 
-    const _query = 'SELECT * FROM users as u where u.id = ?';
-    const [results] = await db.query(_query, [userId]);
-
-    db.release();
-
-  
-    const tmp = NextResponse.json(results);
-    // const retVal = {
-    //   name: tmp.firstame,
-    //   lastName
-    // }
-
-    return tmp;
-    
-  } catch (error) {
-    if(error instanceof Error){
-      console.log('ERROR: API - ', error?.message);
-      return NextResponse.json({error: error.message });
-    }
-  }
 }
 
 export async function GetNotes(){
@@ -163,7 +157,6 @@ export async function DeleteNote(noteId : number, status : boolean){
     const db = await pool.getConnection();
     const _query = 'UPDATE words SET status = ? where id = ?;'
     const [results] = await db.query(_query, [status, noteId]);
-    console.log(noteId);
 
     db.release();
 

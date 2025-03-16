@@ -8,8 +8,7 @@ export async function GET() {
   
   const tmp = await GetNotes();
   const notes = await (tmp != undefined && tmp.json());
-  //delte this console.log
-  console.log(notes);
+
   const  currentDate = new Date();
   const users = new Map<number, boolean>();
 
@@ -20,14 +19,13 @@ export async function GET() {
 
   let to = '';
   for(const e of users.keys()){
-    const mail = await GetUserInfoById(e);
-    to += mail + ', ';
+    const res = await GetUserInfoById(e);
+    const user = (await (res && res.json()))[0];
+    to += user.email + ', ';
   }
 
-  //delte this console.log
-  console.log(to);
   to = to.trim().substring(0, to.length - 1); // omitting the last comma
-
+  
    // Kreiranje transportera sa SMTP podešavanjima
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -41,8 +39,8 @@ export async function GET() {
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: to,
-    subject: 'Hmm, looks like it is time to learn.',
-    text: 'It takes just a few minutes to recall some words and stay on the learning course, keep it up.\n mail do aplikacije'
+    subject: 'Hey it\'s me, looks like it is time to learn.',
+    text: 'It takes just a few minutes to recall some words and stay on the learning path, keep it up.\n Follow link to app: https://dictionary-six-tau.vercel.app.'
   };
 
   try {

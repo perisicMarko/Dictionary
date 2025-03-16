@@ -27,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="bgThemeColor background backgroundStyle">
+    <html lang="en" className="bgThemeColor background">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col justify-center items-center`}>
         {children}
       </body>

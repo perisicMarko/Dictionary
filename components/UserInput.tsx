@@ -73,7 +73,7 @@ export default function UserInput(){
                         {note != null && isErrorNote(note) && note?.error && cleanUp(1)}
                         <div className="flex justify-start">
                           <input key="audioInput" type="text" hidden name="audio" defaultValue={isErrorNote(note) || note === null ? undefined : note?.audio}/>
-                          {note != null && !isErrorNote(note) && note?.parsedNote ? <p className='text-start'>Pronounciation: <AudioPlayer src={isErrorNote(note) || note === null ? '' : note!.audio} ></AudioPlayer></p> : <></>}
+                          {note != null && !isErrorNote(note) && note?.parsedNote ? <p className='text-start'>Pronunciation: <AudioPlayer src={isErrorNote(note) || note === null ? '' : note!.audio} ></AudioPlayer></p> : <></>}
                         </div>
                         {generate && 
                         <div>
@@ -110,13 +110,13 @@ export default function UserInput(){
           <div>
             <Image className="inline-block rounded-2xl border-2 border-blue-300 mr-3" width={350} height={280} src='/wordInput.png' alt='picture of word input'></Image>
             <p className="inline-block bg-blue-400 rounded-2xl p-1 sm:w-[200px]">     
-                Input word you would like to remember, then click on &quot;Generate&quot; button. 
+                Input the word you would like to remember, then click the &quot;Generate&quot; button. 
             </p>
           </div>
           <div className='mt-5'>
             <Image className="inline-block rounded-2xl border-2 border-blue-300 mr-3" width={350} height={250} src='/generateNotes.png' alt='generate notes'></Image>
             <p className='inline-block bg-blue-400 rounded-2xl sm:w-[200px] p-1'>
-            Two textareas will pop up, one filled with generated notes from the app and empty one reserved for your personal notes.
+                Two text areas will pop up: one filled with generated notes from the app and an empty one reserved for your personal notes.
             </p>
           </div>
         </div>

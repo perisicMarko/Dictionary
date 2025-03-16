@@ -4,6 +4,7 @@ import { TDBNoteEntry, TGeneratedNote, TGMeaning, TGPhonetic, TWordApp } from '@
 import { addDays, format, isBefore } from 'date-fns';
 import calc from '@/lib/spacedRepetition';
 import { redirect } from 'next/navigation';
+import GetAuthUser from './getAuthUser';
 
 export async function saveNotes(formData : FormData){
 
@@ -153,7 +154,11 @@ export async function updateReviewDate(state : stateType, formData : FormData){
 }
 
 export async function deleteNote(formData : FormData, status : boolean){
-  DeleteNote(Number(formData.get('noteId')), status); 
+  const user = await GetAuthUser();
+  if(!user)
+    redirect('/logIn');
+
+  await DeleteNote(Number(formData.get('noteId')), status); 
 }
 
 export async function editNote(state: void | undefined, formData : FormData){

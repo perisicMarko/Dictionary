@@ -5,8 +5,8 @@ export const SignUpSchema = z.object({
     lastName: z.string().min(1, {message: "Not be empty!"}).regex(/^[a-zA-Z]+$/, {message: "Only contains letters!"}),
     email: z.string().email('Please enter a valid email!').trim(),
     password: z.string().min(1, {message: "Not be empty!"})
-        .regex(/[a-zA-Z]/, {message: "Must contain at least one letter!"}).regex(/[0-9]/, {message: "Must containt at least one number!"})
-        .regex(/[^a-zA-Z0-9]/, {message: "Must contain at least one special character!"}).trim(),
+        .regex(/[a-zA-Z]/, {message: "Must contains at least one letter!"}).regex(/[0-9]/, {message: "Must contains at least one number!"})
+        .regex(/[^a-zA-Z0-9]/, {message: "Must contains at least one special character!"}).trim(),
     confirmPassword: z.string().trim()
 }).superRefine((val, ctx) => {
     if(val.password !== val.confirmPassword){

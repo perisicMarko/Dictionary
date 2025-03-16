@@ -7,9 +7,9 @@ import { authenticateSignUp } from '@/actions/auth'
 export default function SignUp(){
     const [state, action, isPending] = useActionState(authenticateSignUp, undefined);
 
-    if(!state?.errors && isPending)
-        window.alert('You signed in successfuly. Now log in your account.');
-
+    if(state?.error === 'Email already used.'){
+        window.alert('This email is already used for another account.');
+    }
     return (
         <div className="mt-25 sm:mt-30 md:mt-30 sm:w-[500px] h-1/2 bg-blue-400 rounded-2xl border-2 border-blue-50">
           <div className='flex justify-end items-start bg-blue-500 border-blue-50 rounded-t-2xl'>
@@ -21,25 +21,25 @@ export default function SignUp(){
             <div className="mt-3">
                 <label htmlFor="name">Name: </label>
                 <input className="formInput" type="text" name="name" defaultValue={state?.name}/>
-                {state?.errors?.name && <p className="error" key="name">Name needs to be:</p>}
+                {state?.errors?.name && <p className="error" key="name">Name needs:</p>}
                 <ul className='list-disc'>{state?.errors?.name && state?.errors?.name.map((e) => <li key={e} className="error ml-6">{e}</li>)}</ul>
             </div>            
             <div className="mt-3">
                 <label htmlFor="lastName">Last name: </label>
                 <input className="formInput" type="text" name="lastName" defaultValue={state?.lastName}/>
-                {state?.errors?.lastName && <p className="error" key="lastName">Last name needs to be:</p>}
+                {state?.errors?.lastName && <p className="error" key="lastName">Last name:</p>}
                 <ul className='list-disc'>{state?.errors?.lastName && state?.errors?.lastName.map((e) => <li key={e} className="error ml-6">{e}</li>)}</ul>
             </div>                    
             <div className="mt-3">
                 <label htmlFor="email">Email: </label>
                 <input className="formInput" type="text" name="email" defaultValue={state?.email}/>
-                {state?.errors?.email && <p className="error" key="email">Email needs to be:</p>}
+                {state?.errors?.email && <p className="error" key="email">Email:</p>}
                 <ul className='list-disc'>{state?.errors?.email && state?.errors?.email.map((e) => <li key={e} className="error ml-6">{e}</li>)}</ul>
             </div>
             <div className="mt-3">
                 <label htmlFor="password">Password: </label>
                 <input className="formInput" type="password" name="password"/>
-                {state?.errors?.password && <p className="error" key="password">Passwowrd needs to be:</p>}
+                {state?.errors?.password && <p className="error" key="password">Passwowrd:</p>}
                 <ul className='list-disc'>{state?.errors?.password && state.errors.password.map((e) => <li key={e} className="error ml-6">{e}</li>)}</ul>
             </div>
             <div className="mt-3">
