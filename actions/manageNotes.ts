@@ -123,6 +123,10 @@ export async function getRecallNotes(userId : number){
   const notes = await (res != undefined && res.json());
 
   const currentDate = new Date().toISOString();
+  if(typeof notes === 'object')
+    if(notes.status === false && notes.user_id === userId && isBefore(notes.review_date, currentDate))
+      return notes;
+
   return notes.filter((n : TDBNoteEntry) => {
     const res = n.status == false && n.user_id == userId && isBefore(n.review_date, currentDate);
     return res;

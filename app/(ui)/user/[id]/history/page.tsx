@@ -34,7 +34,7 @@ export default function History(){
         {(words && search != '' && index != -1) && <Note {...words[index]}></Note>}
         {words && search === '' ? <Words props={words}></Words> : <></>}
         {words.length === 0 &&
-        <div className="center bg-blue-400 mt-60 rounded-4xl b-2 border-blue-500 p-2">
+        <div className="center bg-blue-400 mt-60 mx-2 rounded-4xl b-2 border-blue-500 p-2">
             <h1 className="text-center text-blue-950 "><b>Hmm, looks like you do not have any words in your history, time to learn!</b></h1>
         </div>
         }
