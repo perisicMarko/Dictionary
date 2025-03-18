@@ -4,6 +4,8 @@ import Note from '@/components/Note';
 import Words from '@/components/Words';
 import { TDBNoteEntry } from '@/lib/types';
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 export default function History(){
 
@@ -22,21 +24,36 @@ export default function History(){
         }
         fetchNotes();
     }, []);
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        show: {
+          opacity: 1,
+          transition: {
+            staggerChildren: 0.3,
+          },
+        },
+      };
+    
+      const itemVariants = {
+        hidden: { opacity: 0, y: -15 },
+        show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+      };
     
     const index : number = words?.findIndex((word : TDBNoteEntry) => word.word.toLowerCase().trim() === search.toLowerCase().trim());
 
     return (
         <>
-        <div className='rounded-4xl mt-10 b-2 text0-blue-950 bg-blue-400 b-blue-950'>
-            <input className="bg-blue-400 text-blue-950 rounded-4xl p-2" type="text" name="search" placeholder="Search words here..." value={search} onChange={(e) => { setSearch(e.target.value) }}/>
-        </div>
-        {index === -1 && search != '' && <p className=' mt-3 bg-blue-400 rounded-full p-2'>{'No word like that within your words'}</p>}
+        <motion.div initial='hidden' animate='show' variants={itemVariants} className='mt-10 w-3/4 sm:w-[600px] bg-slate-800 rounded-4xl grid grid-cols-[auto_1fr] items-center'>
+            <Image src='/magnifyGlass.svg' alt='magnify glass icon' width={20} height={20} className='inline-block ml-8 mr-5'></Image><input className="text-white p-2 inline-block rounded-r-4xl" type="text" name="search" placeholder='Search for words here...' value={search} onChange={(e) => { setSearch(e.target.value) }}/>
+        </motion.div>
+        {index === -1 && search != '' && <motion.p initial='hidden' animate='show' variants={{hidden: {opacity: 0, y: 10}, show: {opacity: 1, y: 0, transition: {duration: 1}}}} className=' mt-3 bg-blue-400 rounded-full p-2'>{'No word like that within your words'}</motion.p>}
         {(words && search != '' && index != -1) && <Note {...words[index]}></Note>}
         {words && search === '' ? <Words props={words}></Words> : <></>}
         {words.length === 0 &&
-        <div className="center bg-blue-400 mt-60 mx-2 rounded-4xl b-2 border-blue-500 p-2">
-            <h1 className="text-center text-blue-950 "><b>Hmm, looks like you do not have any words in your history, time to learn!</b></h1>
-        </div>
+        <motion.div initial='hidden' animate='show' variants={containerVariants} className="center bg-slate-800 w-3/4 sm:w-[600px] mt-60 mx-2 rounded-4xl  p-2">
+            <motion.h1 variants={itemVariants} className="text-center text-white"><b>Hmm, looks like you do not have any words in your history, time to learn!</b></motion.h1>
+        </motion.div>
         }
         </>
     );

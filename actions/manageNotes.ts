@@ -103,6 +103,10 @@ export async function getUsersNotes(userId : number){
   const res = await GetNotes();
   const notes = await (res != undefined && res.json());
 
+  if(typeof notes === 'object')
+    if(notes.status === false && notes.user_id === userId)
+      return notes;
+
   return notes.filter((w : TDBNoteEntry) => {
     const res = w.status == false && w.user_id == userId;
     return res;
@@ -113,6 +117,11 @@ export async function getUsersNotes(userId : number){
 export async function getUsersHistory(userId : number){
   const tmp = await GetNotes();
   const notes = await (tmp != undefined && tmp.json());
+
+  if(typeof notes === 'object')
+    if(notes.status === true && notes.user_id === userId)
+      return notes;
+
   return notes.filter((w : TDBNoteEntry) => {
     const res = w.status == true && w.user_id == userId;
     return res;
@@ -127,7 +136,7 @@ export async function getRecallNotes(userId : number){
   if(typeof notes === 'object')
     if(notes.status === false && notes.user_id === userId && isBefore(notes.review_date, currentDate))
       return notes;
-
+  
   return notes.filter((n : TDBNoteEntry) => {
     const res = n.status == false && n.user_id == userId && isBefore(n.review_date, currentDate);
     return res;

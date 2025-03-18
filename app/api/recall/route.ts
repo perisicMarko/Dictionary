@@ -39,7 +39,7 @@ export async function GET() {
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: to,
-    subject: 'Hey it\'s me, looks like it is time to learn.',
+    subject: 'Hey it\'s me again, looks like it is time to learn.',
     text: 'It takes just a few minutes to recall some words and stay on the learning path, keep it up.\n Follow link to app: https://dictionary-six-tau.vercel.app.'
   };
 

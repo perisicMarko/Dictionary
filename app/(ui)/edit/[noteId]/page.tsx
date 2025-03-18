@@ -2,6 +2,7 @@
 import { editNote, getNoteById } from "@/actions/manageNotes";
 import { TDBNoteEntry } from "@/lib/types";
 import { useActionState, useEffect, useState } from "react";
+import { motion } from 'framer-motion';
 
 export default function Edit(){
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -22,26 +23,42 @@ export default function Edit(){
         getNote();
     }, []);
 
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        show: {
+            opacity: 1,
+            transition: {
+                duration: 0.5,
+                staggerChildren: 0.4,
+            },
+        },
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        show: { opacity: 1, y: 0, transition: { duration: 0.7 } },
+    };
+
     return (
-        <div className="flex flex-col justify-center items-center mt-15 bg-blue-400 rounded-4xl xl:h-[800px] h-3/4 w-3/4 xl:w-[600px] p-5 overflow-auto">
-            <form className='rounded-2xl border-2 border-blue-950 space-y-4 w-full h-3/4 xl:h-[750px] p-4' action={action}>
-                <h1 className="text-center hover:underline text-blue-950"><b>Edit your notes here:</b></h1>
+        <motion.div initial='hidden' animate='show' variants={containerVariants} className="flex flex-col justify-center items-center mt-15 bg-slate-800 rounded-4xl xl:h-[800px] h-3/4 w-3/4 xl:w-[600px] p-5 overflow-auto">
+            <form className='rounded-2xl space-y-4 w-full p-4' action={action}>
+                <motion.h1 variants={itemVariants} className="text-center hover:underline text-white"><b>Edit your notes here:</b></motion.h1>
                 <input type="text" name="noteId" defaultValue={note?.id} hidden/>
                 <input type="text" name="userId" defaultValue={note?.user_id} hidden/>
-                <div>
-                    <label htmlFor="userNotes">Your notes:</label>
-                    <textarea name="userNotes" id="userNotes" defaultValue={note?.user_notes} className="border-2 border-blue-200 rounded-2xl  xl:h-[180px] md:h-[220px] sm:h-[180px] h-[130px] block w-full p-2 text-blue-950"></textarea>
-                </div>
+                <motion.div variants={itemVariants}>
+                    <label htmlFor="userNotes" className="text-white">Your notes:</label>
+                    <textarea name="userNotes" id="userNotes" defaultValue={note?.user_notes} className="bg-white rounded-2xl  xl:h-[180px] md:h-[220px] sm:h-[180px] h-[130px] block w-full p-2 mt-1 text-slate-800"></textarea>
+                </motion.div>
                 
-                <div>
-                    <label htmlFor="generatedNotes">Generated notes:</label>
-                    <textarea name="generatedNotes" id="generatedNotes" defaultValue={note?.generated_notes} className="border-2 border-blue-200 rounded-2xl xl:h-[375px] md:h-[250px] sm:h-[200px] h-[150px] block w-full p-2 text-blue-950"></textarea>
-                </div>
-                <div className="center sm:my-3">
-                    <button className="bg-blue-950 sm:px-5 sm:py-1 hover:bg-blue-400 hover:scale-115 cursor-pointer rounded-full border-2 text-blue-50 px-4">Edit</button>
-                </div>
+                <motion.div variants={itemVariants}>
+                    <label htmlFor="generatedNotes" className="text-white">Generated notes:</label>
+                    <textarea name="generatedNotes" id="generatedNotes" defaultValue={note?.generated_notes} className=" bg-white rounded-2xl xl:h-[375px] md:h-[250px] sm:h-[200px] h-[150px] block w-full p-2 mt-1 text-slate-800"></textarea>
+                </motion.div>
+                <motion.div initial={{opacity: 0, y: 50}} animate={{opacity: 1, y: 0, transition: {duration: 0.6}}} className="center sm:my-3">
+                    <button className="primaryBtn">Edit</button>
+                </motion.div>
             </form>
-        </div>
+        </motion.div>
         
     );
 }

@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 .primaryBtn{
-  @apply bg-blue-950 hover:bg-blue-400 sm:hover:scale-110 cursor-pointer rounded-full border-2 text-blue-50 sm:scale-105 p-2 m-2 w-32;
+  @apply w-full bg-blue-400 text-white hover:scale-105 active:scale-95 rounded-3xl block m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer;
 }
 
 .xBtn{
-  @apply text-blue-950 hover:scale-150 scale-125;
+  @apply hover:scale-150 scale-125 cursor-pointer;
 }
 
 
@@ -13,8 +13,8 @@
   background-color: #10172a;
 }
 
-.textThemeColor{
-  color: #066cb1;
+.textColor{
+  @apply text-slate-800;
 }
 
 .error{
@@ -29,14 +29,27 @@
   @apply space-x-2 space-y-2;
 }
 .formInput{
-  @apply block w-full rounded focus:to-indigo-400 bg-blue-950 text-blue-50;
+  @apply block w-full p-2 rounded-2xl text-slate-800 bg-white;
 }
 
-.background{
+.background {
+  position: relative;
+  min-height: 100vh; /* Ensure it has height */
+}
+
+.background::before {
+  content: "";
+  position: fixed; /* Keeps background visible even while scrolling */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh; /* Covers full viewport */
   background-image: url('/bgDictionary.png');
-  background-size: contain;
-  background-attachment: fixed;
-  background-blend-mode:soft-light;
+  background-size: cover; /* Adjust to fit */
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.3; /* Controls transparency */
+  z-index: -1;
 }
 
 .whiteSpaces{
@@ -45,5 +58,9 @@
 
 .title{
   @apply text-center font-bold hover:underline mt-3;
+}
+
+.navigationBtn{
+  @apply text-white text-xs md:text-[14px] xl:text-[16px] cursor-pointer hover:text-blue-400;
 }
 

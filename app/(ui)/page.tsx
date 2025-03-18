@@ -1,21 +1,81 @@
-import '@/app/globals.css';
-import Link from 'next/link';
+"use client";
+import { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import Link from "next/link";
 
 export default function Home() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   
+  const borderOffset = 10; 
 
-  return (  
-    
-    <div className='mt-30 flex flex-col items-center'>
-      <h1 className="sm:w-100 text-2xl  bg-blue-950/80 rounded-full text-center hover:underline textThemeColor"><i>&quot;Learning a new language takes time, so take it step by step.&quot;</i></h1>
+  useEffect(() => {
+    const updateDimensions = () => {
+      if (containerRef.current) {
+        const { width, height } = containerRef.current.getBoundingClientRect();
+        setDimensions({ width, height });
+      }
+    };
 
-      <Link className="text-center primaryBtn hover:underline" href='/about'><b>About app</b></Link>  
-      <Link className="text-center primaryBtn hover:underline" href='/logIn'><b>Log in</b></Link>    
-      <Link className="text-center primaryBtn hover:underline" href='/signUp'><b>Sign up</b></Link>
+    updateDimensions();
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
 
-    </div>
-    
-    );
+  const rectWidth = dimensions.width - borderOffset * 2;
+  const rectHeight = dimensions.height - borderOffset * 2;
+  const dashLength = 2 * (rectWidth + rectHeight);
+
+  return (
+    <motion.div
+      ref={containerRef}
+      className="relative mt-15 flex w-3/4 sm:w-[500px] flex-col items-center bg-slate-800 rounded-3xl p-6 overflow-visible"
+    >
+  
+      <motion.svg
+        width={dimensions.width}
+        height={dimensions.height}
+        viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
+        className="absolute top-0 left-0 z-0 pointer-events-none"
+      >
+        <motion.rect
+          x={borderOffset}
+          y={borderOffset}
+          width={rectWidth}
+          height={rectHeight}
+          rx="15"
+          ry="15"
+          stroke="#60A5FA"
+          strokeWidth="3"
+          fill="transparent"
+          strokeDasharray={dashLength}
+          animate={{ strokeDashoffset: [dashLength, 0] }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        />
+      </motion.svg>
+
+
+      <motion.h1 className="relative z-10 text-center text-white px-4 py-2 mb-5">
+        <i>&quot;Learning takes time, so take it step by step.&quot;</i>
+      </motion.h1>
+
+      <motion.div className="relative z-10 w-full flex flex-col justify-center items-center">
+        <Link className="primaryBtn center" href="/logIn">
+          <b>Log in</b>        
+        </Link>
+        <div className="grid grid-cols-2 w-full mt-3">
+          <Link className="flex items-start justify-start text-white hover:scale-105 hover:underline text-[14px] sm:text-[18px]" href="/signUp">
+            <u>Sign up</u>
+          </Link>
+          <Link className="flex justify-end text-white hover:scale-105 hover:underline text-center text-[14px] sm:text-[18px]" href="/about">
+            <u>About the app</u>
+          </Link>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
 }
-
-
