@@ -1,15 +1,14 @@
-'use server'
 import "@/app/globals.css";
 import { logOut } from '@/actions/auth';
 import Link from 'next/link';
-import Image
- from "next/image";
+import Image from "next/image";
+
 export default async function RootLayout({
   children,
   params
 }: Readonly<{
   children: React.ReactNode;
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }>) {
 
   const { id } = await params; 
@@ -23,10 +22,10 @@ export default async function RootLayout({
             </form>
           </div>
             <div className="flex justify-end items-center xl:space-x-5 mr-2 sm:mr-5">
-              <Link href={'/user/' + id} className="xl:scale-105 py-1 px-1 sm:px-3 navigationBtn"> Input word </Link>
-              <Link href={'/user/' + id + '/recall'} className=" xl:scale-105 py-1 px-1 sm:px-3 navigationBtn"> Recall </Link>
-              <Link href={'/user/' + id + '/yourWords'} className="xl:scale-105 py-1 px-1 sm:px-3 navigationBtn"> Your words </Link>
-              <Link href={'/user/' + id + '/history'} className="xl:scale-105 py-1 px-1 sm:px-3 navigationBtn"> Learned words </Link>
+              <Link id='layoutInputLink' href={'/user/' + id + '/inputWord'} className="py-1 px-1 sm:px-3 navigationBtn text-white"> Input word </Link>
+              <Link id='layoutRecallLink' href={'/user/' + id + '/recall'} className="py-1 px-1 sm:px-3 navigationBtn text-blue-400"> Recall </Link>
+              <Link id='layoutHistoryLink' href={'/user/' + id + '/yourWords'} className="py-1 px-1 sm:px-3 navigationBtn text-white"> Your words </Link>
+              <Link id='layoutLearnedLink' href={'/user/' + id + '/history'} className="py-1 px-1 sm:px-3 navigationBtn text-white"> Learned words </Link>
             </div>
         </nav>
         

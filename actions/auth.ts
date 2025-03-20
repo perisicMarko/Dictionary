@@ -139,7 +139,7 @@ export async function authenticateLogIn(state : stateType, formData : FormData){
       sameSite: 'lax',
       path: '/',
     });
-    redirect('/user/' + user.id);
+    redirect('/user/' + user.id + '/inputWord');
 }
 
 

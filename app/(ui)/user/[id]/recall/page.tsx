@@ -49,13 +49,17 @@ export default function Page(){
                 <div className='rounded-t-2xl flex justify-end bg-slate-950'>
                     <span className="xBtn mr-3 text-white" onClick={() => {setHelp(false);}}><b>x</b></span>
                 </div>
-                <motion.p variants={itemVariants} className="p-2 text-white">
-                    Here is where you recall words you have added, click on menu icon to open the menu.<br/>
-                    There you have edit and delete icons, also &quot;notes&quot; for showing word notes and &quot;grade&quot; for returning to the grading ui.<br/>
-                    Note that you will be informed via email when to enter the app to recall some words. Recall system is based on forgetting curve and spaced repetition algorithm.<br/>
-                    Initially, a freshly added word is set to recall for the next day, then after 6 days. After first two repetitions each next is calculated based on how good you have graded your recall.<br/>
-                    If you mark some word with grade below 3(0, 1, 2) repetition cycle will be returned to the beginning. <br/>
-                    Also word is considered as learned when it has a big interval for recall(30+ days), but app will not get rid of those words for you, you can do it on delete button which marks word as learned and moves it to the history.<br/>
+                <h2 className="text-white text-center"><b>Here is where you recall your words.</b></h2>
+                <motion.p variants={itemVariants} className="p-4 text-white">
+                    Click on menu icon to open the menu.
+                    There is edit and delete icons, also &quot;notes&quot; for showing word notes and &quot;grade&quot; for grading ui, grading ui is initialy selected.<br/><br/>
+                    <b>How this works?</b><br/>
+                    Recall system is based on forgetting curve and spaced repetition algorithm.<br/>
+                    Freshly added word is set to recall for the next day, that is the first repetition. After the first one the second one is after 6 days. When you have done first two repetitions each next is calculated based on how good you have graded your recall.<br/>
+                    If you mark some word with grade below 3(0, 1, 2) repetition cycle will be returned to the beginning. <br/><br/>
+                    Also word is considered as learned when it has a big interval for recall(30+ days), but app will not get rid of those words for you. You can do it on delete button which marks word as learned and moves it to the history.<br/>
+                    It is recommended to leave the word in recall system even after the fifth repetition for another one or more repetitions.<br/><br/>
+                    Note that you will be informed via email when to enter the app to recall some words.<br/>
                 </motion.p>
             </motion.div>
         }
