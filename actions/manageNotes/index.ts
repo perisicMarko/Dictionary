@@ -1,10 +1,10 @@
 'use server'
-import { ImportNotes, GetNotes, GetNoteById, UpdateNote, DeleteNote, EditNote } from '@/lib/db';
+import { ImportNotes, GetNotes, GetNoteById, UpdateRepetitionFactors, SetNoteLearned, ResetNoteRecallFactors, DeleteNote, EditNotes } from '@/lib/db';
 import { TDBNoteEntry, TGeneratedNote, TGMeaning, TGPhonetic, TWordApp } from '@/lib/types';
 import { addDays, format, isBefore } from 'date-fns';
 import calc from '@/lib/spacedRepetition';
 import { redirect } from 'next/navigation';
-import GetAuthUser from './getAuthUser';
+import GetAuthUser from '../auth/getAuthUser';
 
 export async function saveNotes(formData : FormData){
 
@@ -159,21 +159,21 @@ export async function updateReviewDate(state : stateType, formData : FormData){
   note.ease_factor = retVal.easeFactor;
   note.review_date = addDays(new Date(), note.days);
 
-  UpdateNote(note);
+  UpdateRepetitionFactors(note);
 }
 
-export async function deleteNote(formData : FormData, status : boolean){
+export async function setAsLearned(formData : FormData, status : boolean){
   const user = await GetAuthUser();
   if(!user)
     redirect('/logIn');
 
-  await DeleteNote(Number(formData.get('noteId')), status); 
+  await SetNoteLearned(Number(formData.get('noteId')), status); 
 }
 
 export async function editNote(state: void | undefined, formData : FormData){
   const userNotes = formData.get('userNotes')?.toString();
   const generatedNotes = formData.get('generatedNotes')?.toString();
-  const retVal = EditNote((userNotes ? userNotes : ''), (generatedNotes ? generatedNotes : ''), Number(formData.get('noteId')));
+  const retVal = EditNotes((userNotes ? userNotes : ''), (generatedNotes ? generatedNotes : ''), Number(formData.get('noteId')));
 
   if(!retVal)
     throw new Error('Note with noteId is missing in database check manageNotes and edit/[noteId]');
@@ -188,4 +188,14 @@ export async function getNoteById(noteId : number){
   const note = await (data != undefined && data.json());
 
   return note[0];
+}
+
+
+export async function backToRecallSystem(formData : FormData){ 
+  await ResetNoteRecallFactors(Number(formData.get('noteId')), 1, 0, 2.5, format(addDays(new Date(), 1), 'yyyy-MM-dd'));
+}
+
+
+export async function deleteNote(formData : FormData){
+  await DeleteNote(Number(formData.get('noteId')));
 }

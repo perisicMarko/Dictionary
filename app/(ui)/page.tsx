@@ -29,7 +29,7 @@ export default function Home() {
   return (
     <motion.div
       ref={containerRef}
-      className="relative mt-15 flex w-3/4 sm:w-[500px] flex-col items-center bg-slate-800 rounded-3xl p-6 overflow-visible"
+      className="relative mt-15 sm:mt-30 md:mt-35 xl:mt-70 flex w-3/4 sm:w-[500px] flex-col items-center bg-slate-800 rounded-3xl p-6"
     >
   
       <motion.svg

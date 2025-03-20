@@ -58,6 +58,7 @@ export default function Page(){
                     Freshly added word is set to recall for the next day, that is the first repetition. After the first one the second one is after 6 days. When you have done first two repetitions each next is calculated based on how good you have graded your recall.<br/>
                     If you mark some word with grade below 3(0, 1, 2) repetition cycle will be returned to the beginning. <br/><br/>
                     Also word is considered as learned when it has a big interval for recall(30+ days), but app will not get rid of those words for you. You can do it on delete button which marks word as learned and moves it to the history.<br/>
+                    You can delete word from the app only on &quot;Learned words&quot; page when you click on menu then on delete icon, then is permanently deleted.
                     It is recommended to leave the word in recall system even after the fifth repetition for another one or more repetitions.<br/><br/>
                     Note that you will be informed via email when to enter the app to recall some words.<br/>
                 </motion.p>

@@ -3,7 +3,7 @@ import { SignUpSchema, LogInSchema } from '@/lib/rules';
 import { GetUserInfoByEmail, InsertUserInfo } from '@/lib/db';
 import { redirect } from 'next/navigation';
 import bcrypt from 'bcrypt';
-import { createSession } from '../lib/session';
+import { createSession } from '../../lib/session';
 import { cookies } from 'next/headers';
 import { TUser } from '@/lib/types';
 import { NextResponse } from 'next/server';

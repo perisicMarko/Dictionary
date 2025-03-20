@@ -3,7 +3,7 @@ import { TDBNoteEntry } from '@/lib/types';
 import AudioPlayer from "./AudioPlayer";
 import { useState, useActionState, useRef, useEffect } from 'react';
 import Image from 'next/image';
-import { updateReviewDate, deleteNote } from '@/actions/manageNotes';
+import { updateReviewDate, setAsLearned } from '@/actions/manageNotes';
 import { motion, useAnimation, useInView, useScroll, useTransform } from 'framer-motion';
 
 
@@ -68,7 +68,7 @@ export default function RecallNote({note, handle} : {note : TDBNoteEntry, handle
                 <motion.form variants={itemVariants} className="center" action={'/edit/' + note.id}>
                     <button type='submit'><Image className="scale-75 hover:scale-90 cursor-pointer" title='edit note' src='/edit.svg' width={30} height={30} alt='edit icon'></Image></button>
                 </motion.form>
-                <motion.form variants={itemVariants} className="center" action={async (e) => {setMenu(!menu); await deleteNote(e, true); handle();}}>
+                <motion.form variants={itemVariants} className="center" action={async (e) => {setMenu(!menu); await setAsLearned(e, true); handle();}}>
                     <input type="text" name='userId' defaultValue={note.user_id} hidden/>
                     <input type="text" name='noteId' defaultValue={note.id} hidden/>
                     <input type="text" name='userNotes' defaultValue={note.user_notes} hidden/>

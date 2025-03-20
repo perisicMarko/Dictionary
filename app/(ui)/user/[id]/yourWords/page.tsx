@@ -39,8 +39,8 @@ export default function YourWords(){
                     <Image src='/magnifyGlass.svg' alt='magnify glass icon' width={20} height={20} className='inline-block ml-8 mr-5'></Image><input className="text-white p-2 inline-block rounded-r-4xl" type="text" name="search" placeholder='Search for words here...' value={search} onChange={(e) => { setSearch(e.target.value) }}/>
                 </motion.div>
         {index === -1 && search != '' && <p className=' mt-3 bg-slate-800 rounded-full p-2'>{'No word like that within your words'}</p>}
-        {(words && search != '' && index != -1) && <Note {...words[index]}></Note>}
-        {words && search === '' ? <Words props={words}></Words> : <></>}
+        {(words && search != '' && index != -1) && <Note prop={words[index]} historyNote={false} handle={() => {}}></Note>}
+        {words && search === '' ? <Words props={words} historyNote={false} handle={() => {}}></Words> : <></>}
         {words.length === 0 &&
         <motion.div initial='hidden' animate='show' variants={itemVariants} className="center bg-slate-800 mt-60 rounded-4xl b-2 border-blue-500 p-2">
             <h1 className="text-center w-3/4 sm:w-[600px] text-white p-2"><b>Hmm, looks like you do not have any words, time to learn!</b></h1>

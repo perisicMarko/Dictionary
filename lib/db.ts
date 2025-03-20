@@ -132,7 +132,7 @@ export async function GetNoteById(noteId : number){
   }
 }
 
-export async function UpdateNote(note : TDBNoteEntry){
+export async function UpdateRepetitionFactors(note : TDBNoteEntry){
   try{
     const db = await pool.getConnection();
     const _query = 'UPDATE words SET days = ?, repetitions = ?, ease_factor = ?, review_date = ? where id = ?;'
@@ -152,7 +152,7 @@ export async function UpdateNote(note : TDBNoteEntry){
 
 
 
-export async function DeleteNote(noteId : number, status : boolean){
+export async function SetNoteLearned(noteId : number, status : boolean){
   try{
     const db = await pool.getConnection();
     const _query = 'UPDATE words SET status = ? where id = ?;'
@@ -170,7 +170,7 @@ export async function DeleteNote(noteId : number, status : boolean){
   }
 }
 
-export async function EditNote(userNotes : string, generatedNotes : string, noteId : number){
+export async function EditNotes(userNotes : string, generatedNotes : string, noteId : number){
   try{
     const db = await pool.getConnection();
     const _query = 'UPDATE words SET user_notes = ?, generated_notes = ? where id = ?;'
@@ -187,3 +187,41 @@ export async function EditNote(userNotes : string, generatedNotes : string, note
     }
   }
 }
+
+export async function ResetNoteRecallFactors(noteId : number, days : number, repetitions : number, easeFactor : number, reviewDate : string){
+  try{
+    const db = await pool.getConnection();
+    const _query = 'UPDATE words SET days = ?, repetitions = ?, ease_factor = ?, review_date = ?, status = ? where id = ?;'
+    const [results] = await db.query(_query, [days, repetitions, easeFactor, reviewDate, false, noteId]);
+
+    db.release();
+
+    return NextResponse.json(results);
+  } catch(error){
+
+    if(error instanceof Error){
+      console.log('ERROR: API - ' + error.message);
+      return NextResponse.json({error: error.message});      
+    }
+  }
+}
+
+export async function DeleteNote(noteId : number){
+  try{
+    const db = await pool.getConnection();
+    const _query = 'DELETE FROM words where id = ?';
+    const [results] = await db.query(_query, [noteId]);
+
+    db.release();
+
+    return NextResponse.json(results);
+  } catch(error){
+
+    if(error instanceof Error){
+      console.log('ERROR: API - ' + error.message);
+      return NextResponse.json({error: error.message});      
+    }
+  }
+}
+
+
