@@ -1,42 +1,23 @@
 'use client'
+import dynamic from 'next/dynamic';
 import { TDBNoteEntry } from '@/lib/types';
 import AudioPlayer from "./AudioPlayer";
-import { useState, useActionState, useRef, useEffect } from 'react';
+import { useState, useActionState, useRef } from 'react';
 import Image from 'next/image';
 import { updateReviewDate, setAsLearned } from '@/actions/manageNotes';
-import { motion, useAnimation, useInView, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
 
+function RecallNote({note, handle} : {note : TDBNoteEntry, handle : () => void}){ 
 
-
-export default function RecallNote({note, handle} : {note : TDBNoteEntry, handle : () => void}){
-
-    const [drop, setDrop] = useState(false);
     const [menu, setMenu] = useState(false);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [state, action, isPending] = useActionState(updateReviewDate, undefined);
     const [quality, setQuality] = useState(-1);
-    
-    const title = (drop ? 'Click to collapse.' : 'Click for notes.');
+
 
     const containerRef = useRef(null);
     const [arrowSrc, setArrowSrc] = useState(false);
-
-    const isInView = useInView(containerRef, {once: true});
-    const mainControls = useAnimation();
-    
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start end", "end end"]
-    });
-
-    const noteValue = useTransform(scrollYProgress, [0, 1], ["-100%", "0%"])
-
-    useEffect(() => {
-        if(isInView){
-            mainControls.start("visible")
-        }
-    }, [isInView]);
-
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -53,46 +34,46 @@ export default function RecallNote({note, handle} : {note : TDBNoteEntry, handle
         show: { opacity: 1, y: 0, transition: { duration: 0.2 } },
     };
 
-    return (        
+    return (   
+        
         <motion.div
         initial={{ x: -100, opacity: 0 }}
         animate={{x: 0, opacity: 1}}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        viewport={{ once: true, amount: 0.2 }}
-        style={{translateX: noteValue}} ref={containerRef} 
-        className="bg-slate-800 relative w-3/4 sm:w-[600px] max-h-[800px] rounded-4xl mt-8 p-7 overflow-auto" onClick={() => {if(quality != 6) return; setDrop(!drop)}}>
-            <div className="absolute right-0 top-5 rounded-2xl w-[55px] h-[110px]">
-            <Image className="justify-self-end ml-3 scale-75 hover:scale-90 cursor-pointer" title='options' src='/menu.svg' width={30} height={30} alt='menu icon' onClick={(e) => {e.stopPropagation(); setMenu(!menu);}}></Image>
-            {menu && 
-            <motion.div initial='hidden' animate='show' variants={containerVariants} className='absolute bg-white/80 z-10 left-1 rounded-2xl'>
-                <motion.form variants={itemVariants} className="center" action={'/edit/' + note.id}>
-                    <button type='submit'><Image className="scale-75 hover:scale-90 cursor-pointer" title='edit note' src='/edit.svg' width={30} height={30} alt='edit icon'></Image></button>
-                </motion.form>
-                <motion.form variants={itemVariants} className="center" action={async (e) => {setMenu(!menu); await setAsLearned(e, true); handle();}}>
-                    <input type="text" name='userId' defaultValue={note.user_id} hidden/>
-                    <input type="text" name='noteId' defaultValue={note.id} hidden/>
-                    <input type="text" name='userNotes' defaultValue={note.user_notes} hidden/>
-                    <input type="text" name='generatedNotes' defaultValue={note.generated_notes} hidden/>
-                    <button type='submit'><Image className="scale-75 hover:scale-90 cursor-pointer" title='delete note' src='/delete.svg' width={30} height={30} alt='delete icon'></Image></button>
-                </motion.form>
-                
-                <motion.span variants={itemVariants} className="ml-1 block hover:scale-105 hover:underline text-slate-800 cursor-pointer" onClick={() => {setQuality(6); setMenu(!menu); setDrop(true)}}><b>notes</b></motion.span>
-                <motion.span variants={itemVariants} className="ml-1 block hover:scale-105 hover:underline text-slate-800 cursor-pointer" onClick={() => {setQuality(-1); setMenu(!menu); setDrop(false);}}><b>grade</b></motion.span>
-            </motion.div>
-            }
+        ref={containerRef} 
+        className="bg-slate-800 relative w-3/4 sm:w-[600px] max-h-[800px] rounded-4xl mt-8 p-7" onClick={() => {setMenu(false);}}>
+            <div className="absolute right-0 top-5 flex flex-col items-center rounded-2xl w-[55px] h-[110px]">
+                <Image className="scale-75 hover:scale-90 cursor-pointer" title='options' src='/menu.svg' width={30} height={30} alt='menu icon' onClick={(e) => {e.stopPropagation(); setMenu(!menu);}}></Image>
+                {menu && 
+                <motion.div initial='hidden' animate='show' variants={containerVariants} className='bg-white/80 flex flex-col items-center pointer-events-auto z-10 left-2 py-1 px-1 rounded-2xl'>
+                    <Link href={'/edit/' + note.id} type='submit' onClick={() => setMenu(false)}><Image className="scale-75 hover:scale-90 cursor-pointer" title='edit note' src='/edit.svg' width={30} height={30} alt='edit icon'></Image></Link>
+                    
+                    <motion.form variants={itemVariants} className="center" action={async (e) => {await setAsLearned(e, true); handle();}}>
+                        <input type="text" name='userId' defaultValue={note.user_id} hidden/>
+                        <input type="text" name='noteId' defaultValue={note.id} hidden/>
+                        <input type="text" name='userNotes' defaultValue={note.user_notes} hidden/>
+                        <input type="text" name='generatedNotes' defaultValue={note.generated_notes} hidden/>
+                        <button type='submit' onClick={(e) => e.stopPropagation()}><Image className="scale-75 hover:scale-90 cursor-pointer" title='delete note' src='/delete.svg' width={30} height={30} alt='delete icon'></Image></button>
+                    </motion.form>
+
+                    <motion.span variants={itemVariants} className="ml-1 block hover:scale-105 hover:underline text-slate-800 cursor-pointer" onClick={() => {setQuality(6); setMenu(!menu); }}><b>notes</b></motion.span>
+                    <motion.span variants={itemVariants} className="ml-1 block hover:scale-105 hover:underline text-slate-800 cursor-pointer" onClick={() => {setQuality(-1); setMenu(!menu); }}><b>grade</b></motion.span>
+                </motion.div>
+                }
             </div>
             <span className=" text-white" title="word"><b>{note.word}</b></span>
               
            
         {quality === 6 ?
-              <motion.div initial='hidden' animate='show' variants={containerVariants} className="space-y-2 mt-2 justify-center items-center" title={title}>
-                    <AudioPlayer src={note.audio}></AudioPlayer>
-                    <motion.h2 initial={{y:15, opacity: 0}} animate={{y: 0, opacity: 1}} className='mt-2 text-blue-400'><b><u>Your notes:</u></b></motion.h2>
-                    <motion.p  initial={{y:15, opacity: 0}} animate={{y: 0, opacity: 1}} className="whiteSpaces text-blue-300">{note.user_notes ? note.user_notes : 'You have not inserted yor notes.'}</motion.p> 
-                    <motion.h2 initial={{y:15, opacity: 0}} animate={{y: 0, opacity: 1}} className="mt-2 text-blue-400"><b><u>Generated notes:</u></b></motion.h2>
-                    <motion.p  initial={{y:15, opacity: 0}} animate={{y: 0, opacity: 1}} className="whiteSpaces text-blue-300">{note.generated_notes}</motion.p>
-              </motion.div>
-              
+        <>
+            <AudioPlayer src={note.audio}></AudioPlayer>
+            <motion.div initial='hidden' animate='show' variants={containerVariants} className="space-y-2 mt-2 justify-center items-center overflow-auto h-[200px] md:h-[250px] xl:h-[400px]">
+                <motion.h2 initial={{y:15, opacity: 0}} animate={{y: 0, opacity: 1}} className='mt-2 text-blue-400'><b><u>Your notes:</u></b></motion.h2>
+                <motion.p  initial={{y:15, opacity: 0}} animate={{y: 0, opacity: 1}} className="whiteSpaces text-blue-300">{note.user_notes ? note.user_notes : 'You have not inserted yor notes.'}</motion.p> 
+                <motion.h2 initial={{y:15, opacity: 0}} animate={{y: 0, opacity: 1}} className="mt-2 text-blue-400"><b><u>Generated notes:</u></b></motion.h2>
+                <motion.p  initial={{y:15, opacity: 0}} animate={{y: 0, opacity: 1}} className="whiteSpaces text-blue-300">{note.generated_notes}</motion.p>
+            </motion.div>
+        </>      
         :
         
             <motion.div initial='hidden' animate='show' variants={containerVariants} className='center'>
@@ -100,20 +81,17 @@ export default function RecallNote({note, handle} : {note : TDBNoteEntry, handle
                     <input type="text" name='note.user_id' defaultValue={note.user_id} hidden/>
                     <input type='text' name='wordId' defaultValue={note.id} hidden/>
                     <label htmlFor="recall" className="text-white text-xs sm:text-xl">Remember this word?</label>
-                    {!drop && 
-                    <>
-                        <Image src={!arrowSrc ? '/arrowDown.svg' : '/arrowUp.svg'} alt='arrow icon' width={20} height={20} className='ml-3 top-12 sm:top-12 pointer-events-none md:top-13 xl:top-14 right-5 sm:right-11 scale-80 sm:scale-100 z-5 inline-block absolute'></Image>
-                        <select id="recall" defaultValue={-1} name="recall" onClick={() => setArrowSrc(!arrowSrc)} onChange={(e) => setQuality(Number(e.target.value))} className="relative mt-1 block text-white hover:scale-105 active:scale-95 bg-blue-400 w-full h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] appearance-none cursor-pointer py-2 rounded-3xl focus:outline-none px-3 text-xs sm:text-xl">
-                            <option value='-1' disabled>Grade from 0-5 </option>
-                            <option value="0">0(complete blackout)</option>
-                            <option value="1">1(incorrect response, the correct one remembered after reading notes)</option>
-                            <option value="2">2(incorrect response, where the correct one seemed easy to recall)</option>
-                            <option value="3">3(correct response, recalled with serious difficulty)</option>
-                            <option value="4">4(correct response, after hestitation)</option>
-                            <option value="5">5(perfect response)</option>
-                        </select> 
-                    </>
-                    }
+                    <Image src='/arrowDown.svg' alt='arrow icon' width={20} height={20} className='ml-3 top-10 sm:top-12 pointer-events-none md:top-13 xl:top-14 right-5 sm:right-11 scale-80 sm:scale-100 z-5 inline-block absolute'></Image>
+                    <select id="recall" defaultValue={-1} name="recall" onClick={() => {setMenu(false); setArrowSrc(!arrowSrc);}} onChange={(e) => setQuality(Number(e.target.value))} className="relative mt-1 block text-white hover:scale-105 active:scale-95 bg-blue-400 w-full h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] appearance-none cursor-pointer py-2 rounded-3xl focus:outline-none px-3 text-xs sm:text-xl">
+                        <option value='-1' disabled>Grade from 0-5 </option>
+                        <option value="0">0(complete blackout)</option>
+                        <option value="1">1(incorrect response, the correct one remembered after reading notes)</option>
+                        <option value="2">2(incorrect response, where the correct one seemed easy to recall)</option>
+                        <option value="3">3(correct response, recalled with serious difficulty)</option>
+                        <option value="4">4(correct response, after hestitation)</option>
+                        <option value="5">5(perfect response)</option>
+                    </select> 
+                    
                     {quality != -1 && <motion.button variants={itemVariants} className='primaryBtn'><b>{isPending ? 'Loading...' : 'Grade'}</b></motion.button>}
                 </motion.form>
             </motion.div>
@@ -121,4 +99,6 @@ export default function RecallNote({note, handle} : {note : TDBNoteEntry, handle
       
       </motion.div>
     );
-}
+};
+
+export default dynamic(() => Promise.resolve(RecallNote), { ssr: false });

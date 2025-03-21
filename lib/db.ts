@@ -115,7 +115,6 @@ export async function ImportNotes(note : TDBNoteEntry){
 
 export async function GetNoteById(noteId : number){
   try{
-    console.log(noteId);
     const db = await pool.getConnection();
     const _query = 'select * from words as w where w.id = ?;'
     const [results] = await db.query(_query, [noteId]);

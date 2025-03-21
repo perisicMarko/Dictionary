@@ -24,8 +24,8 @@ export default function LogIn(){
     
     return (
         <motion.div initial="hidden" animate="show" variants={containerVariants} className="mt-25 sm:mt-30 md:mt-30 bg-slate-800 rounded-2xl border-2 border-blue-50 w-[1/2] md:w-[500px]">
-            <div className='flex justify-end items-start bg-slate-950 border-blue-50 rounded-t-2xl'>
-                <Link className="xBtn mr-3 text-white" href="/"><b>x</b></Link>
+            <div className='flex justify-end items-center bg-slate-950 border-blue-50 rounded-t-2xl'>
+                <Link className="xBtn mr-3 py-1 text-white" href="/"><b>x</b></Link>
             </div>
             <form className="form flex flex-col items-center justify-center m-5" action={action}>
                 <motion.div variants={itemVariants} className="w-full">

@@ -26,7 +26,7 @@ export async function GET() {
 
   to = to.trim().substring(0, to.length - 1); // omitting the last comma
   
-   // Kreiranje transportera sa SMTP podešavanjima
+   // create transporter with SMTP settings
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -35,16 +35,16 @@ export async function GET() {
     },
   });
 
-  // Podešavanje mejla
+  // configuring mail
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: to,
-    subject: 'Hey it\'s me again, looks like it is time to learn.',
-    text: 'It takes just a few minutes to recall some words and stay on the learning path, keep it up.\n Follow link to app: https://dictionary-six-tau.vercel.app.'
+    subject: 'Hey it\'s me again, it is time to recall some words.',
+    text: 'It takes just a few minutes to recall some words and stay on the learning path, keep it up.\n Follow this link to the app: https://dictionary-six-tau.vercel.app.'
   };
 
   try {
-    // Slanje mejla
+    // sending mail
     await transporter.sendMail(mailOptions);
     return NextResponse.json({ message: 'Mejl je uspešno poslat.' , status: 200});
   } catch (error) {

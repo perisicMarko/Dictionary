@@ -1,5 +1,10 @@
 @import "tailwindcss";
+@import "normalize.css";
 
+
+*{
+  @apply outline-blue-400;
+}
 .primaryBtn{
   @apply w-full bg-blue-400 text-white hover:scale-105 active:scale-95 rounded-3xl block m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer;
 }
@@ -7,7 +12,6 @@
 .xBtn{
   @apply hover:scale-150 scale-125 cursor-pointer;
 }
-
 
 .bgThemeColor{
   background-color: #10172a;

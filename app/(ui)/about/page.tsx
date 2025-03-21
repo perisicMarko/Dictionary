@@ -22,7 +22,7 @@ export default function Page(){
     return (
         <motion.div initial='hidden' animate='show' variants={containerVariants} className="mt-10 m-5 sm:w-[660px] bg-slate-800 rounded-2xl border-2 border-blue-50 overflow-auto">
             <div className="flex justify-end bg-slate-950">
-                <Link className="xBtn mr-4 text-white" href="/"><b>x</b></Link>
+                <Link className="xBtn mr-4 py-1 text-white" href="/"><b>x</b></Link>
             </div>
             <motion.div variants={itemVariants} className='p-5'>
                 <h2 className='title text-white'>What does this app do?</h2>

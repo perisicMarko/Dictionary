@@ -40,9 +40,9 @@ export default function Edit(){
     };
 
     return (
-        <motion.div initial='hidden' animate='show' variants={containerVariants} className="flex flex-col justify-center items-center mt-15 bg-slate-800 rounded-4xl xl:h-[800px] h-3/4 w-3/4 xl:w-[600px] p-5 overflow-auto">
+        <motion.div initial='hidden' animate='show' variants={containerVariants} className="flex flex-col justify-center items-center mt-15 bg-slate-800 rounded-4xl xl:h-[800px] h-3/4 w-3/4 xl:w-[600px] p-5">
             <form className='rounded-2xl space-y-4 w-full p-4' action={action}>
-                <motion.h1 variants={itemVariants} className="text-center hover:underline text-white"><b>Edit your notes here:</b></motion.h1>
+                <motion.h2 variants={itemVariants} className="text-center hover:underline text-white"><b>Edit your notes here:</b></motion.h2>
                 <input type="text" name="noteId" defaultValue={note?.id} hidden/>
                 <input type="text" name="userId" defaultValue={note?.user_id} hidden/>
                 <motion.div variants={itemVariants}>

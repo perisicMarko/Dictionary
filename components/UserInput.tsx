@@ -78,10 +78,10 @@ export default function UserInput(){
     };
 
     let buttonStyle = 'bg-blue-400 text-white hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block';
-    if(note && !isErrorNote)
-      buttonStyle += ' w-5/12';
-    else
-      buttonStyle += ' w-full';
+    if(!(note && !isErrorNote(note))){
+      buttonStyle += ' w-full col-span-2';
+    }else if(note)
+      buttonStyle += ' col-span-1';
 
     return (
         <>
@@ -92,58 +92,56 @@ export default function UserInput(){
         transition={{duration: 1}}
         key='input' className="flex flex-col justify-center items-center sm:mt-25 md:mt-25 xl:mt-70 w-3/4 h-3/4 sm:w-[500px] md: py-5 md-py-10 xl:py-16 sm:max-h-[400px] rounded-2xl">    
                 <motion.div initial='hidden' animate='show' variants={containerVariants} className="flex flex-col justify-center items-center w-full">
-                    <form action={(e) => {cleanUp(0); saveNotes(e);} } className='bg-slate-800 space-y-2 h-full rounded-4xl p-7 flex flex-col justify-center items-center w-full'>
+                    <form action={(e) => {cleanUp(0); saveNotes(e);}} className='bg-slate-800 space-y-2 h-full rounded-4xl p-7 flex flex-col justify-center items-center w-full'>
                         <input key="userId" type='text' hidden name="userId" defaultValue={userId} />
-                        <input ref={wordInputRef} key='userWord' className='rounded-3xl text-center textColor bg-white w-full h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] p-2 mt-5 mb-3' type="text" name="word" value={word} onChange={(e) => setWord(e.target.value)} placeholder='Enter new word here...'/>
+                        <input ref={wordInputRef} key='userWord' className='rounded-3xl text-center textColor bg-white w-full h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] p-2 mt-5' type="text" name="word" value={word} onChange={(e) => setWord(e.target.value)} placeholder='Enter new word here...'/>
                         {error && <p className='error'>{error}</p>}
                         {note != null && isErrorNote(note) && note?.error && cleanUp(1)}
-                        <motion.div variants={itemVariants} className="flex justify-start w-full">
-                          <motion.input variants={itemVariants} key="audioInput" type="text" hidden name="audio" defaultValue={isErrorNote(note) || note === null ? undefined : note?.audio}/>
+                        <motion.div variants={itemVariants} className="flex justify-start w-full mt-2">
+                          <input key="audioInput" type="text" hidden name="audio" defaultValue={isErrorNote(note) || note === null ? undefined : note?.audio}/>
                           {note != null && !isErrorNote(note) && note?.parsedNote ? <motion.div variants={itemVariants} className='w-full'><AudioPlayer src={isErrorNote(note) || note === null ? '' : note!.audio} ></AudioPlayer></motion.div> : <></>}
                         </motion.div>
                         {generate && 
                         <motion.div variants={itemVariants} className='w-full center'>
-                            <textarea  rows={5} placeholder='Type your notes here...' className='p-1 rounded-2xl w-full  mt-2 text-slate-800 bg-white max-h-40 xl:max-h-70' name='userNotes' key="userNotes"/>
+                            <textarea  rows={5} placeholder='Type your notes here...' className='p-2 rounded-2xl w-full  mt-2 text-slate-800 bg-white max-h-40 xl:max-h-70' name='userNotes' key="userNotes"/>
                         </motion.div>     
                         }
                         {generate && 
-                        <motion.div variants={itemVariants} className='p-3'>
+                        <motion.div variants={itemVariants} className='p-3 w-full'>
                             <h2 className='text-blue-400 self-start'><b>{!isErrorNote(note) && note?.word}</b></h2>
-                            <textarea  rows={5} placeholder='Notes will be generated here...' className='w-[20ch] sm:w-[40ch] mt-2 text-blue-300 xl:h-100 xl:max-h-100 px-1 resize-none xl:resize-y' name='generatedNotes' key="genNotes" defaultValue={(isErrorNote(note) || note === null || note === undefined ? "" : note!.parsedNote)}/>
+                            <textarea  rows={5} placeholder='Notes will be generated here...' className='w-full mt-2 text-blue-300 h-50 xl:h-100 xl:max-h-100 px-1 resize-none xl:resize-y' name='generatedNotes' key="genNotes" defaultValue={(isErrorNote(note) || note === null || note === undefined ? "" : note!.parsedNote)}/>
                          </motion.div>
                         }
                         <motion.div variants={itemVariants} className="w-full flex flex-col items-center">
-                            <div className='w-full center justify-between'>
-                            <button className={buttonStyle}  onClick={(e) => {
-                              setGenerate(true);
-                              if(isDisabled === true){
-                                wordInputRef?.current?.focus(); 
-                                e.preventDefault(); 
-                                return; 
-                              }
-                              e.preventDefault();
-                              setRequest(true)}}>
-                            <b>Generate</b> 
-                            </button>
-                            {generate && <button type='submit' className={buttonStyle}> <b>Save</b> </button>}
-                            </div>
-                            <span className="hover:underline hover:scale-105 cursor-pointer text-white mt-2" onClick={() => setHelp(!help)}>Need any help?</span> 
+                            <motion.div initial='hidden' animate='show' variants={containerVariants} className='w-full grid grid-cols-2 gap-2'>
+                              <motion.button variants={itemVariants} className={buttonStyle}  onClick={(e) => {
+                                setGenerate(true);
+                                if(isDisabled === true){
+                                  wordInputRef?.current?.focus(); 
+                                  e.preventDefault(); 
+                                  return; 
+                                }
+                                e.preventDefault();
+                                setRequest(true)}}>
+                              <b>Generate</b> 
+                              </motion.button>
+                              {generate && <motion.button variants={itemVariants} type='submit' className={buttonStyle}> <b>Save</b> </motion.button>}
+                            </motion.div>
+                            <motion.span variants={itemVariants} className="hover:underline hover:scale-105 cursor-pointer text-white mt-5" onClick={() => setHelp(!help)}>Need any help?</motion.span> 
                         </motion.div>
                     </form>
                 </motion.div>
         </motion.div>
         :
-        <motion.div initial='hidden' animate='show' variants={containerVariants} key='help' className="w-3/4 sm:w-[500px] md:w-[600px] xl:w-[700px] xl:h-[400px] rounded-4xl mt-10 xl:mt-50 p-3"  id='help'>
-          <motion.div variants={itemVariants} className='center rounded-t-2xl mb-5'>
-          <h1 className="hover:underline cursor-pointer bg-slate-800 text-white h-[25px] sm:h-[30px] sm:pt-1 text-center w-full rounded-2xl" onClick={() => setHelp(!help)}><b>{help ? 'Go back' : 'Need hlep?'}</b></h1> 
-          </motion.div>
-          <motion.div variants={itemVariants}>
+        <motion.div initial='hidden' animate='show' variants={containerVariants} key='help' className="w-3/4 sm:w-[500px] md:w-[600px] xl:w-[700px] xl:h-[400px] rounded-4xl mt-10 xl:mt-50 p-3"  id='help'>          
+          <motion.h2 variants={itemVariants} className="hover:underline mb-5 cursor-pointer bg-slate-800 text-white sm:h-[30px] p-1.5 text-center h-[25px] sm:h-[30[px] w-full rounded-3xl" onClick={() => setHelp(!help)}>{help ? 'Go back' : 'Need hlep?'}</motion.h2> 
+          <motion.div variants={itemVariants} className='flex flex-col md:flex-row justify-center items-center'>
             <Image className="inline-block rounded-4xl mr-3" width={350} height={280} src='/wordInput.png' alt='picture of word input'></Image>
             <motion.p variants={{hidden: {opacity: 0, x:100}, show: {opacity: 1, x: 0}}} className="inline-block bg-slate-800 text-white rounded-2xl p-2 text-center sm:w-[200px]">     
                 Input the word you would like to remember, then click the &quot;Generate&quot; button. 
             </motion.p>
           </motion.div>
-          <motion.div variants={itemVariants} className='mt-5'>
+          <motion.div variants={itemVariants} className='mt-5 flex flex-col md:flex-row justify-center items-center'>
             <Image className="inline-block rounded-4xl mr-3" width={350} height={50} src='/generateNotes.png' alt='generate notes'></Image>
             <motion.p variants={{hidden: {opacity: 0, x:100}, show: {opacity: 1, x: 0}}} className='inline-block bg-slate-800 text-white rounded-3xl p-2 text-center sm:w-[200px]'>
                 Pronunciation of word and two text areas will pop up: one filled with generated notes from the app and an empty one reserved for your personal notes.

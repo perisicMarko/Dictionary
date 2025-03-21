@@ -144,7 +144,7 @@ export async function getRecallNotes(userId : number){
 }
 
 
-type stateType = void | undefined;
+type stateType = undefined | {success: string};
   
 export async function updateReviewDate(state : stateType, formData : FormData){
   const res = await GetNoteById(Number(formData.get('wordId')));
@@ -159,10 +159,15 @@ export async function updateReviewDate(state : stateType, formData : FormData){
   note.ease_factor = retVal.easeFactor;
   note.review_date = addDays(new Date(), note.days);
 
-  UpdateRepetitionFactors(note);
+  const ret = await UpdateRepetitionFactors(note);
+  if(ret)
+    return {success: 'review date set'};
+  else 
+    console.log('An error occured while updating review date, check manageNotes/index.');
 }
 
 export async function setAsLearned(formData : FormData, status : boolean){
+  console.log('hello set as learned');
   const user = await GetAuthUser();
   if(!user)
     redirect('/logIn');

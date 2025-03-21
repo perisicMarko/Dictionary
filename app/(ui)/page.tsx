@@ -59,9 +59,9 @@ export default function Home() {
       </motion.svg>
 
 
-      <motion.h1 className="relative z-10 text-center text-white px-4 py-2 mb-5">
+      <motion.h2 className="relative z-10 text-center text-white px-4 py-2 mb-5">
         <i>&quot;Learning takes time, so take it step by step.&quot;</i>
-      </motion.h1>
+      </motion.h2>
 
       <motion.div className="relative z-10 w-full flex flex-col justify-center items-center">
         <Link className="primaryBtn center" href="/logIn">

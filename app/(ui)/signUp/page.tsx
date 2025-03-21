@@ -29,11 +29,11 @@ export default function SignUp(){
     return (
         <motion.div initial='hidden' animate='show' variants={containerVariants} className="mt-25 sm:mt-30 md:mt-30 sm:w-[500px] h-1/2 bg-slate-800 rounded-2xl border-2 border-blue-50">
           <div className='flex justify-end items-start bg-blue-950 border-blue-50 rounded-t-2xl'>
-            <Link className="xBtn mr-3 text-white" href="/"><b>x</b></Link>
+            <Link className="xBtn mr-3 py-1 text-white" href="/"><b>x</b></Link>
           </div>
 
           <div className="center">
-            <form className="form sm:w-[450px] p-2" action={action}>
+            <form className="form sm:w-[450px] px-2 py-5" action={action}>
             <motion.div variants={itemVariants} className="mt-3">
                 <label htmlFor="name" className='text-white'>Name: </label>
                 <input className="formInput" type="text" name="name" defaultValue={state?.name}/>
