@@ -57,7 +57,13 @@ export default function Page(){
                     Also word is considered as learned when it has a big interval for recall(30+ days), but app will not move those words automaticaly to the &quot;Learned words&quot; page. You can do it on the trash icon in the menu which marks word as learned and moves it to the &quot;Learned words&quot; page.<br/>
                     You can delete word from the app only on &quot;Learned words&quot; page by clicking on the menu then on trash icon, only then is permanently deleted. So delete on recall and history page are two different delete options.
                     It is recommended to leave the word in recall system even after the fifth repetition for another repetition or more.<br/><br/>
-                    Note that you will be informed via email when to enter the app to recall some words.<br/>
+                    Note that you will be informed via email when to enter the app to recall some words. Email may end up in spam, so you will need to fix that by yourself.<br/>
+                    In order to fix that:<br/>
+                    -open gmail then spam sections<br/>
+                    -find our email and select it<br/>
+                    -when options appear click on &quot;report not spam&quot;<br/>
+                    If you have followed sing up instructions properly, you should have done this upon sing up.
+                    <br/>
                 </motion.p>
             </motion.div>
         }

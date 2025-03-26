@@ -17,9 +17,9 @@ export default async function RootLayout({
   return (
     <>
         <nav className="bg-slate-900 w-full h-[50px] grid grid-cols-[auto_1fr] items-center">
-          <div className="flex justify-start items-center xl:ml-5 ml-2">
+          <div className="flex justify-start items-center ml-3 md:ml-7">
             <form action={logOut}>
-              <button className="hover:scale-110 scale-105 cursor-pointer ml-2"> <Image src='/logOut.svg' alt='logOut icon' width={20} height={20}></Image> </button>
+              <button className="hover:scale-110 scale-105 cursor-pointer"> <Image src='/logOut.svg' alt='logOut icon' width={20} height={20}></Image> </button>
             </form>
           </div>
             <div className="flex justify-end items-center xl:space-x-5 mr-2 sm:mr-5">

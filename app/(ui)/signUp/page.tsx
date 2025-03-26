@@ -1,14 +1,18 @@
 'use client'
 import Link from 'next/link';
-import { useActionState } from 'react'
-import { authenticateSignUp } from '@/actions/auth'
+import { useActionState, useState } from 'react'
+import { authenticateSignUp, resendVerificationMail } from '@/actions/auth'
 import { motion } from 'framer-motion';
+
 
 export default function SignUp(){
     const [state, action, isPending] = useActionState(authenticateSignUp, undefined);
+    const [resendState, resendAction, isPendingReset] = useActionState(resendVerificationMail, undefined);
+    const [email, setEmail] = useState('');
 
     if(state?.error === 'Email already used.'){
         window.alert('This email is already used for another account.');
+        state.error = '';
     }
         
     const containerVariants = {
@@ -27,7 +31,18 @@ export default function SignUp(){
     };
 
     return (
-        <motion.div initial='hidden' animate='show' variants={containerVariants} className="mt-25 sm:mt-30 md:mt-30 sm:w-[500px] h-1/2 bg-slate-800 rounded-2xl border-2 border-blue-50">
+        <>
+        {state?.success && 
+          <motion.div initial='hidden' animate='show' variants={containerVariants} className='sm:w-[500px] w-3/4 rounded-3xl bg-slate-800 p-5 mt-15 sm:mt-20'>
+            <motion.p variants={itemVariants} className='text-center text-white'>Verification email has been sent to you. Check your email spam section and mark email as report not spam so you can receive our messages.<br/> <Link href="https://mail.google.com/" className='hover:scale-105'><u>Mail</u></Link></motion.p>
+            <motion.form action={resendAction}>
+              <input name='email' defaultValue={email} hidden />
+              <button className='primaryBtn'>{isPendingReset ? 'Resending mail...' : 'Resend mail'}</button>
+            </motion.form>
+            {resendState && <motion.span className='text-white'>Verification email is successfully resent.</motion.span>}
+          </motion.div>
+        }
+        <motion.div initial='hidden' animate='show' variants={containerVariants} className=" mt-10 sm:w-[500px] w-3/4 h-1/2 bg-slate-800 rounded-2xl border-2 border-blue-50">
           <div className='flex justify-end items-start bg-slate-950 border-blue-50 rounded-t-2xl'>
             <Link className="xBtn mr-3 py-1 text-white" href="/"><b>x</b></Link>
           </div>
@@ -48,7 +63,7 @@ export default function SignUp(){
             </motion.div>                    
             <motion.div variants={itemVariants}  className="mt-3">
                 <label htmlFor="email" className='text-white'>Email: </label>
-                <input className="formInput" type="text" name="email" defaultValue={state?.email}/>
+                <input className="formInput" type="text" name="email" defaultValue={state?.email} onChange={(e) => setEmail(e.target.value)}/>
                 {state?.errors?.email && <p className="error" key="email">Email:</p>}
                 <ul className='list-disc'>{state?.errors?.email && state?.errors?.email.map((e) => <li key={e} className="error ml-6">{e}</li>)}</ul>
             </motion.div>
@@ -72,5 +87,6 @@ export default function SignUp(){
             </form>
           </div>
         </motion.div> 
+        </>
     );
 }

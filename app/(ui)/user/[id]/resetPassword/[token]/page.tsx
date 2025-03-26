@@ -67,8 +67,8 @@ export default function ResetPassword(){
         :
             <>
             {state?.success ? 
-                <motion.div initial='hidden' animate='show' variants={containerVariants} className="bg-slate-800 appWidth center rounded-3xl p-5 mt-20 sm:mt-25 md:mt-30 xl:mt-50">
-                    <motion.p variants={itemVariants} className="text-white text-center"><b>Your password has been reset. Click to </b> <motion.span className="text-white"><Link href='/logIn'><u><i>Log in.</i></u></Link></motion.span></motion.p> 
+                <motion.div initial='hidden' animate='show' variants={containerVariants} className="bg-slate-800 appWidth center rounded-3xl p-5 mt-20 sm:mt-25 md:mt-30 xl:mt-50 z-10">
+                    <motion.p variants={itemVariants} className="text-white text-center z-10"><b>Your password has been reset. Click to </b> <motion.span className="text-white"><Link href='/logIn'><u><i>Log in.</i></u></Link></motion.span></motion.p> 
                 </motion.div>
 
             :
@@ -87,7 +87,7 @@ export default function ResetPassword(){
                             {state?.errors?.confirmPassword === false && <motion.span variants={itemVariants} className="error">Passwords do not match.</motion.span>}
                         </div>
                         <div className="center">
-                            <button type="submit" className="primaryBtn">{isPending ? 'Reseting...' : 'Reset'}</button>
+                            <button type="submit" className="primaryBtn z-0">{isPending ? 'Reseting...' : 'Reset'}</button>
                         </div>
                     </motion.form>
                 </motion.div>    

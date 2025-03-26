@@ -1,12 +1,14 @@
 "use server"
 import { SignUpSchema, LogInSchema } from '@/lib/rules';
-import { GetUserInfoByEmail, InsertUserInfo } from '@/lib/db';
+import { GetUserByToken, GetUserInfoByEmail, InsertUserInfo, VerifyUser } from '@/lib/db';
 import { redirect } from 'next/navigation';
 import bcrypt from 'bcrypt';
 import { createSession } from '../../lib/session';
 import { cookies } from 'next/headers';
 import { TUser } from '@/lib/types';
 import { NextResponse } from 'next/server';
+import sendEmail, { generateVerificationMail } from './sendVerificationEmail';
+import { isBefore } from 'date-fns';
 
 
 type stateType = { 
@@ -27,6 +29,19 @@ type stateType = {
     email: string;
 } | undefined | {error : string};
 
+export async function verifyUser(state : { success: boolean; } | undefined, formData : FormData){
+    const userId = Number(formData.get('userId'));
+    if(!userId)
+        throw new Error('User is undefined by verification, check auth/index/verifyUser');
+    
+    const status = await VerifyUser(userId)
+
+    if(status)
+        return {success: true};
+
+    return {success: false};
+}
+
 export async function authenticateSignUp(state: stateType, formData: FormData){
 
     const validatedFields = SignUpSchema.safeParse({
@@ -43,7 +58,8 @@ export async function authenticateSignUp(state: stateType, formData: FormData){
             name: "",
             lastName: "", 
             email: "", 
-            error: ""
+            error: "",
+            success: false
         } ;
         
 
@@ -70,12 +86,14 @@ export async function authenticateSignUp(state: stateType, formData: FormData){
                 lastName: "", 
                 name: "",
                 email: "",
-                error: 'Email already used.'
+                error: 'Email already used.',
+                success: false
             } ;
 
         return retObj;
         }   
     }
+
 
     const {name, lastName, email} = validatedFields.data;
     let {password} = validatedFields.data;
@@ -83,14 +101,49 @@ export async function authenticateSignUp(state: stateType, formData: FormData){
 
     const status = await InsertUserInfo({name, lastName, email, password});
 
-    if(status){
-        console.log('New User signed up!');
-        redirect('/logIn');
-    }
-    else{
-        redirect('/signUp');
-    }
+    if(!status)
+        throw new Error('Error: InsertUserInfor status in authenthicateSignUp');
+
+    const verified = await generateVerificationMail(email);
+
+    if(verified)
+        return {
+            errors: null,
+            lastName: "", 
+            name: "",
+            email: "",
+            error: '',
+            success: true
+        } ;
 }
+
+export async function resendVerificationMail(state : boolean | undefined, formData : FormData){
+    const email = formData.get('email')?.toString() || '';
+    if(email === '')
+        return false;
+    const val = await GetUserInfoByEmail({email});
+    const user = (val != undefined && await val.json());
+
+    
+    if(isBefore(user.token_expiration_date, new Date()))
+        return false;
+
+    const status = await sendEmail(email, user.refresh_token);
+
+    if(status)
+        return true;
+}   
+
+export async function getUserByToken(token : Base64URLString){
+
+    const retVal = await GetUserByToken(token);
+    const user = (retVal != undefined && await retVal.json());
+
+    if(user.length === 0)
+        return false;
+    
+    return user[0];
+}  
 
 export async function authenticateLogIn(state : stateType, formData : FormData){
     const validatedFields = LogInSchema.safeParse({

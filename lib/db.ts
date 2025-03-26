@@ -277,3 +277,22 @@ export async function  UpdateUsersPassword(userId : number, password : string){
     }
   }
 }
+
+
+export async function  VerifyUser(userId : number){
+  try{
+    const db = await pool.getConnection();
+    const _query = 'UPDATE users SET refresh_token =  ?, token_expiration_date = ?, email_verified = ? where id = ?;'
+    const [results] = await db.query(_query, [null, null, true, userId]);
+
+    db.release();
+
+    return NextResponse.json(results);
+  } catch(error){
+
+    if(error instanceof Error){
+      console.log('UpdateUsersPassword: ERROR: API - ' + error.message);
+      return NextResponse.json({error: error.message});      
+    }
+  }
+}

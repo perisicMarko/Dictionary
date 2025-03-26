@@ -23,7 +23,7 @@ export async function resetPassword(state: { message: string; status: number; er
 
   
   if(user.length === 0)
-    return {error: 'There is no user with that Email, please enter your correct email', status: 0};
+    return {error: 'There is no user using that Email, please enter your email', status: 0};
 
   if(user.length === 1)
     user = user[0];

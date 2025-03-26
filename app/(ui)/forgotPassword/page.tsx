@@ -27,6 +27,7 @@ export default function ForgotPassword(){
             {state?.status === 200 &&
                 <motion.div variants={itemVariants} className='absolute top-auto left-auto h-[200px] sm:[250px] center bg-slate-800 rounded-3xl appWidth p-2'>
                     <span className='text-center text-white'><b>Email with instructions has been sent to you, please check your email.</b></span>
+                    <span className='text-center text-white'>Link to gmail: <Link href="https://mail.google.com/">mail</Link>.</span>
                 </motion.div>
             }
             {state?.status === 500 && 
