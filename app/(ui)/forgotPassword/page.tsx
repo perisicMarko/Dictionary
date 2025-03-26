@@ -25,14 +25,14 @@ export default function ForgotPassword(){
     return (
         <motion.div initial='hidden' animate='show' variants={containerVariants} className='bg-slate-800 mt-20 flex flex-col items-center justify-center md:mt-30 p-1 xl:mt-50 w-3/4 sm:w-[600px] rounded-3xl'>
             {state?.status === 200 &&
-                <motion.div variants={itemVariants} className='absolute top-auto left-auto h-[200px] sm:[250px] center bg-slate-800 rounded-3xl appWidth p-2'>
-                    <span className='text-center text-white'><b>Email with instructions has been sent to you, please check your email.</b></span>
-                    <span className='text-center text-white'>Link to gmail: <Link href="https://mail.google.com/">mail</Link>.</span>
+                <motion.div variants={itemVariants} className='absolute flex flex-col items-center top-auto left-auto h-[200px] sm:[250px] center bg-slate-800 rounded-3xl appWidth p-2'>
+                    <span className='text-center text-white'>Email with instructions has been sent, please check your email<b>(it may ends up in spam).</b></span>
+                    <Link href="https://mail.google.com/" className='text-white hover:scale-115 mt-3 hover:underline'>Link to Gmail.</Link>
                 </motion.div>
             }
             {state?.status === 500 && 
                 <motion.div variants={itemVariants} className='absolute top-auto left-auto  h-1/2 center bg-slate-800 rounded-3xl appWidth p-2'>
-                    <span className='text-center text-white'>Something is wrong, please try again.</span>
+                    <span className='text-center text-white'>Something is wrong, please try again later.</span>
                 </motion.div>
             }
             <motion.span className='mt-5  hover:underline hover:scale-105'><Link href='/' className='text-white'>Back to home page</Link></motion.span>

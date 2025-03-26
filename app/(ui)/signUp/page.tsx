@@ -33,13 +33,14 @@ export default function SignUp(){
     return (
         <>
         {state?.success && 
-          <motion.div initial='hidden' animate='show' variants={containerVariants} className='sm:w-[500px] w-3/4 rounded-3xl bg-slate-800 p-5 mt-15 sm:mt-20'>
-            <motion.p variants={itemVariants} className='text-center text-white'>Verification email has been sent to you. Check your email spam section and mark email as report not spam so you can receive our messages.<br/> <Link href="https://mail.google.com/" className='hover:scale-105'><u>Mail</u></Link></motion.p>
-            <motion.form action={resendAction}>
+          <motion.div initial='hidden' animate='show' variants={containerVariants} className='flex flex-col items-center sm:w-[500px] w-3/4 rounded-3xl bg-slate-800 p-5 mt-15 sm:mt-20'>
+            <motion.p variants={itemVariants} className='text-center text-white'>Verification email has been sent. Check your email <b>spam</b> section and mark email as <b>report not spam</b> so you can receive our messages.<br/></motion.p>
+            <Link href="https://mail.google.com/" className='hover:scale-115 text-white my-3'><u>Gmail link.</u></Link>
+            <motion.form action={resendAction} className='w-full'>
               <input name='email' defaultValue={email} hidden />
-              <button className='primaryBtn'>{isPendingReset ? 'Resending mail...' : 'Resend mail'}</button>
-            </motion.form>
-            {resendState && <motion.span className='text-white'>Verification email is successfully resent.</motion.span>}
+              <button className='primaryBtn' type='submit'>{isPendingReset ? 'Resending mail...' : 'Resend mail'}</button>
+            </motion.form> 
+            {resendState && <motion.span className='text-white'>Verification email was successfully resent.</motion.span>}
           </motion.div>
         }
         <motion.div initial='hidden' animate='show' variants={containerVariants} className=" mt-10 sm:w-[500px] w-3/4 h-1/2 bg-slate-800 rounded-2xl border-2 border-blue-50">
@@ -70,7 +71,7 @@ export default function SignUp(){
             <motion.div variants={itemVariants} className="mt-3">
                 <label htmlFor="password" className='text-white'>Password: </label>
                 <input className="formInput" type="password" name="password"/>
-                {state?.errors?.password && <p className="error" key="password">Passwowrd:</p>}
+                {state?.errors?.password && <p className="error" key="password">Password:</p>}
                 <ul className='list-disc'>{state?.errors?.password && state.errors.password.map((e) => <li key={e} className="error ml-6">{e}</li>)}</ul>
             </motion.div>
             <motion.div variants={itemVariants} className="mt-3">

@@ -67,8 +67,9 @@ export default function ResetPassword(){
         :
             <>
             {state?.success ? 
-                <motion.div initial='hidden' animate='show' variants={containerVariants} className="bg-slate-800 appWidth center rounded-3xl p-5 mt-20 sm:mt-25 md:mt-30 xl:mt-50 z-10">
-                    <motion.p variants={itemVariants} className="text-white text-center z-10"><b>Your password has been reset. Click to </b> <motion.span className="text-white"><Link href='/logIn'><u><i>Log in.</i></u></Link></motion.span></motion.p> 
+                <motion.div initial='hidden' animate='show' variants={containerVariants} className="flex flex-col items-center bg-slate-800 appWidth center rounded-3xl p-5 mt-20 sm:mt-25 md:mt-30 xl:mt-50 z-10">
+                    <motion.p variants={itemVariants} className="text-white text-center z-10"><b>Your password has been reset.</b></motion.p> 
+                    <Link href='/logIn' className="text-white mt-3 hover:underline hover:scale-115"><u><i>Click to log in.</i></u></Link>
                 </motion.div>
 
             :

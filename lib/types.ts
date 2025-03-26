@@ -7,6 +7,7 @@ export type TUser = {
     password: string;
     refresh_token: string;
     token_expiration_date: Date;
+    email_verified: boolean;
 };
 
 export type TGPhonetic = {

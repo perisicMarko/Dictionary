@@ -39,17 +39,17 @@ export async function GET() {
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: to,
-    subject: 'Hey it\'s me again, it is time to recall some words.',
-    text: 'It takes just a few minutes to recall some words and stay on the learning path, keep it up.\n Follow this link to the app: https://dictionary-six-tau.vercel.app.'
+    subject: 'Recall time',
+    text: 'Hey it\'s me again, it is time to recall some words.\nIt takes just a few minutes to recall your words and stay on the learning path, keep it up.\n Follow this link to the app: https://dictionary-six-tau.vercel.app.'
   };
 
   try {
     // sending mail
     await transporter.sendMail(mailOptions);
-    return NextResponse.json({ message: 'Mejl je uspešno poslat.' , status: 200});
+    return NextResponse.json({ message: 'Mial was successfully sent.' , status: 200});
   } catch (error) {
     const message =  (error instanceof Error && error.message);
-    return NextResponse.json({ error: 'Greska prilikom slanja mejla: ' + message, status: 500});
+    return NextResponse.json({ error: 'Error when sending mail: ' + message, status: 500});
   }
 
 }

@@ -296,3 +296,59 @@ export async function  VerifyUser(userId : number){
     }
   }
 }
+
+
+export async function  GetUsers(){
+  try{
+    const db = await pool.getConnection();
+    const _query = 'SELECT * FROM users;'
+    const [results] = await db.query(_query, []);
+
+    db.release();
+
+    return NextResponse.json(results);
+  } catch(error){
+
+    if(error instanceof Error){
+      console.log('GetUsers: ERROR: API - ' + error.message);
+      return NextResponse.json({error: error.message});      
+    }
+  }
+}
+
+export async function  DeleteUnverifiedNotes(ids : [number]){
+  try{
+    const db = await pool.getConnection();
+    const _query = `DELETE FROM words WHERE id IN (${ids.map(() => '?').join(',')});`;
+    const [results] = await db.query(_query, ids);
+
+    db.release();
+
+    return NextResponse.json(results);
+  } catch(error){
+
+    if(error instanceof Error){
+      console.log('DeleteUnverifiedNotes: ERROR: API - ' + error.message);
+      return NextResponse.json({error: error.message});      
+    }
+  }
+}
+
+
+export async function DeleteUnverifiedUsers(ids : [number]){
+  try{
+    const db = await pool.getConnection();
+    const _query = `DELETE FROM users WHERE id IN (${ids.map(() => '?').join(',')});`;
+    const [results] = await db.query(_query, ids);
+
+    db.release();
+
+    return NextResponse.json(results);
+  } catch(error){
+
+    if(error instanceof Error){
+      console.log('DeleteUnverifiedUsers: ERROR: API - ' + error.message);
+      return NextResponse.json({error: error.message});      
+    }
+  }
+}
