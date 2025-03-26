@@ -28,7 +28,7 @@ export default function SignUp(){
 
     return (
         <motion.div initial='hidden' animate='show' variants={containerVariants} className="mt-25 sm:mt-30 md:mt-30 sm:w-[500px] h-1/2 bg-slate-800 rounded-2xl border-2 border-blue-50">
-          <div className='flex justify-end items-start bg-blue-950 border-blue-50 rounded-t-2xl'>
+          <div className='flex justify-end items-start bg-slate-950 border-blue-50 rounded-t-2xl'>
             <Link className="xBtn mr-3 py-1 text-white" href="/"><b>x</b></Link>
           </div>
 

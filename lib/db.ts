@@ -29,7 +29,7 @@ export async function GetUserInfoById(id : number){
 
   } catch (error) {
     if(error instanceof Error){
-      console.log('ERROR: API - ', error?.message)
+      console.log('GetUserInfoById: ERROR: API - ', error?.message)
       return NextResponse.json({error: error.message })
     }
   }
@@ -49,7 +49,7 @@ export async function GetUserInfoByEmail({email} : {email: string}){
   
     } catch (error) {
       if(error instanceof Error){
-        console.log('ERROR: API - ', error?.message)
+        console.log('GetUserInfoByEmail: ERROR: API - ', error?.message)
         return NextResponse.json({error: error.message })
       }
     }
@@ -68,7 +68,7 @@ export async function GetNotes(){
     
   } catch (error) {
     if(error instanceof Error){
-      console.log('ERROR: API - ', error?.message);
+      console.log('GetNotes: ERROR: API - ', error?.message);
       return NextResponse.json({error: error.message });
     }
   }
@@ -88,7 +88,7 @@ export async function InsertUserInfo({name, lastName, email, password} : {name: 
     
   } catch (error) {
     if(error instanceof Error){
-      console.log('ERROR: API - ', error.message);
+      console.log('InsertUserInfo: ERROR: API - ', error.message);
       return NextResponse.json({error: error.message });
     }
   }
@@ -107,7 +107,7 @@ export async function ImportNotes(note : TDBNoteEntry){
   } catch(error){
 
     if(error instanceof Error){
-      console.log('ERROR: API - ' + error.message);
+      console.log('ImportNotes: ERROR: API - ' + error.message);
       return NextResponse.json({error: error.message});      
     }
   }
@@ -125,7 +125,7 @@ export async function GetNoteById(noteId : number){
   } catch(error){
 
     if(error instanceof Error){
-      console.log('ERROR: API - ' + error.message);
+      console.log('GetNoteById: ERROR: API - ' + error.message);
       return NextResponse.json({error: error.message});      
     }
   }
@@ -143,7 +143,7 @@ export async function UpdateRepetitionFactors(note : TDBNoteEntry){
   } catch(error){
 
     if(error instanceof Error){
-      console.log('ERROR: API - ' + error.message);
+      console.log('UpdateRepetitionFactors: ERROR: API - ' + error.message);
       return NextResponse.json({error: error.message});      
     }
   }
@@ -163,7 +163,7 @@ export async function SetNoteLearned(noteId : number, status : boolean){
   } catch(error){
 
     if(error instanceof Error){
-      console.log('ERROR: API - ' + error.message);
+      console.log('SetNoteLearned: ERROR: API - ' + error.message);
       return NextResponse.json({error: error.message});      
     }
   }
@@ -181,7 +181,7 @@ export async function EditNotes(userNotes : string, generatedNotes : string, not
   } catch(error){
 
     if(error instanceof Error){
-      console.log('ERROR: API - ' + error.message);
+      console.log('EditNotes: ERROR: API - ' + error.message);
       return NextResponse.json({error: error.message});      
     }
   }
@@ -199,7 +199,7 @@ export async function ResetNoteRecallFactors(noteId : number, days : number, rep
   } catch(error){
 
     if(error instanceof Error){
-      console.log('ERROR: API - ' + error.message);
+      console.log('ResetNoteRecallFactors: ERROR: API - ' + error.message);
       return NextResponse.json({error: error.message});      
     }
   }
@@ -217,10 +217,63 @@ export async function DeleteNote(noteId : number){
   } catch(error){
 
     if(error instanceof Error){
-      console.log('ERROR: API - ' + error.message);
+      console.log('DeleeteNote: ERROR: API - ' + error.message);
+      return NextResponse.json({error: error.message});      
+    }
+  }
+}
+
+export async function UpdateUsersToken(userId : number, refreshToken : Base64URLString | null, tokenExpirationDate : Date | null){
+  try{
+    const db = await pool.getConnection();
+    const _query = 'UPDATE users SET refresh_token = ?, token_expiration_date = ? WHERE id = ?;';
+    const [results] = await db.query(_query, [refreshToken, tokenExpirationDate, userId]);
+
+    db.release();
+
+    return NextResponse.json(results);
+  } catch(error){
+
+    if(error instanceof Error){
+      console.log('UpdateUsersToken: ERROR: API - ' + error.message);
+      return NextResponse.json({error: error.message});      
+    }
+  }
+}
+
+export async function GetUserByToken(refreshToken : Base64URLString){
+  try{
+    const db = await pool.getConnection();
+    const _query = 'SELECT * FROM users u where u.refresh_token = ?;'
+    const [results] = await db.query(_query, [refreshToken]);
+
+    db.release();
+
+    return NextResponse.json(results);
+  } catch(error){
+
+    if(error instanceof Error){
+      console.log('GetuserByToken: ERROR: API - ' + error.message);
       return NextResponse.json({error: error.message});      
     }
   }
 }
 
 
+export async function  UpdateUsersPassword(userId : number, password : string){
+  try{
+    const db = await pool.getConnection();
+    const _query = 'UPDATE users SET password = ? where id = ?;'
+    const [results] = await db.query(_query, [password, userId]);
+
+    db.release();
+
+    return NextResponse.json(results);
+  } catch(error){
+
+    if(error instanceof Error){
+      console.log('UpdateUsersPassword: ERROR: API - ' + error.message);
+      return NextResponse.json({error: error.message});      
+    }
+  }
+}

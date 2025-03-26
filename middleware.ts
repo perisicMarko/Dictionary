@@ -14,11 +14,16 @@ export default function middleware(req : NextRequest){
     const end = path.indexOf('/', start);
     const urlId = (end == -1 ? path.substring(start) : path.substring(start, end));
 
+    if(path.indexOf('resetPassword') != -1){
+        return;
+    }
+
     if(isProtected && !userId)
         return NextResponse.redirect(new URL('/logIn', req.nextUrl));
-    else if(isProtected)
+    else if(isProtected){
         if(urlId != userId)
             return NextResponse.redirect(new URL('/user/' + userId + '/inputWord', req.nextUrl));
+    }
 
     if(isPublic && userId)
         return NextResponse.redirect(new URL('/user/' + userId + '/inputWord', req.nextUrl));
