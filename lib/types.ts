@@ -5,9 +5,9 @@ export type TUser = {
     last_name: string;
     email: string;
     password: string;
-    refresh_token: string;
-    token_expiration_date: Date;
-    email_verified: boolean;
+    refresh_token: string | null;
+    refresh_token_expiration_date: Date | null;
+    email_verified: boolean | null;
 };
 
 export type TGPhonetic = {
@@ -41,12 +41,12 @@ export type TGeneratedNote = {
   sourceUrls: string[];
 };
 
-export type TDefinition = {
+type TDefinition = {
     definition: string;
     example: string | undefined;
   };
   
-export type TMeaning = {
+type TMeaning = {
     partOfSpeech: string;
     definitions: TDefinition[];
 };
@@ -59,28 +59,18 @@ export type TWordApp = {
     parsedNote: string;
 };
 
-
-
-// ovo hocu da izbacim da ne koristim vise
-export type TDBNote = {
-    word: string;
-    audio: string;
-    generated: string | null;
-    user_notes: string;
-    generated_notes: string;
-};
   
 export type TDBNoteEntry = {
     id: number;
-    user_id: number;
     word: string
     status: boolean;
-    language: string;
     user_notes: string;
     generated_notes: string;
     audio: string;
     repetitions: number;
     days: number;
+    review_date: Date;
     ease_factor: number;
-    review_date: string;
+    user_id: number;
+    language: string;
 };

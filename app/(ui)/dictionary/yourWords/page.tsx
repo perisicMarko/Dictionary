@@ -10,19 +10,14 @@ import Image from 'next/image';
 
 export default function YourWords(){
 
-    const [words, setWords] = useState<TDBNoteEntry[]>([]);
+    const [words, setWords] = useState<TDBNoteEntry[] | undefined>([]);
     const [search, setSearch] = useState('');
     const [help, setHelp] = useState(false);
     const searchBarRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        const url = window.location.href
-        const start = url.indexOf('/user') + 6;
-        const end = url.indexOf('/', start);
-        const userId = Number(url.substring(start, end));
-
         async function fetchNotes() {
-            const data = await getUsersNotes(Number(userId));
+            const data = await getUsersNotes();
             setWords(data);
         }
         fetchNotes();
@@ -43,7 +38,9 @@ export default function YourWords(){
         show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
     };  
 
-    const index : number = words?.findIndex((word : TDBNoteEntry) => word.word.toLowerCase().trim() === search.toLowerCase().trim());
+    console.log(words);
+
+    const index : number = words?.findIndex((word : TDBNoteEntry) => word.word.toLowerCase().trim() === search.toLowerCase().trim()) || -1;
     
     return (
         <>
@@ -65,7 +62,7 @@ export default function YourWords(){
         {index === -1 && search != '' && <p className='mt-3 rounded-full p-2 w-3/4 sm:w-[600px] text-center text-white bg-slate-800'>{'No word like that within your words'}</p>}
         {(words && search != '' && index != -1) && <Note prop={words[index]} historyNote={false} handle={() => {}}></Note>}
         {words && search === '' ? <Words props={words} historyNote={false} handle={() => {}}></Words> : <></>}
-        {words.length === 0 &&
+        {words?.length === 0 &&
         <motion.div initial='hidden' animate='show' variants={containerVariants} className="center bg-slate-800 mt-60 rounded-4xl border-blue-500 p-2 w-3/4 sm:w-[600px]">
             <h2 className="text-center text-white"><b>Hmm, looks like you do not have any words, time to learn!</b></h2>
         </motion.div>

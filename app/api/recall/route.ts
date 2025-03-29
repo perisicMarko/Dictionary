@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { isBefore } from 'date-fns';
-import { GetNotes, GetUserInfoById } from '@/lib/db';
+import { GetNotes, GetUserInfoById } from '@/actions/resetPassword/db';
 import nodemailer from 'nodemailer';
 
 

@@ -1,4 +1,4 @@
-import "server-only"
+import 'server-only'
 import { JWTPayload, SignJWT, jwtVerify } from 'jose'
 import { cookies } from 'next/headers'
 
@@ -10,7 +10,7 @@ export async function encrypt(payload: JWTPayload | undefined) {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
-    .setExpirationTime('7d')
+    .setExpirationTime('1d')
     .sign(encodedKey)
 }
  
@@ -26,9 +26,9 @@ export async function decrypt(session: string | undefined = '') {
 }
 
  
-export async function createSession(userId: string) {
-    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-    const session = await encrypt({ userId, expiresAt })
+export async function createSession(userId: string, password: string) {
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000)
+    const session = await encrypt({ userId, password, expiresAt })
     const cookieStore = await cookies();
    
     cookieStore.set('session', session, {
@@ -38,4 +38,4 @@ export async function createSession(userId: string) {
       sameSite: 'lax',
       path: '/',
     })
-  }
+}

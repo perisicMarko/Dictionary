@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                            Int       @id @unique(map: "id") @default(autoincrement())
+  first_name                    String    @db.VarChar(100)
+  last_name                     String    @db.VarChar(100)
+  email                         String    @unique(map: "unique_email") @db.VarChar(100)
+  password                      String    @db.VarChar(255)
+  refresh_token                 String?   @db.VarChar(255)
+  refresh_token_expiration_date DateTime? @db.DateTime(0)
+  email_verified                Boolean?  @default(false)
+
+  @@map("users")
+}
+
+model Word {
+  id              Int      @id @default(autoincrement())
+  word            String   @db.VarChar(100)
+  status          Boolean
+  user_notes      String   @db.VarChar(2000)
+  generated_notes String   @db.VarChar(3000)
+  audio           String   @db.VarChar(255)
+  repetitions     Int
+  days            Int
+  review_date     DateTime @db.Date
+  ease_factor     Float    @db.Float
+  user_id         Int
+  language        String   @db.VarChar(100)
+
+  @@map("words")
+}

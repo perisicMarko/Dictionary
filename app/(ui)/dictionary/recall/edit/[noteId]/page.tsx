@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 export default function Edit(){
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [state, action, isLoading] = useActionState(editNote, undefined);
-    const [note, setNote] = useState<TDBNoteEntry>();
+    const [note, setNote] = useState<TDBNoteEntry | null>();
 
     useEffect(() => {
         const url = window.location.href;

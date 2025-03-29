@@ -1,14 +1,14 @@
 "use server"
 import { SignUpSchema, LogInSchema } from '@/lib/rules';
-import { GetUserByToken, GetUserInfoByEmail, InsertUserInfo, VerifyUser } from '@/lib/db';
+import { GetUserByToken, GetUserInfoByEmail, InsertUserInfo, VerifyUser } from '@/actions/manageUsers/db';
 import { redirect } from 'next/navigation';
 import bcrypt from 'bcrypt';
 import { createSession } from '../../lib/session';
 import { cookies } from 'next/headers';
-import { TUser } from '@/lib/types';
-import { NextResponse } from 'next/server';
 import sendEmail, { generateVerificationMail } from './sendVerificationEmail';
 import { isBefore } from 'date-fns';
+import { decrypt } from '@/lib/session'
+
 
 
 type stateType = { 
@@ -34,7 +34,7 @@ export async function verifyUser(state : { success: boolean; } | undefined, form
     if(!userId)
         throw new Error('User is undefined by verification, check auth/index/verifyUser');
     
-    const status = await VerifyUser(userId)
+    const status = await VerifyUser(userId);
 
     if(status)
         return {success: true};
@@ -78,9 +78,9 @@ export async function authenticateSignUp(state: stateType, formData: FormData){
         return retObj;
     }else{
         const tmp = formData.get('email')?.toString();
-        const res = await GetUserInfoByEmail({email: (tmp ? tmp : '')});
-        const alreadyExist = await (res != undefined && res.json());
-        if(alreadyExist.length != 0 && validatedFields.success){
+        const res = await GetUserInfoByEmail({email: tmp || ''});
+        const alreadyExist = res != null;
+        if(alreadyExist && validatedFields.success){
             const retObj = {
                 errors: null,
                 lastName: "", 
@@ -121,14 +121,15 @@ export async function resendVerificationMail(state : boolean | undefined, formDa
     const email = formData.get('email')?.toString() || '';
     if(email === '')
         return false;
-    const val = await GetUserInfoByEmail({email});
-    const user = (val != undefined && await val.json());
-
+    const user = await GetUserInfoByEmail({email});
     
-    if(isBefore(user.token_expiration_date, new Date()))
+    if(!user)
+        return;
+    
+    if(isBefore(user?.refresh_token_expiration_date || '', new Date()))
         return false;
 
-    const status = await sendEmail(email, user.refresh_token);
+    const status = await sendEmail(email, user?.refresh_token || '');
 
     if(status)
         return true;
@@ -136,13 +137,12 @@ export async function resendVerificationMail(state : boolean | undefined, formDa
 
 export async function getUserByToken(token : Base64URLString){
 
-    const retVal = await GetUserByToken(token);
-    const user = (retVal != undefined && await retVal.json());
-
-    if(user.length === 0)
-        return false;
+    const user = await GetUserByToken(token);
     
-    return user[0];
+    if(!user)
+        return false
+
+    return user;
 }  
 
 export async function authenticateLogIn(state : stateType, formData : FormData){
@@ -165,14 +165,9 @@ export async function authenticateLogIn(state : stateType, formData : FormData){
     }
 
     const {email, password} : {email: string, password: string} = validatedFields.data;
-    const tmp : NextResponse | NextResponse<{ error: string; }> | undefined = await GetUserInfoByEmail({email});
-    const tmp1 : TUser[] = (await (tmp!= undefined && tmp.json()));
-    if(tmp1 && tmp1.length > 1)
-        throw new Error("Result from database should be [] or only one user!, bad sign up logic.");
-
-    if(tmp1.length === 0 || tmp1.length === undefined) return {errors: {email: '-Wrong email.', password: ''}}; 
-
-    const user : TUser = tmp1[0];
+    const user = await GetUserInfoByEmail({email});
+    
+    if(!user) return {errors: {email: '-Wrong email.', password: ''}}; 
 
     const cmpStatus = await bcrypt.compare(password, user?.password);
     if(!cmpStatus) 
@@ -181,24 +176,23 @@ export async function authenticateLogIn(state : stateType, formData : FormData){
             email: email
         };
 
-    await createSession(user.id.toString());
-    const expiresAt = new Date(Date.now() + 5 * 60 * 60 * 1000)
-    const cookieStore = await cookies();
-   
-    cookieStore.set('userId', user.id.toString(), {
-      httpOnly: false, 
-      secure: true,
-      expires: expiresAt,
-      sameSite: 'lax',
-      path: '/',
-    });
-    redirect('/user/' + user.id + '/inputWord');
+    await createSession(user.id.toString(), user.password);
+    
+    redirect('/dictionary/inputWord');
 }
 
 
 export async function logOut(){
     const cookieStore = await cookies();
     cookieStore.delete('session');
-    cookieStore.delete('userId');
     redirect('/');
+}
+
+export async function getAuthUser(){
+    const cookieStore = await cookies();
+    const session = cookieStore.get('session')?.value;
+
+    if(session){
+        return await decrypt(session);
+    }
 }
