@@ -35,7 +35,8 @@ export default async function sendEmail(email : string, token : Base64URLString)
         from: process.env.EMAIL_USER,
         to: email,
         subject: 'Email verification',
-        text: 'Click on this link to verify your email: https://dictionary-six-tau.vercel.app/signUp/' + token,
+        text: 'Click on this link to verify your email: http://localhost:3000/signUp/' + token,
+        //text: 'Click on this link to verify your email: https://dictionary-six-tau.vercel.app/signUp/' + token,
       };
     
     try {

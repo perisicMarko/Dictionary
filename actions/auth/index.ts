@@ -140,8 +140,8 @@ export async function getUserByToken(token : Base64URLString){
     const user = await GetUserByToken(token);
     
     if(!user)
-        return false
-
+        return undefined;
+    
     return user;
 }  
 

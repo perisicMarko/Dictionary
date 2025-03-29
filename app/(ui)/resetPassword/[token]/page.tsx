@@ -9,11 +9,12 @@ import Link from 'next/link';
 import { isBefore } from "date-fns";
 
 
-export default function RefreshPassword(){
+export default function ResetPassword(){
     const params = useParams();
     let token = params.token;
     if(typeof token === 'object')
         token = token[0];
+    console.log(token);
     const [user, setUser] = useState<TUser | undefined>();
     const [state, action, isPending] = useActionState(updateUsersPassword, undefined);
 
@@ -28,8 +29,6 @@ export default function RefreshPassword(){
 
         fetchUser();
     }, [token]);
-
-
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -51,7 +50,6 @@ export default function RefreshPassword(){
     const tokenExpirationDate = (user?.refresh_token_expiration_date ? user.refresh_token_expiration_date : false);
     const tokenDate = tokenExpirationDate ? new Date(tokenExpirationDate) : undefined;
     
-
     
     if(!tokenExpirationDate){
 
@@ -69,8 +67,8 @@ export default function RefreshPassword(){
             <>
             {state?.success ? 
                 <motion.div initial='hidden' animate='show' variants={containerVariants} className="flex flex-col items-center bg-slate-800 appWidth center rounded-3xl p-5 mt-20 sm:mt-25 md:mt-30 xl:mt-50 z-10">
-                    <motion.p variants={itemVariants} className="text-white text-center z-10"><b>Your password has been refresh.</b></motion.p> 
-                    <Link href='/logIn' className="text-white mt-3 hover:underline hover:scale-115"><u><i>Click to log in.</i></u></Link>
+                    <motion.p variants={itemVariants} className="text-white text-center z-10"><b>Your password has been reset.</b></motion.p> 
+                    <Link href='/logIn' className="text-blue-300 mt-3 hover:underline hover:scale-115"><u><i>Click to log in.</i></u></Link>
                 </motion.div>
 
             :

@@ -12,11 +12,13 @@ export async function saveNotes(formData : FormData){
   const audio = formData.get('audio')?.toString();
   const user_notes = formData.get('userNotes')?.toString();
   const generated_notes = formData.get('generatedNotes')?.toString();
+  const user = await getAuthUser();
+  const userId = user?.userId;
 
   const now = new Date();
   const dbInput : TDBNoteEntry = {
     id : 0, // mock for schema
-    user_id : Number(formData.get('userId')),
+    user_id : Number(userId),
     word: word || '',
     status: false, //false meaning word is not learned 
     language: 'english',
@@ -103,9 +105,9 @@ function stringifyNote(noteObj : TWordApp){
 
 export async function getUsersNotes(){
   const user = await getAuthUser();
-  const userId = Number(user?.userId);  
+  const userId = Number(user?.userId); 
   const notes = await GetNotes();
-  
+
   if(Array.isArray(notes))
     return notes?.filter((w : TDBNoteEntry) => {
       const res = w.status == false && w.user_id === userId;
@@ -125,10 +127,11 @@ export async function getUsersHistory(userId : number){
     });
 }
 
-export async function getRecallNotes(userId : number){
+export async function getRecallNotes(){
   const notes = await GetNotes();
-
   const currentDate = new Date().toISOString();
+  const user = await getAuthUser();
+  const userId = user?.userId;
   
   if(Array.isArray(notes))
     return notes.filter((n : TDBNoteEntry) => {

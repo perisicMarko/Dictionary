@@ -6,17 +6,12 @@ import RecallNote from '@/components/RecallNote';
 import { motion } from 'framer-motion';
 
 export default function Page(){
-    const [words, setWords] = useState<TDBNoteEntry[] | undefined>([]); 
+    const [words, setWords] = useState<TDBNoteEntry[] | undefined>(); 
     const [refresh, setRefresh] = useState(false);
     const [help, setHelp] = useState(false);
     useEffect(() => {
-        const url = window.location.href
-        const start = url.indexOf('/user') + 6;
-        const end = url.indexOf('/', start);
-        const userId = Number(url.substring(start, end));
-        
         async function fetchNotes() {
-            const data = await getRecallNotes(Number(userId));
+            const data = await getRecallNotes();
             setWords(data);
         }
         fetchNotes();
@@ -67,7 +62,7 @@ export default function Page(){
                 </motion.p>
             </motion.div>
         }
-        {words ?   
+        {words && words.length > 0 ?   
             words?.map((w : TDBNoteEntry) => { 
                 return <RecallNote key={w.id} note={w} handle={onSubmit} ></RecallNote>
             })

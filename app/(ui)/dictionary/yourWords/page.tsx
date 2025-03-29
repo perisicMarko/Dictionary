@@ -38,8 +38,6 @@ export default function YourWords(){
         show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
     };  
 
-    console.log(words);
-
     const index : number = words?.findIndex((word : TDBNoteEntry) => word.word.toLowerCase().trim() === search.toLowerCase().trim()) || -1;
     
     return (

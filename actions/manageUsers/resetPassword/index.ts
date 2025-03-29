@@ -41,17 +41,17 @@ export async function resetPassword(state: { message: string; status: number; er
 function validateFields(password : string, confirmPassword : string){
   const errors : {password: string[], confirmPassword: boolean} = {password: [], confirmPassword: true};
 
-  if(password === '' )
-      errors.password.push('Not be empty.');
-  
+  if(password.length < 5)
+    errors.password.push('Must be at least five characters long!');
+
   if(!(/[a-zA-Z]/.test(password || '')))
-      errors.password.push('Must contains at least one character!');
+      errors.password.push('Must contain at least one character!');
 
   if(!(/[0-9]/.test(password || '')))
-      errors.password.push('Must contains at least one number!');
+      errors.password.push('Must contain at least one number!');
 
   if(!(/[^a-zA-Z0-9]/.test(password || '')))
-      errors.password.push('Must contains at least one special character!')
+      errors.password.push('Must contain at least one special character!')
 
   if(password != confirmPassword)
       errors.confirmPassword = false;

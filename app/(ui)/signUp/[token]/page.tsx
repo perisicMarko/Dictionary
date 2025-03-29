@@ -12,7 +12,7 @@ export default function Page(){
     let token = params.token;
     if(typeof token === 'object')
         token = token[0];
-    const [user, setUser] = useState<TUser>();
+    const [user, setUser] = useState<TUser | undefined>();
     const [state, action, isPending] = useActionState(verifyUser, undefined);
  
     useEffect(() => {
@@ -45,7 +45,7 @@ export default function Page(){
 
     let isValid = false;
     const now = new Date();
-    const tokenExpirationDate = (user?.token_expiration_date ? user.token_expiration_date : false);
+    const tokenExpirationDate = (user?.refresh_token_expiration_date ? user.refresh_token_expiration_date : false);
     const tokenDate = tokenExpirationDate ? new Date(tokenExpirationDate) : undefined;
     
 
@@ -64,7 +64,7 @@ export default function Page(){
             {state?.success === true ? 
                 <motion.div initial='hidden' animate='show' variants={containerVariants} className="appWidth rounded-3xl bg-slate-800 p-5 mt-30">
                     <motion.p variants={itemVariants} className="text-white text-center">
-                        <b>Your email has been verified successfully.<br/> Log in here:  </b><Link href='/logIn' className="hover:scale-115 hover:underline">log in page link</Link>.
+                        <b>Your email has been verified successfully.<br/> Log in here:  </b><Link href='/logIn' className="hover:scale-115 hover:underline text-blue-300">log in page link</Link>.
                     </motion.p>
                 </motion.div>
 
