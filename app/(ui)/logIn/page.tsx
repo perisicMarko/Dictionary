@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from "next/navigation";
 
 
@@ -9,6 +9,8 @@ export default function LogIn() {
   const [respondMessage, setRespondMessage] = useState<{errors: {email: string, password: string}, email: string}>();
   const [isPending, setIsPending] = useState(false);
   const router = useRouter();
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const passInputRef = useRef<HTMLInputElement>(null);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -37,7 +39,15 @@ export default function LogIn() {
       });
 
       if(response.status != 200) {
+        setIsPending(false);
         const res = await response.json();
+        if (emailInputRef.current && passInputRef.current && res.email === '') {
+          emailInputRef.current.value = '';
+          passInputRef.current.value = ''
+        }
+        if(passInputRef.current && res.errors.password != '')
+          passInputRef.current.value = '';
+
         setRespondMessage(res); // display error if no user has been founded with that credentials
       }else{
         setIsPending(false);
@@ -70,6 +80,7 @@ export default function LogIn() {
             className="formInput"
             type="text"
             name="email"
+            ref={emailInputRef}
             defaultValue={respondMessage?.email}
           />
           {respondMessage?.errors?.email != "" && (
@@ -80,7 +91,7 @@ export default function LogIn() {
           <label htmlFor="password" className="text-white">
             Password:{" "}
           </label>
-          <input className="formInput" type="password" name="password" />
+          <input className="formInput" type="password" ref={passInputRef} name="password" />
           {respondMessage?.errors?.password && (
             <p className="error ml-1">{respondMessage.errors.password}</p>
           )}

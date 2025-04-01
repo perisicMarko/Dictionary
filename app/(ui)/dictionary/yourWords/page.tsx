@@ -28,21 +28,21 @@ export default function YourWords() {
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.3,
+        staggerChildren: 0.1,
       },
     },
   };
 
   const itemVariants = {
     hidden: { opacity: 0, y: -15 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+    show: { opacity: 1, y: 0, transition: { duration: 0.3 } },
   };
 
-  const index: number =
+  const index : number =
     words?.findIndex(
       (word: TDBNoteEntry) =>
-        word.word.toLowerCase().trim() === search.toLowerCase().trim()
-    ) || -1;
+        word.word.toString().toLowerCase().trim() === search.toString().toLowerCase().trim()
+    ) ?? -1;
 
   return (
     <>
@@ -50,7 +50,7 @@ export default function YourWords() {
         initial="hidden"
         animate="show"
         variants={itemVariants}
-        className="mt-10 w-3/4 sm:w-[600px] bg-slate-800 rounded-4xl grid grid-cols-[auto_auto_1fr] items-center"
+        className="mt-10 w-3/4 sm:w-[600px] bg-slate-800 rounded-4xl grid grid-cols-[auto_auto_1fr] justify-center items-center"
       >
         <span
           className="text-white ml-4 cursor-pointer hover:scale-115 rounded-full text-2xl"
@@ -64,7 +64,7 @@ export default function YourWords() {
           alt="magnify glass icon"
           width={20}
           height={20}
-          className="inline-block ml-2 mr-5"
+          className="inline-block ml-3"
           onClick={() => {
             searchBarRef?.current?.focus();
           }}
@@ -101,9 +101,16 @@ export default function YourWords() {
         </motion.div>
       )}
       {index === -1 && search != "" && (
-        <p className="mt-3 rounded-full p-2 w-3/4 sm:w-[600px] text-center text-white bg-slate-800">
+        <motion.p
+        initial="hidden"
+        animate="show"
+        variants={{
+          hidden: { opacity: 0, y: 10 },
+          show: { opacity: 1, y: 0, transition: { duration: 1 } },
+        }}
+        className="mt-3 rounded-full p-2 w-3/4 sm:w-[600px] text-center text-white bg-slate-800">
           {"No word like that within your words"}
-        </p>
+        </motion.p>
       )}
       {words && search != "" && index != -1 && (
         <Note prop={words[index]} historyNote={false} handle={() => {}}></Note>
@@ -120,9 +127,12 @@ export default function YourWords() {
           variants={containerVariants}
           className="center bg-slate-800 mt-60 rounded-4xl border-blue-500 p-2 w-3/4 sm:w-[600px]"
         >
-          <h2 className="text-center text-white">
-            <b>Hmm, looks like you do not have any words, time to learn!</b>
-          </h2>
+          <motion.h2 variants={itemVariants} className="text-center text-white">
+            <b>
+              Hmm, looks like you do not have any words in your history, time to
+              learn!
+            </b>
+          </motion.h2>
         </motion.div>
       )}
     </>

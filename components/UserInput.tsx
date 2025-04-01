@@ -27,15 +27,15 @@ export default function UserInput() {
         const response = await fetch(
           "https://api.dictionaryapi.dev/api/v2/entries/en/" + word.trim()
         );
-        if(response.status === 200){
+        if(response.ok){
           const result = await response.json();
           const tmp = await generateNotes(result);
           setNote(tmp);
           setRequest(false);
           setError("");
-        }else if(response.status === 401)
-          router.push('/logIn');
-
+        }else{
+          cleanUp(1);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -71,15 +71,15 @@ export default function UserInput() {
     show: {
       opacity: 1,
       transition: {
-        duration: 0.5,
-        staggerChildren: 0.4,
+        duration: 0.2,
+        staggerChildren: 0.2,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.7 } },
+    hidden: { opacity: 0, y: 10 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.2 } },
   };
 
 
@@ -118,13 +118,12 @@ export default function UserInput() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
+          variants={containerVariants}
           key="input"
           className="flex flex-col justify-center items-center sm:mt-25 md:mt-25 xl:mt-70 w-3/4 h-3/4 sm:w-[500px] md: py-5 md-py-10 xl:py-16 sm:max-h-[400px] rounded-2xl"
         >
           <motion.div
-            initial="hidden"
-            animate="show"
-            variants={containerVariants}
+            variants={itemVariants}
             className="flex flex-col justify-center items-center w-full"
           >
             <form
@@ -150,8 +149,7 @@ export default function UserInput() {
               />
               {error && <p className="error">{error}</p>}
               {note != null && isErrorNote(note) && note?.error && cleanUp(1)}
-              <motion.div
-                variants={itemVariants}
+              <div
                 className="flex justify-start w-full mt-2"
               >
                 <input
@@ -164,19 +162,19 @@ export default function UserInput() {
                   }
                 />
                 {note != null && !isErrorNote(note) && note?.parsedNote ? (
-                  <motion.div variants={itemVariants} className="w-full">
+                  <div  className="w-full">
                     <AudioPlayer
                       src={
                         isErrorNote(note) || note === null ? "" : note!.audio
                       }
                     ></AudioPlayer>
-                  </motion.div>
+                  </div>
                 ) : (
                   <></>
                 )}
-              </motion.div>
+              </div>
               {generate && (
-                <motion.div variants={itemVariants} className="w-full center">
+                <div  className="w-full center">
                   <textarea
                     rows={5}
                     placeholder="Type your notes here..."
@@ -184,10 +182,10 @@ export default function UserInput() {
                     name="userNotes"
                     key="userNotes"
                   />
-                </motion.div>
+                </div>
               )}
               {generate && (
-                <motion.div variants={itemVariants} className="p-3 w-full">
+                <div  className="p-3 w-full">
                   <h2 className="text-blue-400 self-start">
                     <b>{!isErrorNote(note) && note?.word}</b>
                   </h2>
@@ -203,20 +201,17 @@ export default function UserInput() {
                         : note!.parsedNote
                     }
                   />
-                </motion.div>
+                </div>
               )}
-              <motion.div
-                variants={itemVariants}
+              <div
+                
                 className="w-full flex flex-col items-center"
               >
-                <motion.div
-                  initial="hidden"
-                  animate="show"
-                  variants={containerVariants}
+                <div
                   className="w-full grid grid-cols-2 gap-2"
                 >
-                  <motion.button
-                    variants={itemVariants}
+                  <button
+                    
                     className={buttonStyle}
                     onClick={(e) => {
                       setGenerate(true);
@@ -230,26 +225,25 @@ export default function UserInput() {
                     }}
                   >
                     <b>Generate</b>
-                  </motion.button>
+                  </button>
                   {generate && (
-                    <motion.button
-                      variants={itemVariants}
+                    <button
+                      
                       type="submit"
                       className={buttonStyle}
                     >
                       {" "}
                       <b>Save</b>{" "}
-                    </motion.button>
+                    </button>
                   )}
-                </motion.div>
-                <motion.span
-                  variants={itemVariants}
+                </div>
+                <span
                   className="hover:underline hover:scale-105 cursor-pointer text-white mt-5"
                   onClick={() => setHelp(!help)}
                 >
                   Need any help?
-                </motion.span>
-              </motion.div>
+                </span>
+              </div>
             </form>
           </motion.div>
         </motion.div>

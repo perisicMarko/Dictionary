@@ -5,6 +5,7 @@ import { TDBNoteEntry } from "@/lib/types";
 import RecallNote from "@/components/RecallNote";
 import { motion } from "framer-motion";
 import { TokenContext } from "@/components/TokenContextProvider";
+import Link from "next/link";
 
 export default function Page() {
   const [words, setWords] = useState<TDBNoteEntry[] | undefined>();
@@ -84,13 +85,15 @@ export default function Page() {
             6 days. When you have done first two repetitions each next is
             calculated based on how good you have graded your recall. If you
             mark some word with grade below 3(0, 1, 2) repetition cycle will be
-            returned to the beginning. <br />
+            returned to the beginning. 
+            <br />
             <br />
             Also word is considered as learned when it has a big interval for
             recall(30+ days), but app will not move those words automaticaly to
             the &quot;Learned words&quot; page. You can do it on the trash icon
             in the menu which marks word as learned and moves it to the
             &quot;Learned words&quot; page.
+            <br />
             <br />
             You can delete word from the app only on &quot;Learned words&quot;
             page by clicking on the menu then on trash icon, only then is
@@ -100,17 +103,22 @@ export default function Page() {
             or more.
             <br />
             <br />
+            <b>Email notifications</b>
+            <br />
             Note that you will be informed via email when to enter the app to
             recall some words. Email may end up in spam, so you will need to fix
             that by yourself.
             <br />
             In order to fix that:
             <br />
-            -open gmail then spam sections
+            <span className="pl-1">
+            -open <Link href='https://mail.google.com/mail' className='text-blue-300 hover:underline' target='blank'>mail</Link> then spam section
             <br />
             -find our email and select it
             <br />
             -when options appear click on &quot;report not spam&quot;
+            </span>
+            <br />
             <br />
             If you have followed sing up instructions properly, you should have
             done this upon sing up.

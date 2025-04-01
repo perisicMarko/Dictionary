@@ -35,20 +35,20 @@ export default function History() {
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.3,
+        staggerChildren: 0.1,
       },
     },
   };
 
   const itemVariants = {
     hidden: { opacity: 0, y: -15 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+    show: { opacity: 1, y: 0, transition: { duration: 0.3 } },
   };
 
   const index : number = words?.findIndex(
     (word: TDBNoteEntry) =>
       word.word.toLowerCase().trim() === search.toLowerCase().trim()
-  ) || -1;
+  ) ?? -1;
 
   return (
     <>
@@ -70,7 +70,7 @@ export default function History() {
           alt="magnify glass icon"
           width={20}
           height={20}
-          className="inline-block ml-2 mr-5"
+          className="inline-block ml-3"
           onClick={() => {
             searchBarRef?.current?.focus();
           }}
@@ -108,7 +108,7 @@ export default function History() {
             From this page and this page only you can delete note permanently or
             return word to learning process. Both of those actions can be
             accomplished by opening the menu on menu icon and clicking on trash
-            icon or &quot;learned words&quot;.
+            icon or &quot;relearn&quot;.
           </motion.p>
         </motion.div>
       )}

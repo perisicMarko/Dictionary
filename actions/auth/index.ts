@@ -168,12 +168,8 @@ export async function authenticateLogIn(inputEmail : string, inputPassword : str
         return {
             errors: {password: '-Wrong password.', email: ''},
             email: email, 
-            success: true,
+            success: false,
         };
 
     return {errors: undefined, email: '', success: true};
-}
-
-export async function verifyToken(){
-
 }
