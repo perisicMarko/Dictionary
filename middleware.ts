@@ -1,28 +1,34 @@
 import { NextRequest, NextResponse } from "next/server";
+import { decryptRefresh, TokenPayload } from "./lib/session";
 
 const protectedRoutes = [''];
 const publicRoutes = ['/', '/signUp', '/logIn', '/about'];
 
-export default function middleware(req : NextRequest){
+export default async function middleware(req: NextRequest) {
     const path = req.nextUrl.pathname;
-
     const isProtected = protectedRoutes.includes(path) || path.startsWith('/dictionary');
     const isPublic = publicRoutes.includes(path);
 
-    //temporary light check, just check the existance of the session, when i implement refresh access token funcionality this will be changed
-    const session = req.cookies.get('session')?.value;  
-    const userId = session ? true : false;
-
-    if(path.indexOf('resetPassword') != -1){
-        //allows direct access to resetPassword page
-        return;
+    const refreshToken = req.cookies.get('refreshToken')?.value;
+    if(isProtected){
+        if(!refreshToken)
+            return NextResponse.redirect(new URL('/', req.nextUrl));
+        const payload = await decryptRefresh(refreshToken || '');
+        const { userId } = (payload as TokenPayload && payload as TokenPayload);
+        if(userId)
+            return NextResponse.next();
+        else
+            return NextResponse.redirect(new URL('/', req.nextUrl));
+    }else if(isPublic){
+        if(!refreshToken)
+            return NextResponse.next();
+        const payload = await decryptRefresh(refreshToken || '');
+        const { userId } = (payload as TokenPayload && payload as TokenPayload);
+        if(userId)
+            return NextResponse.redirect(new URL('/dictionary/inputWord', req.nextUrl));
+        else
+            return NextResponse.next();
     }
 
-    if(isProtected && !userId)
-        return NextResponse.redirect(new URL('/logIn', req.nextUrl));
-
-    if(isPublic && userId)
-        return NextResponse.redirect(new URL('/dictionary/inputWord', req.nextUrl));
-
-return NextResponse.next();
+    return NextResponse.next(); // letting all other requests to pass
 }

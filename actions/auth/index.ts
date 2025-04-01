@@ -1,17 +1,11 @@
 "use server"
 import { SignUpSchema, LogInSchema } from '@/lib/rules';
 import { GetUserByToken, GetUserInfoByEmail, InsertUserInfo, VerifyUser } from '@/actions/manageUsers/db';
-import { redirect } from 'next/navigation';
 import bcrypt from 'bcrypt';
-import { createSession } from '../../lib/session';
-import { cookies } from 'next/headers';
 import sendEmail, { generateVerificationMail } from './sendVerificationEmail';
 import { isBefore } from 'date-fns';
-import { decrypt } from '@/lib/session'
 
-
-
-type stateType = { 
+type stateType = {
     errors: {
         email?: string[] | undefined;
         password?: string[] | undefined;
@@ -78,7 +72,7 @@ export async function authenticateSignUp(state: stateType, formData: FormData){
         return retObj;
     }else{
         const tmp = formData.get('email')?.toString();
-        const res = await GetUserInfoByEmail({email: tmp || ''});
+        const res = await GetUserInfoByEmail(tmp || '');
         const alreadyExist = res != null;
         if(alreadyExist && validatedFields.success){
             const retObj = {
@@ -121,7 +115,7 @@ export async function resendVerificationMail(state : boolean | undefined, formDa
     const email = formData.get('email')?.toString() || '';
     if(email === '')
         return false;
-    const user = await GetUserInfoByEmail({email});
+    const user = await GetUserInfoByEmail(email);
     
     if(!user)
         return;
@@ -145,54 +139,41 @@ export async function getUserByToken(token : Base64URLString){
     return user;
 }  
 
-export async function authenticateLogIn(state : stateType, formData : FormData){
+export async function authenticateLogIn(inputEmail : string, inputPassword : string){
     const validatedFields = LogInSchema.safeParse({
-        email: formData.get("email"),
-        password: formData.get("password"),
+        email: inputEmail,
+        password: inputPassword,
     });
 
     if(!validatedFields.success){
         const retObj = {
             errors: validatedFields.error.flatten().fieldErrors,
-            email: ""
+            email: "",
+            success: false,
         };
 
-        const emailError = formData.get('email')?.toString();
-        if(!retObj.errors?.email && emailError)   
-            retObj.email = emailError;
+        if(!retObj.errors?.email)   
+            retObj.email = inputEmail;
     
         return retObj;
     }
 
     const {email, password} : {email: string, password: string} = validatedFields.data;
-    const user = await GetUserInfoByEmail({email});
+    const user = await GetUserInfoByEmail(email);
     
-    if(!user) return {errors: {email: '-Wrong email.', password: ''}}; 
+    if(!user) return {errors: {email: '-Wrong email.', password: ''}, email: '', success: false}; 
 
     const cmpStatus = await bcrypt.compare(password, user?.password);
     if(!cmpStatus) 
         return {
             errors: {password: '-Wrong password.', email: ''},
-            email: email
+            email: email, 
+            success: true,
         };
 
-    await createSession(user.id.toString(), user.password);
-    
-    redirect('/dictionary/inputWord');
+    return {errors: undefined, email: '', success: true};
 }
 
+export async function verifyToken(){
 
-export async function logOut(){
-    const cookieStore = await cookies();
-    cookieStore.delete('session');
-    redirect('/');
-}
-
-export async function getAuthUser(){
-    const cookieStore = await cookies();
-    const session = cookieStore.get('session')?.value;
-
-    if(session){
-        return await decrypt(session);
-    }
 }

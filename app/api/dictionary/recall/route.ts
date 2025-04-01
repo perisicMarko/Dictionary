@@ -1,32 +1,33 @@
 import { NextResponse } from 'next/server';
 import { isBefore } from 'date-fns';
-import { GetNotes, GetUserInfoById } from '@/actions/resetPassword/db';
+import { GetUserInfoById } from '@/actions/manageUsers/db';
+import { GetNotes } from '@/actions/manageNotes/db';
 import nodemailer from 'nodemailer';
 
 
 export async function GET() {
-  
-  const tmp = await GetNotes();
-  const notes = await (tmp != undefined && tmp.json());
 
-  const  currentDate = new Date();
+  const notes = await GetNotes();
+
+  const currentDate = new Date();
   const users = new Map<number, boolean>();
-
-  for(let i = 0; i < notes.length; i++){
-    if(isBefore(notes[i].review_date, currentDate))
-      users.set(notes[i].user_id,  true);
+  if (notes) {
+    for (let i = 0; i < notes.length; i++) {
+      if (isBefore(notes[i].review_date, currentDate))
+        users.set(notes[i].user_id, true);
+    }
   }
 
   let to = '';
-  for(const e of users.keys()){
-    const res = await GetUserInfoById(e);
-    const user = (await (res && res.json()))[0];
-    to += user.email + ', ';
+  for (const e of users.keys()) {
+    const user = await GetUserInfoById(e);
+    if (user)
+      to += user.email + ', ';
   }
 
   to = to.trim().substring(0, to.length - 1); // omitting the last comma
-  
-   // create transporter with SMTP settings
+
+  // create transporter with SMTP settings
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -46,10 +47,10 @@ export async function GET() {
   try {
     // sending mail
     await transporter.sendMail(mailOptions);
-    return NextResponse.json({ message: 'Mial was successfully sent.' , status: 200});
+    return NextResponse.json({ message: 'Mial was successfully sent.', status: 200 });
   } catch (error) {
-    const message =  (error instanceof Error && error.message);
-    return NextResponse.json({ error: 'Error when sending mail: ' + message, status: 500});
+    const message = (error instanceof Error && error.message);
+    return NextResponse.json({ error: 'Error when sending mail: ' + message, status: 500 });
   }
 
 }

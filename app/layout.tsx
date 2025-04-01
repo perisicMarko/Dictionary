@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title: "Dictionary",
   description: "",
   icons: {
-    icon: "/favi.svg", 
+    icon: "/favi.svg",
   },
 };
 
@@ -23,10 +23,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="background">
-      <body className={`${roboto.variable} antialiased flex flex-col justify-center items-center mb-48`}>
+      <body
+        className={`${roboto.variable} antialiased flex flex-col justify-center items-center mb-48`}
+      >
         {children}
       </body>
     </html>
   );
 }
-

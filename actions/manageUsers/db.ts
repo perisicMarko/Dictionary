@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export async function GetUserInfoById(id: number) {
 
   try {
-    const res = prisma.user.findMany({ where: { id: id } });
+    const res = prisma.user.findUnique({ where: { id: id } });
 
     return res;
   } catch (error) {
@@ -18,7 +18,7 @@ export async function GetUserInfoById(id: number) {
   }
 }
 
-export async function GetUserInfoByEmail({ email }: { email: string }) {
+export async function GetUserInfoByEmail(email : string) {
 
   try {
     const res = await prisma.user.findFirst({ where: { email: email } });

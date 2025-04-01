@@ -1,13 +1,12 @@
-
 export type TUser = {
-    id: number;
-    first_name: string;
-    last_name: string;
-    email: string;
-    password: string;
-    refresh_token: string | null;
-    refresh_token_expiration_date: Date | null;
-    email_verified: boolean | null;
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+  refresh_token: string | null;
+  refresh_token_expiration_date: Date | null;
+  email_verified: boolean | null;
 };
 
 export type TGPhonetic = {
@@ -42,35 +41,35 @@ export type TGeneratedNote = {
 };
 
 type TDefinition = {
-    definition: string;
-    example: string | undefined;
-  };
-  
+  definition: string;
+  example: string | undefined;
+};
+
 type TMeaning = {
-    partOfSpeech: string;
-    definitions: TDefinition[];
+  partOfSpeech: string;
+  definitions: TDefinition[];
 };
 
-  
+
 export type TWordApp = {
-    word: string;
-    audio: string;
-    meanings: TMeaning[];
-    parsedNote: string;
+  word: string;
+  audio: string;
+  meanings: TMeaning[];
+  parsedNote: string;
 };
 
-  
+
 export type TDBNoteEntry = {
-    id: number;
-    word: string
-    status: boolean;
-    user_notes: string;
-    generated_notes: string;
-    audio: string;
-    repetitions: number;
-    days: number;
-    review_date: Date;
-    ease_factor: number;
-    user_id: number;
-    language: string;
+  id: number;
+  word: string
+  status: boolean;
+  user_notes: string;
+  generated_notes: string;
+  audio: string;
+  repetitions: number;
+  days: number;
+  review_date: Date;
+  ease_factor: number;
+  user_id: number;
+  language: string;
 };

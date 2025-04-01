@@ -3,18 +3,9 @@ import { ImportNotes, GetNotes, GetNoteById, UpdateRepetitionFactors, SetNoteLea
 import { TDBNoteEntry, TGeneratedNote, TGMeaning, TGPhonetic, TWordApp } from '@/lib/types';
 import { addDays, isBefore } from 'date-fns';
 import calc from '@/lib/spacedRepetition';
-import { redirect } from 'next/navigation';
-import { getAuthUser } from '../auth/index';
+import { decryptAccess, TokenPayload } from '@/lib/session';
 
-export async function saveNotes(formData : FormData){
-
-  const word = formData.get('word')?.toString();
-  const audio = formData.get('audio')?.toString();
-  const user_notes = formData.get('userNotes')?.toString();
-  const generated_notes = formData.get('generatedNotes')?.toString();
-  const user = await getAuthUser();
-  const userId = user?.userId;
-
+export async function saveNotes(word : string, audio : string, user_notes : string, generated_notes : string, userId : number){
   const now = new Date();
   const dbInput : TDBNoteEntry = {
     id : 0, // mock for schema
@@ -35,6 +26,8 @@ export async function saveNotes(formData : FormData){
   
   if(!retVal)
     throw new Error('Word is not imported in database, smth is wrong. Check manageNotes/saveNotes -> db/ImportNotes');
+
+  return retVal;
 }
 
 export async function generateNotes(rawNotes : TGeneratedNote[]){
@@ -103,11 +96,15 @@ function stringifyNote(noteObj : TWordApp){
 }
 
 
-export async function getUsersNotes(){
-  const user = await getAuthUser();
-  const userId = Number(user?.userId); 
+export async function getUsersNotes(accessToken : string){
+
+  const payload = await decryptAccess(accessToken);
+  if(!payload)
+    return;
+  const {userId} = payload as TokenPayload;
   const notes = await GetNotes();
 
+  
   if(Array.isArray(notes))
     return notes?.filter((w : TDBNoteEntry) => {
       const res = w.status == false && w.user_id === userId;
@@ -116,8 +113,12 @@ export async function getUsersNotes(){
 }
 
 
-export async function getUsersHistory(userId : number){
+export async function getUsersHistory(accessToken : string){
   
+  const payload = await decryptAccess(accessToken);
+  if(!payload)
+    return;
+  const {userId} = payload as TokenPayload;  
   const notes = await GetNotes();
   
   if(Array.isArray(notes))
@@ -127,11 +128,14 @@ export async function getUsersHistory(userId : number){
     });
 }
 
-export async function getRecallNotes(){
+export async function getRecallNotes(accessToken : string){
+
+  const payload = await decryptAccess(accessToken);
+  if(!payload)
+    return;
+  const {userId} = payload as TokenPayload;  
   const notes = await GetNotes();
   const currentDate = new Date().toISOString();
-  const user = await getAuthUser();
-  const userId = user?.userId;
   
   if(Array.isArray(notes))
     return notes.filter((n : TDBNoteEntry) => {
@@ -140,13 +144,8 @@ export async function getRecallNotes(){
     });
 }
 
-
-type stateType = undefined | {success: string};
-  
-export async function updateReviewDate(state : stateType, formData : FormData){
-  const note = await GetNoteById(Number(formData.get('wordId')));
-
-  const quality = Number(formData.get('recall'));
+export async function updateReviewDate(noteId : number, quality : number){
+  const note = await GetNoteById(noteId);
 
   if(note && !('error' in note)){
     const retVal = calc(quality, note.days, note.repetitions, note.ease_factor);
@@ -164,23 +163,15 @@ export async function updateReviewDate(state : stateType, formData : FormData){
   }
 }
 
-export async function setAsLearned(formData : FormData, status : boolean){
-  const user = await getAuthUser();
-  if(!user)
-    redirect('/logIn');
-
-  await SetNoteLearned(Number(formData.get('noteId')), status); 
+export async function setAsLearned(noteId : number, status : boolean){
+  return await SetNoteLearned(noteId, status); 
 }
 
-export async function editNote(state: void | undefined, formData : FormData){
-  const userNotes = formData.get('userNotes')?.toString();
-  const generatedNotes = formData.get('generatedNotes')?.toString();
-  const retVal = EditNotes(userNotes || '', generatedNotes || '', Number(formData.get('noteId')));
+export async function editNote(userNotes : string, generatedNotes : string, noteId : number){
+  const retVal = await EditNotes(userNotes, generatedNotes, noteId);
 
   if(!retVal)
     throw new Error('Note with noteId is missing in database check manageNotes and edit/[noteId]');
-
-  redirect('/recall');
 }
 
 export async function getNoteById(noteId : number){
@@ -190,16 +181,13 @@ export async function getNoteById(noteId : number){
 }
 
 
-export async function backToRecallSystem(formData : FormData){ 
-  await ResetNoteRecallFactors(Number(formData.get('noteId')), 1, 0, 2.5, addDays(new Date(), 1));
+export async function backToRecallSystem(noteId : number){ 
+  return await ResetNoteRecallFactors(noteId, 1, 0, 2.5, addDays(new Date(), 1));
 }
 
 
-export async function deleteNote(formData : FormData){
-  const res = await DeleteNote(Number(formData.get('noteId')));
-
-  if(res)
-    return true;
-  else
-    return false;
+export async function deleteNote(noteId : number){
+  return await DeleteNote(noteId);
 }
+
+

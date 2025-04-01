@@ -8,7 +8,6 @@ export async function GetNotes(){
 
     try{
         const res = await prisma.word.findMany();
-
         return res;
     }catch (error) {
         
