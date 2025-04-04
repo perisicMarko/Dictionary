@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useActionState, useState } from "react";
 import { authenticateSignUp, resendVerificationMail } from "@/actions/auth";
 import { motion } from "framer-motion";
+import { containerVariants, itemVariants } from "@/lib/animationVariants";
 
 export default function SignUp() {
   const [state, action, isPending] = useActionState(
@@ -19,21 +20,6 @@ export default function SignUp() {
     window.alert("This email is already used for another account.");
     state.error = "";
   }
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: -15 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
-  };
 
   return (
     <>
@@ -74,9 +60,9 @@ export default function SignUp() {
         initial="hidden"
         animate="show"
         variants={containerVariants}
-        className=" mt-10 sm:w-[500px] w-3/4 h-1/2 bg-slate-800 rounded-2xl border-2 border-blue-50"
+        className=" mt-10 sm:w-[500px] w-3/4 h-1/2 bg-slate-800 rounded-3xl border-2 border-blue-50"
       >
-        <div className="flex justify-end items-start bg-slate-950 border-blue-50 rounded-t-2xl">
+        <div className="flex justify-end items-start bg-slate-950 border-blue-50 rounded-t-3xl">
           <Link className="xBtn mr-3 py-1 text-white" href="/">
             <b>x</b>
           </Link>
@@ -194,7 +180,7 @@ export default function SignUp() {
                 hidden: { opacity: 0, y: 15 },
                 show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
               }}
-              className="center w-full"
+              className="center mt-3"
             >
               <button
                 disabled={isPending}

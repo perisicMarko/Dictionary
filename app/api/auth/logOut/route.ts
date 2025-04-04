@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { decryptRefresh } from "@/lib/session";
+import { decryptRefresh } from "@/actions/manageSession";
 import { NextRequest, NextResponse } from "next/server";
 
 const REFRESH_SECRET = new TextEncoder().encode(process.env.REFRESH_SECRET);

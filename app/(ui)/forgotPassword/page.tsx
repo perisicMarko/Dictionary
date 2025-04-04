@@ -3,24 +3,11 @@ import { resetPassword } from "@/actions/manageUsers/resetPassword";
 import { motion } from "framer-motion";
 import { useActionState } from "react";
 import Link from "next/link";
+import { containerVariants, itemVariants } from "@/lib/animationVariants";
 
 export default function ForgotPassword() {
   const [state, action, isPending] = useActionState(resetPassword, null);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 15 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.2 } },
-  };
   return (
     <motion.div
       initial="hidden"

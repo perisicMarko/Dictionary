@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { containerVariants, itemVariants } from "@/lib/animationVariants";
 
 export default function Edit() {
   const params = useParams();
@@ -33,22 +34,6 @@ export default function Edit() {
     if(response.ok)
       router.push('/dictionary/recall')
   }
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        staggerChildren: 0.4,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.7 } },
-  };
 
   return (
     <motion.div

@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { editNote } from '@/actions/manageNotes';
-import { decryptRefresh, encryptAccess, verifySession,  } from '@/lib/session';
-import { TokenPayload } from '@/lib/session';
+import { decryptRefresh, encryptAccess, verifySession,  } from '@/actions/manageSession';
+import { TokenPayload } from '@/actions/manageSession';
 import { cookies } from 'next/headers';
-import { STATUS } from '@/lib/session';
+import { STATUS } from '@/actions/manageSession';
 
 export async function POST(req : NextRequest){
 

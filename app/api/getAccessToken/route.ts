@@ -1,4 +1,4 @@
-import { encryptAccess, decryptRefresh } from "@/lib/session";
+import { encryptAccess, decryptRefresh } from "@/actions/manageSession";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 

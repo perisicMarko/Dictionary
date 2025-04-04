@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { TUser } from "@/lib/types";
 import Link from "next/link";
 import { isBefore } from "date-fns";
+import { containerVariants, itemVariants } from "@/lib/animationVariants";
 
 export default function ResetPassword() {
   const params = useParams();
@@ -28,21 +29,6 @@ export default function ResetPassword() {
 
     fetchUser();
   }, [token]);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: -15 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.2 } },
-  };
 
   let isValid = false;
   const now = new Date();

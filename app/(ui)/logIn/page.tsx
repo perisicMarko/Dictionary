@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState, useRef } from 'react';
+import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { useRouter } from "next/navigation";
 
 
@@ -11,21 +12,6 @@ export default function LogIn() {
   const router = useRouter();
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passInputRef = useRef<HTMLInputElement>(null);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.3,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: -15 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();

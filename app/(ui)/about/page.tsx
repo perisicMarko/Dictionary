@@ -1,23 +1,10 @@
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { containerVariants, itemVariants } from "@/lib/animationVariants";
 
 export default function Page() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        staggerChildren: 0.3,
-      },
-    },
-  };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.7 } },
-  };
   return (
     <motion.div
       initial="hidden"

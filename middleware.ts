@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { decryptRefresh, TokenPayload } from "./lib/session";
+import { decryptRefresh, TokenPayload } from "./actions/manageSession";
 
 const protectedRoutes = [''];
 const publicRoutes = ['/', '/signUp', '/logIn', '/about'];

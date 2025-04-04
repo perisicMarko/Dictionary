@@ -1,10 +1,12 @@
 @import "tailwindcss";
 @import "normalize.css";
 
-* {
-  @apply outline-blue-400;
+input,
+button,
+textarea,
+select {
+  @apply outline outline-blue-400;
 }
-
 .primaryBtn {
   @apply w-full bg-blue-400 text-white hover:scale-105 active:scale-95 rounded-3xl block m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer;
 }
@@ -30,7 +32,7 @@
 }
 
 .form {
-  @apply space-x-2 space-y-2;
+  @apply gap-2;
 }
 .formInput {
   @apply block w-full p-2 mt-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] rounded-3xl text-slate-800 bg-white;

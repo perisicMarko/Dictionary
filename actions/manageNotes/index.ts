@@ -2,8 +2,8 @@
 import { ImportNotes, GetNotes, GetNoteById, UpdateRepetitionFactors, SetNoteLearned, ResetNoteRecallFactors, DeleteNote, EditNotes } from '@/actions/manageNotes/db';
 import { TDBNoteEntry, TGeneratedNote, TGMeaning, TGPhonetic, TWordApp } from '@/lib/types';
 import { addDays, isBefore } from 'date-fns';
-import calc from '@/lib/spacedRepetition';
-import { decryptAccess, TokenPayload } from '@/lib/session';
+import calc from '@/actions/manageNotes/spacedRepetition';
+import { decryptAccess, TokenPayload } from '@/actions/manageSession';
 
 export async function saveNotes(word : string, audio : string, user_notes : string, generated_notes : string, userId : number){
   const now = new Date();

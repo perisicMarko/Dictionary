@@ -27,8 +27,7 @@ export function TokenContextProvider({
           setAccessToken(data.accessToken);
         }
         fetchToken();
-    });//setting up rerender whenever accessToken value is changed
-
+    });
 
     return (
         <TokenContext.Provider value={{accessToken, setAccessToken}}>
