@@ -49,7 +49,7 @@ export function GradeForm({
         onSubmit={onSubmitGradeHandle}
       >
         <input type="text" name="noteId" defaultValue={noteId} hidden />
-        <label htmlFor="recall" className="text-white text-xs sm:text-xl">
+        <label htmlFor="recall" className="text-white text-[16px] sm:text-xl">
           Remember this word?
         </label>
         <Image
@@ -57,7 +57,7 @@ export function GradeForm({
           alt="arrow icon"
           width={20}
           height={20}
-          className="ml-3 w-auto h-auto top-10 sm:top-12 pointer-events-none md:top-13 xl:top-14 right-5 sm:right-11 scale-80 sm:scale-100 z-5 inline-block absolute"
+          className="ml-3 w-auto h-auto top-10 sm:top-12 pointer-events-none md:top-14 xl:top-14 right-5 sm:right-11  z-5 inline-block absolute"
         ></Image>
         <select
           id="recall"
@@ -65,7 +65,7 @@ export function GradeForm({
           name="recall"
           onClick={() => toggleMenu()}
           onChange={(e) => changeQuality(Number(e.target.value))}
-          className="relative mt-1 block text-white hover:scale-105 active:scale-95 bg-blue-400 w-full h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] appearance-none cursor-pointer py-2 rounded-3xl focus:outline-none px-3 text-xs sm:text-xl"
+          className="relative block text-white hover:scale-105 bg-blue-400 w-full h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] appearance-none cursor-pointer py-2 rounded-3xl focus:outline-none px-3 text-xs sm:text-xl mt-2"
         >
           <option value="-1" disabled>
             Grade from 0-5{" "}

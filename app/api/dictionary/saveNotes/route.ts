@@ -37,5 +37,5 @@ export async function POST(req : NextRequest){
         return NextResponse.json({token}, {status: 200}); 
     }
 
-    return NextResponse.next;
+    return NextResponse.next();
 }

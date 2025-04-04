@@ -6,7 +6,7 @@ import { addMinutes } from "date-fns";
 
 export async function generateVerificationMail(email : string){
 
-    const user = await GetUserInfoByEmail({email});
+    const user = await GetUserInfoByEmail(email);
 
     
     if(!user)

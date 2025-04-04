@@ -31,7 +31,6 @@ export async function GET() {
         return NextResponse.json({ success: 'Unverified items have been deleted', status: 200 })
     } catch (error) {
         const message = (error instanceof Error && error.message);
-        return NextResponse.json({ error: 'Error occured whiele deleting unverified database items: ' + message, status: 500 });
+        return NextResponse.json({ error: 'Error occured while deleting unverified database items: ' + message, status: 500 });
     }
-
 }

@@ -34,8 +34,10 @@ export default function SaveNoteForm({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (tokenContext?.accessToken == undefined) return;
+    if (tokenContext?.accessToken == undefined) 
+      return;
     cleanUp(0);
+    changeWord('');
     const formData = new FormData(e.target as HTMLFormElement);
 
     const res = await fetch("/api/dictionary/saveNotes", {
@@ -56,7 +58,6 @@ export default function SaveNoteForm({
       tokenContext?.setAccessToken(newToken);
     } else if (res.status === 401) router.push("/logIn");
   }
-
 
   const isErrorNote = (
     note: TWordApp | { error: string } | null | undefined
@@ -138,6 +139,7 @@ export default function SaveNoteForm({
             )}
           </div>
           {generate && (
+            <>
             <div className="w-full center">
               <textarea
                 rows={5}
@@ -147,8 +149,6 @@ export default function SaveNoteForm({
                 key="userNotes"
               />
             </div>
-          )}
-          {generate && (
             <div className="p-3 w-full">
               <h2 className="text-blue-400 self-start">
                 <b>{!isErrorNote(note) && note?.word}</b>
@@ -162,17 +162,19 @@ export default function SaveNoteForm({
                 defaultValue={
                   isErrorNote(note) || note === null || note === undefined
                     ? ""
-                    : note!.parsedNote
+                    : note.parsedNote
                 }
               />
             </div>
+            </>
           )}
           <div className="w-full flex flex-col items-center">
             <div className="w-full grid grid-cols-2 gap-2">
-              <button
-                className={buttonStyle}
+              <motion.button
+                variants={itemVariants}
+                className={buttonStyle + (wordInputRef && !isErrorNote(note) && wordInputRef.current?.value != note?.word && ' col-span-2')}
                 onClick={(e) => {
-                  changeGenerate(true);
+                changeGenerate(true);
 
                   if (isDisabled === true) {
                     wordInputRef?.current?.focus();
@@ -185,12 +187,15 @@ export default function SaveNoteForm({
                 }}
               >
                 <b>Generate</b>
-              </button>
+              </motion.button>
               {generate && (
-                <button type="submit" className={buttonStyle}>
-                  {" "}
-                  <b>Save</b>{" "}
-                </button>
+                <motion.button type="submit" className={buttonStyle}
+                  hidden={wordInputRef && !isErrorNote(note) && wordInputRef.current?.value != note?.word}
+                  variants={itemVariants}
+                >
+  
+                  <b>Save</b>
+                </motion.button>
               )}
             </div>
             <span

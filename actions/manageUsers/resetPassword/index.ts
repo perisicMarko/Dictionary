@@ -19,7 +19,7 @@ export async function resetPassword(state: { message: string; status: number; er
     throw new Error('Email is undefined, check resetPassword/index.ts & forgotPassword/page.tsx');
   
   
-  const user = await GetUserInfoByEmail({email});
+  const user = await GetUserInfoByEmail(email);
    
   if(!user)
     return {error: 'There is no user using that Email, please enter your email', status: 0};

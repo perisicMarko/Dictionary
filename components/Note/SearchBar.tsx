@@ -20,7 +20,7 @@ export function SearchBar({
       className="mt-10 w-3/4 sm:w-[600px] bg-slate-800 rounded-4xl grid grid-cols-[auto_auto_1fr] items-center"
     >
       <span
-        className="text-white ml-4 cursor-pointer hover:scale-115 rounded-full text-2xl"
+        className="text-white md:ml-4 ml-3 cursor-pointer hover:scale-115 rounded-full text-2xl"
         title="click for help"
         onClick={() => toggleHelp()}
       >
@@ -31,7 +31,7 @@ export function SearchBar({
         alt="magnify glass icon"
         width={20}
         height={20}
-        className="inline-block ml-3"
+        className="inline-block md:ml-4 ml-1 scale-90 md:scale-100"
         onClick={() => {
           searchBarRef?.current?.focus();
         }}
