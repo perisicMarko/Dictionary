@@ -15,7 +15,7 @@ export async function GET() {
             unverifiedUserIds = users?.filter((u: TUser) => !u.email_verified).map((u: TUser) => { return u.id });
 
         //delete unverified users
-        await DeleteUnverifiedUsers(unverifiedUserIds || [])
+        await DeleteUnverifiedUsers(unverifiedUserIds);
 
         //retrieve all db notes
         const notes = await GetNotes();
@@ -26,9 +26,9 @@ export async function GET() {
             unverifiedNoteIds = notes?.filter((n: TDBNoteEntry) => n.user_id in unverifiedUserIds).map((n: TDBNoteEntry) => { return n.id });
 
         //delete unverified notes
-        await DeleteUnverifiedNotes(unverifiedNoteIds || []);
+        await DeleteUnverifiedNotes(unverifiedNoteIds);
 
-        return NextResponse.json({ success: 'Unverified items have been deleted', status: 200 })
+        return NextResponse.json({ success: 'Unverified items have been deleted', status: 200 });
     } catch (error) {
         const message = (error instanceof Error && error.message);
         return NextResponse.json({ error: 'Error occured while deleting unverified database items: ' + message, status: 500 });

@@ -37,7 +37,6 @@ export default function SaveNoteForm({
     if (tokenContext?.accessToken == undefined) 
       return;
     cleanUp(0);
-    changeWord('');
     const formData = new FormData(e.target as HTMLFormElement);
 
     const res = await fetch("/api/dictionary/saveNotes", {
@@ -51,6 +50,10 @@ export default function SaveNoteForm({
         accessToken: formData.get("accessToken"),
       }),
     });
+
+    changeWord('');
+    if(wordInputRef.current)
+      wordInputRef.current.value = '';
 
     if (res.status === 201) {
       const data = await res.json();
@@ -172,7 +175,7 @@ export default function SaveNoteForm({
             <div className="w-full grid grid-cols-2 gap-2">
               <motion.button
                 variants={itemVariants}
-                className={buttonStyle + (wordInputRef && !isErrorNote(note) && wordInputRef.current?.value != note?.word && ' col-span-2')}
+                className={buttonStyle + (wordInputRef && !isErrorNote(note) && wordInputRef.current?.value.toLowerCase() != note?.word.toLowerCase() && ' col-span-2')}
                 onClick={(e) => {
                 changeGenerate(true);
 
@@ -190,7 +193,7 @@ export default function SaveNoteForm({
               </motion.button>
               {generate && (
                 <motion.button type="submit" className={buttonStyle}
-                  hidden={wordInputRef && !isErrorNote(note) && wordInputRef.current?.value != note?.word}
+                  hidden={wordInputRef && !isErrorNote(note) && wordInputRef.current?.value.toLowerCase() != note?.word.toLowerCase()}
                   variants={itemVariants}
                 >
   

@@ -36,7 +36,6 @@ export default function LogIn() {
 
         setRespondMessage(res); // display error if no user has been founded with that credentials
       }else{
-        setIsPending(false);
         router.push('/dictionary/inputWord');
       }
   }
@@ -82,7 +81,7 @@ export default function LogIn() {
             <p className="error ml-1">{respondMessage.errors.password}</p>
           )}
         </motion.div>
-        <motion.div variants={itemVariants} className="center w-3/4">
+        <motion.div variants={itemVariants} className="center w-3/4 mt-2">
           <button disabled={isPending} className="primaryBtn">
             {isPending ? "Loading..." : "Log in"}
           </button>
@@ -94,16 +93,11 @@ export default function LogIn() {
           }}
           className="center my-1"
         >
-          <p className="text-center text-white text-xs sm:text-base mr-3 sm:mr-6 hover:underline">
-            You do not have an account yet?
-          </p>
           <Link
-            href="/signUp"
-            className="hover:scale-115 text-white text-center"
+            className="flex items-start justify-end text-white hover:scale-105 hover:underline text-[14px] sm:text-[18px]"
+            href="/forgotPassword"
           >
-            <i>
-              <u>Sign up here</u>
-            </i>
+            <u>Forgot password?</u>
           </Link>
         </motion.div>
       </form>
