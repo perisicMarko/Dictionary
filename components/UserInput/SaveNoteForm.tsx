@@ -68,12 +68,12 @@ export default function SaveNoteForm({
     return note != null && "error" in note;
   };
 
-  let buttonStyle = "bg-blue-400 text-white hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block";
-  if (!(note && !isErrorNote(note))) {
-    buttonStyle += " w-full col-span-2";
-  } else if (note) 
-    buttonStyle += " col-span-1";
 
+  let buttonStyle = "bg-blue-400 text-white hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block";
+  if(!isErrorNote(note) && note)
+    buttonStyle += " col-span-1";
+  else
+    buttonStyle += " col-span-2";
 
   wordInputRef.current?.focus();
 
@@ -175,7 +175,7 @@ export default function SaveNoteForm({
             <div className="w-full grid grid-cols-2 gap-2">
               <motion.button
                 variants={itemVariants}
-                className={buttonStyle + (wordInputRef && !isErrorNote(note) && wordInputRef.current?.value.toLowerCase() != note?.word.toLowerCase() && ' col-span-2')}
+                className={buttonStyle + (wordInputRef && !isErrorNote(note) && wordInputRef.current?.value.toLowerCase() != note?.word.toLowerCase() ? " col-span-2" : "")}
                 onClick={(e) => {
                 changeGenerate(true);
 
@@ -192,7 +192,7 @@ export default function SaveNoteForm({
                 <b>Generate</b>
               </motion.button>
               {generate && (
-                <motion.button type="submit" className={buttonStyle}
+                <motion.button type="submit" className="bg-blue-400 text-white hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block col-span-1"
                   hidden={wordInputRef && !isErrorNote(note) && wordInputRef.current?.value.toLowerCase() != note?.word.toLowerCase()}
                   variants={itemVariants}
                 >
