@@ -2,9 +2,10 @@
 import { decryptRefresh } from "@/actions/manageSession";
 import { NextRequest, NextResponse } from "next/server";
 
-const REFRESH_SECRET = new TextEncoder().encode(process.env.REFRESH_SECRET);
-
 export async function POST(req : NextRequest){
+    
+    if(req.method != 'POST') return NextResponse.json({status: 405}); // method not allowed
+    
     const cookies = req.cookies;
     const refreshToken = cookies.get('refreshToken')?.value;
     

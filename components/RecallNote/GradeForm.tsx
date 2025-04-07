@@ -24,7 +24,7 @@ export function GradeForm({
     if (accessToken === undefined) return;
     changeQuality(-1);
     const response = await fetch("/api/dictionary/recall/grade", {
-      method: "POST",
+      method: "PATCH",
       credentials: "include",
       body: JSON.stringify({
         noteId: Number(formData.get("noteId")),

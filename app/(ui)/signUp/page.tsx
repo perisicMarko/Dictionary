@@ -1,7 +1,8 @@
 "use client";
+import { VerificationEmailSent } from './../../../components/VerificationEmailSent';
 import Link from "next/link";
 import { useActionState, useState } from "react";
-import { authenticateSignUp, resendVerificationMail } from "@/actions/auth";
+import { authenticateSignUp } from "@/actions/auth";
 import { motion } from "framer-motion";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 
@@ -10,10 +11,7 @@ export default function SignUp() {
     authenticateSignUp,
     undefined
   );
-  const [resendState, resendAction, isPendingReset] = useActionState(
-    resendVerificationMail,
-    undefined
-  );
+
   const [email, setEmail] = useState("");
 
   if (state?.error === "Email already used.") {
@@ -24,37 +22,7 @@ export default function SignUp() {
   return (
     <>
       {state?.success && (
-        <motion.div
-          initial="hidden"
-          animate="show"
-          variants={containerVariants}
-          className="flex flex-col items-center sm:w-[500px] w-3/4 rounded-3xl bg-slate-800 p-5 mt-15 sm:mt-20"
-        >
-          <motion.p variants={itemVariants} className="text-center text-white">
-            Verification email has been sent. Check your email{" "}
-            <b className="text-blue-300">spam</b> section and mark email as{" "}
-            <b className="text-blue-300">report not spam</b> so you can receive
-            our messages.
-            <br />
-          </motion.p>
-          <Link
-            href="https://mail.google.com/"
-            className="hover:scale-115 text-white my-3"
-          >
-            <u className="text-blue-300">Gmail link.</u>
-          </Link>
-          <motion.form action={resendAction} className="w-full">
-            <input name="email" defaultValue={email} hidden />
-            <button className="primaryBtn" type="submit">
-              {isPendingReset ? "Resending mail..." : "Resend mail"}
-            </button>
-          </motion.form>
-          {resendState && (
-            <motion.span className="text-white">
-              Verification email was successfully resent.
-            </motion.span>
-          )}
-        </motion.div>
+        <VerificationEmailSent email={email}/>
       )}
       <motion.div
         initial="hidden"
@@ -69,7 +37,7 @@ export default function SignUp() {
         </div>
 
         <div className="center">
-          <form className="form sm:w-[450px] px-2 py-5" action={action}>
+          <form className="form sm:w-[450px] px-2 pb-5" action={action}>
             <motion.div variants={itemVariants} className="mt-3">
               <label htmlFor="name" className="text-white">
                 Name:{" "}
@@ -184,13 +152,13 @@ export default function SignUp() {
             >
               <button
                 disabled={isPending}
-                className="bg-blue-400 text-white rounded-3xl block m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer w-1/2"
+                className="bg-blue-400 text-white rounded-3xl block m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer w-1/2 hover:scale-105 active:scale-95"
               >
                 {isPending ? "Loading..." : "Sign up"}
               </button>
               <motion.div
                 variants={itemVariants}
-                className="inline-block hover:scale-105 ml-1"
+                className="inline-block hover:scale-105 ml-3"
               >
                 <Link href="logIn" className="text-white">
                   <i>

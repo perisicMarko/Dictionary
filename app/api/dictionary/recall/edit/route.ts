@@ -5,9 +5,9 @@ import { TokenPayload } from '@/actions/manageSession';
 import { cookies } from 'next/headers';
 import { STATUS } from '@/actions/manageSession';
 
-export async function POST(req : NextRequest){
+export async function PATCH(req : NextRequest){
 
-    if (req.method !== 'POST') return NextResponse.json({status: 405}); //server error
+    if (req.method !== 'PATCH') return NextResponse.json({status: 405}); // method not allowed
 
     const data = await req?.json();
     const retVal = await verifySession(data.accessToken);

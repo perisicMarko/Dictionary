@@ -22,12 +22,12 @@ export function TokenContextProvider({
             credentials: 'include',
           });
           if(!response.ok)
-            throw new Error('Failed to retireve Access token in layout');
+            console.log('Failed to fetch access token.');
           const data = await response.json();
           setAccessToken(data.accessToken);
         }
         fetchToken();
-    });
+    }, []);
 
     return (
         <TokenContext.Provider value={{accessToken, setAccessToken}}>

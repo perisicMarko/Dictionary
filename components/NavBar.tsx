@@ -1,15 +1,27 @@
-import React from "react";
+'use client'
+import { useContext} from "react";
+import { usePathname, useRouter } from 'next/navigation';
 import Link from "next/link";
 import Image from "next/image";
-export function NavBar({
-  handleSubmit,
-  accessToken,
-  path,
-}: {
-  handleSubmit: (e: React.FormEvent) => Promise<void>;
-  accessToken: string | undefined;
-  path: string;
-}) {
+import { TokenContext } from "@/components/TokenContextProvider";
+
+export function NavBar() {
+    const path = usePathname();
+    const router = useRouter();
+    const tokenContext = useContext(TokenContext);
+    const accessToken = tokenContext?.accessToken;
+    
+    const handleSubmit = async (e : React.FormEvent) => {
+      e.preventDefault();
+      await fetch('/api/auth/logOut', {
+        method: "POST",
+        credentials: 'include',
+      });
+  
+      tokenContext?.setAccessToken('');
+      router.push('/');
+    }
+    
   return (
     <nav className="bg-slate-900 w-full h-[50px] grid grid-cols-[auto_1fr] items-center">
       <div className="flex justify-start items-center ml-3 md:ml-7">

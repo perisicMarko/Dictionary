@@ -38,6 +38,9 @@ export default function SaveNoteForm({
       return;
     cleanUp(0);
     const formData = new FormData(e.target as HTMLFormElement);
+    
+    if(wordInputRef.current) 
+      wordInputRef.current.value = '';
 
     const res = await fetch("/api/dictionary/saveNotes", {
       method: "POST",
@@ -50,8 +53,6 @@ export default function SaveNoteForm({
         accessToken: formData.get("accessToken"),
       }),
     });
-
-    changeWord('');
     if(wordInputRef.current)
       wordInputRef.current.value = '';
 
@@ -141,7 +142,7 @@ export default function SaveNoteForm({
               </div>
             )}
           </div>
-          {generate && (
+          {generate && !isErrorNote(note) && note && (
             <>
             <div className="w-full center">
               <textarea

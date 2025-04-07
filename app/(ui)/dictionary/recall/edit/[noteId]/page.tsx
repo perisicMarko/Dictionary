@@ -27,7 +27,7 @@ export default function Edit() {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement)
     const response = await fetch('/api/dictionary/recall/edit', {
-      method: 'POST',
+      method: 'PATCH',
       credentials: 'include',
       body: JSON.stringify({noteId: Number(noteId), userNotes: formData.get('userNotes'), generatedNotes: formData.get('generatedNotes')}),
     });

@@ -24,7 +24,7 @@ export default function RecallNoteMenu({
     const formData = new FormData(e.target as HTMLFormElement);
     if (accessToken === undefined) return;
     const response = await fetch("/api/dictionary/recall/learned", {
-      method: "POST",
+      method: "PATCH",
       credentials: "include",
       body: JSON.stringify({
         accessToken: accessToken,

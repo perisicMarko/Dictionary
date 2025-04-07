@@ -45,9 +45,9 @@ export default function LogIn() {
       initial="hidden"
       animate="show"
       variants={containerVariants}
-      className="mt-25 sm:mt-30 md:mt-30 bg-slate-800 rounded-2xl border-2 border-blue-50 w-[1/2] md:w-[500px]"
+      className="mt-25 sm:mt-30 md:mt-30 bg-slate-800 rounded-3xl border-2 border-blue-50 w-[1/2] md:w-[500px]"
     >
-      <div className="flex justify-end items-center bg-slate-950 border-blue-50 rounded-t-2xl">
+      <div className="flex justify-end items-center bg-slate-950 border-blue-50 rounded-t-3xl">
         <Link className="xBtn mr-3 py-1 text-white" href="/">
           <b>x</b>
         </Link>

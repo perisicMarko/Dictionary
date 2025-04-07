@@ -19,7 +19,7 @@ export default function HistoryNoteMenu({
     const formData = new FormData(e.target as HTMLFormElement);
     if (accessToken === undefined) return;
     await fetch("/api/dictionary/history/relearn", {
-      method: "POST",
+      method: "PATCH",
       credentials: "include",
       body: JSON.stringify({
         accessToken: accessToken,
@@ -37,7 +37,7 @@ export default function HistoryNoteMenu({
     const formData = new FormData(e.target as HTMLFormElement);
     if (accessToken === undefined) return;
     await fetch("/api/dictionary/history/delete", {
-      method: "POST",
+      method: "DELETE",
       credentials: "include",
       body: JSON.stringify({
         accessToken: accessToken,
