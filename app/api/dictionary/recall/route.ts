@@ -8,24 +8,14 @@ import nodemailer from 'nodemailer';
 export async function GET() {
 
   const notes = await GetNotes();
-
   const currentDate = new Date();
-  const users = new Map<number, boolean>();
+  const userIds = new Set<number>();
   if (notes) {
     for (let i = 0; i < notes.length; i++) {
       if (isBefore(notes[i].review_date, currentDate))
-        users.set(notes[i].user_id, true);
+        userIds.add(notes[i].user_id);
     }
   }
-
-  let to = '';
-  for (const e of users.keys()) {
-    const user = await GetUserInfoById(e);
-    if (user)
-      to += user.email + ', ';
-  }
-
-  to = to.trim().substring(0, to.length - 1); // omitting the last comma
 
   // create transporter with SMTP settings
   const transporter = nodemailer.createTransport({
@@ -35,22 +25,28 @@ export async function GET() {
       pass: process.env.EMAIL_PASS,
     },
   });
-
+  
   // configuring mail
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: to,
+    to: '',
     subject: 'Recall time',
     text: 'Hey it\'s me again, it is time to recall some words.\nIt takes just a few minutes to recall your words and stay on the learning path, keep it up.\n Follow this link to the app: https://dictionary-six-tau.vercel.app.'
   };
+  for (const u of userIds) {
+    const user = await GetUserInfoById(u);
+    if(user)
+      mailOptions.to = user.email;
 
-  try {
-    // sending mail
-    await transporter.sendMail(mailOptions);
-    return NextResponse.json({ message: 'Mial was successfully sent.', status: 200 });
-  } catch (error) {
-    const message = (error instanceof Error && error.message);
-    return NextResponse.json({ error: 'Error when sending mail: ' + message, status: 500 });
+    try {
+      // sending mail
+      await transporter.sendMail(mailOptions);
+      return NextResponse.json({ message: 'Mial was successfully sent.', status: 200 });
+    } catch (error) {
+      const message = (error instanceof Error && error.message);
+      return NextResponse.json({ error: 'Error when sending mail: ' + message, status: 500 });
+    }
   }
+
 
 }
