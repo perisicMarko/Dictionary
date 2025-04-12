@@ -1,7 +1,7 @@
 "use client";
 import RecallNoteHelp from "@/components/RecallNote/Help";
 import { getRecallNotes } from "@/actions/manageNotes";
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext, useLayoutEffect } from "react";
 import { TDBNoteEntry } from "@/lib/types";
 import RecallNote from "@/components/RecallNote";
 import { TokenContext } from "@/components/TokenContextProvider";
@@ -10,10 +10,9 @@ import ZeroNotesMessage from "@/components/shared/ZeroNotesMessage";
 export default function Page() {
   const [words, setWords] = useState<TDBNoteEntry[] | undefined>();
   const [refresh, setRefresh] = useState(false);
-  const [help, setHelp] = useState<boolean>(false);
   const tokenContext = useContext(TokenContext);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     async function fetchNotes() {
       const data = await getRecallNotes(tokenContext?.accessToken || "");
       setWords(data);
@@ -25,13 +24,9 @@ export default function Page() {
     setRefresh(!refresh);
   }
 
-  function toggleHelp() {
-    setHelp(!help);
-  }
-
   return (
     <>
-      <RecallNoteHelp toggleHelp={toggleHelp} help={help} />
+      <RecallNoteHelp />
 
       {words && words.length > 0 ? (
         words?.map((w: TDBNoteEntry) => {

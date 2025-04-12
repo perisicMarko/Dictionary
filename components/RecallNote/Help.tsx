@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
 import { itemVariants } from "@/lib/animationVariants";
 import Link from "next/link";
+import { useState } from 'react';
 
-export default function RecallNoteHelp({toggleHelp, help}: {toggleHelp: () => void, help: boolean}) {
+export default function RecallNoteHelp() {
+  const [help, setHelp] = useState<boolean>(false);
+
   return (
     <>
       <motion.div
@@ -18,9 +21,9 @@ export default function RecallNoteHelp({toggleHelp, help}: {toggleHelp: () => vo
             y: 0,
           },
         }}
-        className="center bg-slate-800 rounded-2xl w-3/4 sm:w-[600px] mt-10 px-3"
+        className="center bg-slate-800 rounded-2xl w-3/4 sm:w-[600px] mt-15 px-3"
         onClick={() => {
-          toggleHelp();
+          setHelp(!help);
         }}
       >
         <span className="block hover:scale-105 py-2 hover:underline cursor-pointer text-white text-center">
@@ -38,7 +41,7 @@ export default function RecallNoteHelp({toggleHelp, help}: {toggleHelp: () => vo
           <span
             className="xBtn mr-3 text-white py-1"
             onClick={() => {
-              toggleHelp();
+              setHelp(!help);
             }}
           >
             <b>x</b>

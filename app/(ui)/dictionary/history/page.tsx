@@ -4,20 +4,19 @@ import { getUsersHistory } from "@/actions/manageNotes";
 import Note from "@/components/Note";
 import Words from "@/components/shared/Words";
 import { TDBNoteEntry } from "@/lib/types";
-import { useEffect, useState, useContext } from "react";
+import { useState, useContext, useLayoutEffect } from "react";
 import { TokenContext } from "@/components/TokenContextProvider";
-import { motion } from "framer-motion";
-import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import ZeroNotesMessage from "@/components/shared/ZeroNotesMessage";
+import { itemVariants } from '@/lib/animationVariants';
+import { motion } from 'framer-motion';
 
 export default function History() {
   const tokenContext = useContext(TokenContext);
   const [search, setSearch] = useState("");
   const [refresh, setRefresh] = useState(false);
-  const [help, setHelp] = useState(false);
   const [words, setWords] = useState<TDBNoteEntry[] | undefined>([]);
   
-  useEffect(() => {
+  useLayoutEffect(() => {
     const fetch = async () => { 
       const words = await getUsersHistory(tokenContext?.accessToken || '');
       setWords(words);
@@ -30,40 +29,25 @@ export default function History() {
       word.word.toLowerCase().trim() === search.toLowerCase().trim()
   ) ?? -1;
 
-  function toggleHelp(){
-    setHelp(!help);
-  }
+
   function updateSearch(word: string){
     setSearch(word);
   }
+
   return (
     <>
-      <SearchBar toggleHelp={toggleHelp} updateSearch={updateSearch}/>
-      {help && (
-        <motion.div
-          initial="hidden"
-          animate="show"
-          variants={containerVariants}
-          className="bg-slate-800 w-3/4 sm:w-[600px] mt-5 rounded-3xl text-white"
-        >
-          <div className="flex justify-end bg-slate-950 rounded-t-2xl">
-            <span className="xBtn mr-4 py-1" onClick={() => setHelp(!help)}>
-              <b>x</b>
-            </span>
-          </div>
-          <motion.p variants={itemVariants} className="p-3">
+      <SearchBar updateSearch={updateSearch}>
+        <motion.p variants={itemVariants} className='p-3'>
             This page should helps you review the words you have learned. So
             basically this page just stores learned words, like personal
-            history.
-            <br />
-            <br />
+            history.<br/><br/>
             From this page and this page only you can delete note permanently or
             return word to learning process. Both of those actions can be
             accomplished by opening the menu on menu icon and clicking on trash
             icon or &quot;relearn&quot;.
-          </motion.p>
-        </motion.div>
-      )}
+        </motion.p>
+      </SearchBar>
+
       {index === -1 && search != "" && (
        <ZeroNotesMessage message={'There is no word like that within your words.'}/>
       )}

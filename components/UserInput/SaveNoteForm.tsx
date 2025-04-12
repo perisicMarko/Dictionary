@@ -1,7 +1,7 @@
 import AudioPlayer from "../shared/AudioPlayer";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { containerVariants, itemVariants } from "@/lib/animationVariants";
+import { containerVariants, itemVariants, transition } from "@/lib/animationVariants";
 import { useRef, useContext } from 'react';
 import { TWordApp } from "@/lib/types";
 import { TokenContext } from "../TokenContextProvider";
@@ -83,6 +83,8 @@ export default function SaveNoteForm({
 
   return (
     <motion.div
+      layout
+      transition={transition}
       initial={{
         opacity: 0,
         y: 20,
@@ -90,9 +92,6 @@ export default function SaveNoteForm({
       animate={{
         opacity: 1,
         y: 0,
-      }}
-      transition={{
-        duration: 1,
       }}
       variants={containerVariants}
       key="input"

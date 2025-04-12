@@ -1,13 +1,16 @@
 'use client'
-import { useContext} from "react";
+import { useContext, useEffect, useState } from "react";
 import { usePathname, useRouter } from 'next/navigation';
 import Link from "next/link";
 import Image from "next/image";
 import { TokenContext } from "@/components/TokenContextProvider";
+import { motion } from 'framer-motion';
+import { containerVariants } from "@/lib/animationVariants";
 
 export function NavBar() {
     const path = usePathname();
     const router = useRouter();
+    const [isVisible, setIsVisible] = useState(true);
     const tokenContext = useContext(TokenContext);
     const accessToken = tokenContext?.accessToken;
     
@@ -21,9 +24,30 @@ export function NavBar() {
       tokenContext?.setAccessToken('');
       router.push('/');
     }
+
+    useEffect(() => {
+      let lastScrollY = window.scrollY;
+
+      const controlScroll = () => {
+        const currentScrollY = window.scrollY;
+        if(currentScrollY > lastScrollY && currentScrollY > 100)
+          setIsVisible(false);
+        else
+          setIsVisible(true);
+
+          lastScrollY = currentScrollY;
+      }
+
+      window.addEventListener("scroll", controlScroll);
+
+      return () => window.removeEventListener("scroll", controlScroll);
+    }, []);
+
+
     
   return (
-    <nav className="bg-slate-900 w-full h-[50px] grid grid-cols-[auto_1fr] items-center">
+    isVisible && 
+    <motion.nav initial='hidden' animate='show' variants={containerVariants} className="fixed top-0 z-20 bg-slate-800 w-full h-[50px] grid grid-cols-[auto_1fr] items-center">
       <div className="flex justify-start items-center ml-3 md:ml-7">
         <form onSubmit={handleSubmit} method="POST">
           <input name="accessToken" value={accessToken} hidden readOnly />
@@ -83,6 +107,6 @@ export function NavBar() {
           Learned words{" "}
         </Link>
       </div>
-    </nav>
+    </motion.nav>
   );
 }
