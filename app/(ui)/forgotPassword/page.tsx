@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useActionState } from "react";
 import Link from "next/link";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
+import Loader from "@/components/Loader";
 
 export default function ForgotPassword() {
   const [state, action, isPending] = useActionState(resetPassword, null);
@@ -64,7 +65,7 @@ export default function ForgotPassword() {
           </motion.span>
         )}
         <button className="primaryBtn">
-          {isPending ? "Sending email..." : "Send email"}
+          {isPending ? <Loader /> : "Send email"}
         </button>
       </motion.form>
     </motion.div>

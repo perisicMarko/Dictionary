@@ -6,6 +6,7 @@ import { useRef, useContext } from 'react';
 import { TWordApp } from "@/lib/types";
 import { TokenContext } from "../TokenContextProvider";
 
+
 export default function SaveNoteForm({
     cleanUp,
     note,
@@ -60,7 +61,8 @@ export default function SaveNoteForm({
       const data = await res.json();
       const newToken = data.accessToken;
       tokenContext?.setAccessToken(newToken);
-    } else if (res.status === 401) router.push("/logIn");
+    } else if (res.status === 401) 
+      router.push("/logIn");
   }
 
   const isErrorNote = (
@@ -192,7 +194,7 @@ export default function SaveNoteForm({
                 <b>Generate</b>
               </motion.button>
               {generate && (
-                <motion.button type="submit" className="bg-blue-400 text-white hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block col-span-1"
+                <motion.button type="submit" className="bg-blue-400 center text-white hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block col-span-1"
                   hidden={wordInputRef && !isErrorNote(note) && wordInputRef.current?.value.toLowerCase() != note?.word.toLowerCase()}
                   variants={itemVariants}
                 >

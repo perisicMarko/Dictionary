@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { isBefore } from "date-fns";
 import Link from "next/link";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
+import Loader from "@/components/Loader";
 
 export default function Page() {
   const params = useParams();
@@ -84,8 +85,8 @@ export default function Page() {
                 action={action}
               >
                 <input name="userId" defaultValue={user?.id} hidden />
-                <button type="submit" className="primaryBtn">
-                  {isPending ? "Confirming verification..." : "Click to verify"}
+                <button type="submit" className="primaryBtn center">
+                  {isPending ? <Loader /> : "Click to verify"}
                 </button>
               </motion.form>
             </motion.div>

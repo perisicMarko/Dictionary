@@ -5,6 +5,7 @@ import { useActionState, useState } from "react";
 import { authenticateSignUp } from "@/actions/auth";
 import { motion } from "framer-motion";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
+import Loader from '@/components/Loader';
 
 export default function SignUp() {
   const [state, action, isPending] = useActionState(
@@ -152,9 +153,9 @@ export default function SignUp() {
             >
               <button
                 disabled={isPending}
-                className="bg-blue-400 text-white rounded-3xl block m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer w-1/2 hover:scale-105 active:scale-95"
+                className="bg-blue-400 center text-white rounded-3xl block m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer w-1/2 hover:scale-105 active:scale-95"
               >
-                {isPending ? "Loading..." : "Sign up"}
+                {isPending ? <Loader /> : "Sign up"}
               </button>
               <motion.div
                 variants={itemVariants}

@@ -8,6 +8,7 @@ import { TUser } from "@/lib/types";
 import Link from "next/link";
 import { isBefore } from "date-fns";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
+import Loader from "@/components/Loader";
 
 export default function ResetPassword() {
   const params = useParams();
@@ -135,8 +136,8 @@ export default function ResetPassword() {
                   )}
                 </div>
                 <div className="center">
-                  <button type="submit" className="primaryBtn z-0">
-                    {isPending ? "refreshing..." : "refresh"}
+                  <button type="submit" className="primaryBtn z-0 center">
+                    {isPending ? <Loader /> : "Reset password"}
                   </button>
                 </div>
               </motion.form>

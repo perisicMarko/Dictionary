@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useState, useRef } from 'react';
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { useRouter } from "next/navigation";
+import Loader from "@/components/Loader";
 
 
 export default function LogIn() {
@@ -82,8 +83,8 @@ export default function LogIn() {
           )}
         </motion.div>
         <motion.div variants={itemVariants} className="center w-3/4 mt-2">
-          <button disabled={isPending} className="primaryBtn">
-            {isPending ? "Loading..." : "Log in"}
+          <button disabled={isPending} className="primaryBtn center">
+            {isPending ? <Loader /> : "Log in"}
           </button>
         </motion.div>
         <motion.div

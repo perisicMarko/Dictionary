@@ -6,12 +6,15 @@ import { motion } from "framer-motion";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
+import Loader from "@/components/Loader";
+import Loading from "@/app/(ui)/loading";
 
 export default function Edit() {
   const params = useParams();
   const noteId = params.noteId;
   console.log(noteId);
   const [note, setNote] = useState<TDBNoteEntry | null>();
+  const [isPending, setIsPending] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -22,32 +25,38 @@ export default function Edit() {
     getNote();
   }, [noteId]);
 
-
-  async function onSubmitEditHandle(e : React.FormEvent){
+  async function onSubmitEditHandle(e: React.FormEvent) {
     e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement)
-    const response = await fetch('/api/dictionary/recall/edit', {
-      method: 'PATCH',
-      credentials: 'include',
-      body: JSON.stringify({noteId: Number(noteId), userNotes: formData.get('userNotes'), generatedNotes: formData.get('generatedNotes')}),
+    const formData = new FormData(e.target as HTMLFormElement);
+    const response = await fetch("/api/dictionary/recall/edit", {
+      method: "PATCH",
+      credentials: "include",
+      body: JSON.stringify({
+        noteId: Number(noteId),
+        userNotes: formData.get("userNotes"),
+        generatedNotes: formData.get("generatedNotes"),
+      }),
     });
-    if(response.ok)
-      router.push('/dictionary/recall')
+    if (response.ok) router.push("/dictionary/recall");
   }
 
   return (
+    note ?
     <motion.div
       initial="hidden"
       animate="show"
       variants={containerVariants}
       className="flex flex-col justify-center items-center mt-15 bg-slate-800 rounded-4xl xl:h-[800px] h-3/4 w-3/4 xl:w-[600px] p-5"
     >
-      <form className="rounded-2xl space-y-4 w-full p-4" onSubmit={onSubmitEditHandle}>
+      <form
+        className="rounded-2xl space-y-4 w-full p-4"
+        onSubmit={onSubmitEditHandle}
+      >
         <motion.h2
           variants={itemVariants}
-          className="text-center hover:underline text-white"
+          className="text-center text-white"
         >
-          <b>Edit your notes here:</b>
+          Edit your notes for: <b title="word" className="hover:underline">{note.word}</b>
         </motion.h2>
         <motion.div variants={itemVariants}>
           <label htmlFor="userNotes" className="text-white">
@@ -77,9 +86,16 @@ export default function Edit() {
           animate={{ opacity: 1, y: 0, transition: { duration: 0.6 } }}
           className="center sm:my-3"
         >
-          <button className="primaryBtn">Edit</button>
+          <button className="primaryBtn center" onClick={() => setIsPending(true)}>
+            {isPending ? (
+              <Loader />
+            ) : (
+              "Edit"
+            )}
+          </button>
         </motion.div>
       </form>
     </motion.div>
+    : <Loading />
   );
 }

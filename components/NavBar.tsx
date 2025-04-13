@@ -68,7 +68,7 @@ export function NavBar() {
       <div className="flex justify-end items-center xl:space-x-5 mr-2 sm:mr-5">
         <Link
           id="layoutInputLink"
-          href={"/dictionary/inputWord"}
+          href="/dictionary/inputWord"
           className={`nav-link ${
             path === "/dictionary/inputWord" ? "text-blue-400" : "text-white"
           } py-1 px-1 sm:px-3 navigationBtn`}
@@ -78,9 +78,9 @@ export function NavBar() {
         </Link>
         <Link
           id="layoutRecallLink"
-          href={"/dictionary/recall"}
+          href="/dictionary/recall"
           className={`nav-link ${
-            path === "/dictionary/recall" ? "text-blue-400" : "text-white"
+            path === "/dictionary/recall" || path.includes('/recall/edit') ? "text-blue-400" : "text-white"
           } py-1 px-1 sm:px-3 navigationBtn`}
         >
           {" "}
@@ -88,7 +88,7 @@ export function NavBar() {
         </Link>
         <Link
           id="layoutHistoryLink"
-          href={"/dictionary/yourWords"}
+          href="/dictionary/yourWords"
           className={`nav-link ${
             path === "/dictionary/yourWords" ? "text-blue-400" : "text-white"
           } py-1 px-1 sm:px-3 navigationBtn`}
@@ -98,7 +98,7 @@ export function NavBar() {
         </Link>
         <Link
           id="layoutLearnedLink"
-          href={"/dictionary/history"}
+          href="/dictionary/history"
           className={`nav-link ${
             path === "/dictionary/history" ? "text-blue-400" : "text-white"
           } py-1 px-1 sm:px-3 navigationBtn`}
