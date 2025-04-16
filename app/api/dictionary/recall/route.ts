@@ -41,7 +41,7 @@ export async function GET() {
     try {
       // sending mail
       await transporter.sendMail(mailOptions);
-      return NextResponse.json({ message: 'Mial was successfully sent.', status: 200 });
+      return NextResponse.json({ message: 'Mail was successfully sent.', status: 200 });
     } catch (error) {
       const message = (error instanceof Error && error.message);
       return NextResponse.json({ error: 'Error when sending mail: ' + message, status: 500 });

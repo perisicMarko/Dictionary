@@ -1,6 +1,6 @@
 'use server'
 import { randomBytes } from 'crypto';
-import sendEmail from '../sendEmail';
+import sendEmail from './sendEmail';
 import { GetUserInfoByEmail, UpdateUsersRefreshToken, UpdateUsersPassword } from '@/actions/manageUsers/db';
 import { addMinutes } from 'date-fns';
 
