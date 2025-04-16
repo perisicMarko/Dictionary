@@ -3,36 +3,37 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
-  id                            Int       @id @unique(map: "id") @default(autoincrement())
-  first_name                    String    @db.VarChar(100)
-  last_name                     String    @db.VarChar(100)
-  email                         String    @unique(map: "unique_email") @db.VarChar(100)
-  password                      String    @db.VarChar(255)
-  refresh_token                 String?   @db.VarChar(255)
-  refresh_token_expiration_date DateTime? @db.DateTime(0)
-  email_verified                Boolean?  @default(false)
+  id                             Int       @id @unique(map: "id") @default(autoincrement())
+  first_name                     String
+  last_name                      String
+  email                          String    @unique(map: "unique_email")
+  password                       String
+  refresh_token                  String?
+  refresh_token_expiration_date DateTime?
+  email_verified                 Boolean?  @default(false)
 
   @@map("users")
 }
 
 model Word {
   id              Int      @id @default(autoincrement())
-  word            String   @db.VarChar(100)
+  word            String
   status          Boolean
-  user_notes      String   @db.VarChar(2000)
-  generated_notes String   @db.VarChar(3000)
-  audio           String   @db.VarChar(255)
+  user_notes      String
+  generated_notes String
+  audio           String
   repetitions     Int
   days            Int
-  review_date     DateTime @db.Date
-  ease_factor     Float    @db.Float
+  review_date     DateTime
+  ease_factor     Float
   user_id         Int
-  language        String   @db.VarChar(100)
+  language        String
 
   @@map("words")
 }
