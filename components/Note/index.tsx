@@ -7,6 +7,7 @@ import { useState, useRef, useContext } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { TokenContext } from "../TokenContextProvider";
+import NoteMenu from './NoteMenu';
 
 export default function Note({
   prop,
@@ -41,23 +42,25 @@ export default function Note({
         setDrop(!drop);
       }}
     >
-      <div className="absolute flex flex-col items-center justify-center top-5 right-0 rounded-2xl w-1/6">
-        {historyNote && (
-          <Image
-            className="scale-75 hover:scale-90 cursor-pointer"
-            title="options"
-            src="/menu.svg"
-            width={30}
-            height={30}
-            alt="menu icon"
-            onClick={(e) => {
-              e.stopPropagation();
-              setMenu(!menu);
-            }}
-          ></Image>
-        )}
+      <div className="absolute flex flex-col items-center top-5 right-0 rounded-2xl w-[100px] h-[50px]">
+        <Image
+          className="scale-75 hover:scale-90 cursor-pointer"
+          title="options"
+          src="/menu.svg"
+          width={30}
+          height={30}
+          alt="menu icon"
+          onClick={(e) => {
+            e.stopPropagation();
+            setMenu(!menu);
+          }}
+        ></Image>
+
         {menu && historyNote && (
           <HistoryNoteMenu actionCallBack={handle} accessToken={tokenContext?.accessToken} toggleMenu={toggleMenu} noteId={note.id} />
+        )}
+        {menu && !historyNote && (
+          <NoteMenu noteId = {note.id}/>
         )}
       </div>
 

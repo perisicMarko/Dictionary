@@ -16,12 +16,12 @@ export function Help({
       animate="show"
       variants={containerVariants}
       key="help"
-      className="w-3/4 sm:w-[500px] md:w-[600px] xl:w-[700px] xl:h-[400px] rounded-4xl mt-10 xl:mt-50 p-3"
+      className="w-3/4 sm:w-[500px] md:w-[600px] xl:w-[700px] xl:h-[400px] rounded-4xl mt-15 xl:mt-50 p-3"
       id="help"
     >
       <motion.h2
         variants={itemVariants}
-        className="hover:underline mb-5 cursor-pointer bg-slate-800 text-white sm:h-[30px] p-1.5 text-center h-[25px] sm:h-[30[px] w-full rounded-3xl"
+        className="hover:underline mb-5 cursor-pointer bg-slate-800 text-white p-2 text-center h-[30px] w-full rounded-3xl"
         onClick={() => toggleHelp()}
       >
         {help ? "Go back" : "Need hlep?"}

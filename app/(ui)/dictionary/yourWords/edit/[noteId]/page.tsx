@@ -37,7 +37,7 @@ export default function Edit() {
         generatedNotes: formData.get("generatedNotes"),
       }),
     });
-    if (response.ok) router.push("/dictionary/recall");
+    if (response.ok) router.push("/dictionary/yourWords");
   }
 
   return (

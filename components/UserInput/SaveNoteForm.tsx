@@ -97,7 +97,7 @@ export default function SaveNoteForm({
       }}
       variants={containerVariants}
       key="input"
-      className="flex flex-col justify-center items-center sm:mt-25 md:mt-25 xl:mt-70 w-3/4 h-3/4 sm:w-[500px] md: py-5 md-py-10 xl:py-16 sm:max-h-[400px] rounded-2xl"
+      className="flex flex-col justify-center items-center mt-25 xl:mt-70 w-3/4 h-3/4 sm:w-[500px] md: py-5 md-py-10 xl:py-16 sm:max-h-[400px] rounded-2xl"
     >
       <motion.div
         variants={itemVariants}
@@ -164,7 +164,7 @@ export default function SaveNoteForm({
                 className="w-full mt-2 text-blue-300 h-50 xl:h-100 xl:max-h-100 px-1 resize-none xl:resize-y"
                 name="generatedNotes"
                 key="genNotes"
-                defaultValue={
+                value={
                   isErrorNote(note) || note === null || note === undefined
                     ? ""
                     : note.parsedNote

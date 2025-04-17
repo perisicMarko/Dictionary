@@ -38,7 +38,7 @@ export default function RecallNote({
         setMenu(false);
       }}
     >
-      <div className="absolute right-0 top-5 flex flex-col items-center rounded-2xl w-[55px] h-[110px]">
+      <div className="absolute right-0 top-5 flex flex-col items-center rounded-2xl w-[100px] h-[50px]">
         <Image
           className="scale-75 hover:scale-90 cursor-pointer"
           title="options"

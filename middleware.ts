@@ -14,7 +14,7 @@ export default async function middleware(req: NextRequest) {
         if(!refreshToken)
             return NextResponse.redirect(new URL('/', req.nextUrl));
         const payload = await decryptRefresh(refreshToken || '');
-        const { userId } = (payload as TokenPayload && payload as TokenPayload);
+        const { userId } = (payload as TokenPayload);
         if(userId)
             return NextResponse.next();
         else

@@ -29,10 +29,11 @@ export async function POST(req : NextRequest){
     const res = NextResponse.json({status: 200});
     res.headers.set('Set-Cookie', serialize('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: false,// devlop env
-      //production env secure: true,
+      //secure: false,// devlop env
+      secure: true,
       path: '/',
       sameSite: 'strict',
+      maxAge: 60 * 60 * 24 * 10 // 10 days
     }));
 
     return res; 

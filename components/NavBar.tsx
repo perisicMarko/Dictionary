@@ -42,11 +42,11 @@ export function NavBar() {
 
       return () => window.removeEventListener("scroll", controlScroll);
     }, []);
-
-
+    const navigationRoutes = ['/dictionary/inputWord', '/dictionary/history', '/dictionary/yourWords', '/dictionary/recall'];
+    const isMatch = navigationRoutes.includes(path);
     
   return (
-    isVisible && 
+    isVisible && isMatch && 
     <motion.nav initial='hidden' animate='show' variants={containerVariants} className="fixed top-0 z-20 bg-slate-800 w-full h-[50px] grid grid-cols-[auto_1fr] items-center">
       <div className="flex justify-start items-center ml-3 md:ml-7">
         <form onSubmit={handleSubmit} method="POST">
@@ -80,7 +80,7 @@ export function NavBar() {
           id="layoutRecallLink"
           href="/dictionary/recall"
           className={`nav-link ${
-            path === "/dictionary/recall" || path.includes('/recall/edit') ? "text-blue-400" : "text-white"
+            path === "/dictionary/recall" ? "text-blue-400" : "text-white"
           } py-1 px-1 sm:px-3 navigationBtn`}
         >
           {" "}
