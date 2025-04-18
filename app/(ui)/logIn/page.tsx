@@ -1,45 +1,51 @@
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useState, useRef } from 'react';
+import { useState } from "react";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/Loader";
 
-
 export default function LogIn() {
-  const [respondMessage, setRespondMessage] = useState<{errors: {email: string, password: string}, email: string}>();
+  const [respondMessage, setRespondMessage] = useState<{
+    errors: { email: string; password: string };
+    email: string;
+  }>();
   const [isPending, setIsPending] = useState(false);
   const router = useRouter();
-  const emailInputRef = useRef<HTMLInputElement>(null);
-  const passInputRef = useRef<HTMLInputElement>(null);
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-      e.preventDefault();
-  
-      setIsPending(true);
-      const formData = new FormData(e.target as HTMLFormElement);
-      const response = await fetch("/api/auth/logIn", {
-        method: "POST",
-        //headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: formData.get('email'), password: formData.get('password') }),
-      });
+    e.preventDefault();
 
-      if(response.status != 200) {
-        setIsPending(false);
-        const res = await response.json();
-        if (emailInputRef.current && passInputRef.current && res.email === '') {
-          emailInputRef.current.value = '';
-          passInputRef.current.value = ''
-        }
-        if(passInputRef.current && res.errors.password != '')
-          passInputRef.current.value = '';
+    setIsPending(true);
+    const formData = new FormData(e.target as HTMLFormElement);
+    const response = await fetch("/api/auth/logIn", {
+      method: "POST",
+      //headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: formData.get("email"),
+        password: formData.get("password"),
+      }),
+    });
 
-        setRespondMessage(res); // display error if no user has been founded with that credentials
-      }else{
-        router.push('/dictionary/inputWord');
+    if (response.status != 200) {
+      setIsPending(false);
+      const res = await response.json();
+      if (res.email === "") {
+        setEmail("");
+        setPass("");
       }
-  }
+      if (res.errors.password != "") setPass("");
+
+      setRespondMessage(res); // display error if no user has been founded with that credentials
+    } else {
+      router.push("/dictionary/inputWord");
+    }
+  };
+
+  const emptyCredentials = pass === "" || email === "";
 
   return (
     <motion.div
@@ -66,8 +72,10 @@ export default function LogIn() {
             className="formInput"
             type="text"
             name="email"
-            ref={emailInputRef}
-            defaultValue={respondMessage?.email}
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
           />
           {respondMessage?.errors?.email != "" && (
             <p className="error ml-1">{respondMessage?.errors.email}</p>
@@ -77,13 +85,24 @@ export default function LogIn() {
           <label htmlFor="password" className="text-white">
             Password:{" "}
           </label>
-          <input className="formInput" type="password" ref={passInputRef} name="password" />
+          <input
+            className="formInput"
+            type="password"
+            name="password"
+            value={pass}
+            onChange={(e) => setPass(e.target.value)}
+          />
           {respondMessage?.errors?.password && (
             <p className="error ml-1">{respondMessage.errors.password}</p>
           )}
         </motion.div>
         <motion.div variants={itemVariants} className="center w-3/4 mt-2">
-          <button disabled={isPending} className="primaryBtn center">
+          <button
+            disabled={isPending || emptyCredentials}
+            className={
+              "primaryBtn center " + (emptyCredentials && " opacity-50")
+            }
+          >
             {isPending ? <Loader /> : "Log in"}
           </button>
         </motion.div>

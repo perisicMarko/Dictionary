@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useActionState, useState } from "react";
+import { useActionState, useState, useLayoutEffect } from "react";
 import { useParams } from "next/navigation";
 import { TUser } from "@/lib/types";
 import { getUserByToken, verifyUser } from "@/actions/auth/index";
@@ -16,7 +16,7 @@ export default function Page() {
   const [user, setUser] = useState<TUser | undefined>();
   const [state, action, isPending] = useActionState(verifyUser, undefined);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!token) return;
 
     const fetchUser = async () => {

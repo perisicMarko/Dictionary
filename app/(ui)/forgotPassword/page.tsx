@@ -1,13 +1,14 @@
 "use client";
 import { resetPassword } from "@/actions/manageUsers/resetPassword";
 import { motion } from "framer-motion";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import Link from "next/link";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import Loader from "@/components/Loader";
 
 export default function ForgotPassword() {
   const [state, action, isPending] = useActionState(resetPassword, null);
+  const [email, setEmail] = useState('');
 
   return (
     <motion.div
@@ -19,7 +20,7 @@ export default function ForgotPassword() {
       {state?.status === 200 && (
         <motion.div
           variants={itemVariants}
-          className="absolute flex flex-col items-center top-auto left-auto h-[200px] sm:[250px] center bg-slate-800 rounded-3xl appWidth p-2"
+          className="absolute flex flex-col items-center top-auto left-auto h-[200px] sm:[250px] center bg-slate-800 rounded-3xl appWidth p-2 z-20"
         >
           <span className="text-center text-white">
             Email with instructions has been sent, please check your email
@@ -50,7 +51,7 @@ export default function ForgotPassword() {
       </motion.span>
       <motion.form
         variants={itemVariants}
-        className="p-5 flex w-full flex-col items-center"
+        className="p-5 flex w-full flex-col items-center space-y-5"
         action={action}
       >
         <input
@@ -58,13 +59,15 @@ export default function ForgotPassword() {
           name="email"
           className="formInput"
           placeholder="Enter your email here..."
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         {state?.status === 0 && (
           <motion.span className="error my-1 align-baseline">
             {state.error}
           </motion.span>
         )}
-        <button className="primaryBtn">
+        <button className={"primaryBtn center " + (email === '' && " opacity-50")} disabled={email === ''} >
           {isPending ? <Loader /> : "Send email"}
         </button>
       </motion.form>

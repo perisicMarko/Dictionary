@@ -152,8 +152,8 @@ export default function SignUp() {
               className="center mt-3"
             >
               <button
-                disabled={isPending}
-                className="bg-blue-400 center text-white rounded-3xl block m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer w-1/2 hover:scale-105 active:scale-95"
+                disabled={isPending || email === ''}
+                className={"bg-blue-400 center text-white rounded-3xl block m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer w-1/2 hover:scale-105 active:scale-95 " + (email === '' && " opacity-50")}
               >
                 {isPending ? <Loader /> : "Sign up"}
               </button>
