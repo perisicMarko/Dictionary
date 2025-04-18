@@ -9,14 +9,18 @@ datasource db {
 }
 
 model User {
-  id                             Int       @id @unique(map: "id") @default(autoincrement())
-  first_name                     String
-  last_name                      String
-  email                          String    @unique(map: "unique_email")
-  password                       String
-  refresh_token                  String?
+  id                            Int       @id @unique(map: "id") @default(autoincrement())
+  first_name                    String
+  last_name                     String
+  email                         String    @unique(map: "unique_email")
+  password                      String
+  refresh_token                 String?
   refresh_token_expiration_date DateTime?
-  email_verified                 Boolean?  @default(false)
+  email_verified                Boolean?  @default(false)
+  school_id                     Int?
+  languages                     String?   @db.VarChar
+  schools                       schools?  @relation(fields: [school_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  words                         Word[]
 
   @@map("users")
 }
@@ -34,6 +38,38 @@ model Word {
   ease_factor     Float
   user_id         Int
   language        String
+  users           User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("words")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model school_partners {
+  school_email       String    @id @db.VarChar
+  active_partnership String    @db.VarChar
+  school_name        String?   @db.VarChar
+  schools            schools[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model schools {
+  id              Int             @id @default(autoincrement())
+  email           String          @db.VarChar
+  password        String?         @db.VarChar
+  name            String?         @db.VarChar
+  school_partners school_partners @relation(fields: [email], references: [school_email], onDelete: Cascade)
+  subscriptions   subscriptions[]
+  users           User[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model subscriptions {
+  email               String    @id @db.VarChar
+  activation_key      String    @db.VarChar
+  key_expiration_date DateTime? @db.Date
+  school_id           Int?
+  schools             schools?  @relation(fields: [school_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }

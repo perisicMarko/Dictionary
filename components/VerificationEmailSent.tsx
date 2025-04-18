@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { containerVariants, itemVariants } from '@/lib/animationVariants';
 import Link from 'next/link';
 import { useActionState } from 'react';
-import { resendVerificationMail } from '@/actions/auth';
+import { resendVerificationMail } from '@/actions/auth/user';
 
 export function VerificationEmailSent({ email }: { email: string }) {
       const [resendState, resendAction, isPendingReset] = useActionState(

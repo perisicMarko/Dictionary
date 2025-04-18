@@ -2,7 +2,7 @@
 import { useActionState, useState, useLayoutEffect } from "react";
 import { useParams } from "next/navigation";
 import { TUser } from "@/lib/types";
-import { getUserByToken, verifyUser } from "@/actions/auth/index";
+import { getUserByToken, verifyUser } from "@/actions/auth/user/index";
 import { motion } from "framer-motion";
 import { isBefore } from "date-fns";
 import Link from "next/link";

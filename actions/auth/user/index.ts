@@ -93,7 +93,7 @@ export async function authenticateSignUp(state: stateType, formData: FormData){
     let {password} = validatedFields.data;
     password = await bcrypt.hash(password, 10);
 
-    const status = await InsertUserInfo({name, lastName, email, password});
+    const status = await InsertUserInfo(name, lastName, email, password);
 
     if(!status)
         throw new Error('Error: InsertUserInfor status in authenthicateSignUp');

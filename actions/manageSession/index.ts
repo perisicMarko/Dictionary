@@ -75,3 +75,22 @@ export async function verifySession(accessString : string) {
 
   return STATUS.UNAUTHORIZED;
 }
+
+
+export async function createSession(email: string, password: string){
+  const cookieStore = await cookies();
+
+  const token = await new SignJWT({email, password})
+  .setProtectedHeader({ alg: 'HS256' })
+  .setIssuedAt()
+  .setExpirationTime('15m')
+  .sign(ACCESS_SECRET);
+
+  cookieStore.set('sessionToken', token, {
+    httpOnly: true,
+    //secure: true,
+    secure: false,
+    path: '/',
+    sameSite: 'strict',
+  });
+}

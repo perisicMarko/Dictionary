@@ -34,7 +34,7 @@ export async function GetUserInfoByEmail(email : string) {
 }
 
 
-export async function InsertUserInfo({ name, lastName, email, password }: { name: string, lastName: string, email: string, password: string }) {
+export async function InsertUserInfo(name: string, lastName: string, email: string, password: string) {
 
   try {
     const res = await prisma.user.create({

@@ -1,6 +1,6 @@
 import { serialize } from 'cookie';
 import { SignJWT } from "jose";
-import { authenticateLogIn } from '@/actions/auth';
+import { authenticateLogIn } from '@/actions/auth/user';
 import { NextRequest, NextResponse } from 'next/server';
 import { GetUserInfoByEmail } from '@/actions/manageUsers/db';
 
