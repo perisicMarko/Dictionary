@@ -90,7 +90,20 @@ export async function createSession(email: string, password: string){
     httpOnly: true,
     //secure: true,
     secure: false,
-    path: '/',
+    path: '/school',
     sameSite: 'strict',
   });
+}
+
+export async function decryptSession(token: string){
+  try {
+    const { payload } = await jwtVerify(token, ACCESS_SECRET, {
+      algorithms: ['HS256'],
+    });
+
+    const t = payload as TokenPayload;
+    return t;
+  } catch (error) {
+    console.log('Failed session token decryption, error: ' + error);
+  } 
 }

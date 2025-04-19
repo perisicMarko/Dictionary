@@ -32,7 +32,7 @@ export async function POST(req : NextRequest){
       //secure: false,// devlop env
       secure: true,
       path: '/',
-      sameSite: 'strict',
+      sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 10 // 10 days
     }));
 
