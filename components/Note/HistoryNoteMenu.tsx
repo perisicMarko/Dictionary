@@ -1,50 +1,47 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
+import { backToRecallSystem, deleteNote } from "@/actions/manageNotes";
+import { TokenContext } from "../TokenContextProvider";
+import { useContext } from "react";
+import { useRouter } from "next/navigation";
 
 export default function HistoryNoteMenu({
   actionCallBack,
-  accessToken,
   toggleMenu,
   noteId,
 }: {
   actionCallBack: () => void;
-  accessToken: string | undefined;
   toggleMenu: () => void;
   noteId: number;
 }) {
-  async function onSubmitRelearnHandle(e: React.FormEvent) {
-    e.preventDefault();
-    toggleMenu();
-    const formData = new FormData(e.target as HTMLFormElement);
-    if (accessToken === undefined) return;
-    await fetch("/api/dictionary/history/relearn", {
-      method: "PATCH",
-      credentials: "include",
-      body: JSON.stringify({
-        accessToken: accessToken,
-        noteId: Number(formData.get("noteId")),
-        status: false,
-      }),
-    });
+  const tokenContext = useContext(TokenContext);
+  const router = useRouter();
 
+  async function onSubmitRelearnHandle() {
+    toggleMenu();
+    if (tokenContext?.accessToken === undefined) return;
+    const res = await backToRecallSystem(noteId, tokenContext?.accessToken || '');
+
+    if(!res?.success){
+      tokenContext.setAccessToken('');
+      router.push('/logIn');    
+    }else if(res.status === 201)
+      tokenContext.setAccessToken(res.accessToken || '');
     actionCallBack(); //rerendering parent
   }
 
-  async function onSubmitDeleteHandle(e: React.FormEvent) {
-    e.preventDefault();
+  async function onSubmitDeleteHandle(formData: FormData) {
     toggleMenu();
-    const formData = new FormData(e.target as HTMLFormElement);
-    if (accessToken === undefined) return;
-    await fetch("/api/dictionary/history/delete", {
-      method: "DELETE",
-      credentials: "include",
-      body: JSON.stringify({
-        accessToken: accessToken,
-        noteId: Number(formData.get("noteId")),
-      }),
-    });
+    if (tokenContext?.accessToken === undefined) return;
+    const res = await deleteNote(Number(formData.get('noteId')), tokenContext?.accessToken);
 
+    if(!res?.success){ 
+      tokenContext.setAccessToken('');
+      router.push('/logIn');    
+    }else if(res.status === 201)
+      tokenContext.setAccessToken(res.accessToken || '');
+      
     actionCallBack(); //rerendering parent
   }
 
@@ -58,7 +55,7 @@ export default function HistoryNoteMenu({
       <motion.form
         variants={itemVariants}
         className="center"
-        onSubmit={onSubmitDeleteHandle}
+        action={onSubmitDeleteHandle}
       >
         <input type="text" name="noteId" defaultValue={noteId} hidden />
         <button type="submit" onClick={(e) => e.stopPropagation()}>

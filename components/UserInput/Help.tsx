@@ -31,7 +31,7 @@ export function Help({
         className="flex flex-col md:flex-row justify-center items-center"
       >
         <Image
-          className="inline-block rounded-4xl mr-3"
+          className="inline-block rounded-4xl mr-3 w-auto h-auto"
           width={350}
           height={280}
           src="/wordInput.png"
@@ -59,7 +59,7 @@ export function Help({
         className="mt-5 flex flex-col md:flex-row justify-center items-center"
       >
         <Image
-          className="inline-block rounded-4xl mr-3"
+          className="inline-block rounded-4xl mr-3 w-auto h-auto"
           width={350}
           height={50}
           src="/generateNotes.png"

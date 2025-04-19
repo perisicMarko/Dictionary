@@ -15,7 +15,7 @@ export function TokenContextProvider({
   }>){
     
     const [accessToken, setAccessToken] = useState('');
-    useEffect(() =>{
+    useEffect(() => {
         const fetchToken = async () => {
           const response = await fetch('/api/getAccessToken', {
             method: 'POST', 
@@ -26,7 +26,15 @@ export function TokenContextProvider({
           const data = await response.json();
           setAccessToken(data.accessToken);
         }
+        //call it manualy for the first time
         fetchToken();
+
+        const intervalFetching = setInterval(() => {
+          fetchToken();
+        }, 1000 * 60 * 3);
+        
+
+        return () => clearInterval(intervalFetching);
     }, []);
 
     return (

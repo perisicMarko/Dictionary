@@ -116,7 +116,7 @@ export async function  DeleteUnverifiedNotes(ids : number[]){
   }
 }
 
-export async function SetNoteLearned(noteId : number, status : boolean){
+export async function SetNoteAsLearned(noteId : number, status : boolean){
   
     try{
         const res = await prisma.word.update({where: {id: noteId}, data: {status: status}});

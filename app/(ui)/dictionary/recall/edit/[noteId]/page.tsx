@@ -1,21 +1,22 @@
 "use client";
-import { getNoteById } from "@/actions/manageNotes";
+import { editNote, getNoteById } from "@/actions/manageNotes";
 import { TDBNoteEntry } from "@/lib/types";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import Loader from "@/components/Loader";
 import Loading from "@/app/(ui)/loading";
+import { TokenContext } from "@/components/TokenContextProvider";
 
 export default function Edit() {
   const params = useParams();
   const noteId = params.noteId;
-  console.log(noteId);
   const [note, setNote] = useState<TDBNoteEntry | null>();
   const [isPending, setIsPending] = useState(false);
   const router = useRouter();
+  const tokenContext = useContext(TokenContext);
 
   useEffect(() => {
     async function getNote() {
@@ -24,21 +25,16 @@ export default function Edit() {
     }
     getNote();
   }, [noteId]);
-
-  async function onSubmitEditHandle(e: React.FormEvent) {
-    e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    const response = await fetch("/api/dictionary/edit", {
-      method: "PATCH",
-      credentials: "include",
-      body: JSON.stringify({
-        noteId: Number(noteId),
-        userNotes: formData.get("userNotes"),
-        generatedNotes: formData.get("generatedNotes"),
-      }),
-    });
-    if (response.ok) router.push("/dictionary/recall");
-  }
+  
+  async function onSubmitEditHandle(formData: FormData) {
+    const response = await editNote(formData.get('userNotes')?.toString() || '', formData.get('generatedNotes')?.toString() || '', Number(noteId), tokenContext?.accessToken || '');
+    if (!response?.success) 
+      router.push("/dictionary/recall");
+    else if(response.status === 201)
+      tokenContext?.setAccessToken(response.accessToken || '');
+      
+    router.push('/dictionary/recall');
+  };
 
   return (
     note ?
@@ -50,7 +46,7 @@ export default function Edit() {
     >
       <form
         className="rounded-2xl space-y-4 w-full p-4"
-        onSubmit={onSubmitEditHandle}
+        action={(e) => onSubmitEditHandle(e)}
       >
         <motion.h2
           variants={itemVariants}

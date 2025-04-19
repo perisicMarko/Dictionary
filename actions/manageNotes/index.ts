@@ -1,15 +1,18 @@
 'use server'
-import { ImportNotes, GetNotes, GetNoteById, UpdateRepetitionFactors, SetNoteLearned, ResetNoteRecallFactors, DeleteNote, EditNotes } from '@/actions/manageNotes/db';
+import { ImportNotes, GetNotes, GetNoteById, UpdateRepetitionFactors, SetNoteAsLearned, ResetNoteRecallFactors, DeleteNote, EditNotes } from '@/actions/manageNotes/db';
 import { TDBNoteEntry, TGeneratedNote, TGMeaning, TGPhonetic, TWordApp } from '@/lib/types';
 import { addDays, isBefore } from 'date-fns';
 import calc from '@/actions/manageNotes/spacedRepetition';
-import { decryptAccess, TokenPayload } from '@/actions/manageSession';
+import { decryptAccess, decryptRefresh, encryptAccess, TokenPayload, verifySession } from '@/actions/manageSession';
+import { STATUS } from '@/actions/manageSession';
+import { logOutUser } from '../auth/user';
+import { cookies } from 'next/headers';
 
-export async function saveNotes(word : string, audio : string, user_notes : string, generated_notes : string, userId : number){
+export async function saveNotes(word : string, audio : string, user_notes : string, generated_notes : string, accessToken: string){
   const now = new Date();
   const dbInput : TDBNoteEntry = {
     id : 0, // mock for schema
-    user_id : Number(userId),
+    user_id : -1,
     word: word || '',
     status: false, //false meaning word is not learned 
     language: 'english',
@@ -21,13 +24,32 @@ export async function saveNotes(word : string, audio : string, user_notes : stri
     ease_factor: 2.5,
     review_date: addDays(now, 1)
   };
+  const retVal = await verifySession(accessToken);
+  if(retVal === STATUS.UNAUTHORIZED){ //unauthorized
+      await logOutUser();
+    return {success: false, accessToken: '', status: 401}
+  }
+  else if(retVal === STATUS.ACCESS_NEEDED){
+      const cookieStore = await cookies();
+      const refreshToken = cookieStore.get('refreshToken')?.value;
+      const payload = await decryptRefresh(refreshToken || '');
+      const {email, userId} = payload as TokenPayload;
+      dbInput.user_id = userId;
+      await ImportNotes(dbInput);
+      const accessToken = await encryptAccess({email, userId});
 
-  const retVal = await ImportNotes(dbInput);
-  
-  if(!retVal)
-    throw new Error('Word is not imported in database, smth is wrong. Check manageNotes/saveNotes -> db/ImportNotes');
-
-  return retVal;
+      return {success: true, accessToken: accessToken, status: 201};
+  }else if(retVal === STATUS.VALID_ACCESS){
+      const payload = await decryptAccess(accessToken);
+      const {userId} = payload as TokenPayload;
+      dbInput.user_id = userId;
+      const status = await ImportNotes(dbInput);
+      if(!status)
+        throw new Error('Word is not imported in database, smth is wrong. Check manageNotes/saveNotes -> db/ImportNotes');
+      const token = accessToken;
+      
+      return {success: true, accessToken: token, status: 200}; 
+  }
 }
 
 export async function generateNotes(rawNotes : TGeneratedNote[]){
@@ -144,50 +166,136 @@ export async function getRecallNotes(accessToken : string){
     });
 }
 
-export async function updateReviewDate(noteId : number, quality : number){
+export async function updateReviewDate(quality: number, noteId: number, accessToken: string){
+  const retVal = await verifySession(accessToken);
   const note = await GetNoteById(noteId);
+  if(!note)
+    throw new Error('Note that should be graded does not exist in database.');
+  const nextReviewValues = calc(quality, note.days, note.repetitions, note.ease_factor);
 
-  if(note && !('error' in note)){
-    const retVal = calc(quality, note.days, note.repetitions, note.ease_factor);
+  note.days = nextReviewValues.days;
+  note.repetitions = nextReviewValues.repetitions;
+  note.ease_factor = nextReviewValues.easeFactor;
+  note.review_date = addDays(new Date(), note.days);
 
-    note.days = retVal.days;
-    note.repetitions = retVal.repetitions;
-    note.ease_factor = retVal.easeFactor;
-    note.review_date = addDays(new Date(), note.days);
-    
+  if(retVal === STATUS.UNAUTHORIZED){ //unauthorized
+      await logOutUser();
+      return {success: false};
+  }
+  else if(retVal === STATUS.ACCESS_NEEDED){
+      const cookieStore = await cookies();
+      const refreshToken = cookieStore.get('refreshToken')?.value;
+      const payload = await decryptRefresh(refreshToken || '');
+      const {email, userId} = payload as TokenPayload;
+      const ret = await UpdateRepetitionFactors(note);
+      if(!ret)
+        console.log('An error has occured while updating review date, check manageNotes/index.');
+      const accessToken = await encryptAccess({email, userId});
+
+      return {success: true, accessToken: accessToken, status: 201};
+  }else if(retVal === STATUS.VALID_ACCESS){        
     const ret = await UpdateRepetitionFactors(note);
-    if(ret)
-      return {success: 'review date set'};
-    else 
+    if(!ret)
       console.log('An error has occured while updating review date, check manageNotes/index.');
+    return {success: true, status: 200};
+  }
+  
+  
+}
+
+export async function setAsLearned(noteId : number, status : boolean, accessToken: string){
+  const retVal = await verifySession(accessToken);
+  if(retVal === STATUS.UNAUTHORIZED){ //unauthorized
+      await logOutUser();
+      return {success: false};
+  }
+  else if(retVal === STATUS.ACCESS_NEEDED){
+      const cookieStore = await cookies();
+      const refreshToken = cookieStore.get('refreshToken')?.value;
+      const payload = await decryptRefresh(refreshToken || '');
+      const {email, userId} = payload as TokenPayload;
+      await SetNoteAsLearned(noteId, status); 
+      const accessToken = await encryptAccess({email, userId});
+
+      return {success: true, accessToken: accessToken, status: 201};
+  }else if(retVal === STATUS.VALID_ACCESS){        
+      await SetNoteAsLearned(noteId, status); 
+      return {success: true, status: 200};
   }
 }
 
-export async function setAsLearned(noteId : number, status : boolean){
-  return await SetNoteLearned(noteId, status); 
+export async function editNote(userNotes : string, generatedNotes : string, noteId : number, accessToken: string){
+  const status = await verifySession(accessToken);
+  if(status === STATUS.UNAUTHORIZED){ //unauthorized
+      await logOutUser();
+      return {success: false};
+  }
+  else if(status === STATUS.ACCESS_NEEDED){
+    const cookieStore = await cookies();
+    const refreshToken = cookieStore.get('refreshToken')?.value;
+    const payload = await decryptRefresh(refreshToken || '');
+    const {email, userId} = payload as TokenPayload;
+    const retVal = await EditNotes(userNotes, generatedNotes, noteId);
+    if(!retVal)
+      throw new Error('Note with noteId is missing in database check manageNotes and edit/[noteId]');      const accessToken = await encryptAccess({email, userId});
+    
+    return {success: true, accessToken: accessToken, status: 201};
+  }else if(status === STATUS.VALID_ACCESS){        
+    const retVal = await EditNotes(userNotes, generatedNotes, noteId);
+    if(!retVal)
+      throw new Error('Note with noteId is missing in database check manageNotes and edit/[noteId]');
+    return {success: true, status: 200};
+  }
 }
 
-export async function editNote(userNotes : string, generatedNotes : string, noteId : number){
-  const retVal = await EditNotes(userNotes, generatedNotes, noteId);
-
-  if(!retVal)
-    throw new Error('Note with noteId is missing in database check manageNotes and edit/[noteId]');
-}
-
-export async function getNoteById(noteId : number){
+export async function getNoteById(noteId: number){
   const note = await GetNoteById(noteId);
 
   return note;
 }
 
 
-export async function backToRecallSystem(noteId : number){ 
-  return await ResetNoteRecallFactors(noteId, 1, 0, 2.5, addDays(new Date(), 1));
+export async function backToRecallSystem(noteId: number, accessToken: string){ 
+  const retVal = await verifySession(accessToken);
+  if(retVal === STATUS.UNAUTHORIZED){ //unauthorized
+      await logOutUser();
+      return {success: false};
+  }
+  else if(retVal === STATUS.ACCESS_NEEDED){
+      const cookieStore = await cookies();
+      const refreshToken = cookieStore.get('refreshToken')?.value;
+      const payload = await decryptRefresh(refreshToken || '');
+      const {email, userId} = payload as TokenPayload;
+      await ResetNoteRecallFactors(noteId, 1, 0, 2.5, addDays(new Date(), 1));
+      const accessToken = await encryptAccess({email, userId});
+      
+      return {success: true, accessToken: accessToken, status: 201};
+  }else if(retVal === STATUS.VALID_ACCESS){        
+    await ResetNoteRecallFactors(noteId, 1, 0, 2.5, addDays(new Date(), 1));
+    return {success: true, status: 200};
+  }
 }
 
 
-export async function deleteNote(noteId : number){
-  return await DeleteNote(noteId);
+export async function deleteNote(noteId: number, accessToken: string){
+  const retVal = await verifySession(accessToken);
+  if(retVal === STATUS.UNAUTHORIZED){ //unauthorized
+      await logOutUser();
+      return {success: false};
+  }
+  else if(retVal === STATUS.ACCESS_NEEDED){
+      const cookieStore = await cookies();
+      const refreshToken = cookieStore.get('refreshToken')?.value;
+      const payload = await decryptRefresh(refreshToken || '');
+      const {email, userId} = payload as TokenPayload;
+      await DeleteNote(noteId);
+      const accessToken = await encryptAccess({email, userId});
+
+      return {success: true, accessToken: accessToken, status: 201};
+  }else if(retVal === STATUS.VALID_ACCESS){        
+      await DeleteNote(noteId);
+      return {success: true, status: 200};
+  }
 }
 
 

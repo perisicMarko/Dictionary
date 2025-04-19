@@ -3,38 +3,33 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { useRouter } from "next/navigation";
+import { setAsLearned } from "@/actions/manageNotes";
+import { TokenContext } from "../TokenContextProvider";
+import { useContext } from "react";
+
 
 export default function RecallNoteMenu({
   toggleMenu,
   changeQuality,
   noteId,
   rerenderHandle,
-  accessToken,
 }: {
   toggleMenu: () => void;
   changeQuality: (e: number) => void;
   noteId: number;
   rerenderHandle: () => void;
-  accessToken: string | undefined;
 }) {
   const router = useRouter();
+  const tokenContext = useContext(TokenContext);
 
-  async function onSubmitDeleteHandle(e: React.FormEvent) {
-    e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    if (accessToken === undefined) return;
-    const response = await fetch("/api/dictionary/recall/learned", {
-      method: "PATCH",
-      credentials: "include",
-      body: JSON.stringify({
-        accessToken: accessToken,
-        noteId: Number(formData.get("noteId")),
-        status: true,
-      }),
-    });
-
-    console.log(response);
-    if (response.status === 401) router.push("/");
+  async function onSubmitDeleteHandle() {
+    if (tokenContext?.accessToken === undefined) return;
+    const response = await setAsLearned(noteId, true, tokenContext?.accessToken)
+    if (!response?.status) {
+      tokenContext.setAccessToken('');
+      router.push("/logIn");
+    }else if(response.status === 201)
+      tokenContext.setAccessToken(response.accessToken || '');
 
     rerenderHandle(); //rerendering parent
   }
@@ -63,7 +58,7 @@ export default function RecallNoteMenu({
       <motion.form
         variants={itemVariants}
         className="center"
-        onSubmit={onSubmitDeleteHandle}
+        action={() => {onSubmitDeleteHandle()}}
       >
         <input type="text" name="noteId" defaultValue={noteId} hidden />
         <button type="submit" onClick={(e) => e.stopPropagation()}>

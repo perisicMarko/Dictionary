@@ -3,10 +3,9 @@ import { GradeForm } from './GradeForm';
 import Menu from './Menu';
 import { TDBNoteEntry } from "@/lib/types";
 import AudioPlayer from "../shared/AudioPlayer";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { TokenContext } from "../TokenContextProvider";
 import DisplayNotes from '@/components/shared/DisplayNotes';
 
 export default function RecallNote({
@@ -18,7 +17,6 @@ export default function RecallNote({
 }) {
   const [menu, setMenu] = useState(false);
   const [quality, setQuality] = useState(-1);
-  const tokenContext = useContext(TokenContext);
 
   function toggleMenu(){
     setMenu(!menu);
@@ -52,7 +50,7 @@ export default function RecallNote({
           }}
         ></Image>
         {menu && (
-          <Menu toggleMenu={toggleMenu} changeQuality={changeQuality} noteId={note.id} rerenderHandle={rerenderHandle} accessToken={tokenContext?.accessToken} />
+          <Menu toggleMenu={toggleMenu} changeQuality={changeQuality} noteId={note.id} rerenderHandle={rerenderHandle} />
         )}
       </div>
       <span className=" text-white" title="word">
@@ -70,7 +68,6 @@ export default function RecallNote({
         changeQuality={changeQuality} 
         noteId={note.id} 
         quality={quality} 
-        accessToken={tokenContext?.accessToken} 
         rerenderHandle={rerenderHandle}
         />
       )}

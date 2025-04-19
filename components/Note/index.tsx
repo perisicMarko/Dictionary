@@ -3,10 +3,9 @@ import DisplayNotes from '../shared/DisplayNotes';
 import HistoryNoteMenu from './HistoryNoteMenu';
 import { TDBNoteEntry } from "@/lib/types";
 import AudioPlayer from "../shared/AudioPlayer";
-import { useState, useRef, useContext } from "react";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { TokenContext } from "../TokenContextProvider";
 import NoteMenu from './NoteMenu';
 
 export default function Note({
@@ -22,7 +21,6 @@ export default function Note({
   const [menu, setMenu] = useState(false);
   const title = drop ? "Click to collapse." : "Click for notes.";
   const containerRef = useRef(null);
-  const tokenContext = useContext(TokenContext);
   const note = prop;
 
   function toggleMenu(){
@@ -57,7 +55,7 @@ export default function Note({
         ></Image>
 
         {menu && historyNote && (
-          <HistoryNoteMenu actionCallBack={handle} accessToken={tokenContext?.accessToken} toggleMenu={toggleMenu} noteId={note.id} />
+          <HistoryNoteMenu actionCallBack={handle} toggleMenu={toggleMenu} noteId={note.id} />
         )}
         {menu && !historyNote && (
           <NoteMenu noteId = {note.id}/>

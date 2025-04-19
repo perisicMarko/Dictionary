@@ -4,6 +4,8 @@ import { GetUserByToken, GetUserInfoByEmail, InsertUserInfo, VerifyUser } from '
 import bcrypt from 'bcrypt';
 import sendEmail, { generateVerificationMail } from './sendVerificationEmail';
 import { isBefore } from 'date-fns';
+import { encryptRefresh } from '@/actions/manageSession';
+import { cookies } from 'next/headers';
 
 type stateType = {
     errors: {
@@ -139,37 +141,69 @@ export async function getUserByToken(token : Base64URLString){
     return user;
 }  
 
-export async function authenticateLogIn(inputEmail : string, inputPassword : string){
+type logInStateType = {
+    errors:  { email?: string[] | string | undefined; password?: string[] | string | undefined } | undefined,
+    email: string,
+    success: boolean,
+} | undefined;
+
+export async function authenticateLogIn(state: logInStateType, formData: FormData){
+    
+    const inputEmail = formData.get('email')?.toString() || '';
+    const inputPassword = formData.get('password')?.toString() || '';
+            
     const validatedFields = LogInSchema.safeParse({
         email: inputEmail,
         password: inputPassword,
     });
 
+    const retObj : {
+        errors:  { email?: string[] | string | undefined; password?: string[] | string | undefined } | undefined,
+        email: string,
+        success: boolean,
+    } = {
+        errors: undefined,
+        email: '',
+        success: false,
+    };
+
     if(!validatedFields.success){
-        const retObj = {
-            errors: validatedFields.error.flatten().fieldErrors,
-            email: "",
-            success: false,
-        };
-
-        if(!retObj.errors?.email)   
+        retObj.errors = validatedFields.error.flatten().fieldErrors
+        if(!retObj.errors.email)
             retObj.email = inputEmail;
-    
+        
         return retObj;
-    }
-
-    const {email, password} : {email: string, password: string} = validatedFields.data;
-    const user = await GetUserInfoByEmail(email);
     
-    if(!user) return {errors: {email: '-Wrong email.', password: ''}, email: '', success: false}; 
+    }else {
+        const {email, password} = validatedFields.data as {email: string, password: string};
+        const user = await GetUserInfoByEmail(email);
+        
+        if(!user) return {errors: {email: '-Wrong email.', password: ''}, email: '', success: false}; 
+        
+        const cmpStatus = await bcrypt.compare(password, user?.password);
+        if(!cmpStatus) 
+            return {
+                    errors: {password: '-Wrong password.', email: ''},
+                    email: email, 
+                    success: false,
+                };
 
-    const cmpStatus = await bcrypt.compare(password, user?.password);
-    if(!cmpStatus) 
-        return {
-            errors: {password: '-Wrong password.', email: ''},
-            email: email, 
-            success: false,
-        };
+        const refreshToken = await encryptRefresh({email: user.email, userId: user.id})     
 
+        //iz nekog razloga mi je trazio await ne znam zasto
+        ;(await cookies()).set('refreshToken', refreshToken, {
+          httpOnly: true,
+          secure: true,
+          path: '/',
+          sameSite: 'lax',
+          maxAge: 60 * 60 * 24 * 10 // 10 dana
+        });
+    }
     return {errors: undefined, email: '', success: true};
+}
+
+export async function logOutUser(){
+    (await cookies()).delete("refreshToken");
+
+    return {success: true};
 }

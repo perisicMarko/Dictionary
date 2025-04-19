@@ -1,38 +1,35 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
+import { useContext } from "react";
+import { TokenContext } from "../TokenContextProvider";
+import { updateReviewDate } from "@/actions/manageNotes";
+import { useRouter } from "next/navigation";
 
 export function GradeForm({
   toggleMenu,
   changeQuality,
   noteId,
   quality,
-  accessToken,
   rerenderHandle,
 }: {
   toggleMenu: () => void;
   changeQuality: (e: number) => void;
   noteId: number;
   quality: number;
-  accessToken: string | undefined;
   rerenderHandle: () => void;
 }) {
+  const tokenContext = useContext(TokenContext);
+  const router = useRouter();
 
-  async function onSubmitGradeHandle(e: React.FormEvent) {
-    e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    if (accessToken === undefined) return;
+  async function onSubmitGradeHandle(formData: FormData) {
+    if (tokenContext?.accessToken === undefined) return;
     changeQuality(-1);
-    const response = await fetch("/api/dictionary/recall/grade", {
-      method: "PATCH",
-      credentials: "include",
-      body: JSON.stringify({
-        noteId: Number(formData.get("noteId")),
-        accessToken: accessToken,
-        quality: formData.get("recall"),
-      }),
-    });
-    console.log(response);
+    const response = await updateReviewDate(Number(formData.get('quality')), noteId, tokenContext.accessToken || '');
+    if(!response?.success){
+      tokenContext.setAccessToken('');
+      router.push('/logIn');
+    }
     rerenderHandle(); //refresh parrent
   }
 
@@ -46,7 +43,7 @@ export function GradeForm({
       <motion.form
         variants={itemVariants}
         className="rounded-2xl w-full py-2 relative"
-        onSubmit={onSubmitGradeHandle}
+        action={(e) => onSubmitGradeHandle(e)}
       >
         <input type="text" name="noteId" defaultValue={noteId} hidden />
         <label htmlFor="recall" className="text-white text-[16px] sm:text-xl">
@@ -62,7 +59,7 @@ export function GradeForm({
         <select
           id="recall"
           defaultValue={-1}
-          name="recall"
+          name="quality"
           onClick={() => toggleMenu()}
           onChange={(e) => changeQuality(Number(e.target.value))}
           className="relative block text-white hover:scale-105 bg-blue-400 w-full h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] appearance-none cursor-pointer py-2 rounded-3xl focus:outline-none px-3 text-xs sm:text-xl mt-2"

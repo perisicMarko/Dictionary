@@ -6,6 +6,7 @@ import Image from "next/image";
 import { TokenContext } from "@/components/TokenContextProvider";
 import { motion } from 'framer-motion';
 import { containerVariants } from "@/lib/animationVariants";
+import { logOutUser } from "@/actions/auth/user";
 
 export function NavBar() {
     const path = usePathname();
@@ -13,18 +14,7 @@ export function NavBar() {
     const [isVisible, setIsVisible] = useState(true);
     const tokenContext = useContext(TokenContext);
     const accessToken = tokenContext?.accessToken;
-    
-    const handleSubmit = async (e : React.FormEvent) => {
-      e.preventDefault();
-      await fetch('/api/auth/logOut', {
-        method: "POST",
-        credentials: 'include',
-      });
   
-      tokenContext?.setAccessToken('');
-      router.push('/');
-    }
-
     useEffect(() => {
       let lastScrollY = window.scrollY;
 
@@ -49,7 +39,11 @@ export function NavBar() {
     isVisible && isMatch && 
     <motion.nav initial='hidden' animate='show' variants={containerVariants} className="fixed top-0 z-20 bg-slate-800 w-full h-[50px] grid grid-cols-[auto_1fr] items-center">
       <div className="flex justify-start items-center ml-3 md:ml-7">
-        <form onSubmit={handleSubmit} method="POST">
+        <form action={() => { 
+          tokenContext?.setAccessToken('');
+          logOutUser(); 
+          router.push('/');}}
+         >
           <input name="accessToken" value={accessToken} hidden readOnly />
           <button
             type="submit"

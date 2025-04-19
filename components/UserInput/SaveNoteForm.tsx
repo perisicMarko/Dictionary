@@ -5,6 +5,7 @@ import { containerVariants, itemVariants, transition } from "@/lib/animationVari
 import { useRef, useContext } from 'react';
 import { TWordApp } from "@/lib/types";
 import { TokenContext } from "../TokenContextProvider";
+import { saveNotes } from "@/actions/manageNotes";
 
 
 export default function SaveNoteForm({
@@ -33,35 +34,22 @@ export default function SaveNoteForm({
     const router = useRouter();
     const wordInputRef = useRef<HTMLInputElement>(null);
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  async function handleSubmit(formData: FormData) {
     if (tokenContext?.accessToken == undefined) 
       return;
     cleanUp(0);
-    const formData = new FormData(e.target as HTMLFormElement);
-    
+  
     if(wordInputRef.current) 
       wordInputRef.current.value = '';
 
-    const res = await fetch("/api/dictionary/saveNotes", {
-      method: "POST",
-      credentials: "include",
-      body: JSON.stringify({
-        word: formData.get("word"),
-        userNotes: formData.get("userNotes"),
-        generatedNotes: formData.get("generatedNotes"),
-        audio: formData.get("audio"),
-        accessToken: formData.get("accessToken"),
-      }),
-    });
+    const res = await saveNotes(formData.get('word')?.toString() || '', formData.get('audio')?.toString() || '', formData.get('userNotes')?.toString() || '', formData.get('generatedNotes')?.toString() || '', formData.get('accessToken')?.toString() || '');
     if(wordInputRef.current)
       wordInputRef.current.value = '';
 
-    if (res.status === 201) {
-      const data = await res.json();
-      const newToken = data.accessToken;
+    if (res?.status === 201) {
+      const newToken = res.accessToken;
       tokenContext?.setAccessToken(newToken);
-    } else if (res.status === 401) 
+    } else if (res?.status === 401) 
       router.push("/logIn");
   }
 
@@ -104,8 +92,7 @@ export default function SaveNoteForm({
         className="flex flex-col justify-center items-center w-full"
       >
         <form
-          method="POST"
-          onSubmit={handleSubmit}
+          action={(e) => {handleSubmit(e)}}
           className="bg-slate-800 space-y-2 h-full rounded-4xl p-7 flex flex-col justify-center items-center w-full"
         >
           <input
@@ -164,7 +151,7 @@ export default function SaveNoteForm({
                 className="w-full mt-2 text-blue-300 h-50 xl:h-100 xl:max-h-100 px-1 resize-none xl:resize-y"
                 name="generatedNotes"
                 key="genNotes"
-                value={
+                defaultValue={
                   isErrorNote(note) || note === null || note === undefined
                     ? ""
                     : note.parsedNote

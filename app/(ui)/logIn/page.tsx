@@ -1,50 +1,34 @@
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/Loader";
+import { authenticateLogIn } from "@/actions/auth/user";
 
 export default function LogIn() {
-  const [respondMessage, setRespondMessage] = useState<{
-    errors: { email: string; password: string };
-    email: string;
-  }>();
-  const [isPending, setIsPending] = useState(false);
+  const [state, action, isPending] = useActionState(authenticateLogIn, undefined);
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
+  const [semaphore, setSemaphore] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    setIsPending(true);
-    const formData = new FormData(e.target as HTMLFormElement);
-    const response = await fetch("/api/auth/logIn", {
-      method: "POST",
-      //headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: formData.get("email"),
-        password: formData.get("password"),
-      }),
-    });
-
-    if (response.status != 200) {
-      setIsPending(false);
-      const res = await response.json();
-      if (res.email === "") {
-        setEmail("");
-        setPass("");
-      }
-      if (res.errors.password != "") setPass("");
-
-      setRespondMessage(res); // display error if no user has been founded with that credentials
-    } else {
+  useEffect(() => {
+    if(state?.success)
       router.push("/dictionary/inputWord");
-    }
-  };
-
+  }, [router, state?.success]);
+  
+  
+  if(state?.errors?.email && email !== '' && semaphore){
+    setEmail('');
+    setPass('');
+    setSemaphore(false);
+  }
+  if(state?.errors?.password && pass !== '' && semaphore){
+    setPass('');
+    setSemaphore(false);
+  }
   const emptyCredentials = pass === "" || email === "";
 
   return (
@@ -61,8 +45,10 @@ export default function LogIn() {
       </div>
       <form
         className="form flex flex-col items-center justify-center m-5"
-        onSubmit={handleSubmit}
-        method="POST"
+        action={(e) => {
+          action(e);
+          setSemaphore(true);
+        }}
       >
         <motion.div variants={itemVariants} className="w-full">
           <label htmlFor="email" className="text-white">
@@ -77,8 +63,8 @@ export default function LogIn() {
               setEmail(e.target.value);
             }}
           />
-          {respondMessage?.errors?.email != "" && (
-            <p className="error ml-1">{respondMessage?.errors.email}</p>
+          {state?.errors?.email != "" && (
+            <p className="error ml-1">{state?.errors?.email}</p>
           )}
         </motion.div>
         <motion.div variants={itemVariants} className="w-full">
@@ -92,8 +78,8 @@ export default function LogIn() {
             value={pass}
             onChange={(e) => setPass(e.target.value)}
           />
-          {respondMessage?.errors?.password && (
-            <p className="error ml-1">{respondMessage.errors.password}</p>
+          {state?.errors?.password && (
+            <p className="error ml-1">{state.errors.password}</p>
           )}
         </motion.div>
         <motion.div variants={itemVariants} className="center w-3/4 mt-2">

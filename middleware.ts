@@ -15,7 +15,7 @@ export default async function middleware(req: NextRequest) {
     const schoolSessionToken = req.cookies.get('sessionToken')?.value;
     const isSchoolProtected = schoolProtectedRoutes.includes(path);
     const isSchoolPublic = schoolPublicRoutes.includes(path);
-        console.log("middleware running for path:", path);
+    
     if(isProtected){
         if(!refreshToken)
             return NextResponse.redirect(new URL('/', req.nextUrl));
