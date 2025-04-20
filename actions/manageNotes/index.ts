@@ -118,7 +118,7 @@ function stringifyNote(noteObj : TWordApp){
 }
 
 
-export async function getUsersNotes(accessToken : string){
+export async function getUsersNotes(accessToken: string){
 
   const payload = await decryptAccess(accessToken);
   if(!payload)
@@ -135,7 +135,7 @@ export async function getUsersNotes(accessToken : string){
 }
 
 
-export async function getUsersHistory(accessToken : string){
+export async function getUsersHistory(accessToken: string){
   
   const payload = await decryptAccess(accessToken);
   if(!payload)

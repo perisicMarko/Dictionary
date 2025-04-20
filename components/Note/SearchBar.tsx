@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { itemVariants } from "@/lib/animationVariants";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { containerVariants } from "@/lib/animationVariants";
 
 export function SearchBar({
@@ -13,6 +13,23 @@ export function SearchBar({
 }) {
   const searchBarRef = useRef<HTMLInputElement>(null);
   const [help, setHelp] = useState(false);
+
+  useEffect(() => {
+    const eventHandler = (event: KeyboardEvent) => {
+      const activeElement = document.activeElement;
+      if (activeElement?.tagName.toLowerCase() === 'input' || activeElement?.tagName.toLowerCase() === 'textarea')
+        return;
+      
+      if(event.key.toLowerCase() === 'f'){
+        event.preventDefault();
+        searchBarRef.current?.focus();
+      }
+    }
+    document.addEventListener('keydown', eventHandler);
+
+    return () => document.removeEventListener('keydown', eventHandler);
+  }, []);
+
   return (
     <>
     <motion.div

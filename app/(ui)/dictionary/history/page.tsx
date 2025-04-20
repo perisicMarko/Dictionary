@@ -44,7 +44,8 @@ export default function History() {
             From this page and this page only you can delete note permanently or
             return word to learning process. Both of those actions can be
             accomplished by opening the menu on menu icon and clicking on trash
-            icon or &quot;relearn&quot;.
+            icon or &quot;relearn&quot;.<br/>
+            Bonus help: shortcut for focusing search bar is just key F.
         </motion.p>
       </SearchBar>
 

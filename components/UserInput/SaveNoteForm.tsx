@@ -39,11 +39,9 @@ export default function SaveNoteForm({
       return;
     cleanUp(0);
   
-    if(wordInputRef.current) 
-      wordInputRef.current.value = '';
-
     const res = await saveNotes(formData.get('word')?.toString() || '', formData.get('audio')?.toString() || '', formData.get('userNotes')?.toString() || '', formData.get('generatedNotes')?.toString() || '', formData.get('accessToken')?.toString() || '');
-    if(wordInputRef.current)
+    
+    if(wordInputRef.current) // expanding cleanUp
       wordInputRef.current.value = '';
 
     if (res?.status === 201) {

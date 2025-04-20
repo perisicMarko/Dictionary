@@ -39,7 +39,8 @@ export default function YourWords() {
         <motion.p variants={itemVariants} className="p-3">
             This page is where all words you have not learned yet are stored.
             Hence if you have more spare time in the day you can review all
-            words here.
+            words here. <br/>
+            Bonus help: shortcut for focusing search bar is just key F.
           </motion.p>
       </SearchBar>
 
