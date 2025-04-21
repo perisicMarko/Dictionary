@@ -12,7 +12,6 @@ export default function SignUp() {
     authenticateSignUp,
     undefined
   );
-
   const [email, setEmail] = useState("");
 
   if (state?.error === "Email already used.") {
@@ -22,14 +21,21 @@ export default function SignUp() {
 
   return (
     <>
-      {state?.success && (
+      {state?.success && 
         <VerificationEmailSent email={email}/>
-      )}
+      }
+      {state && state?.subscription != '' && 
+        <motion.div initial='hidden' animate='show' variants={containerVariants} className='sm:w-[500px] w-3/4 bg-slate-800 p-3 mt-15 sm:mt-20 rounded-3xl'>
+          <motion.p variants={itemVariants} className='text-white text-center'>
+            <b>{state?.subscription}</b>
+            </motion.p>
+        </motion.div>
+      }
       <motion.div
         initial="hidden"
         animate="show"
         variants={containerVariants}
-        className=" mt-10 sm:w-[500px] w-3/4 h-1/2 bg-slate-800 rounded-3xl border-2 border-blue-50"
+        className="mt-5 sm:w-[500px] w-3/4 h-1/2 bg-slate-800 rounded-3xl border-2 border-blue-50"
       >
         <div className="flex justify-end items-start bg-slate-950 border-blue-50 rounded-t-3xl">
           <Link className="xBtn mr-3 py-1 text-white" href="/">

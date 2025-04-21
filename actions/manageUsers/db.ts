@@ -34,7 +34,7 @@ export async function GetUserInfoByEmail(email : string) {
 }
 
 
-export async function InsertUserInfo(name: string, lastName: string, email: string, password: string) {
+export async function InsertUserInfo(name: string, lastName: string, email: string, password: string, schoolId: number) {
 
   try {
     const res = await prisma.user.create({
@@ -43,6 +43,7 @@ export async function InsertUserInfo(name: string, lastName: string, email: stri
         last_name: lastName,
         email: email,
         password: password,
+        school_id: schoolId
       }
     })
 
@@ -146,6 +147,25 @@ export async function DeleteUnverifiedUsers(ids: number[]) {
     for (const id of ids)
       res = await prisma.user.deleteMany({ where: { id: id } });
 
+    return res;
+  } catch (error) {
+
+    if (error instanceof Error) {
+      console.log('DeleteUnverifiedUsers: ERROR: API - ' + error.message);
+    }
+
+  }
+}
+
+
+export async function ChangeUsersSchool(userId: number, schoolId: number) {
+
+  try {
+    const res = await prisma.user.update({
+      where: {id: userId},
+      data: {school_id: schoolId}
+    })
+    
     return res;
   } catch (error) {
 

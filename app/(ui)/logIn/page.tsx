@@ -31,12 +31,26 @@ export default function LogIn() {
   }
   const emptyCredentials = pass === "" || email === "";
 
+  if(state?.subscription != '' && semaphore){
+    setEmail('');
+    setPass('');
+    setSemaphore(false);
+  }
+
   return (
+  <>
+    {state && state?.subscription != '' && 
+      <motion.div initial='hidden' animate='show' variants={containerVariants} className="md:w-[500px] w-1/2 bg-slate-800 rounded-3xl mt-40">
+        <motion.p variants={itemVariants} className="text-white text-center p-3">
+          <b>{state?.subscription}</b>
+        </motion.p>
+      </motion.div>
+    }
     <motion.div
       initial="hidden"
       animate="show"
       variants={containerVariants}
-      className="mt-25 sm:mt-30 md:mt-30 bg-slate-800 rounded-3xl border-2 border-blue-50 w-[1/2] md:w-[500px]"
+      className={"bg-slate-800 rounded-3xl border-2 border-blue-50 w-1/2 md:w-[500px] " + (state && state?.subscription != '' ? " mt-5" : " mt-25 sm:mt-30 md:mt-30")}
     >
       <div className="flex justify-end items-center bg-slate-950 border-blue-50 rounded-t-3xl">
         <Link className="xBtn mr-3 py-1 text-white" href="/">
@@ -108,5 +122,6 @@ export default function LogIn() {
         </motion.div>
       </form>
     </motion.div>
+  </>
   );
 }
