@@ -57,7 +57,7 @@ export async function SchoolLogIn(state: logInResponseType, formData: FormData){
             success: false,
         };
     
-    await createSession(email, password);
+    await createSession(email, school.id);
     
     return {errors: undefined, email: '', success: true};
 }
@@ -167,6 +167,6 @@ export async function authenticateSignUp(state: singUpReponseType, formData: For
 
 export async function logOut(){
     (await cookies()).delete("sessionToken");
-    console.log('here');
+    
     return {success: true};
 }

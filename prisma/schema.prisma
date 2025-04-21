@@ -68,7 +68,6 @@ model schools {
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model subscriptions {
   email               String    @id @db.VarChar
-  activation_key      String    @db.VarChar
   key_expiration_date DateTime? @db.Date
   school_id           Int?
   schools             schools?  @relation(fields: [school_id], references: [id], onDelete: NoAction, onUpdate: NoAction)

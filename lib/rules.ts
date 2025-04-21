@@ -40,3 +40,7 @@ export const SchoolSignUpSchema = z.object({
         })
     }
 });
+
+export const GenerateSchema = z.object({
+    email: z.string().email('Please enter a valid email!').trim(),
+});

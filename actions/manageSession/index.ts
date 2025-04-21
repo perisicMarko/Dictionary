@@ -77,10 +77,16 @@ export async function verifySession(accessString : string) {
 }
 
 
-export async function createSession(email: string, password: string){
+export type SessionPayload = {
+  email: string;
+  schoolId: number;
+};
+
+
+export async function createSession(email: string, schoolId: number){
   const cookieStore = await cookies();
 
-  const token = await new SignJWT({email, password})
+  const token = await new SignJWT({email, schoolId})
   .setProtectedHeader({ alg: 'HS256' })
   .setIssuedAt()
   .sign(ACCESS_SECRET);
@@ -93,13 +99,14 @@ export async function createSession(email: string, password: string){
   });
 }
 
-export async function decryptSession(token: string){
+export async function decryptSession(){
+  const token = (await cookies()).get('sessionToken')?.value || '';
   try {
     const { payload } = await jwtVerify(token, ACCESS_SECRET, {
       algorithms: ['HS256'],
     });
 
-    const t = payload as TokenPayload;
+    const t = payload as SessionPayload;
     return t;
   } catch (error) {
     console.log('Failed session token decryption, error: ' + error);

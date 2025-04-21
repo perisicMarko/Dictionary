@@ -1,7 +1,6 @@
 import 'server-only'
 import { PrismaClient } from '@prisma/client';
 
-
 const prisma = new PrismaClient();
 
 export async function InsertSchoolInfo(name: string, email: string, password: string){
@@ -19,7 +18,7 @@ export async function InsertSchoolInfo(name: string, email: string, password: st
     }catch (error) {
         
         if(error instanceof Error){
-            console.log('GetNotes: ERROR: API - ', error?.message);
+            console.log('InsertSchoolInfo: ERROR: API - ', error?.message);
         }
 
     }
@@ -36,7 +35,7 @@ export async function GetSchoolByEmail(email: string){
     }catch (error) {
         
         if(error instanceof Error){
-            console.log('GetNotes: ERROR: API - ', error?.message);
+            console.log('GetSchoolByEmail: ERROR: API - ', error?.message);
         }
 
     }
@@ -53,7 +52,73 @@ export async function CheckPartnership(email: string){
     }catch (error) {
         
         if(error instanceof Error){
-            console.log('GetNotes: ERROR: API - ', error?.message);
+            console.log('CheckPartnership: ERROR: API - ', error?.message);
+        }
+
+    }
+}
+
+export async function CreateActivationKey(email: string, activationKeyExpirationDate: Date, schoolId: number){
+
+    try{
+        const res = await prisma.subscriptions.create({ 
+            data: {
+                email: email,
+                key_expiration_date: activationKeyExpirationDate,
+                school_id: schoolId,
+            }
+        });
+
+        return res;
+    }catch (error) {
+        
+        if(error instanceof Error){
+            console.log('GenerateActivationKey: ERROR: API - ', error?.message);
+        }
+
+    }
+}
+
+
+export async function UpdateActivationKey(email: string, activationKeyExpirationDate: Date, schoolId: number){
+
+    try{
+        const res = await prisma.subscriptions.update({ 
+            where: {
+                email: email
+            },
+            data: {
+                email: email,
+                key_expiration_date: activationKeyExpirationDate,
+                school_id: schoolId,
+            }
+        });
+
+        return res;
+    }catch (error) {
+        
+        if(error instanceof Error){
+            console.log('GenerateActivationKey: ERROR: API - ', error?.message);
+        }
+
+    }
+}
+
+
+export async function GetSubscription(email: string){
+
+    try{
+        const res = await prisma.subscriptions.findUnique({ 
+            where: {
+                email: email
+            }
+        });
+
+        return res;
+    }catch (error) {
+        
+        if(error instanceof Error){
+            console.log('GenerateActivationKey: ERROR: API - ', error?.message);
         }
 
     }
