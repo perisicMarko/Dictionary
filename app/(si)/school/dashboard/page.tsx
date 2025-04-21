@@ -1,8 +1,7 @@
-export default function Dashboard(){
+'use client'
 
+export default function Dashboard(){
     return (
-        <div>
-            hello dashboard
-        </div>
+        <div className="mt-70">hello page why is this not visible</div>
     );
 }

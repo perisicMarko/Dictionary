@@ -1,9 +1,10 @@
 
-'use server'
+"use server"
 import { LogInSchema, SchoolSignUpSchema } from '@/lib/rules';
 import bcrypt from 'bcrypt';
 import { CheckPartnership, GetSchoolByEmail, InsertSchoolInfo } from '@/actions/manageSchools/db';
 import { createSession } from '@/actions/manageSession';
+import { cookies } from 'next/headers';
 
 type logInResponseType = undefined
   | {
@@ -58,8 +59,6 @@ export async function SchoolLogIn(state: logInResponseType, formData: FormData){
     
     await createSession(email, password);
     
-  
-
     return {errors: undefined, email: '', success: true};
 }
 
@@ -163,4 +162,11 @@ export async function authenticateSignUp(state: singUpReponseType, formData: For
         partner: true,
         success: true
     } ;
+}
+
+
+export async function logOut(){
+    (await cookies()).delete("sessionToken");
+    console.log('here');
+    return {success: true};
 }

@@ -83,14 +83,12 @@ export async function createSession(email: string, password: string){
   const token = await new SignJWT({email, password})
   .setProtectedHeader({ alg: 'HS256' })
   .setIssuedAt()
-  .setExpirationTime('15m')
   .sign(ACCESS_SECRET);
 
   cookieStore.set('sessionToken', token, {
     httpOnly: true,
     //secure: true,
     secure: false,
-    path: '/school',
     sameSite: 'strict',
   });
 }

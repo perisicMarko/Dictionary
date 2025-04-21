@@ -20,6 +20,8 @@ export default async function middleware(req: NextRequest) {
         if(!refreshToken)
             return NextResponse.redirect(new URL('/', req.nextUrl));
         const payload = await decryptRefresh(refreshToken || '');
+        if(!payload)
+            return NextResponse.redirect(new URL('/', req.nextUrl));
         const { userId } = (payload as TokenPayload);
         if(userId)
             return NextResponse.next();
@@ -29,6 +31,8 @@ export default async function middleware(req: NextRequest) {
         if(!refreshToken)
             return NextResponse.next();
         const payload = await decryptRefresh(refreshToken || '');
+        if(!payload)
+            return NextResponse.next();
         const { userId } = payload as TokenPayload;
         if(userId)
             return NextResponse.redirect(new URL('/dictionary/inputWord', req.nextUrl));
@@ -38,6 +42,8 @@ export default async function middleware(req: NextRequest) {
         if(!schoolSessionToken)
             return NextResponse.next();
         const payload = await decryptSession(schoolSessionToken);
+        if(!payload)
+            return NextResponse.next();
         const { email } = payload as TokenPayload;
         if(email)
             return NextResponse.redirect(new URL('/school/dashboard', req.nextUrl));
@@ -47,6 +53,8 @@ export default async function middleware(req: NextRequest) {
         if(!schoolSessionToken)
             return NextResponse.redirect(new URL('/school', req.nextUrl));
         const payload = await decryptSession(schoolSessionToken);
+        if(!payload)
+            return NextResponse.redirect(new URL('/school', req.nextUrl));
         const { email } = payload as TokenPayload;
         if(email)
             return NextResponse.next();

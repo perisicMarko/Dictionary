@@ -1,3 +1,4 @@
+import { logOutUser } from "@/actions/auth/user";
 import { encryptAccess, decryptRefresh } from "@/actions/manageSession";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
@@ -9,11 +10,8 @@ export async function POST(){
 
     if(!refreshToken){//unauthorized 
         console.log('GETACCESS API: Logging out due to undefined refresh token');
-        const response = await fetch('/api/auth/logOut', {
-            method: "POST",
-            credentials: "include"
-        });
-        return response
+        await logOutUser();
+        return NextResponse.json({status: 401});
     }
 
     const payload = await decryptRefresh(refreshToken || '');
