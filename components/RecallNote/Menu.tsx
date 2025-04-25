@@ -38,23 +38,8 @@ export default function RecallNoteMenu({
       initial="hidden"
       animate="show"
       variants={containerVariants}
-      className="bg-white/80 flex flex-col items-center pointer-events-auto z-10 left-2 py-1 px-1 rounded-2xl"
+      className="bg-white/80 flex flex-col items-center justify-center pointer-events-auto z-10 left-2 py-2 px-1 rounded-2xl"
     >
-      <Link
-        href={"/dictionary/recall/edit/" + noteId}
-        type="submit"
-        onClick={() => toggleMenu()}
-      >
-        <Image
-          className="scale-75 hover:scale-90 cursor-pointer"
-          title="edit note"
-          src="/edit.svg"
-          width={30}
-          height={30}
-          alt="edit icon"
-        ></Image>
-      </Link>
-
       <motion.form
         variants={itemVariants}
         className="center"
@@ -73,25 +58,41 @@ export default function RecallNoteMenu({
         </button>
       </motion.form>
 
+      <Link
+        href={"/dictionary/recall/edit/" + noteId}
+        onClick={() => toggleMenu()}
+      >
+        <Image
+          className="scale-75 hover:scale-90 cursor-pointer"
+          title="edit note"
+          src="/edit.svg"
+          width={30}
+          height={30}
+          alt="edit icon"
+        ></Image>
+      </Link>
+
       <motion.span
         variants={itemVariants}
-        className="ml-1 block hover:scale-105 hover:underline text-blue-500 cursor-pointer"
+        className=" block hover:scale-105 hover:underline text-blue-500 cursor-pointer"
         onClick={() => {
           changeQuality(6);
           toggleMenu();
         }}
+        title='show notes'
       >
-        <b>notes</b>
+        <b>N</b>
       </motion.span>
       <motion.span
         variants={itemVariants}
-        className="ml-1 block hover:scale-105 hover:underline text-blue-500 cursor-pointer"
+        className="block hover:scale-105 hover:underline text-blue-500 cursor-pointer text-center"
         onClick={() => {
           changeQuality(-1);
           toggleMenu();
         }}
+        title='grade recall'
       >
-        <b>grade</b>
+        <b>G</b>
       </motion.span>
     </motion.div>
   );

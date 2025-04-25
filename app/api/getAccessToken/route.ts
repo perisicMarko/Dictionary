@@ -21,8 +21,7 @@ export async function POST(){
     
     if(payload){
         const {email, userId} = payload;
-        const accessToken = await encryptAccess({email, userId})
-        console.log(expirationTime + " " + nowPlus15);
+        const accessToken = await encryptAccess({email, userId});
         if(isBefore(expirationTime, nowPlus15))
             return NextResponse.json({accessToken: accessToken, sessionExpiring: true}, {status: 200});
         else    

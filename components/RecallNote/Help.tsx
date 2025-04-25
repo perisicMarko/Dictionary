@@ -52,8 +52,8 @@ export default function RecallNoteHelp() {
         </h2>
         <motion.p variants={itemVariants} className="p-4 text-white">
           Click on the menu icon to open the menu. In menu there are edit and
-          delete icons, also &quot;notes&quot; for showing word notes and
-          &quot;grade&quot; for grading ui, grading ui is initialy selected.
+          delete icons, also &quot;N&quot; for showing word notes and
+          &quot;G&quot; for grading ui, grading ui is initialy selected.
           <br />
           <br />
           <b>How this works?</b>
