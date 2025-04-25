@@ -13,7 +13,6 @@ import { TokenContext } from "@/components/TokenContextProvider";
 export default function Edit() {
   const params = useParams();
   const noteId = params.noteId;
-  console.log(noteId);
   const [note, setNote] = useState<TDBNoteEntry | null>();
   const [isPending, setIsPending] = useState(false);
   const router = useRouter();
@@ -33,7 +32,8 @@ export default function Edit() {
         router.push("/dictionary/yourWords");
       else if(response.status === 201)
         tokenContext?.setAccessToken(response.accessToken || '');
-        
+      else 
+        console.log('Note update failed, returning to yourWords page');
       router.push('/dictionary/yourWords');
     };
 

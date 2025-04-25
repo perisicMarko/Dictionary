@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @import "normalize.css";
 
+
+body {
+  font-family: var(--font-roboto), sans-serif;
+}
+
 select {
   @apply outline outline-blue-400;
 }

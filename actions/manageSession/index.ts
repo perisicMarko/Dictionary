@@ -1,4 +1,4 @@
-import 'server-only'
+'server-only';
 import { JWTPayload, SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 
@@ -24,6 +24,7 @@ export async function encryptAccess(payload: JWTPayload | undefined) {
 export type TokenPayload = {
   email: string;
   userId: number;
+  exp: number;
 };
 
 export async function decryptAccess(token: string) {
@@ -93,8 +94,8 @@ export async function createSession(email: string, schoolId: number){
 
   cookieStore.set('sessionToken', token, {
     httpOnly: true,
-    //secure: true,
-    secure: false,
+    secure: true,
+    //secure: false,
     sameSite: 'strict',
   });
 }

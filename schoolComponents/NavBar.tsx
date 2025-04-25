@@ -48,6 +48,7 @@ export default function NavBar(){
               alt="logOut icon"
               width={20}
               height={20}
+              priority
             ></Image>{" "}
           </button>
         </div>

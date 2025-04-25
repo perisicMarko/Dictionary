@@ -5,6 +5,7 @@ import { useContext } from "react";
 import { TokenContext } from "../TokenContextProvider";
 import { updateReviewDate } from "@/actions/manageNotes";
 import { useRouter } from "next/navigation";
+import SessionExpiredWindow from "../SessionExpiredWindow";
 
 export function GradeForm({
   toggleMenu,
@@ -27,8 +28,7 @@ export function GradeForm({
     changeQuality(-1);
     const response = await updateReviewDate(Number(formData.get('quality')), noteId, tokenContext.accessToken || '');
     if(!response?.success){
-      tokenContext.setAccessToken('');
-      router.push('/logIn');
+      router.push('/sessionExpired');
     }
     rerenderHandle(); //refresh parrent
   }

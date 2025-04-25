@@ -41,10 +41,10 @@ export default async function middleware(req: NextRequest) {
     }else if(isSchoolPublic){ 
         if(!schoolSessionToken)
             return NextResponse.next();
-        const payload = await decryptSession(schoolSessionToken);
+        const payload = await decryptSession();
         if(!payload)
             return NextResponse.next();
-        const { email } = payload as TokenPayload;
+        const { email } = payload;
         if(email)
             return NextResponse.redirect(new URL('/school/dashboard', req.nextUrl));
         else
@@ -52,10 +52,10 @@ export default async function middleware(req: NextRequest) {
     }else if(isSchoolProtected){
         if(!schoolSessionToken)
             return NextResponse.redirect(new URL('/school', req.nextUrl));
-        const payload = await decryptSession(schoolSessionToken);
+        const payload = await decryptSession();
         if(!payload)
             return NextResponse.redirect(new URL('/school', req.nextUrl));
-        const { email } = payload as TokenPayload;
+        const { email } = payload;
         if(email)
             return NextResponse.next();
         else

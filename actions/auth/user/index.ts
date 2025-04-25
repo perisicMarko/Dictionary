@@ -249,7 +249,7 @@ export async function authenticateLogIn(state: logInStateType, formData: FormDat
           secure: true,
           path: '/',
           sameSite: 'lax',
-          maxAge: 60 * 60 * 24 * 10 // 10 dana
+          maxAge: 60 * 60 * 24 * 7 // 7 dana
         });
     }
     return {errors: undefined, email: '', success: true, subscription: ''};
