@@ -45,7 +45,7 @@ export async function InsertUserInfo(name: string, lastName: string, email: stri
         password: password,
         school_id: schoolId
       }
-    })
+    });
 
 
     return res;
@@ -164,7 +164,24 @@ export async function ChangeUsersSchool(userId: number, schoolId: number) {
     const res = await prisma.user.update({
       where: {id: userId},
       data: {school_id: schoolId}
-    })
+    });
+    
+    return res;
+  } catch (error) {
+
+    if (error instanceof Error) {
+      console.log('DeleteUnverifiedUsers: ERROR: API - ' + error.message);
+    }
+
+  }
+}
+
+export async function GetUsersBySchoolId(schoolId: number){
+
+  try {
+    const res = await prisma.user.findMany({
+      where: { school_id: schoolId },
+    });
     
     return res;
   } catch (error) {

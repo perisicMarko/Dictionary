@@ -1,6 +1,6 @@
 'use server'
-import { GetUserByToken } from "./db";
-
+import { decryptSession } from "../manageSession";
+import { GetUserByToken, GetUsersBySchoolId } from "./db";
 
 export async function getUserByToken(token : Base64URLString){
     const user = await GetUserByToken(token);
@@ -8,4 +8,18 @@ export async function getUserByToken(token : Base64URLString){
     if(!user)
         return undefined;
     return user;
+}
+
+export async function getUsersBySchool(){
+    const payload = await decryptSession();
+
+    if(!payload){ // 401
+        return;
+    }
+
+    const {schoolId} = payload;
+
+    const users = await GetUsersBySchoolId(schoolId);
+
+    return users?.map((u) => ({email: u.email, firstName: u.first_name, lastName: u.last_name, languages: u.languages}));
 }

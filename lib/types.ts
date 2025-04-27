@@ -7,7 +7,16 @@ export type TUser = {
   refresh_token: string | null;
   refresh_token_expiration_date: Date | null;
   email_verified: boolean | null;
+  school_id: number | null;
+  languages: string | null;
 };
+
+export type TStudent = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  languages: string | null;
+}
 
 export type TGPhonetic = {
   text?: string;

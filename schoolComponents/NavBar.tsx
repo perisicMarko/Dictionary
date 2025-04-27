@@ -2,13 +2,15 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { containerVariants } from '@/lib/animationVariants';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { logOut } from '@/actions/auth/school';
+import Link from 'next/link';
 
 export default function NavBar(){
     const router = useRouter();
     const [isVisible, setIsVisible] = useState(true);
+    const path = usePathname();
 
     useEffect(() => {
           let lastScrollY = window.scrollY;
@@ -30,13 +32,12 @@ export default function NavBar(){
 
     const handleLogOut = async () => {
         await logOut();
-        console.log('hello logout');
         router.push('/school');
       };
 
     return (
-        isVisible && 
-        <motion.nav initial='hidden' animate='show' variants={containerVariants} className="fixed top-0 z-20 bg-slate-800 w-full h-[50px] grid grid-cols-[auto_1fr] items-center">
+      isVisible && 
+      <motion.nav initial='hidden' animate='show' variants={containerVariants} className="fixed top-0 z-20 bg-slate-800 w-full h-[50px] grid grid-cols-[auto_1fr] items-center">
         <div className="flex justify-start items-center ml-3 md:ml-7">
           <button
             onClick={() => handleLogOut()}
@@ -51,6 +52,22 @@ export default function NavBar(){
               priority
             ></Image>{" "}
           </button>
+        </div>
+        <div className='flex justify-end xl:space-x-5 mr-2 sm:mr-5'>
+          <Link href='/school/generateKey'
+           className={`nav-link ${
+             path === "/school/generateKey" ? "text-blue-400" : "text-white"
+           } py-1 px-1 sm:px-3 navigationBtn`}
+          >
+            Generate key
+          </Link>
+          <Link href='/school/students'
+           className={`nav-link ${
+             path === "/school/students" ? "text-blue-400" : "text-white"
+           } py-1 px-1 sm:px-3 navigationBtn`}
+          >
+            Students
+          </Link>
         </div>
       </motion.nav>
     );
