@@ -158,10 +158,9 @@ export async function getRecallNotes(accessToken : string){
   const {userId} = payload as TokenPayload;  
   const notes = await GetNotes();
   const currentDate = new Date().toISOString();
-  
   if(Array.isArray(notes))
     return notes.filter((n : TDBNoteEntry) => {
-      const res = n.status == false && n.user_id == userId && isBefore(n.review_date, currentDate);
+      const res = n.status === false && n.user_id == userId && isBefore(n.review_date, currentDate);
       return res;
     });
 }

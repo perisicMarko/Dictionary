@@ -53,7 +53,7 @@ export function SearchBar({
        }}
       />
       <input
-        className="text-white p-2 inline-block outline-0 rounded-r-4xl"
+        className="text-white p-2 inline-block outline-0 focus:outline-none rounded-r-4xl"
         ref={searchBarRef}
         type="text"
         name="search"

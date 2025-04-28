@@ -45,7 +45,7 @@ export default function Note({
           color="white"
           width={30}
           height={30}
-          className="cursor-pointer"
+          className="scale-75 hover:scale-90 cursor-pointer"
           onClick={(e) => {
             e.stopPropagation();
             setMenu(!menu);
@@ -75,13 +75,6 @@ export default function Note({
           }}
         >
           Show notes
-          {/* <Image
-            src={drop ? "/arrowUp.svg" : "/arrowDown.svg"}
-            alt="arrow icon"
-            width={20}
-            height={20}
-            className="ml-3 inline-block w-auto h-auto"
-          ></Image> */}
           {drop ? (
             <ChevronUp
               color="white"
