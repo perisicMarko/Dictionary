@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { backToRecallSystem, deleteNote } from "@/actions/manageNotes";
 import { TokenContext } from "../TokenContextProvider";
 import { useContext } from "react";
 import { useRouter } from "next/navigation";
+import { Trash2 } from "lucide-react";
 
 export default function HistoryNoteMenu({
   actionCallBack,
@@ -50,7 +50,7 @@ export default function HistoryNoteMenu({
       initial="hidden"
       animate="show"
       variants={containerVariants}
-      className="bg-white/80 z-10 rounded-2xl p-1"
+      className="bg-white/80 z-10 rounded-2xl p-2"
     >
       <motion.form
         variants={itemVariants}
@@ -58,15 +58,8 @@ export default function HistoryNoteMenu({
         action={onSubmitDeleteHandle}
       >
         <input type="text" name="noteId" defaultValue={noteId} hidden />
-        <button type="submit" onClick={(e) => e.stopPropagation()}>
-          <Image
-            className="scale-75 hover:scale-90 cursor-pointer"
-            title="delete note"
-            src="/delete.svg"
-            width={30}
-            height={30}
-            alt="delete icon"
-          ></Image>
+        <button type="submit" onClick={(e) => e.stopPropagation()} title='delete note permanently' className="hover:scale-105 cursor-pointer">
+          <Trash2 color="#1E293B"/>
         </button>
       </motion.form>
       <motion.form
@@ -77,10 +70,11 @@ export default function HistoryNoteMenu({
         <input type="text" name="noteId" defaultValue={noteId} hidden />
         <button
           type="submit"
-          className="text-center text-xs text-blue-500 cursor-pointer hover:underline hover:scale-105"
+          className="text-center text-xs text-slate-800 cursor-pointer hover:scale-105"
           onClick={(e) => e.stopPropagation()}
+          title='relearn note'
         >
-          relearn
+          <b>R</b>
         </button>
       </motion.form>
     </motion.div>

@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { itemVariants } from "@/lib/animationVariants";
 import { useEffect, useRef, useState } from "react";
 import { containerVariants } from "@/lib/animationVariants";
+import { Search } from "lucide-react";
 
 export function SearchBar({
   updateSearch,
@@ -45,16 +45,13 @@ export function SearchBar({
       >
         ?
       </span>
-      <Image
-        src="/magnifyGlass.svg"
-        alt="magnify glass icon"
-        width={20}
-        height={20}
-        className="inline-block md:ml-4 ml-1 scale-90 md:scale-100"
-        onClick={() => {
-          searchBarRef?.current?.focus();
-        }}
-      ></Image>
+      <Search
+       color="white"
+       className="inline-block md:ml-4 ml-1 scale-90"
+       onClick={() => {
+         searchBarRef?.current?.focus();
+       }}
+      />
       <input
         className="text-white p-2 inline-block outline-0 rounded-r-4xl"
         ref={searchBarRef}

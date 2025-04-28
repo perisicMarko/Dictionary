@@ -5,7 +5,6 @@ import { useContext } from "react";
 import { TokenContext } from "../TokenContextProvider";
 import { updateReviewDate } from "@/actions/manageNotes";
 import { useRouter } from "next/navigation";
-import SessionExpiredWindow from "../SessionExpiredWindow";
 
 export function GradeForm({
   toggleMenu,
@@ -55,6 +54,7 @@ export function GradeForm({
           width={20}
           height={20}
           className="ml-3 w-auto h-auto top-10 sm:top-12 pointer-events-none md:top-14 xl:top-14 right-5 sm:right-11  z-5 inline-block absolute"
+          priority
         ></Image>
         <select
           id="recall"

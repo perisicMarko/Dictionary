@@ -1,7 +1,6 @@
 "use client";
 import { SearchBar } from '../../../../components/Note/SearchBar';
 import { getUsersHistory } from "@/actions/manageNotes";
-import Note from "@/components/Note";
 import Words from "@/components/shared/Words";
 import { TDBNoteEntry } from "@/lib/types";
 import { useState, useContext, useLayoutEffect } from "react";
@@ -24,10 +23,9 @@ export default function History() {
     fetch();
   }, [tokenContext?.accessToken, refresh]);
 
-  const index : number = words?.findIndex(
-    (word: TDBNoteEntry) =>
-      word.word.toLowerCase().trim() === search.toLowerCase().trim()
-  ) ?? -1;
+  const filteredWords = words?.filter((w) => {
+    return w.word.toLowerCase().trim().includes(search.toLowerCase().trim());
+  }) ?? [];
 
 
   function updateSearch(word: string){
@@ -38,26 +36,21 @@ export default function History() {
     <>
       <SearchBar updateSearch={updateSearch}>
         <motion.p variants={itemVariants} className='p-3'>
+            In menu there are delete icon for permanent word deletion and &quot;R&quot; for relearning the word.
+            <br/>
             This page should helps you review the words you have learned. So
             basically this page just stores learned words, like personal
             history.<br/><br/>
             From this page and this page only you can delete note permanently or
-            return word to learning process. Both of those actions can be
-            accomplished by opening the menu on menu icon and clicking on trash
-            icon or &quot;relearn&quot;.<br/>
+            return word to learning process. <br/><br/>
             Bonus help: shortcut for focusing search bar is just key F.
         </motion.p>
       </SearchBar>
 
-      {index === -1 && search != "" && (
+      {filteredWords.length === 0 && search != "" && (
        <ZeroNotesMessage message={'There is no word like that within your words.'}/>
       )}
-      {words && search != "" && index != -1 && (
-        <Note prop={words[index]} historyNote={true} handle={() => {setRefresh(!refresh)}}></Note>
-      )}
-      {words && search === "" && (
-        <Words props={words} historyNote={true} handle={() => {setRefresh(!refresh)}}></Words>
-      )}
+      <Words props={filteredWords} historyNote={true} handle={() => {setRefresh(!refresh)}}></Words>
       {words?.length === 0 && search === '' && (
         <ZeroNotesMessage message={'Hmm, it looks like you don\'t have any words in your history right now. Time to learn!'}/>
       )}

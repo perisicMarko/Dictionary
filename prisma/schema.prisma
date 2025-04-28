@@ -70,5 +70,6 @@ model subscriptions {
   email               String    @id @db.VarChar
   key_expiration_date DateTime? @db.Date
   school_id           Int?
+  languages           String?
   schools             schools?  @relation(fields: [school_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }

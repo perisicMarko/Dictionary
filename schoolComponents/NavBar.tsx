@@ -1,11 +1,11 @@
 'use client';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import { containerVariants } from '@/lib/animationVariants';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { logOut } from '@/actions/auth/school';
 import Link from 'next/link';
+import { LogOut } from 'lucide-react';
 
 export default function NavBar(){
     const router = useRouter();
@@ -41,16 +41,12 @@ export default function NavBar(){
         <div className="flex justify-start items-center ml-3 md:ml-7">
           <button
             onClick={() => handleLogOut()}
-            className="hover:scale-115 scale-105 cursor-pointer"
+            className="hover:scale-115 scale-105 cursor-pointer text-white hover:text-blue-400"
           >
-            {" "}
-            <Image
-              src="/logOut.svg"
-              alt="logOut icon"
+            <LogOut
               width={20}
               height={20}
-              priority
-            ></Image>{" "}
+            />
           </button>
         </div>
         <div className='flex justify-end xl:space-x-5 mr-2 sm:mr-5'>

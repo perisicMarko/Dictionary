@@ -1,7 +1,6 @@
 "use client";
 import { getUsersNotes } from "@/actions/manageNotes";
 import Words from "@/components/shared/Words";
-import Note from "@/components/Note";
 import { TDBNoteEntry } from "@/lib/types";
 import { useState, useContext, useLayoutEffect } from "react";
 import { motion } from "framer-motion";
@@ -23,12 +22,9 @@ export default function YourWords() {
     fetch();
   }, [tokenContext?.accessToken]);
 
-  const index : number =
-    words?.findIndex(
-      (word: TDBNoteEntry) =>
-        word.word.toString().toLowerCase().trim() === search.toString().toLowerCase().trim()
-    ) ?? -1;
-
+  const filteredWords = words?.filter((w) => {
+    return w.word.toLowerCase().trim().includes(search.toLowerCase().trim());
+  }) ?? [];
 
   function updateSearch(word: string){
     setSearch(word);
@@ -44,17 +40,10 @@ export default function YourWords() {
           </motion.p>
       </SearchBar>
 
-      {index === -1 && search != "" && (
+      {filteredWords.length === 0 && search != "" && (
         <ZeroNotesMessage message={'There is no word like that within your words.'}/>
-      )}
-      {words && search != "" && index != -1 && (
-        <Note prop={words[index]} historyNote={false} handle={() => {}}></Note>
-      )}
-      {words && search === "" ? (
-        <Words props={words} historyNote={false} handle={() => {}}></Words>
-      ) : (
-        <></>
-      )}
+      )}      
+      <Words props={filteredWords} historyNote={false} handle={() => {}}></Words>
       {words?.length === 0 && search === '' && (
         <ZeroNotesMessage message={'Hmm, it looks like you\'re not learning any words right now. Time to learn!'} />
       )}

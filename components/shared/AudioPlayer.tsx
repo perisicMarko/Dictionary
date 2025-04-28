@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import Image from "next/image";
+import { Volume2 } from "lucide-react";
 
 export default function AudioPlayer({ src }: { src: string }) {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -36,13 +36,10 @@ export default function AudioPlayer({ src }: { src: string }) {
       }}
     >
       <audio src={srcAtt} ref={audioRef} className="inline-block"></audio>
-      <Image
-        className="inline-block"
-        width={20}
-        height={20}
-        src={isDisabled ? "/speakerV2.svg" : "/speaker.svg"}
-        alt="audioRef"
-      ></Image>
+      <Volume2 
+       color='white'
+       className='inline-block'
+      />
       <p className="ml-2 text-white inline-block">Pronunciation</p>
     </div>
   );

@@ -1,12 +1,13 @@
 "use client";
 import { GradeForm } from './GradeForm';
-import Menu from './Menu';
+import RecallMenu from './RecallMenu';
 import { TDBNoteEntry } from "@/lib/types";
 import AudioPlayer from "../shared/AudioPlayer";
 import { useState } from "react";
-import Image from "next/image";
+import { Menu } from 'lucide-react';
 import { motion } from "framer-motion";
 import DisplayNotes from '@/components/shared/DisplayNotes';
+
 
 export default function RecallNote({
   note,
@@ -36,21 +37,19 @@ export default function RecallNote({
         setMenu(false);
       }}
     >
-      <div className="absolute right-0 top-5 flex flex-col items-center rounded-2xl w-[100px] h-[50px]">
-        <Image
+      <div className="absolute right-0 top-5 flex flex-col items-center rounded-2xl w-[100px] ">
+        <Menu
+          color='white'
           className="scale-75 hover:scale-90 cursor-pointer"
-          title="options"
-          src="/menu.svg"
           width={30}
           height={30}
-          alt="menu icon"
           onClick={(e) => {
             e.stopPropagation();
             setMenu(!menu);
           }}
-        ></Image>
+        />
         {menu && (
-          <Menu toggleMenu={toggleMenu} changeQuality={changeQuality} noteId={note.id} rerenderHandle={rerenderHandle} />
+          <RecallMenu toggleMenu={toggleMenu} changeQuality={changeQuality} noteId={note.id} rerenderHandle={rerenderHandle} />
         )}
       </div>
       <span className=" text-white" title="word">

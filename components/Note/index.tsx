@@ -1,12 +1,12 @@
 "use client";
-import DisplayNotes from '../shared/DisplayNotes';
-import HistoryNoteMenu from './HistoryNoteMenu';
+import DisplayNotes from "../shared/DisplayNotes";
+import HistoryNoteMenu from "./HistoryNoteMenu";
 import { TDBNoteEntry } from "@/lib/types";
 import AudioPlayer from "../shared/AudioPlayer";
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
-import NoteMenu from './NoteMenu';
+import NoteMenu from "./NoteMenu";
+import { ChevronDown, ChevronUp, Menu } from "lucide-react";
 
 export default function Note({
   prop,
@@ -23,7 +23,7 @@ export default function Note({
   const containerRef = useRef(null);
   const note = prop;
 
-  function toggleMenu(){
+  function toggleMenu() {
     setMenu(!menu);
   }
 
@@ -40,26 +40,26 @@ export default function Note({
         setDrop(!drop);
       }}
     >
-      <div className="absolute flex flex-col items-center top-5 right-0 rounded-2xl w-[100px] h-[50px]">
-        <Image
-          className="scale-75 hover:scale-90 cursor-pointer"
-          title="options"
-          src="/menu.svg"
+      <div className="absolute flex flex-col items-center top-5 right-0 rounded-2xl w-[100px]">
+        <Menu
+          color="white"
           width={30}
           height={30}
-          alt="menu icon"
+          className="cursor-pointer"
           onClick={(e) => {
             e.stopPropagation();
             setMenu(!menu);
           }}
-        ></Image>
+        />
 
         {menu && historyNote && (
-          <HistoryNoteMenu actionCallBack={handle} toggleMenu={toggleMenu} noteId={note.id} />
+          <HistoryNoteMenu
+            actionCallBack={handle}
+            toggleMenu={toggleMenu}
+            noteId={note.id}
+          />
         )}
-        {menu && !historyNote && (
-          <NoteMenu noteId = {note.id}/>
-        )}
+        {menu && !historyNote && <NoteMenu noteId={note.id} />}
       </div>
 
       <h2 className="text-white mb-3" title="word">
@@ -75,17 +75,36 @@ export default function Note({
           }}
         >
           Show notes
-          <Image
+          {/* <Image
             src={drop ? "/arrowUp.svg" : "/arrowDown.svg"}
             alt="arrow icon"
             width={20}
             height={20}
             className="ml-3 inline-block w-auto h-auto"
-          ></Image>
+          ></Image> */}
+          {drop ? (
+            <ChevronUp
+              color="white"
+              width={20}
+              height={20}
+              className="ml-3 inline-block w-auto h-auto"
+            />
+          ) : (
+            <ChevronDown
+              color="white"
+              width={20}
+              height={20}
+              className="ml-3 inline-block w-auto h-auto"
+            />
+          )}
         </button>
       </div>
       {drop && (
-        <DisplayNotes userNotes={note.user_notes} generatedNotes={note.generated_notes} recallNoteType={false}/>
+        <DisplayNotes
+          userNotes={note.user_notes}
+          generatedNotes={note.generated_notes}
+          recallNoteType={false}
+        />
       )}
     </motion.div>
   );

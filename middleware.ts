@@ -3,7 +3,7 @@ import { decryptRefresh, decryptSession, TokenPayload } from "./actions/manageSe
 
 const protectedRoutes = [''];
 const publicRoutes = ['/', '/signUp', '/logIn', '/about'];
-const schoolProtectedRoutes = ['/school/dashboard'];
+const schoolProtectedRoutes = ['/school/students', '/school/generateKey'];
 const schoolPublicRoutes = ['/school', '/school/signUp'];
 
 export default async function middleware(req: NextRequest) {
@@ -38,7 +38,7 @@ export default async function middleware(req: NextRequest) {
             return NextResponse.redirect(new URL('/dictionary/inputWord', req.nextUrl));
         else
             return NextResponse.next();
-    }else if(isSchoolPublic){ 
+    }else if(isSchoolPublic){ // middleware for school platform
         if(!schoolSessionToken)
             return NextResponse.next();
         const payload = await decryptSession();

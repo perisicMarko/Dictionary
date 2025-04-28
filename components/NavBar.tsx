@@ -2,11 +2,11 @@
 import { useContext, useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import { TokenContext } from "@/components/TokenContextProvider";
 import { motion } from "framer-motion";
 import { containerVariants } from "@/lib/animationVariants";
 import { logOutUser } from "@/actions/auth/user";
+import { LogOut } from "lucide-react";
 
 export function NavBar() {
   const path = usePathname();
@@ -60,16 +60,13 @@ export function NavBar() {
             <input name="accessToken" value={accessToken} hidden readOnly/>
             <button
               type="submit"
-              className="hover:scale-115 scale-105 cursor-pointer"
+              className="hover:scale-115 scale-105 cursor-pointer text-white hover:text-blue-400"
             >
-              {" "}
-              <Image
-                src="/logOut.svg"
-                alt="logOut icon"
+              <LogOut
+                
                 width={20}
                 height={20}
-                priority
-              ></Image>{" "}
+              />
             </button>
           </form>
         </div>

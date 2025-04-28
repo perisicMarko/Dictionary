@@ -27,7 +27,6 @@ export function TokenContextProvider({
 
       const data = await response.json();
       if (data.sessionExpiring) setSessionExpiring(true);
-      console.log(data.accessToken);
       setAccessToken(data.accessToken);
     };
     //call it manualy for the first time

@@ -41,11 +41,14 @@ export async function generateActivationKey(state: {success: boolean, message: s
 
     const subscription = await GetSubscription(inputEmail || '');
 
-    if(!subscription && !subscription){
+    if(!subscription){
         const retVal = await CreateActivationKey(inputEmail || '', activationKeyExpirationDate, schoolId);
         if(!retVal)
             throw new Error('Activation Key creation failed, check manageSchools.');
     }else{
+        if(!subscription?.languages?.includes(formData.get('language')?.toString() || '')){
+            subscription.languages += 'e';
+        }
         const retVal = await UpdateActivationKey(inputEmail || '', activationKeyExpirationDate, schoolId);
         if(!retVal)
             throw new Error('Activation Key update failed, check manageSchools.');

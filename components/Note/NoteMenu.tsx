@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { containerVariants } from "@/lib/animationVariants";
 import Link from "next/link";
+import { NotebookPen } from "lucide-react";
 
 export default function HistoryNoteMenu({ noteId }: { noteId: number }) {
   return (
@@ -9,20 +9,15 @@ export default function HistoryNoteMenu({ noteId }: { noteId: number }) {
       initial="hidden"
       animate="show"
       variants={containerVariants}
-      className="bg-white/80 z-10 rounded-2xl p-1"
+      className="bg-white/80 z-10 rounded-2xl p-2"
     >
       <Link
         href={"/dictionary/yourWords/edit/" + noteId}
         onClick={(e) => e.stopPropagation()}
+        title='edit notes'
       >
-        <Image
-          className="scale-75 hover:scale-90 cursor-pointer"
-          title="edit note"
-          src="/edit.svg"
-          width={30}
-          height={30}
-          alt="edit icon"
-        ></Image>
+        <NotebookPen color='#1E293B' className="hover:scale-105 cursor-pointer"/>
+        
       </Link>
     </motion.div>
   );
