@@ -64,7 +64,7 @@ export default function Dashboard() {
             <motion.label htmlFor="language">Key for:</motion.label>
             <select
               name="language"
-              className="text-white outline-none"
+              className="text-white outline-none rounded-3xl p-2 hover:text-blue-300"
               defaultValue={-1}
               onChange={(e) => setLanguage(e.target.value)}
             >

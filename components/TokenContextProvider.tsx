@@ -41,10 +41,11 @@ export function TokenContextProvider({
 
   return (
     <TokenContext.Provider value={{ accessToken, setAccessToken }}>
-      {sessionExpiring && (
+      {sessionExpiring ? (
         <SessionExpiredWindow collapseWindow={setSessionExpiring} />
+      ) : (
+        children
       )}
-      {!sessionExpiring && children}
     </TokenContext.Provider>
   );
 }

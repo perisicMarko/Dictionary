@@ -2,8 +2,9 @@ import { logOutUser } from "@/actions/auth/user";
 import { restoreSession } from "@/actions/manageSession/restoreSession";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { motion } from "framer-motion";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useActionState } from "react";
 import { useRouter } from "next/navigation";
+import Loader from "./Loader";
 
 export default function SessionExpiredWindow({
   collapseWindow,
@@ -11,6 +12,9 @@ export default function SessionExpiredWindow({
   collapseWindow: Dispatch<SetStateAction<boolean>>;
 }) {
   const router = useRouter();
+  const [state, action, isPending] = useActionState(restoreSession, undefined);
+
+  if (state?.status === 401) router.push("/");
 
   return (
     <motion.div
@@ -28,13 +32,13 @@ export default function SessionExpiredWindow({
       <form
         action={() => {
           collapseWindow(false);
-          restoreSession();
+          action();
         }}
         className="mt-5"
       >
         <div className="grid grid-cols-2 gap-2">
           <button className="primaryBtn" type="submit">
-            Restore Session
+            {isPending ? "Restore Session" : <Loader />}
           </button>
           <button
             className="primaryBtn"
