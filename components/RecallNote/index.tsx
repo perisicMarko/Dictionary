@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Menu } from 'lucide-react';
 import { motion } from "framer-motion";
 import DisplayNotes from '@/components/shared/DisplayNotes';
+import { containerVariants } from '@/lib/animationVariants';
 
 
 export default function RecallNote({
@@ -29,9 +30,9 @@ export default function RecallNote({
 
   return (
     <motion.div
-      initial={{ x: -100, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+      initial='hidden'
+      animate='show'
+      variants={containerVariants}
       className="bg-slate-800 relative w-3/4 sm:w-[600px] max-h-[800px] rounded-4xl mt-8 p-7"
       onClick={() => {
         setMenu(false);

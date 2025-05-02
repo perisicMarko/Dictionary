@@ -28,7 +28,7 @@ export async function resetPassword(state: { message: string; status: number; er
   const now = addMinutes(new Date(), 15);
   const retValUpdateUserToken = await UpdateUsersRefreshToken(user.id, token, now);
   
-  const retValEmail = await sendEmail(email, token, user.id);
+  const retValEmail = await sendEmail(email, token);
 
   if(retValEmail.status != 200 || !retValUpdateUserToken)
     throw new Error('Something is wrong check resetPassword/index.ts')

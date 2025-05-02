@@ -53,7 +53,7 @@ export default function Dashboard() {
             <input
               name="courseEnd"
               type="date"
-              className="text-white block w-full outline-2 !outline-white rounded-3xl p-1"
+              className="text-white block w-full appearance-none outline-2 !outline-white rounded-3xl p-1"
               onChange={(e) => setDate(e.target.value)}
             />
           </motion.div>
@@ -64,7 +64,7 @@ export default function Dashboard() {
             <label htmlFor="language">Key for:</label>
             <select
               name="language"
-              className="text-white outline-none rounded-3xl hover:text-blue-300 border-2 border-white p-1 w-full"
+              className="text-white outline-none appearance-none rounded-3xl border-2 border-white p-1 w-full hover:text-blue-400"
               defaultValue={-1}
               onChange={(e) => setLanguage(e.target.value)}
             >

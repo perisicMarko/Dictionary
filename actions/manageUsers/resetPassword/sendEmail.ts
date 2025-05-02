@@ -1,7 +1,7 @@
 'use server'
 import nodemailer from 'nodemailer';
 
-export default async function sendEmail(email : string, token : Base64URLString, userId : number){
+export default async function sendEmail(email : string, token : Base64URLString){
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -15,7 +15,7 @@ export default async function sendEmail(email : string, token : Base64URLString,
         from: process.env.EMAIL_USER,
         to: email,
         subject: 'Reset password',
-        text: 'Click on this link to reset your password: https://dictionary-six-tau.vercel.app/user/' + userId + '/resetPassword/' + token,
+        text: 'Click on this link to reset your password: https://dictionary-six-tau.vercel.app/resetPassword/' + token,
       };
     
     try {

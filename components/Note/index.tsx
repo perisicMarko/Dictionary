@@ -7,6 +7,7 @@ import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import NoteMenu from "./NoteMenu";
 import { ChevronDown, ChevronUp, Menu } from "lucide-react";
+import { containerVariants } from "@/lib/animationVariants";
 
 export default function Note({
   prop,
@@ -29,9 +30,9 @@ export default function Note({
 
   return (
     <motion.div
-      initial={{ x: -50, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+      initial='hidden'
+      animate='show'
+      variants={containerVariants}
       ref={containerRef}
       className="relative bg-slate-800 w-3/4 sm:w-[600px] max-h-[720px] sm:max-h-[800px] rounded-4xl mt-8 p-7"
       title={title}
