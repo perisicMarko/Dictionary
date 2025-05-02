@@ -1,7 +1,7 @@
 "use client";
 import { editNote, getNoteById } from "@/actions/manageNotes";
 import { TDBNoteEntry } from "@/lib/types";
-import { useEffect, useState, useContext } from "react";
+import { useLayoutEffect, useState, useContext } from "react";
 import { motion } from "framer-motion";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -18,7 +18,7 @@ export default function Edit({pathSrc}: {pathSrc: string}) {
   const router = useRouter();
   const tokenContext = useContext(TokenContext);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     async function getNote() {
       const n = await getNoteById(Number(noteId));
       setNote(n);
@@ -28,12 +28,11 @@ export default function Edit({pathSrc}: {pathSrc: string}) {
 
   async function onSubmitEditHandle(formData: FormData) {
       const response = await editNote(formData.get('userNotes')?.toString() || '', formData.get('generatedNotes')?.toString() || '', Number(noteId), tokenContext?.accessToken || '');
-      if (!response?.success) 
-        router.push(pathSrc);
+      if (!response?.success)
+        console.log('Note update failed, returning to yourWords page');
       else if(response.status === 201)
         tokenContext?.setAccessToken(response.accessToken || '');
-      else 
-        console.log('Note update failed, returning to yourWords page');
+
       router.push(pathSrc);
     };
 

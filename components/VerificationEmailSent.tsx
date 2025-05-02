@@ -15,11 +15,11 @@ export function VerificationEmailSent({ email }: { email: string }) {
         initial="hidden"
         animate="show"
         variants={containerVariants}
-        className="flex flex-col items-center sm:w-[500px] w-3/4 rounded-3xl bg-slate-800 p-5 mt-15 sm:mt-20"
+        className="flex flex-col items-center sm:w-[500px] w-3/4 rounded-3xl bg-slate-800 p-3 sm:p-5 mt-15 sm:mt-20"
       >
         <motion.p variants={itemVariants} className="text-center text-white">
-          Verification email has been sent. Check your email{" "}
-          <b className="text-blue-300">spam</b> section and mark email as{" "}
+          <b>Verification email has been sent.<br/> </b>
+          Check your email <b className="text-blue-300"> spam</b> section and mark email as{" "}
           <b className="text-blue-300">report not spam</b> so you can receive our
           messages.
           <br />

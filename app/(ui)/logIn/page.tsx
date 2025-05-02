@@ -60,7 +60,7 @@ export default function LogIn() {
         animate="show"
         variants={containerVariants}
         className={
-          "bg-slate-800 rounded-3xl border-2 border-blue-50 w-1/2 md:w-[500px] " + (isPending && " opacity-50 ") +
+          "bg-slate-800 rounded-3xl border-2 border-blue-50 authWidth " + (isPending && " opacity-50 ") +
           (state?.subscription !== "" ? " mt-5 " : " mt-8 sm:mt-10 md:mt-12 ")
         }
         
@@ -71,7 +71,7 @@ export default function LogIn() {
           </Link>
         </div>
         <form
-          className="form flex flex-col items-center justify-center m-5"
+          className="form flex flex-col items-center justify-center p-3"
           action={(e) => {
             action(e);
             setSemaphore(true);

@@ -24,10 +24,10 @@ export default function LogIn() {
       initial="hidden"
       animate="show"
       variants={containerVariants}
-      className="mt-25 sm:mt-30 md:mt-30 bg-slate-800 rounded-3xl border-2 border-blue-50 w-[1/2] md:w-[500px]"
+      className="mt-25 sm:mt-30 md:mt-30 bg-slate-800 rounded-3xl border-2 border-blue-50 authWidth"
     >
       <form
-        className="form flex flex-col items-center justify-center m-5"
+        className="form flex flex-col items-center justify-center p-4"
         action={(e) => {
           setEmail('');
           setPass('');

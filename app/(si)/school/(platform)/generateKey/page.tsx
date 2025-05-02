@@ -34,37 +34,37 @@ export default function Dashboard() {
         <motion.form
           variants={itemVariants}
           action={action}
-          className="p-5 space-y-3"
+          className="p-5 space-y-2"
         >
-          <motion.div className="grid grid-cols-[auto_1fr] gap-2 justify-center items-center">
+          <motion.div className="flex flex-col justify-center items-start gap-1" variants={itemVariants}>
             <label htmlFor="email">Email of the course atendee:</label>
             <input
               name="email"
               type="text"
-              className="w-full bg-white text-slate-800 rounded-3xl h-[41px] p-3"
+              className="w-full bg-white text-slate-800 rounded-3xl block p-2"
               onChange={(e) => setEmail(e.target.value)}
             />
             {state?.email != "" && (
               <motion.span className="error">{state?.email}</motion.span>
             )}
           </motion.div>
-          <motion.div className="grid grid-cols-[auto_1fr] gap-2 items-center justify-center">
-            <motion.label htmlFor="courseEnd">End of the course:</motion.label>
-            <motion.input
+          <motion.div className="flex flex-col justify-center items-start gap-1" variants={itemVariants}>
+            <label htmlFor="courseEnd">End of the course:</label>
+            <input
               name="courseEnd"
               type="date"
-              className="text-white block outline-2 !outline-white rounded-3xl p-1"
+              className="text-white block w-full outline-2 !outline-white rounded-3xl p-1"
               onChange={(e) => setDate(e.target.value)}
             />
           </motion.div>
           {state?.date != "" && (
             <motion.span className="error mb-5">{state?.date}</motion.span>
           )}
-          <motion.div className="grid grid-cols-[auto_1fr] gap-2 items-center justify-center mt-3">
-            <motion.label htmlFor="language">Key for:</motion.label>
+          <motion.div className="flex flex-col items-start justify-center gap-1" variants={itemVariants}>
+            <label htmlFor="language">Key for:</label>
             <select
               name="language"
-              className="text-white outline-none rounded-3xl p-2 hover:text-blue-300"
+              className="text-white outline-none rounded-3xl hover:text-blue-300 border-2 border-white p-1 w-full"
               defaultValue={-1}
               onChange={(e) => setLanguage(e.target.value)}
             >
@@ -72,16 +72,18 @@ export default function Dashboard() {
               <option value="e">English</option>
             </select>
           </motion.div>
-          <motion.button
-            className={
-              "center primaryBtn " +
-              ((email === "" || date === "" || language === "") &&
-                " opacity-50")
-            }
-            disabled={email === "" || date === "" || language === ""}
-          >
-            {isPending ? <Loader /> : "Generate key"}
-          </motion.button>
+          <div className="mt-5">
+            <motion.button
+              className={
+                "center primaryBtn " +
+                ((email === "" || date === "" || language === "") ?
+                  " opacity-50" : "")
+              }
+              disabled={email === "" || date === "" || language === ""}
+            >
+              {isPending ? <Loader /> : "Generate key"}
+            </motion.button>
+          </div>
         </motion.form>
       </motion.div>
       {state?.success && (

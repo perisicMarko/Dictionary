@@ -2,7 +2,7 @@
 import { useParams } from "next/navigation";
 import { updateUsersPassword } from "@/actions/manageUsers/resetPassword/index";
 import { getUserByToken } from "@/actions/manageUsers";
-import { useEffect, useState, useActionState } from "react";
+import { useLayoutEffect, useState, useActionState } from "react";
 import { motion } from "framer-motion";
 import { TUser } from "@/lib/types";
 import Link from "next/link";
@@ -20,7 +20,7 @@ export default function ResetPassword() {
     undefined
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!token) return;
 
     const fetchUser = async () => {

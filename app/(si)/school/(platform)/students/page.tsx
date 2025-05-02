@@ -3,7 +3,7 @@ import { getUsersBySchool } from "@/actions/manageUsers";
 import { TStudent } from "@/lib/types";
 import { useState, useLayoutEffect } from "react";
 import { motion } from "framer-motion";
-import { LogOut, Menu,  User, UserSearchIcon, Volume2 } from "lucide-react";
+import { User, UserSearchIcon } from "lucide-react";
 import { Languages } from "lucide-react";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 
@@ -38,7 +38,6 @@ export default function Page() {
     );
   }
 
-
   const filteredUsers = users?.filter((user: TStudent) => {
     return user.email.toLowerCase().trim().includes(search.toLowerCase().trim()) ||
     (user.firstName.toLowerCase().trim() + ' ' + user.lastName.toLowerCase().trim()).includes(search.toLowerCase().trim());
@@ -50,16 +49,16 @@ export default function Page() {
         initial="hidden"
         animate="show"
         variants={containerVariants}
-        className="rounded-3xl bg-slate-800 grid grid-cols-[auto_1fr] gap-3 mt-20 appWidth p-3"
+        className="rounded-3xl bg-slate-800 grid grid-cols-[auto_1fr] mt-20 appWidth p-3"
       >
         <UserSearchIcon color="white" />
         <input
           placeholder="Search your students here..."
-          className="text-white outline-0 w-full h-full"
+          className="text-white outline-0 w-full h-full pl-3"
           onChange={(e) => setSearch(e.target.value)}
         />
       </motion.div>
-      <div className="mt-5 center w-full h-full active:outline-0">
+      <div className="mt-5 flex flex-col items-center space-y-4 w-full h-full active:outline-0">
         {filteredUsers?.map((u: TStudent) => {
           return (
             <motion.div
@@ -90,12 +89,6 @@ export default function Page() {
             </motion.div>
           );
         })}
-      </div>
-      <div className="appWidth mt-5 bg-slate-800">
-        <span>hero</span>
-        <Menu  color='white'></Menu>
-        <Volume2 color='white'></Volume2>
-        <LogOut color='white'></LogOut>
       </div>
     </>
   );
