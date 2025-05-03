@@ -31,7 +31,7 @@ export function Help({
         className="flex flex-col md:flex-row justify-center items-center"
       >
         <Image
-          className="inline-block rounded-4xl mr-3 w-auto h-auto"
+          className="block xl:inline-block rounded-4xl mr-3 w-auto h-auto"
           width={350}
           height={280}
           src="/wordInput.png"
@@ -41,14 +41,14 @@ export function Help({
           variants={{
             hidden: {
               opacity: 0,
-              x: 100,
+              x: 50,
             },
             show: {
               opacity: 1,
               x: 0,
             },
           }}
-          className="inline-block bg-slate-800 text-white rounded-2xl p-2 text-center sm:w-[200px]"
+          className="xl:inline-block bg-slate-800 text-white rounded-2xl p-2 text-center sm:w-[200px]"
         >
           Input the word you would like to remember, then click the
           &quot;Generate&quot; button.
@@ -59,7 +59,7 @@ export function Help({
         className="mt-5 flex flex-col md:flex-row justify-center items-center"
       >
         <Image
-          className="inline-block rounded-4xl mr-3 w-auto h-auto"
+          className="block xl:inline-block rounded-4xl mr-3 w-auto h-auto"
           width={350}
           height={50}
           src="/generateNotes.png"
@@ -69,14 +69,14 @@ export function Help({
           variants={{
             hidden: {
               opacity: 0,
-              x: 100,
+              x: 50,
             },
             show: {
               opacity: 1,
               x: 0,
             },
           }}
-          className="inline-block bg-slate-800 text-white rounded-3xl p-2 text-center sm:w-[200px]"
+          className="block xl:inline-block bg-slate-800 text-white rounded-3xl p-2 text-center sm:w-[200px]"
         >
           Pronunciation of word and two text areas will pop up: one filled with
           generated notes from the app and an empty one reserved for your

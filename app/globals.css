@@ -22,17 +22,17 @@ input{
   @apply w-full bg-blue-400 text-white rounded-3xl block m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer;
 }
 .primaryBtn:hover {
-  @apply scale-105;
+  @apply xl:scale-105;
 }
 .primaryBtn:active {
-  @apply scale-95;
+  @apply xl:scale-95;
 }
 
 .xBtn {
   @apply scale-125 cursor-pointer;
 }
 .xBtn:hover {
-  @apply scale-150;
+  @apply xl:scale-150;
 }
 
 .textColor {

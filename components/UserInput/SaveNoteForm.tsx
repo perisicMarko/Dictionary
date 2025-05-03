@@ -58,7 +58,7 @@ export default function SaveNoteForm({
   };
 
 
-  let buttonStyle = "bg-blue-400 text-white hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block";
+  let buttonStyle = "bg-blue-400 text-white xl:hover:scale-105 xl:active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block";
   if(!isErrorNote(note) && note)
     buttonStyle += " col-span-1";
   else

@@ -65,7 +65,7 @@ export function GradeForm({
             name="quality"
             onClick={() => toggleMenu()}
             onChange={(e) => changeQuality(Number(e.target.value))}
-            className="block text-white hover:scale-105 bg-blue-400 w-full h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] appearance-none cursor-pointer py-2 rounded-3xl focus:outline-none px-3 text-xs sm:text-xl mt-2"
+            className="block text-white xl:hover:scale-105 bg-blue-400 w-full h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] appearance-none cursor-pointer py-2 rounded-3xl focus:outline-none px-3 text-xs sm:text-xl mt-2"
           >
             <option value="-1" disabled>
               Grade from 0-5{" "}
