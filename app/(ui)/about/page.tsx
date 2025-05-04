@@ -1,21 +1,22 @@
-import MotionWraper from "@/components/shared/MotionWraper";
+"use client";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 
 export default function Page() {
-
   return (
-    <MotionWraper
-      container={true}      
+    <motion.div
+      initial="hidden"
+      animate="show"
       variants={containerVariants}
-      style={"mt-10 m-5 sm:w-[660px] bg-slate-800 rounded-2xl border-2 border-blue-50 overflow-auto"}
+      className="mt-10 m-5 sm:w-[660px] bg-slate-800 rounded-2xl border-2 border-blue-50 overflow-auto"
     >
       <div className="flex justify-end bg-slate-950">
         <Link className="xBtn mr-4 py-1 text-white" href="/">
           <b>x</b>
         </Link>
       </div>
-      <MotionWraper variants={itemVariants} style={"p-5"} container={false}>
+      <motion.div variants={itemVariants} className="p-5">
         <h2 className="title text-white">What does this app do?</h2>
         <p className="text-white">
           This app helps you actively recall words you would like to learn by
@@ -64,7 +65,7 @@ export default function Page() {
           More information about the app can be found on each page&apos;s
           dedicated help link.
         </h3>
-      </MotionWraper>
-    </MotionWraper>
+      </motion.div>
+    </motion.div>
   );
 }

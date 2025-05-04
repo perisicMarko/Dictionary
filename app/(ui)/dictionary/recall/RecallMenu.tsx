@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { useRouter } from "next/navigation";
 import { setAsLearned } from "@/actions/manageNotes";
-import { TokenContext } from "../TokenContextProvider";
+import { TokenContext } from "../../../../components/TokenContextProvider";
 import { useContext } from "react";
 import { NotebookPen, Trash2 } from "lucide-react";
 

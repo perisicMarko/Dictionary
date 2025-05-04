@@ -6,13 +6,13 @@ export default function Words({
   historyNote,
   handle,
 }: {
-  props: TDBNoteEntry[];
+  props: TDBNoteEntry[] | undefined;
   historyNote: boolean;
   handle: () => void;
 }) {
   return (
     <>
-      {props.map((w: TDBNoteEntry) => {
+      {props?.map((w: TDBNoteEntry) => {
         return (
           <Note
             key={w.id}

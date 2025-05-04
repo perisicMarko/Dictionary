@@ -1,5 +1,5 @@
 "use client";
-import { VerificationEmailSent } from "./../../../components/VerificationEmailSent";
+import VerificationEmailSent from "./VerificationEmailSent";
 import Link from "next/link";
 import { useActionState, useState } from "react";
 import { authenticateSignUp } from "@/actions/auth/user";

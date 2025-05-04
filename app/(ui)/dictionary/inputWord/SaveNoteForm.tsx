@@ -1,11 +1,13 @@
-import AudioPlayer from "../shared/AudioPlayer";
+
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { containerVariants, itemVariants, transition } from "@/lib/animationVariants";
 import { useRef, useContext } from 'react';
 import { TWordApp } from "@/lib/types";
-import { TokenContext } from "../TokenContextProvider";
+
 import { saveNotes } from "@/actions/manageNotes";
+import { TokenContext } from "@/components/TokenContextProvider";
+import AudioPlayer from "@/components/AudioPlayer";
 
 
 export default function SaveNoteForm({

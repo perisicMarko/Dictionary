@@ -2,11 +2,11 @@
 import { GradeForm } from './GradeForm';
 import RecallMenu from './RecallMenu';
 import { TDBNoteEntry } from "@/lib/types";
-import AudioPlayer from "../shared/AudioPlayer";
+import AudioPlayer from "../../../../components/AudioPlayer";
 import { useState } from "react";
 import { Menu } from 'lucide-react';
 import { motion } from "framer-motion";
-import DisplayNotes from '@/components/shared/DisplayNotes';
+import DisplayNotes from '@/components/DisplayNotes';
 import { containerVariants } from '@/lib/animationVariants';
 
 

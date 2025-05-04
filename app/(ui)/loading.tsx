@@ -16,7 +16,7 @@ export default function Loading() {
           repeat: Infinity,
           repeatDelay: 0,
         }}
-        className="w-[25px] h-[25px] sm:w-[50px] sm:h-[50px] md:w-[100px] md:h-[100px] xl:w-[150px] xl:h-[150px] bg-slate-800"
+        className="w-[25px] h-[25px] sm:w-[50px] sm:h-[50px] md:w-[100px] md:h-[100px] xl:w-[150px] xl:h-[150px] bg-slate-800 rounded-2xl"
       ></motion.div>
     </div>
   );

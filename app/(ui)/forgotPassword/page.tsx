@@ -67,7 +67,7 @@ export default function ForgotPassword() {
             {state.error}
           </motion.span>
         )}
-        <button className={"primaryBtn center " + (email === '' && " opacity-50")} disabled={email === ''} >
+        <button className={"primaryBtn !mt-3 center " + (email === '' && " opacity-50")} disabled={email === ''} >
           {isPending ? <Loader /> : "Send email"}
         </button>
       </motion.form>

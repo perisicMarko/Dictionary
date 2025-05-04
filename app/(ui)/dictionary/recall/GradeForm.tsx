@@ -1,10 +1,11 @@
 import { motion } from "framer-motion";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
-import { useContext } from "react";
-import { TokenContext } from "../TokenContextProvider";
+import { useContext, useState } from "react";
+import { TokenContext } from "../../../../components/TokenContextProvider";
 import { updateReviewDate } from "@/actions/manageNotes";
 import { useRouter } from "next/navigation";
 import { ChevronDown } from "lucide-react";
+import Loader from "../../../../components/Loader";
 
 export function GradeForm({
   toggleMenu,
@@ -20,6 +21,7 @@ export function GradeForm({
   rerenderHandle: () => void;
 }) {
   const tokenContext = useContext(TokenContext);
+  const [isPending, setIsPending] = useState(false);
   const router = useRouter();
 
   async function onSubmitGradeHandle(formData: FormData) {
@@ -87,8 +89,13 @@ export function GradeForm({
         </div>
 
         {quality != -1 && (
-          <motion.button variants={itemVariants} className="primaryBtn">
-            <b>Grade</b>
+          <motion.button
+            type="submit"
+            variants={itemVariants}
+            className="primaryBtn center"
+            onClick={() => setIsPending(true)}
+          >
+            {isPending ? <Loader /> : <b>Grade</b>}
           </motion.button>
         )}
       </motion.form>

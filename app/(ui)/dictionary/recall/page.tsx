@@ -1,11 +1,12 @@
 "use client";
-import RecallNoteHelp from "@/components/RecallNote/Help";
+import RecallNoteHelp from "@/app/(ui)/dictionary/recall/Help";
 import { getRecallNotes } from "@/actions/manageNotes";
 import { useState, useContext, useLayoutEffect } from "react";
 import { TDBNoteEntry } from "@/lib/types";
-import RecallNote from "@/components/RecallNote";
+import RecallNote from "@/app/(ui)/dictionary/recall/RecallNote";
 import { TokenContext } from "@/components/TokenContextProvider";
-import ZeroNotesMessage from "@/components/shared/ZeroNotesMessage";
+import ZeroNotesMessage from "@/components/ZeroNotesMessage";
+import Loading from "../../loading";
 
 export default function Page() {
   const [words, setWords] = useState<TDBNoteEntry[] | undefined>();
@@ -28,10 +29,16 @@ export default function Page() {
     <>
       <RecallNoteHelp />
 
-      {words && words.length > 0 ? (
+      {!words ? (
+        <Loading />
+      ) : words.length > 0 ? (
         words?.map((w: TDBNoteEntry) => {
           return (
-            <RecallNote key={w.id} note={w} rerenderHandle={onGradeSubmit}></RecallNote>
+            <RecallNote
+              key={w.id}
+              note={w}
+              rerenderHandle={onGradeSubmit}
+            ></RecallNote>
           );
         })
       ) : (

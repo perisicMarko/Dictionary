@@ -1,8 +1,8 @@
 "use client";
-import DisplayNotes from "../shared/DisplayNotes";
+import DisplayNotes from "../DisplayNotes";
 import HistoryNoteMenu from "./HistoryNoteMenu";
 import { TDBNoteEntry } from "@/lib/types";
-import AudioPlayer from "../shared/AudioPlayer";
+import AudioPlayer from "../AudioPlayer";
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import NoteMenu from "./NoteMenu";
