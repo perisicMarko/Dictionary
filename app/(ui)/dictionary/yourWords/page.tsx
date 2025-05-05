@@ -14,6 +14,7 @@ export default function YourWords() {
   const [words, setWords] = useState<TDBNoteEntry[] | undefined>();
   const [search, setSearch] = useState("");
   const tokenContext = useContext(TokenContext);
+  const [showSwitch, setShowSwitch] = useState(false);
 
   useEffect(() => {
     const fetch = async () => {
@@ -26,7 +27,7 @@ export default function YourWords() {
   const filteredWords =
     words?.filter((w) => {
       return w.word.toLowerCase().trim().includes(search.toLowerCase().trim());
-    }) ?? undefined;
+    });
 
   function updateSearch(word: string) {
     setSearch(word);
@@ -41,6 +42,12 @@ export default function YourWords() {
           Bonus help: shortcut for focusing search bar is just key F.
         </motion.p>
       </SearchBar>
+
+      <div className="appWidth bg-slate-800 rounded-3xl grid grid-cols-3 mt-5">
+        <div className={"text-white rounded-l-3xl w-full h-full p-3 cursor-pointer flex justify-end " + (showSwitch && " bg-blue-400 font-bold")} onClick={() => setShowSwitch(true)}>Show drawers</div>
+        <div className={(showSwitch ? "bg-gradient-to-l " : "bg-gradient-to-r ") + "from-slate-800 to-blue-400"}></div>
+        <div className={"text-white rounded-r-3xl w-full h-full p-3 cursor-pointer " + (!showSwitch && " bg-blue-400 font-bold")} onClick={() => setShowSwitch(false)}>Show notes</div>
+      </div>
 
       {filteredWords?.length === 0 && search != "" && (
         <ZeroNotesMessage

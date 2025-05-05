@@ -27,7 +27,7 @@ export default function History() {
   const filteredWords =
     words?.filter((w) => {
       return w.word.toLowerCase().trim().includes(search.toLowerCase().trim());
-    }) ?? undefined;
+    });
 
   function updateSearch(word: string) {
     setSearch(word);
