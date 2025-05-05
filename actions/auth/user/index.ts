@@ -255,8 +255,10 @@ export async function authenticateLogIn(state: logInStateType, formData: FormDat
     return {errors: undefined, email: '', success: true, subscription: ''};
 }
 
+
 export async function logOutUser(){
     (await cookies()).delete("refreshToken");
+    
 
-    return {success: true};
+    return {success : true};
 }

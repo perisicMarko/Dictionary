@@ -13,7 +13,6 @@ export function NavBar() {
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(true);
   const tokenContext = useContext(TokenContext);
-  const accessToken = tokenContext?.accessToken;
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
@@ -40,6 +39,12 @@ export function NavBar() {
   ];
   const isMatch = navigationRoutes.includes(path);
 
+  const handleLogOut = async () => {
+    tokenContext?.setAccessToken('');
+    await logOutUser();
+    router.push('/');
+  };
+
   return (
     isVisible &&
     isMatch && (
@@ -50,25 +55,16 @@ export function NavBar() {
         className="fixed top-0 z-20 bg-slate-800 w-full h-[50px] grid grid-cols-[auto_1fr] items-center"
       >
         <div className="flex justify-start items-center ml-3 md:ml-7">
-          <form
-            action={() => {
-              tokenContext?.setAccessToken("");
-              logOutUser();
-              router.push("/");
-            }}
-          >
-            <input name="accessToken" value={accessToken} hidden readOnly/>
             <button
               type="submit"
               className="hover:scale-115 scale-105 cursor-pointer text-white hover:text-blue-400"
+              onClick={() => handleLogOut()}
             >
               <LogOut
-                
                 width={20}
                 height={20}
               />
             </button>
-          </form>
         </div>
         <div className="flex justify-end items-center xl:space-x-5 mr-2 sm:mr-5">
           <Link

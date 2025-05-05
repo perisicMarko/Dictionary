@@ -3,7 +3,7 @@ import { SearchBar } from "../../../../components/Note/SearchBar";
 import { getUsersHistory } from "@/actions/manageNotes";
 import Words from "@/components/Words";
 import { TDBNoteEntry } from "@/lib/types";
-import { useState, useContext, useLayoutEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import { TokenContext } from "@/components/TokenContextProvider";
 import ZeroNotesMessage from "@/components/ZeroNotesMessage";
 import { itemVariants } from "@/lib/animationVariants";
@@ -16,7 +16,7 @@ export default function History() {
   const [refresh, setRefresh] = useState(false);
   const [words, setWords] = useState<TDBNoteEntry[] | undefined>(undefined);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const fetch = async () => {
       const words = await getUsersHistory(tokenContext?.accessToken || "");
       setWords(words);

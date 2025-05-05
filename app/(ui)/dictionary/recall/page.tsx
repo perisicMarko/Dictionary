@@ -1,7 +1,7 @@
 "use client";
 import RecallNoteHelp from "@/app/(ui)/dictionary/recall/Help";
 import { getRecallNotes } from "@/actions/manageNotes";
-import { useState, useContext, useLayoutEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import { TDBNoteEntry } from "@/lib/types";
 import RecallNote from "@/app/(ui)/dictionary/recall/RecallNote";
 import { TokenContext } from "@/components/TokenContextProvider";
@@ -13,7 +13,7 @@ export default function Page() {
   const [refresh, setRefresh] = useState(false);
   const tokenContext = useContext(TokenContext);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     async function fetchNotes() {
       const data = await getRecallNotes(tokenContext?.accessToken || "");
       setWords(data);

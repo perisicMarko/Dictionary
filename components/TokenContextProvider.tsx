@@ -1,5 +1,5 @@
 "use client";
-import { useLayoutEffect, createContext, useState } from "react";
+import { useEffect, createContext, useState } from "react";
 import SessionExpiredWindow from "./SessionExpiredWindow";
 
 export type TokenContextType = {
@@ -17,7 +17,7 @@ export function TokenContextProvider({
   const [accessToken, setAccessToken] = useState("");
   const [sessionExpiring, setSessionExpiring] = useState(false);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const fetchToken = async () => {
       const response = await fetch("/api/getAccessToken", {
         method: "POST",

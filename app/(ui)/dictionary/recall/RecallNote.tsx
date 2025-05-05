@@ -53,7 +53,7 @@ export default function RecallNote({
           <RecallMenu toggleMenu={toggleMenu} changeQuality={changeQuality} noteId={note.id} rerenderHandle={rerenderHandle} />
         )}
       </div>
-      <span className=" text-white" title="word">
+      <span className="select-none text-white" title="word">
         <b>{note.word}</b>
       </span>
 

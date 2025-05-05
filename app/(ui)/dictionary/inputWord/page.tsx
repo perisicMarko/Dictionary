@@ -79,6 +79,7 @@ export default function UserInput() {
         isDisabled={isDisabled}
         changeGenerate={changeGenerate}
         changeRequest={changeRequest}
+        request={request}
         />
       ) : (
         <Help toggleHelp={toggleHelp} help={help} />

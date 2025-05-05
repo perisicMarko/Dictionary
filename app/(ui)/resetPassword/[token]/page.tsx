@@ -1,7 +1,7 @@
 "use client";
 import { useParams } from "next/navigation";
 import { getUserByToken } from "@/actions/manageUsers";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { TUser } from "@/lib/types";
 import { isBefore } from "date-fns";
 import NoValidToken from "./NoValidToken";
@@ -14,7 +14,7 @@ export default function ResetPassword() {
   if (typeof token === "object") token = token[0];
   const [user, setUser] = useState<TUser | undefined>();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!token) {
       return;
     }

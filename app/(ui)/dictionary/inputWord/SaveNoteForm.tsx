@@ -2,12 +2,13 @@
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { containerVariants, itemVariants, transition } from "@/lib/animationVariants";
-import { useRef, useContext } from 'react';
+import { useRef, useContext, useState } from 'react';
 import { TWordApp } from "@/lib/types";
 
 import { saveNotes } from "@/actions/manageNotes";
 import { TokenContext } from "@/components/TokenContextProvider";
 import AudioPlayer from "@/components/AudioPlayer";
+import Loader from "@/components/Loader";
 
 
 export default function SaveNoteForm({
@@ -20,6 +21,7 @@ export default function SaveNoteForm({
     isDisabled,
     changeGenerate,
     changeRequest,
+    request,
 }:
 {
     cleanUp: (e: number) => void;
@@ -31,14 +33,20 @@ export default function SaveNoteForm({
     isDisabled: boolean;
     changeGenerate: (e: boolean) => void;
     changeRequest: (e: boolean) => void;
+    request: boolean;
 }) {
     const tokenContext = useContext(TokenContext);
     const router = useRouter();
     const wordInputRef = useRef<HTMLInputElement>(null);
+    const [isSaving, setIsSaving] = useState(false);
 
   async function handleSubmit(formData: FormData) {
-    if (tokenContext?.accessToken == undefined) 
+    
+    if (tokenContext?.accessToken == undefined) {
+      setIsSaving(false);
       return;
+    }
+
     cleanUp(0);
   
     const res = await saveNotes(formData.get('word')?.toString() || '', formData.get('audio')?.toString() || '', formData.get('userNotes')?.toString() || '', formData.get('generatedNotes')?.toString() || '', formData.get('accessToken')?.toString() || '');
@@ -51,6 +59,8 @@ export default function SaveNoteForm({
       tokenContext?.setAccessToken(newToken);
     } else if (res?.status === 401) 
       router.push("/logIn");
+
+    setIsSaving(false);
   }
 
   const isErrorNote = (
@@ -60,7 +70,7 @@ export default function SaveNoteForm({
   };
 
 
-  let buttonStyle = "bg-blue-400 text-white xl:hover:scale-105 xl:active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block";
+  let buttonStyle = "center bg-blue-400 text-white xl:hover:scale-105 xl:active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block";
   if(!isErrorNote(note) && note)
     buttonStyle += " col-span-1";
   else
@@ -151,11 +161,12 @@ export default function SaveNoteForm({
                 className="w-full mt-2 text-blue-300 h-50 xl:h-100 xl:max-h-100 px-1 resize-none xl:resize-y"
                 name="generatedNotes"
                 key="genNotes"
-                defaultValue={
+                value={
                   isErrorNote(note) || note === null || note === undefined
                     ? ""
                     : note.parsedNote
                 }
+                onChange={(e) => {note.parsedNote = e.target.value}}
               />
             </div>
             </>
@@ -166,7 +177,7 @@ export default function SaveNoteForm({
                 variants={itemVariants}
                 className={buttonStyle + (wordInputRef && !isErrorNote(note) && wordInputRef.current?.value.toLowerCase() != note?.word.toLowerCase() ? " col-span-2" : "")}
                 onClick={(e) => {
-                changeGenerate(true);
+                  changeGenerate(true);
 
                   if (isDisabled === true) {
                     wordInputRef?.current?.focus();
@@ -178,15 +189,15 @@ export default function SaveNoteForm({
                   changeRequest(true);
                 }}
               >
-                <b>Generate</b>
+                {request ? <Loader/> : <b>Generate</b>}
               </motion.button>
               {generate && (
                 <motion.button type="submit" className="bg-blue-400 center text-white hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block col-span-1"
                   hidden={wordInputRef && !isErrorNote(note) && wordInputRef.current?.value.toLowerCase() != note?.word.toLowerCase()}
                   variants={itemVariants}
+                  onClick={() => setIsSaving(true)}
                 >
-  
-                  <b>Save</b>
+                  {isSaving ? <Loader/> : <b>Save</b>}
                 </motion.button>
               )}
             </div>

@@ -1,7 +1,7 @@
 "use client";
 import { getUsersBySchool } from "@/actions/manageUsers";
 import { TStudent } from "@/lib/types";
-import { useState, useLayoutEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { User, UserSearchIcon } from "lucide-react";
 import { Languages } from "lucide-react";
@@ -11,7 +11,7 @@ export default function Page() {
   const [users, setUsers] = useState<TStudent[] | undefined>();
   const [search, setSearch] = useState('');
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const fetchUsers = async () => {
       const res = await getUsersBySchool();
       setUsers(res);

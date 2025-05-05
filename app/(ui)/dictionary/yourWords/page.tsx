@@ -2,7 +2,7 @@
 import { getUsersNotes } from "@/actions/manageNotes";
 import Words from "@/components/Words";
 import { TDBNoteEntry } from "@/lib/types";
-import { useState, useContext, useLayoutEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import { motion } from "framer-motion";
 import { TokenContext } from "@/components/TokenContextProvider";
 import ZeroNotesMessage from "@/components/ZeroNotesMessage";
@@ -15,7 +15,7 @@ export default function YourWords() {
   const [search, setSearch] = useState("");
   const tokenContext = useContext(TokenContext);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const fetch = async () => {
       const words = await getUsersNotes(tokenContext?.accessToken || "");
       setWords(words);

@@ -1,7 +1,7 @@
 "use client";
 import { editNote, getNoteById } from "@/actions/manageNotes";
 import { TDBNoteEntry } from "@/lib/types";
-import { useLayoutEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import { motion } from "framer-motion";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -18,7 +18,7 @@ export default function Edit({pathSrc}: {pathSrc: string}) {
   const router = useRouter();
   const tokenContext = useContext(TokenContext);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     async function getNote() {
       const n = await getNoteById(Number(noteId));
       setNote(n);
