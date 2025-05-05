@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 export default function Loading() {
   return (
-    <div className="flex center w-screen h-screen">
+    <div className="flex justify-center sm:items-center mt-40 sm:mt-0 w-screen h-screen">
       <motion.div
         animate={{
           scale: [1, 2, 2, 1],
@@ -16,7 +16,7 @@ export default function Loading() {
           repeat: Infinity,
           repeatDelay: 0,
         }}
-        className="w-[25px] h-[25px] sm:w-[50px] sm:h-[50px] md:w-[100px] md:h-[100px] xl:w-[150px] xl:h-[150px] bg-slate-800 rounded-2xl"
+        className="w-[50px] h-[50px] md:w-[100px] md:h-[100px] xl:w-[150px] xl:h-[150px] bg-slate-800 rounded-2xl"
       ></motion.div>
     </div>
   );

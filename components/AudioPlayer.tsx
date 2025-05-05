@@ -40,7 +40,7 @@ export default function AudioPlayer({ src }: { src: string }) {
        color='white'
        className='inline-block'
       />
-      <p className="ml-2 text-white inline-block">Pronunciation</p>
+      <p className="ml-2 text-white inline-block select-none">Pronunciation</p>
     </div>
   );
 }
