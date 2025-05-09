@@ -1,9 +1,7 @@
 import { getDrawerById, updateDrawerName } from "@/actions/manageNotes/manageDrawers";
 import Loader from "@/components/Loader";
 import { TokenContext } from "@/components/TokenContextProvider";
-import { itemVariants } from "@/lib/animationVariants";
 import { TDrawer } from "@/lib/types";
-import { easeIn, motion } from "framer-motion";
 import { Edit } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useActionState, useState, useContext, useEffect, useRef } from "react";
@@ -75,9 +73,8 @@ export default function UpdateForm({
         hidden
       />
       <input name="drawerId" value={drawer?.id || -1} readOnly hidden />
-      <motion.div
+      <div
         className="center py-1 px-2 border-1 border-white rounded-3xl w-full"
-        variants={itemVariants}
       >
         <input
           ref={nameRef}
@@ -99,7 +96,7 @@ export default function UpdateForm({
             setAddDrop(false);
           }}
         />
-      </motion.div>
+      </div>
       {updateDrop && (
         <button
           className={
