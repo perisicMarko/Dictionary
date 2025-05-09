@@ -1,9 +1,23 @@
 import { motion } from "framer-motion";
 import { containerVariants } from "@/lib/animationVariants";
 import Link from "next/link";
-import { NotebookPen } from "lucide-react";
+import { FolderMinus, NotebookPen } from "lucide-react";
+import { TokenContext } from "../TokenContextProvider";
+import { useContext, useState } from "react";
+import { removeWordFromDrawer } from "@/actions/manageNotes/manageDrawers";
 
-export default function HistoryNoteMenu({ noteId }: { noteId: number }) {
+export default function NoteMenu({
+  noteId,
+  drawerId,
+  handle,
+}: {
+  noteId: number;
+  drawerId: number;
+  handle: () => void;
+}) {
+  const [isRemoving, setIsRemoving] = useState(false);
+  const tokenContext = useContext(TokenContext);
+
   return (
     <motion.div
       initial="hidden"
@@ -14,11 +28,31 @@ export default function HistoryNoteMenu({ noteId }: { noteId: number }) {
       <Link
         href={"/dictionary/yourWords/edit/" + noteId}
         onClick={(e) => e.stopPropagation()}
-        title='edit notes'
+        title="edit notes"
       >
-        <NotebookPen color='#1E293B' className="hover:scale-105 cursor-pointer"/>
-        
+        <NotebookPen
+          color="#1E293B"
+          className="hover:scale-105 cursor-pointer"
+        />
       </Link>
+      {drawerId != -1 && (
+        <span
+          className="text-slate-800 cursor-pointer"
+          title="Remove from drawer"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsRemoving(true);
+            removeWordFromDrawer(
+              tokenContext?.accessToken || "",
+              drawerId,
+              noteId
+            );
+            handle();
+          }}
+        >
+          <FolderMinus className={"hover:scale-105 mt-1 " + (isRemoving ? " animate-spin" : "")} />
+        </span>
+      )}
     </motion.div>
   );
 }

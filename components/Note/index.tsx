@@ -12,10 +12,12 @@ import { containerVariants } from "@/lib/animationVariants";
 export default function Note({
   prop,
   historyNote,
+  drawerId,
   handle,
 }: {
   prop: TDBNoteEntry;
   historyNote: boolean;
+  drawerId: number;
   handle: () => void;
 }) {
   const [drop, setDrop] = useState(false);
@@ -30,8 +32,8 @@ export default function Note({
 
   return (
     <motion.div
-      initial='hidden'
-      animate='show'
+      initial="hidden"
+      animate="show"
       variants={containerVariants}
       ref={containerRef}
       className="relative bg-slate-800 w-3/4 sm:w-[600px] max-h-[720px] sm:max-h-[800px] rounded-4xl mt-8 p-7"
@@ -60,7 +62,9 @@ export default function Note({
             noteId={note.id}
           />
         )}
-        {menu && !historyNote && <NoteMenu noteId={note.id} />}
+        {menu && !historyNote && (
+          <NoteMenu noteId={note.id} drawerId={drawerId} handle={handle}/>
+        )}
       </div>
 
       <h2 className="text-white mb-3 select-none" title="word">

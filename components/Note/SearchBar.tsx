@@ -6,9 +6,11 @@ import { Search } from "lucide-react";
 
 export function SearchBar({
   updateSearch,
+  placeholder,
   children
 }: {
   updateSearch: (arg: string) => void;
+  placeholder: string;
   children: React.ReactElement;
 }) {
   const searchBarRef = useRef<HTMLInputElement>(null);
@@ -36,7 +38,7 @@ export function SearchBar({
       initial="hidden"
       animate="show"
       variants={itemVariants}
-      className="mt-15 w-3/4 sm:w-[600px] bg-slate-800 rounded-4xl grid grid-cols-[auto_auto_1fr] items-center"
+      className="mt-5 w-3/4 sm:w-[600px] bg-slate-800 rounded-4xl grid grid-cols-[auto_auto_1fr] items-center"
     >
       <span
         className="text-white md:ml-4 ml-3 cursor-pointer hover:scale-115 rounded-full text-2xl"
@@ -57,7 +59,7 @@ export function SearchBar({
         ref={searchBarRef}
         type="text"
         name="search"
-        placeholder="Search for words here..."
+        placeholder={placeholder}
         onChange={(e) => {
           updateSearch(e.target.value);
         }}

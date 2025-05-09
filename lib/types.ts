@@ -82,3 +82,15 @@ export type TDBNoteEntry = {
   user_id: number;
   language: string;
 };
+
+export type TDrawer = {
+  id: number;
+  name: string;
+  user_id: number;
+}
+
+export type TWordsByDrawer = {
+  drawer_id: number;
+  word_id: number;
+  name: string;
+}

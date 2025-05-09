@@ -13,7 +13,7 @@ export async function saveNotes(word : string, audio : string, user_notes : stri
   const dbInput : TDBNoteEntry = {
     id : 0, // mock for schema
     user_id : -1,
-    word: word || '',
+    word: word.toLowerCase() || '',
     status: false, //false meaning word is not learned 
     language: 'english',
     user_notes: user_notes || '',

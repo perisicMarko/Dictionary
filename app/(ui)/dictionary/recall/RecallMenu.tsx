@@ -50,7 +50,7 @@ export default function RecallNoteMenu({
           onSubmitDeleteHandle();
         }}
       >
-        <input type="text" name="noteId" defaultValue={noteId} hidden />
+        <input type="text" name="noteId" defaultValue={Number(noteId)} hidden />
         <button type="submit" onClick={(e) => e.stopPropagation()} title='mark note as learned'>
           <Trash2 color="#1E293B" className="hover:scale-105 cursor-pointer"/>
         </button>

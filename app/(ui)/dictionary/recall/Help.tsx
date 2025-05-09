@@ -47,36 +47,36 @@ export default function RecallNoteHelp() {
             <b>x</b>
           </span>
         </div>
-        <h2 className="text-white text-center mt-1">
+        <h2 className="text-white text-center mt-1 px-1">
           <b>Here is where you recall your words</b>
         </h2>
         <motion.p variants={itemVariants} className="p-4 text-white">
-          Click on the menu icon to open the menu. In menu there are edit and
+          Click on the menu icon to open the menu. In menu, there are edit and
           delete icons, also &quot;N&quot; for showing word notes and
-          &quot;G&quot; for grading ui, grading ui is initialy selected.
+          &quot;G&quot; for grading UI, the grading UI is initially selected.
           <br />
           <br />
-          <b>How this works?</b>
+          <b>How does this work?</b>
           <br />
           Recall system is based on forgetting curve and spaced repetition
           algorithm.
           <br />
           When you add a new word it is set to recall for the next day, that is
-          the first repetition. After the first one the second one is after 6
-          days. When you have done first two repetitions each next is calculated
-          based on how good you have graded your recall. If you mark some word
+          the first repetition. After the first one, the second one is after 6
+          days. When you do first two repetitions each next is calculated
+          based on how well you have graded your recall. If you mark some word
           with grade below 3(0, 1, 2) repetition cycle will be returned to the
           beginning.
           <br />
           <br />
           Also word is considered as learned when it has a big interval for
-          recall(30+ days), but app will not move those words automaticaly to
+          recall(30+ days), but app will not automatically move those words to
           the &quot;Learned words&quot; page. You can do it on the trash icon in
           the menu which marks word as learned and moves it to the &quot;Learned
           words&quot; page.
           <br />
           <br />
-          You can delete word from the app only on &quot;Learned words&quot;
+          You can delete a word from the app only on &quot;Learned words&quot;
           page by clicking on the menu then on trash icon, only then is
           permanently deleted. So delete on recall and history page are two
           different delete options. It is recommended to leave the word in
@@ -109,8 +109,8 @@ export default function RecallNoteHelp() {
           </span>
           <br />
           <br />
-          If you have followed sing up instructions properly, you should have
-          done this upon sing up.
+          If you have followed sign up instructions properly, you should have
+          done this upon sign up.
           <br />
         </motion.p>
       </motion.div>

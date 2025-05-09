@@ -1,4 +1,4 @@
-import 'server-only'
+import 'server-only';
 import { PrismaClient } from '@prisma/client';
 import { TDBNoteEntry } from '@/lib/types';
 
@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 export async function GetNotes(){
 
     try{
-        const res = await prisma.word.findMany();
+        const res = await prisma.words.findMany();
         return res;
     }catch (error) {
         
@@ -18,11 +18,24 @@ export async function GetNotes(){
     }
 }
 
-export async function ImportNotes(note : TDBNoteEntry){
+export async function ImportNotes(inputNote : TDBNoteEntry){
   
     try{
 
-        const newNotes = await prisma.word.create({
+        const note = {
+          user_id: inputNote.user_id,
+          word: inputNote.word,
+          status: inputNote.status,
+          language: inputNote.language,
+          user_notes: inputNote.user_notes,
+          generated_notes: inputNote.generated_notes,
+          audio: inputNote.audio,
+          repetitions: inputNote.repetitions,
+          days: inputNote.days,
+          ease_factor: inputNote.ease_factor, 
+          review_date: inputNote.review_date
+        };
+        const newNotes = await prisma.words.create({
           data:{
             user_id: note.user_id,
             word: note.word,
@@ -51,7 +64,7 @@ export async function ImportNotes(note : TDBNoteEntry){
 export async function GetNoteById(noteId : number){
   
     try{
-        const res = await prisma.word.findUnique({where: {id: noteId}});
+        const res = await prisma.words.findUnique({where: {id: noteId}});
 
         return res;
     } catch(error){
@@ -66,7 +79,7 @@ export async function GetNoteById(noteId : number){
 export async function UpdateRepetitionFactors(note : TDBNoteEntry){
   
     try{
-        const res = await prisma.word.update({where: {id: note.id}, 
+        const res = await prisma.words.update({where: {id: note.id}, 
             data: {
                 days: note.days,
                 repetitions: note.repetitions, 
@@ -88,7 +101,7 @@ export async function UpdateRepetitionFactors(note : TDBNoteEntry){
 export async function DeleteNote(noteId : number){
     
     try{
-        const res = await prisma.word.delete({where: {id: noteId}});
+        const res = await prisma.words.delete({where: {id: noteId}});
         
         return res;
     } catch(error){
@@ -104,7 +117,7 @@ export async function  DeleteUnverifiedNotes(ids : number[]){
     try{
         let res;
         for(const id of ids)
-            res = await prisma.word.deleteMany({where: {id: id}});
+            res = await prisma.words.deleteMany({where: {id: id}});
 
         return res;
     } catch(error){
@@ -119,7 +132,7 @@ export async function  DeleteUnverifiedNotes(ids : number[]){
 export async function SetNoteAsLearned(noteId : number, status : boolean){
   
     try{
-        const res = await prisma.word.update({where: {id: noteId}, data: {status: status}});
+        const res = await prisma.words.update({where: {id: noteId}, data: {status: status}});
     
         return res;
     } catch(error){
@@ -133,7 +146,7 @@ export async function SetNoteAsLearned(noteId : number, status : boolean){
 export async function EditNotes(userNotes : string, generatedNotes : string, noteId : number){
     
     try{
-        const res = await prisma.word.update({ where: {id: noteId}, data: {user_notes: userNotes, generated_notes: generatedNotes}});
+        const res = await prisma.words.update({ where: {id: noteId}, data: {user_notes: userNotes, generated_notes: generatedNotes}});
       
         return res;
     } catch(error){
@@ -147,7 +160,7 @@ export async function EditNotes(userNotes : string, generatedNotes : string, not
   
   export async function ResetNoteRecallFactors(noteId : number, days : number, repetitions : number, easeFactor : number, reviewDate : Date){
     try{
-        const res = await prisma.word.update({where: {id: noteId}, 
+        const res = await prisma.words.update({where: {id: noteId}, 
             data: {
                 days: days, 
                 repetitions: repetitions,

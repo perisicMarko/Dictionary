@@ -8,39 +8,23 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model User {
-  id                            Int       @id @unique(map: "id") @default(autoincrement())
-  first_name                    String
-  last_name                     String
-  email                         String    @unique(map: "unique_email")
-  password                      String
-  refresh_token                 String?
-  refresh_token_expiration_date DateTime?
-  email_verified                Boolean?  @default(false)
-  school_id                     Int?
-  languages                     String?   @db.VarChar
-  schools                       schools?  @relation(fields: [school_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  words                         Word[]
-
-  @@map("users")
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model drawers {
+  id                Int                 @id @default(autoincrement())
+  name              String              @db.VarChar
+  user_id           Int
+  users             users               @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  drawers_and_words drawers_and_words[]
 }
 
-model Word {
-  id              Int      @id @default(autoincrement())
-  word            String
-  status          Boolean
-  user_notes      String
-  generated_notes String
-  audio           String
-  repetitions     Int
-  days            Int
-  review_date     DateTime
-  ease_factor     Float
-  user_id         Int
-  language        String
-  users           User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model drawers_and_words {
+  drawer_id Int
+  word_id   Int
+  drawers   drawers @relation(fields: [drawer_id], references: [id], onDelete: Cascade)
+  words     words   @relation(fields: [word_id], references: [id], onDelete: Cascade)
 
-  @@map("words")
+  @@id([drawer_id, word_id])
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -61,7 +45,7 @@ model schools {
   name            String?         @db.VarChar
   school_partners school_partners @relation(fields: [email], references: [school_email], onDelete: Cascade)
   subscriptions   subscriptions[]
-  users           User[]
+  users           users[]
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -72,4 +56,39 @@ model subscriptions {
   school_id           Int?
   languages           String?
   schools             schools?  @relation(fields: [school_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model users {
+  id                            Int       @id @unique(map: "id") @default(autoincrement())
+  first_name                    String
+  last_name                     String
+  email                         String    @unique(map: "unique_email")
+  password                      String
+  refresh_token                 String?
+  refresh_token_expiration_date DateTime?
+  email_verified                Boolean?  @default(false)
+  school_id                     Int?
+  languages                     String?   @db.VarChar
+  drawers                       drawers[]
+  schools                       schools?  @relation(fields: [school_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  words                         words[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model words {
+  id                Int                 @id @unique @default(autoincrement())
+  word              String
+  status            Boolean
+  user_notes        String
+  generated_notes   String
+  audio             String
+  repetitions       Int
+  days              Int
+  review_date       DateTime
+  ease_factor       Float
+  user_id           Int
+  language          String
+  drawers_and_words drawers_and_words[]
+  users             users               @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }

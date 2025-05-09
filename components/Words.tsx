@@ -4,10 +4,12 @@ import { TDBNoteEntry } from "@/lib/types";
 export default function Words({
   props,
   historyNote,
+  drawerId,
   handle,
 }: {
   props: TDBNoteEntry[] | undefined;
   historyNote: boolean;
+  drawerId: number;
   handle: () => void;
 }) {
   return (
@@ -18,6 +20,7 @@ export default function Words({
             key={w.id}
             prop={w}
             historyNote={historyNote}
+            drawerId={drawerId}
             handle={handle}
           ></Note>
         );

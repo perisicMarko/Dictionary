@@ -50,7 +50,7 @@ export function GradeForm({
         className="rounded-2xl w-full py-2"
         action={(e) => onSubmitGradeHandle(e)}
       >
-        <input type="text" name="noteId" defaultValue={noteId} hidden />
+        <input type="text" name="noteId" defaultValue={Number(noteId)} hidden />
         <label htmlFor="recall" className="text-white text-[16px] sm:text-xl">
           Remember this word?
         </label>
