@@ -3,7 +3,7 @@ import Loader from "@/components/Loader";
 import { TokenContext } from "@/components/TokenContextProvider";
 import { itemVariants } from "@/lib/animationVariants";
 import { TDrawer } from "@/lib/types";
-import { motion } from "framer-motion";
+import { easeIn, motion } from "framer-motion";
 import { Edit } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useActionState, useState, useContext, useEffect, useRef } from "react";
@@ -82,7 +82,7 @@ export default function UpdateForm({
         <input
           ref={nameRef}
           name="drawerName"
-          className="text-center w-full text-white mt-5 inline-block outline-none active:outline-none "
+          className={`transition-opacity text-center w-full text-white mt-5 inline-block outline-none active:outline-none duration-200 ${drawer?.name ? 'opacity-100' : 'opacity-0'}`}
           defaultValue={drawer?.name}
           onChange={(e) => {
             setStateDrawerName(e.target.value);

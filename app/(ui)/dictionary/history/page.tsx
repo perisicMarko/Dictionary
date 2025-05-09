@@ -48,7 +48,7 @@ export default function History() {
             From this page, and this page only you can delete a note permanently or
             return word to the learning process. <br />
             <br /><br />
-            Bonus help: the shortcut for focusing the search bar is to press the F key.
+            Bonus help: Press the F key to focus the search bar.
           </motion.p>
         </SearchBar>
       </div>

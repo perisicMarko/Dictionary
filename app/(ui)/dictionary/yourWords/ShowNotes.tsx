@@ -37,7 +37,7 @@ export default function ShowNotes() {
           This page is where all the words you have not learned yet are stored.
           Hence, if you have more spare time in the day you can review all the words
           here. <br /> <br />
-          Bonus help: the shortcut for focusing the search bar is to press the F key.
+          Bonus help: Press the F key to focus the search bar.
         </motion.p>
       </SearchBar>
 

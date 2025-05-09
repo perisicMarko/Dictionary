@@ -78,15 +78,13 @@ export default function ShowDrawers() {
               related to that topic.
               <br />
               <br />
-              Bonus help: the shortcut for focusing the search bar is to press
-              the F key.
+              Bonus help: Press the F key to focus the search bar.
             </>
           ) : (
             <>
-              Here are displayed just the words that belong to the certain
-              drawer. <br /> <br />
-              Bonus help: the shortcut for focusing the search bar is to press
-              the F key.
+              Here are displayed only the words that belong to a certain
+              drawer. You can edit the notes for a word or you can remove the word from the drawer.<br /> <br />
+              Bonus help: Press the F key to focus the search bar.
             </>
           )}
         </motion.p>
