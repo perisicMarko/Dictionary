@@ -14,7 +14,7 @@ export default function OpenDrawer({
 }: {
   drawer: TDrawer | undefined;
   search: string;
-  openDrawer: (v: number) => void;
+  openDrawer: (id : number) => void;
   openedDrawerId: number;
   allWords: TDBNoteEntry[] | undefined;
 }) {
@@ -30,9 +30,7 @@ export default function OpenDrawer({
     fetchWords();
   }, [drawer?.id, refresh]);
 
-  const searchedWords = words?.filter((w) => {
-    if (w.word.toLowerCase().includes(search)) return w;
-  });
+  const searchedWords = words?.filter((w) => w.word.toLowerCase().includes(search.toLowerCase().trim()));
 
   return (
     <>

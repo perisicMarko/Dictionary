@@ -78,7 +78,7 @@ export default function StrictAutocomplete({
         value={value}
         name="word"
         onChange={handleChange}
-        className="text-white p-2 outline-none active:outline-none rounded-3xl border-2 border-white w-full"
+        className="text-white p-2 outline-none active:outline-none rounded-3xl w-full"
         placeholder="Input your word..."
       />
       <datalist id="words">

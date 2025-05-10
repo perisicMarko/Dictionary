@@ -1,7 +1,7 @@
 import { SearchBar } from "@/components/Note/SearchBar";
 import { motion } from "framer-motion";
 import { itemVariants } from "@/lib/animationVariants";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useLayoutEffect } from "react";
 import { TokenContext } from "@/components/TokenContextProvider";
 import AddDrawer from "./AddDrawer";
 import { getUsersDrawers } from "@/actions/manageNotes/manageDrawers";
@@ -18,6 +18,17 @@ export default function ShowDrawers() {
   const [words, setWords] = useState<TDBNoteEntry[]>();
   const [refresh, setRefresh] = useState(false);
   const [openedDrawerId, setOpenedDrawerId] = useState(-1);
+  
+  useLayoutEffect(() => {
+    const drawerId = sessionStorage.getItem('openedDrawerId');
+    if(drawerId != null && !isNaN(Number(drawerId)))
+      setOpenedDrawerId(Number(drawerId));
+  }, [])
+
+  const openDrawer = (id: number) => {
+    sessionStorage.setItem("openedDrawerId", id.toString());
+    setOpenedDrawerId(id);
+  };
 
   const fetch = async () => {
     const res = await getUsersDrawers(tokenContext?.accessToken || "");
@@ -27,6 +38,11 @@ export default function ShowDrawers() {
     }
     if (allWords) setWords(allWords);
   };
+
+  useEffect(() => {
+    fetch();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     fetch();
@@ -48,6 +64,8 @@ export default function ShowDrawers() {
       if (d.name.toLowerCase().includes(search.toLowerCase())) return d;
     });
   }
+
+  const openedDrawer = drawers?.find((d) => d.id === openedDrawerId);
 
   return (
     <>
@@ -82,8 +100,10 @@ export default function ShowDrawers() {
             </>
           ) : (
             <>
-              Here are displayed only the words that belong to a certain
-              drawer. You can edit the notes for a word or you can remove the word from the drawer.<br /> <br />
+              Here are displayed only the words that belong to a certain drawer.
+              You can edit the notes for a word or you can remove the word from
+              the drawer.
+              <br /> <br />
               Bonus help: Press the F key to focus the search bar.
             </>
           )}
@@ -92,34 +112,27 @@ export default function ShowDrawers() {
 
       {openedDrawerId === -1 && <AddDrawer fetch={() => fetch()} />}
 
-      {drawers ? (
-        searchedDrawers?.map((d) => {
-          return openedDrawerId === -1 ? (
+      {openedDrawerId === -1 &&
+        (drawers ? (
+          searchedDrawers?.map((d) => (
             <Drawer
               key={d.id}
               drawer={d as TDrawer}
               words={words}
               rerender={rerender}
-              openDrawer={(id: number) => {
-                setOpenedDrawerId(id);
-              }}
+              openDrawer={(id: number) => openDrawer(id)}
               openedDrawerId={openedDrawerId}
             />
-          ) : (
-            <></>
-          );
-        })
-      ) : (
-        <Loading />
-      )}
+          ))
+        ) : (
+          <Loading />
+        ))}
 
       {openedDrawerId != -1 && (
         <OpenDrawer
-          drawer={drawers?.find((d) => d.id === openedDrawerId)}
+          drawer={openedDrawer}
           search={search}
-          openDrawer={(id: number) => {
-            setOpenedDrawerId(id);
-          }}
+          openDrawer={(id: number) => openDrawer(id)}
           openedDrawerId={openedDrawerId}
           allWords={words}
         />

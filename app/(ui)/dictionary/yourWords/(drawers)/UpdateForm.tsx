@@ -45,9 +45,12 @@ export default function UpdateForm({
   }, [refreshUponUpdate])
 
   useEffect(() => {
-    if (updateDrop) {
+    const length = drawer?.name.length;
+    if (updateDrop && nameRef.current && length) {
+      nameRef.current.setSelectionRange(length, length);
       nameRef.current?.focus();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateDrop]);
 
   useEffect(() => {
@@ -79,7 +82,7 @@ export default function UpdateForm({
         <input
           ref={nameRef}
           name="drawerName"
-          className={`transition-opacity text-center w-full text-white mt-5 inline-block outline-none active:outline-none duration-200 ${drawer?.name ? 'opacity-100' : 'opacity-0'}`}
+          className={`transition-opacity text-start w-full text-white mt-5 inline-block outline-none active:outline-none duration-100 ${drawer?.name ? 'opacity-100' : 'opacity-0'}`}
           defaultValue={drawer?.name}
           onChange={(e) => {
             setStateDrawerName(e.target.value);

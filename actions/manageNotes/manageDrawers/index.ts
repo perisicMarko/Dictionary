@@ -117,6 +117,8 @@ export async function updateDrawerName(state : {success : boolean, accessToken :
 
 
 export async function deleteDrawer(drawerId : number, aToken : string){
+    if(drawerId === -1)
+        return;
     const sessionStatus = await verifySession(aToken);
 
     if(STATUS.UNAUTHORIZED === sessionStatus){

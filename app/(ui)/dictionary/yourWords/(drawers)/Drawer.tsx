@@ -17,7 +17,7 @@ export default function Drawer({
   openDrawer,
   openedDrawerId,
 }: {
-  drawer: TDrawer;
+  drawer: TDrawer | undefined;
   words: TDBNoteEntry[] | undefined;
   rerender: () => void;
   openDrawer: (id: number) => void;
@@ -31,7 +31,7 @@ export default function Drawer({
   const tokenContext = useContext(TokenContext);
 
   const handleDelete = async () => {
-    const res = await deleteDrawer(drawer?.id, tokenContext?.accessToken || "");
+    const res = await deleteDrawer(drawer?.id || -1, tokenContext?.accessToken || "");
     if (!res?.success) tokenContext?.setAccessToken("");
     else if (res.success && res.accessToken)
       tokenContext?.setAccessToken(res?.accessToken);
@@ -40,10 +40,10 @@ export default function Drawer({
     setIsDeleting(false);
   };
 
+  console.log(words);
   const deleteConfirmation = (v: boolean) => {
     setConfirmDelete(v);
   };
-
 
   return (
     <>
@@ -56,7 +56,6 @@ export default function Drawer({
           setMenu(false);
           setAddDrop(false);
         }}
-        hidden={openedDrawerId != -1 && openedDrawerId != drawer.id} // more convinient approach do not fetch everything again just hide drawers that are not opened
       >
         {confirmDelete && (
           <motion.div
@@ -106,16 +105,16 @@ export default function Drawer({
           toggleMenu={() => {
             setMenu(!menu);
           }}
-          drawerId={drawer.id}
+          drawerId={drawer?.id || -1}
           confirmDelete={deleteConfirmation}
           rerender={rerender}
         />
-        <div className="flex flex-col justify-center items-center w-1/2">
+        <div className="flex flex-col justify-center items-center w-2/3 sm:w-1/2">
           <UpdateForm
             updateDrop={updateDrop}
             setUpdateDrop={(v: boolean) => setUpdateDrop(v)}
             setAddDrop={(v: boolean) => setAddDrop(v)}
-            drawerId={drawer?.id}
+            drawerId={drawer?.id || -1}
           />
           {updateDrop === false && (
             <>
@@ -143,7 +142,7 @@ export default function Drawer({
                     word: w.word,
                     wordId: w.id,
                   }))}
-                  drawerId={drawer.id}
+                  drawerId={drawer?.id || -1}
                   rerender={rerender}
                 />
               )}
@@ -158,7 +157,7 @@ export default function Drawer({
               width={25}
               height={25}
               className="xl:hover:scale-105 mt-3 cursor-pointer"
-              onClick={() => openDrawer(drawer.id)}
+              onClick={() => openDrawer(drawer?.id || -1)}
             />
           ) : (
             <ChevronUp

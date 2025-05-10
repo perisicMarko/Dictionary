@@ -123,7 +123,7 @@ export async function RemoveWordFromDrawer(wordId : number, drawerId : number){
 
 export async function GetDrawerById(drawerId : number){
     try {
-        const res = await prisma.drawers.findFirst({
+        const res = await prisma.drawers.findUnique({
             where: {
               id: drawerId
             },
