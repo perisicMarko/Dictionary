@@ -19,10 +19,13 @@ export default function History() {
   useEffect(() => {
     const fetch = async () => {
       const words = await getUsersHistory(tokenContext?.accessToken || "");
-      setWords(words);
+      if(words){
+        setWords(words?.data);
+        tokenContext?.setAccessToken(words.accessToken || '');
+      }
     };
     fetch();
-  }, [tokenContext?.accessToken, refresh]);
+  }, [tokenContext?.accessToken, refresh, tokenContext]);
 
   const filteredWords =
     words?.filter((w) => {

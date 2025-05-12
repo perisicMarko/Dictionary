@@ -17,10 +17,13 @@ export default function ShowNotes() {
   useEffect(() => {
     const fetch = async () => { 
       const words = await getUsersNotes(tokenContext?.accessToken || "");
-      setWords(words);
+      if(words){
+        setWords(words.data);
+        tokenContext?.setAccessToken(words.accessToken || '');
+      }
     };
     fetch();
-  }, [tokenContext?.accessToken]);
+  }, [tokenContext, tokenContext?.accessToken]);
 
   const filteredWords = words?.filter((w) => {
     return w.word.toLowerCase().trim().includes(search.toLowerCase().trim());
