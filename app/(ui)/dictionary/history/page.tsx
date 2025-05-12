@@ -1,11 +1,11 @@
 "use client";
-import { SearchBar } from "../../../../components/Note/SearchBar";
+import { SearchBar } from "../../../../components/common/SearchBar";
 import { getUsersHistory } from "@/actions/manageNotes";
-import Words from "@/components/Words";
+import Words from "@/components/common/Words";
 import { TDBNoteEntry } from "@/lib/types";
 import { useState, useContext, useEffect } from "react";
 import { TokenContext } from "@/components/TokenContextProvider";
-import ZeroNotesMessage from "@/components/ZeroNotesMessage";
+import ZeroNotesMessage from "@/components/common/ZeroNotesMessage";
 import { itemVariants } from "@/lib/animationVariants";
 import { motion } from "framer-motion";
 import Loading from "../../loading";
@@ -35,9 +35,9 @@ export default function History() {
 
   return (
     <>
-      <div className="mt-15 w-full flex flex-col justify-center items-center">
+      <div className="mt-15 w-full center-vertically">
         <SearchBar updateSearch={updateSearch} placeholder={'Search for notes here...'}>
-          <motion.p variants={itemVariants} className="p-3">
+          <motion.p variants={itemVariants} className="pt-3">
             In menu, there is a delete icon for permanent word deletion and
             &quot;R&quot; for relearning the word.
             <br />
@@ -60,7 +60,7 @@ export default function History() {
       )}
       {!filteredWords && <Loading />}
       {filteredWords?.length != 0 && (
-        <Words props={filteredWords} historyNote={false} handle={() => {setRefresh(!refresh)}} drawerId={-1} />
+        <Words props={filteredWords} historyNote={false} rerenderParent={() => {setRefresh(!refresh)}} drawerId={-1} />
       )}
       {filteredWords?.length === 0 && search === "" && (
         <ZeroNotesMessage

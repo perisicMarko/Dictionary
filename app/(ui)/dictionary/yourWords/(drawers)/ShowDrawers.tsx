@@ -1,4 +1,4 @@
-import { SearchBar } from "@/components/Note/SearchBar";
+import { SearchBar } from "@/components/common/SearchBar";
 import { motion } from "framer-motion";
 import { itemVariants } from "@/lib/animationVariants";
 import { useState, useEffect, useContext, useLayoutEffect } from "react";
@@ -18,12 +18,12 @@ export default function ShowDrawers() {
   const [words, setWords] = useState<TDBNoteEntry[]>();
   const [refresh, setRefresh] = useState(false);
   const [openedDrawerId, setOpenedDrawerId] = useState(-1);
-  
+
   useLayoutEffect(() => {
-    const drawerId = sessionStorage.getItem('openedDrawerId');
-    if(drawerId != null && !isNaN(Number(drawerId)))
+    const drawerId = sessionStorage.getItem("openedDrawerId");
+    if (drawerId != null && !isNaN(Number(drawerId)))
       setOpenedDrawerId(Number(drawerId));
-  }, [])
+  }, []);
 
   const openDrawer = (id: number) => {
     sessionStorage.setItem("openedDrawerId", id.toString());
@@ -34,14 +34,18 @@ export default function ShowDrawers() {
     const res = await getUsersDrawers(tokenContext?.accessToken || "");
     const allWords = await getUsersNotes(tokenContext?.accessToken || "");
     if (res) {
+      tokenContext?.setAccessToken(res.accessToken);
       setDrawers(res.data);
     }
-    if (allWords) setWords(allWords);
+    if (allWords) {
+      tokenContext?.setAccessToken(allWords.accessToken || "");
+      setWords(allWords.data);
+    }
   };
 
   useEffect(() => {
     fetch();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -77,7 +81,7 @@ export default function ShowDrawers() {
             : "Search for words..."
         }
       >
-        <motion.p variants={itemVariants} className="p-3">
+        <motion.p variants={itemVariants} className="pt-3">
           {openedDrawerId === -1 ? (
             <>
               <b>

@@ -1,6 +1,6 @@
 import { getWordsOfDrawer } from "@/actions/manageNotes/manageDrawers";
 import Loading from "@/app/(ui)/loading";
-import Words from "@/components/Words";
+import Words from "@/components/common/Words";
 import { TDBNoteEntry, TDrawer } from "@/lib/types";
 import { useEffect, useState } from "react";
 import Drawer from "./Drawer";
@@ -46,7 +46,7 @@ export default function OpenDrawer({
         <Words
           props={searchedWords}
           historyNote={false}
-          handle={() => {
+          rerenderParent={() => {
             setRefresh(!refresh);
           }}
           drawerId={drawer?.id || -1}

@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import { isBefore } from "date-fns";
 import Link from "next/link";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
-import Loader from "@/components/Loader";
+import Loader from "@/components/common/Loader";
 
 export default function Page() {
   const params = useParams();
@@ -53,14 +53,14 @@ export default function Page() {
               initial="hidden"
               animate="show"
               variants={containerVariants}
-              className="appWidth rounded-3xl bg-slate-800 p-5 mt-30"
+              className="box-layout mt-30"
             >
               <motion.p
                 variants={itemVariants}
-                className="text-white text-center"
+                className="text-box"
               >
                 <b>
-                  Your email has been verified successfully.
+                  Your account has been verified successfully.
                   <br /> Log in here:{" "}
                 </b>
                 <Link
@@ -77,7 +77,7 @@ export default function Page() {
               initial="hidden"
               animate="show"
               variants={containerVariants}
-              className="appWidth bg-slate-800 p-5 rounded-3xl mt-30"
+              className="box-layout mt-30"
             >
               <motion.form
                 variants={itemVariants}
@@ -85,7 +85,7 @@ export default function Page() {
                 action={action}
               >
                 <input name="userId" defaultValue={user?.id} hidden />
-                <button type="submit" className="primaryBtn center">
+                <button type="submit" className="primary-btn center">
                   {isPending ? <Loader /> : "Click to verify"}
                 </button>
               </motion.form>
@@ -97,7 +97,7 @@ export default function Page() {
           initial="hidden"
           animate="show"
           variants={containerVariants}
-          className="appWidth rounded-3xl bg-slate-800 p-5"
+          className="box-layout"
         >
           <motion.p className="text-white text-center">
             <b>Sorry, no valid token.</b>

@@ -21,12 +21,12 @@ export default function RecallNoteHelp() {
             y: 0,
           },
         }}
-        className="center bg-slate-800 rounded-2xl w-3/4 sm:w-[600px] mt-15 px-3"
+        className="center box-layout mt-15 !py-0 !px-3"
         onClick={() => {
           setHelp(!help);
         }}
       >
-        <span className="block hover:scale-105 py-2 hover:underline cursor-pointer text-white text-center">
+        <span className="block hover:scale-105 py-2 hover:underline cursor-pointer text-box">
           <u>Need help?</u>
         </span>
       </motion.div>
@@ -35,11 +35,11 @@ export default function RecallNoteHelp() {
         initial="hidden"
         animate="show"
         variants={itemVariants}
-        className="bg-slate-800 w-3/4 sm:w-[600px] rounded-2xl mt-10"
+        className="box-layout mt-10 relative"
       >
-        <div className="rounded-t-2xl flex justify-end bg-slate-950">
+        <div className="collapse-window">
           <span
-            className="xBtn mr-3 text-white py-1"
+            className="x-btn"
             onClick={() => {
               setHelp(!help);
             }}
@@ -47,7 +47,7 @@ export default function RecallNoteHelp() {
             <b>x</b>
           </span>
         </div>
-        <h2 className="text-white text-center mt-1 px-1">
+        <h2 className="text-box mt-3 px-1">
           <b>Here is where you recall your words</b>
         </h2>
         <motion.p variants={itemVariants} className="p-4 text-white">

@@ -29,7 +29,7 @@ export default function Home() {
   return (
     <motion.div
       ref={containerRef}
-      className="relative mt-15 sm:mt-30 md:mt-35 xl:mt-70 flex w-3/4 sm:w-[500px] flex-col items-center bg-slate-800 rounded-3xl p-6"
+      className="relative mt-15 sm:mt-30 md:mt-35 xl:mt-70 center-vertically box-layout"
     >
       <motion.svg
         width={dimensions.width}
@@ -61,14 +61,14 @@ export default function Home() {
         <i>&quot;Learning takes time, so take it step by step.&quot;</i>
       </motion.h2>
 
-      <motion.div className="relative z-10 w-full flex flex-col justify-center items-center">
+      <motion.div className="relative z-10 w-full center-vertically">
         <Link
-          className="flex justify-end text-white hover:scale-105 hover:underline text-center text-[14px] mb-2 sm:text-[18px]"
+          className="flex justify-end text-box hover:scale-105 hover:underline text-[14px] mb-2 sm:text-[18px]"
           href="/about"
         >
           <u>About the app</u>
         </Link>
-        <Link className="primaryBtn center" href="/logIn">
+        <Link className="primary-btn center" href="/logIn">
           <b>Log in</b>
         </Link>
         <div className="grid grid-cols-2 w-full mt-3">

@@ -1,5 +1,5 @@
 "use client";
-import Loader from "@/components/Loader";
+import Loader from "@/components/common/Loader";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { motion } from "framer-motion";
 import { useActionState, useEffect, useState } from "react";
@@ -29,7 +29,7 @@ export default function Dashboard() {
         initial="hidden"
         animate="show"
         variants={containerVariants}
-        className="bg-slate-800 appWidth rounded-3xl mt-50"
+        className="bg-slate-800 box-width rounded-3xl mt-50"
       >
         <motion.form
           variants={itemVariants}
@@ -91,7 +91,7 @@ export default function Dashboard() {
           initial="hidden"
           animate="show"
           variants={containerVariants}
-          className="appWidth p-3 bg-slate-800 rounded-3xl mt-5"
+          className="box-width p-3 bg-slate-800 rounded-3xl mt-5"
         >
           <motion.p variants={itemVariants} className="text-white">
             <b>{state?.message}</b>

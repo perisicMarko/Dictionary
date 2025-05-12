@@ -11,12 +11,12 @@ export default function RecallNoteMenu({
   toggleMenu,
   changeQuality,
   noteId,
-  rerenderHandle,
+  rerenderParent,
 }: {
   toggleMenu: () => void;
   changeQuality: (e: number) => void;
   noteId: number;
-  rerenderHandle: () => void;
+  rerenderParent: () => void;
 }) {
   const router = useRouter();
   const tokenContext = useContext(TokenContext);
@@ -34,14 +34,14 @@ export default function RecallNoteMenu({
     } else if (response.status === 201)
       tokenContext.setAccessToken(response.accessToken || "");
 
-    rerenderHandle(); //rerendering parent
+    rerenderParent();
   }
   return (
     <motion.div
       initial="hidden"
       animate="show"
       variants={containerVariants}
-      className="bg-white/80 flex flex-col items-center justify-center pointer-events-auto z-10 left-2 gap-1 rounded-2xl p-2"
+      className="bg-white/80 center-vertically pointer-events-auto z-10 left-2 gap-1 rounded-2xl p-2"
     >
       <motion.form
         variants={itemVariants}
@@ -51,7 +51,7 @@ export default function RecallNoteMenu({
         }}
       >
         <input type="text" name="noteId" defaultValue={Number(noteId)} hidden />
-        <button type="submit" onClick={(e) => e.stopPropagation()} title='mark note as learned'>
+        <button type="submit" onClick={(e) => e.stopPropagation()} title='Mark note as learned'>
           <Trash2 color="#1E293B" className="hover:scale-105 cursor-pointer"/>
         </button>
       </motion.form>
@@ -70,7 +70,7 @@ export default function RecallNoteMenu({
       </motion.span>
       <motion.span
         variants={itemVariants}
-        className=" block hover:scale-105 text-slate-800 cursor-pointer"
+        className="block hover:scale-105 text-slate-800 cursor-pointer"
         onClick={() => {
           changeQuality(6);
           toggleMenu();

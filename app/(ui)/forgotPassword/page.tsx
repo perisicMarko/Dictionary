@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useActionState, useState } from "react";
 import Link from "next/link";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
-import Loader from "@/components/Loader";
+import Loader from "@/components/common/Loader";
 
 export default function ForgotPassword() {
   const [state, action, isPending] = useActionState(resetPassword, null);
@@ -15,15 +15,15 @@ export default function ForgotPassword() {
       initial="hidden"
       animate="show"
       variants={containerVariants}
-      className="bg-slate-800 mt-20 flex flex-col items-center justify-center md:mt-30 p-1 xl:mt-50 w-3/4 sm:w-[600px] rounded-3xl"
+      className="box-layout mt-20 center-vertically md:mt-30 p-1 xl:mt-50 "
     >
       {state?.status === 200 && (
         <motion.div
           variants={itemVariants}
-          className="absolute flex flex-col items-center top-auto left-auto h-[200px] sm:[250px] center bg-slate-800 rounded-3xl appWidth p-2 z-20"
+          className="box-layout absolute top-auto left-auto h-[200px] sm:h-[250px] center-vertically z-20"
         >
           <span className="text-center text-white">
-            Email with instructions has been sent, please check your email
+            Email with instructions has been sent, please check your email<br/>
             <b className="text-blue-300">(it may ends up in spam).</b>
           </span>
           <Link
@@ -37,27 +37,27 @@ export default function ForgotPassword() {
       {state?.status === 500 && (
         <motion.div
           variants={itemVariants}
-          className="absolute top-auto left-auto  h-1/2 center bg-slate-800 rounded-3xl appWidth p-2"
+          className="absolute top-auto left-auto h-1/2 center box-layout"
         >
-          <span className="text-center text-white">
+          <span className="text-box">
             Something is wrong, please try again later.
           </span>
         </motion.div>
       )}
-      <motion.span className="mt-5  hover:underline hover:scale-105">
+      <motion.span className="my-2 hover:underline hover:scale-105">
         <Link href="/" className="text-white">
           Back to home page
         </Link>
       </motion.span>
       <motion.form
         variants={itemVariants}
-        className="p-5 flex w-full flex-col items-center space-y-5"
+        className="w-full center-vertically space-y-5"
         action={action}
       >
         <input
           type="text"
           name="email"
-          className="formInput"
+          className="form-input"
           placeholder="Enter your email here..."
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -67,7 +67,7 @@ export default function ForgotPassword() {
             {state.error}
           </motion.span>
         )}
-        <button className={"primaryBtn !mt-3 center " + (email === '' && " opacity-50")} disabled={email === ''} >
+        <button className={"primary-btn !mt-3 center " + (email === '' && " opacity-50")} disabled={email === ''} >
           {isPending ? <Loader /> : "Send email"}
         </button>
       </motion.form>

@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="background">
       <body
-        className={`${roboto.variable} antialiased flex flex-col justify-center items-center mb-48`}
+        className={`${roboto.variable} antialiased center-vertically mb-48`}
       >
         {children}
       </body>

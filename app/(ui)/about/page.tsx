@@ -9,14 +9,14 @@ export default function Page() {
       initial="hidden"
       animate="show"
       variants={containerVariants}
-      className="mt-10 m-5 sm:w-[660px] bg-slate-800 rounded-2xl border-2 border-blue-50 overflow-auto"
+      className="mt-10 m-5 box-layout border-2 border-blue-50 overflow-auto relative"
     >
-      <div className="flex justify-end bg-slate-950">
-        <Link className="xBtn mr-4 py-1 text-white" href="/">
+      <div className="collapse-window">
+        <Link className="x-btn mr-4 py-1 text-box" href="/">
           <b>x</b>
         </Link>
       </div>
-      <motion.div variants={itemVariants} className="p-5">
+      <motion.div variants={itemVariants}>
         <h2 className="title text-white">What does this app do?</h2>
         <p className="text-white">
           This app helps you actively recall words you would like to learn by

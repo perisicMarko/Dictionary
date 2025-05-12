@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { updateUsersPassword } from "@/actions/manageUsers/resetPassword";
 import { TUser } from "@/lib/types";
-import Loader from "@/components/Loader";
+import Loader from "@/components/common/Loader";
 import SuccessWindow from "./SuccessWindow";
 
 export default function ChangePasswordForm({
@@ -15,6 +15,14 @@ export default function ChangePasswordForm({
     updateUsersPassword,
     undefined
   );
+
+  const [formData, setFormData] = useState({
+    newPassword: "",
+    confirmPassword: "",
+  });
+
+  const { newPassword, confirmPassword } = formData;
+
   return (
     <>
       {state?.success ? (
@@ -24,7 +32,7 @@ export default function ChangePasswordForm({
           initial="hidden"
           animate="show"
           variants={containerVariants}
-          className="appWidth rounded-3xl bg-slate-800 p-5 mt-20 sm:mt-25 md:mt-30 xl:mt-50"
+          className="box-layout mt-20 sm:mt-25 md:mt-30 xl:mt-50"
         >
           <motion.form
             variants={itemVariants}
@@ -36,7 +44,9 @@ export default function ChangePasswordForm({
               <label htmlFor="password" className="text-white">
                 Enter new password:
               </label>
-              <input type="password" name="password" className="formInput" />
+              <input type="password" name="password" className="form-input" 
+                onChange={(e) => setFormData({...formData, newPassword: e.target.value})} 
+              />
               {(state?.errors?.password?.length || 0) > 0 && (
                 <span className="error">Password:</span>
               )}
@@ -54,7 +64,10 @@ export default function ChangePasswordForm({
               <input
                 type="password"
                 name="confirmPassword"
-                className="formInput"
+                className="form-input"
+                onChange={(e) =>
+                  setFormData({ ...formData, confirmPassword: e.target.value })
+                }
               />
               {state?.errors?.confirmPassword === false && (
                 <motion.span variants={itemVariants} className="error">
@@ -63,7 +76,13 @@ export default function ChangePasswordForm({
               )}
             </div>
             <div className="center mt-5">
-              <button type="submit" className="primaryBtn z-0 center">
+              <button
+                type="submit"
+                className={`primary-btn z-0 center ${
+                  (!newPassword || !confirmPassword) && " opacity-50"
+                }`}
+                disabled={!newPassword || !confirmPassword}
+              >
                 {isPending ? <Loader /> : "Reset password"}
               </button>
             </div>

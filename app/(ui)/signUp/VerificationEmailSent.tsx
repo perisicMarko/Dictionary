@@ -15,7 +15,7 @@ export default function VerificationEmailSent({ email }: { email: string }) {
         initial="hidden"
         animate="show"
         variants={containerVariants}
-        className="flex flex-col items-center sm:w-[500px] w-3/4 rounded-3xl bg-slate-800 p-3 sm:p-5 mt-15 sm:mt-20"
+        className="flex flex-col items-center box-layout mt-15 sm:mt-20"
       >
         <motion.p variants={itemVariants} className="text-center text-white">
           <b>Verification email has been sent.<br/> </b>

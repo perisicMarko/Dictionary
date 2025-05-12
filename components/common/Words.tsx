@@ -5,12 +5,12 @@ export default function Words({
   props,
   historyNote,
   drawerId,
-  handle,
+  rerenderParent,
 }: {
   props: TDBNoteEntry[] | undefined;
   historyNote: boolean;
   drawerId: number;
-  handle: () => void;
+  rerenderParent: () => void;
 }) {
   return (
     <>
@@ -21,7 +21,7 @@ export default function Words({
             prop={w}
             historyNote={historyNote}
             drawerId={drawerId}
-            handle={handle}
+            rerenderParent={rerenderParent}
           ></Note>
         );
       })}

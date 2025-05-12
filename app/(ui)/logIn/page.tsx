@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useActionState, useEffect, useState } from "react";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { useRouter } from "next/navigation";
-import Loader from "@/components/Loader";
+import Loader from "@/components/common/Loader";
 import { authenticateLogIn } from "@/actions/auth/user";
 
 export default function LogIn() {
@@ -45,11 +45,11 @@ export default function LogIn() {
           initial="hidden"
           animate="show"
           variants={containerVariants}
-          className="md:w-[500px] w-1/2 bg-slate-800 rounded-3xl mt-40 "
+          className="box-layout mt-40 "
         >
           <motion.p
             variants={itemVariants}
-            className="text-white text-center p-3"
+            className="text-box"
           >
             <b>{state?.subscription}</b>
           </motion.p>
@@ -60,18 +60,18 @@ export default function LogIn() {
         animate="show"
         variants={containerVariants}
         className={
-          "bg-slate-800 rounded-3xl border-2 border-blue-50 authWidth " + (isPending && " opacity-50 ") +
+          "relative box-layout border-2 border-blue-50 " + (isPending && " opacity-50 ") +
           (state?.subscription !== "" ? " mt-5 " : " mt-8 sm:mt-10 md:mt-12 ")
         }
         
       >
-        <div className="flex justify-end items-center bg-slate-950 border-blue-50 rounded-t-3xl">
-          <Link className="xBtn mr-3 py-1 text-white" href="/">
+        <div className="collapse-window">
+          <Link className="x-btn" href="/">
             <b>x</b>
           </Link>
         </div>
         <form
-          className="form flex flex-col items-center justify-center p-3"
+          className="form flex flex-col items-center justify-center mt-5"
           action={(e) => {
             action(e);
             setSemaphore(true);
@@ -82,7 +82,7 @@ export default function LogIn() {
               Email:{" "}
             </label>
             <input
-              className="formInput"
+              className="form-input"
               type="text"
               name="email"
               value={email}
@@ -99,7 +99,7 @@ export default function LogIn() {
               Password:{" "}
             </label>
             <input
-              className="formInput"
+              className="form-input"
               type="password"
               name="password"
               value={pass}
@@ -109,11 +109,11 @@ export default function LogIn() {
               <p className="error ml-1">{state.errors.password}</p>
             )}
           </motion.div>
-          <motion.div variants={itemVariants} className="center w-3/4 mt-2">
+          <motion.div variants={itemVariants} className="center mt-2 w-3/4">
             <button
               disabled={isPending || emptyCredentials}
               className={
-                "primaryBtn center " + (emptyCredentials && " opacity-50")
+                "primary-btn center " + (emptyCredentials && " opacity-50")
               }
             >
               {isPending ? <Loader /> : "Log in"}

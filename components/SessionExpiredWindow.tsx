@@ -4,7 +4,7 @@ import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { motion } from "framer-motion";
 import { Dispatch, SetStateAction, useActionState } from "react";
 import { useRouter } from "next/navigation";
-import Loader from "./Loader";
+import Loader from "./common/Loader";
 
 export default function SessionExpiredWindow({
   collapseWindow,
@@ -18,15 +18,15 @@ export default function SessionExpiredWindow({
 
   return (
     <motion.div
-      className="appWidth bg-slate-800 rounded-3xl z-100 absolute top-30 p-5"
+      className="box-layout z-100 absolute top-30"
       initial="hidden"
       animate="show"
       variants={containerVariants}
     >
-      <motion.h2 variants={itemVariants} className="text-center text-white">
+      <motion.h2 variants={itemVariants} className="text-box">
         <b>Your session will expire very soon.</b>
       </motion.h2>
-      <motion.p className="text-white text-center" variants={itemVariants}>
+      <motion.p className="text-box" variants={itemVariants}>
         Would you like to restore it and stay logged or do you want to log out?
       </motion.p>
       <form
@@ -37,11 +37,11 @@ export default function SessionExpiredWindow({
         className="mt-5"
       >
         <div className="grid grid-cols-2 gap-2">
-          <button className="primaryBtn" type="submit">
+          <button className="primary-btn" type="submit">
             {isPending ? "Restore Session" : <Loader />}
           </button>
           <button
-            className="primaryBtn"
+            className="primary-btn"
             onClick={(e) => {
               e.preventDefault();
               logOutUser();

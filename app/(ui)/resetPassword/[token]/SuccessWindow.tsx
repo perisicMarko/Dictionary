@@ -8,11 +8,11 @@ export default function SuccessWindow(){
               initial="hidden"
               animate="show"
               variants={containerVariants}
-              className="flex flex-col items-center bg-slate-800 appWidth center rounded-3xl p-5 mt-20 sm:mt-25 md:mt-30 xl:mt-50 z-10"
+              className="center-vertically box-layout mt-20 sm:mt-25 md:mt-30 xl:mt-50 z-10"
             >
               <motion.p
                 variants={itemVariants}
-                className="text-white text-center z-10"
+                className="text-box z-10"
               >
                 <b>Your password has been reset.</b>
               </motion.p>

@@ -7,11 +7,11 @@ import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
 
 export default function HistoryNoteMenu({
-  actionCallBack,
+  rerenderParent,
   toggleMenu,
   noteId,
 }: {
-  actionCallBack: () => void;
+  rerenderParent: () => void;
   toggleMenu: () => void;
   noteId: number;
 }) {
@@ -28,7 +28,7 @@ export default function HistoryNoteMenu({
       router.push('/logIn');    
     }else if(res.status === 201)
       tokenContext.setAccessToken(res.accessToken || '');
-    actionCallBack(); //rerendering parent
+    rerenderParent(); //rerendering parent
   }
 
   async function onSubmitDeleteHandle(formData: FormData) {
@@ -42,7 +42,7 @@ export default function HistoryNoteMenu({
     }else if(res.status === 201)
       tokenContext.setAccessToken(res.accessToken || '');
       
-    actionCallBack(); //rerendering parent
+    rerenderParent(); //rerendering parent
   }
 
   return (
@@ -58,7 +58,7 @@ export default function HistoryNoteMenu({
         action={onSubmitDeleteHandle}
       >
         <input type="text" name="noteId" defaultValue={noteId} hidden />
-        <button type="submit" onClick={(e) => e.stopPropagation()} title='delete note permanently' className="hover:scale-105 cursor-pointer">
+        <button type="submit" onClick={(e) => e.stopPropagation()} title='Delete note permanently' className="hover:scale-105 cursor-pointer">
           <Trash2 color="#1E293B"/>
         </button>
       </motion.form>
@@ -72,7 +72,7 @@ export default function HistoryNoteMenu({
           type="submit"
           className="text-center text-xs text-slate-800 cursor-pointer hover:scale-105"
           onClick={(e) => e.stopPropagation()}
-          title='relearn note'
+          title='Relearn note'
         >
           <b>R</b>
         </button>

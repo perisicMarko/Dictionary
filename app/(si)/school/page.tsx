@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useActionState, useEffect, useState } from "react";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { useRouter } from "next/navigation";
-import Loader from "@/components/Loader";
+import Loader from "@/components/common/Loader";
 import { SchoolLogIn } from "@/actions/auth/school";
 
 export default function LogIn() {

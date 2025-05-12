@@ -1,5 +1,8 @@
-import { getDrawerById, updateDrawerName } from "@/actions/manageNotes/manageDrawers";
-import Loader from "@/components/Loader";
+import {
+  getDrawerById,
+  updateDrawerName,
+} from "@/actions/manageNotes/manageDrawers";
+import Loader from "@/components/common/Loader";
 import { TokenContext } from "@/components/TokenContextProvider";
 import { TDrawer } from "@/lib/types";
 import { Edit } from "lucide-react";
@@ -31,26 +34,27 @@ export default function UpdateForm({
   const fetchDrawer = async () => {
     const d = await getDrawerById(drawerId);
     setDrawer(d);
-  }
+  };
 
   useEffect(() => {
     fetchDrawer();
-    
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     fetchDrawer();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refreshUponUpdate])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshUponUpdate]);
 
   useEffect(() => {
     const length = drawer?.name.length;
     if (updateDrop && nameRef.current && length) {
+      // move the cursor to the end of the drawer name
       nameRef.current.setSelectionRange(length, length);
       nameRef.current?.focus();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateDrop]);
 
   useEffect(() => {
@@ -65,10 +69,7 @@ export default function UpdateForm({
   }, [updateState?.success, isUpdating]);
 
   return (
-    <form
-      className="flex flex-col justify-center items-center gap-2 w-full"
-      action={updateAction}
-    >
+    <form className="center-vertically gap-2 w-full" action={updateAction}>
       <input
         name="accessToken"
         value={tokenContext?.accessToken}
@@ -76,13 +77,13 @@ export default function UpdateForm({
         hidden
       />
       <input name="drawerId" value={drawer?.id || -1} readOnly hidden />
-      <div
-        className="center py-1 px-2 border-1 border-white rounded-3xl w-full"
-      >
+      <div className="center py-1 px-2 border-1 border-white rounded-3xl w-full">
         <input
           ref={nameRef}
           name="drawerName"
-          className={`transition-opacity text-start w-full text-white mt-5 inline-block outline-none active:outline-none duration-100 ${drawer?.name ? 'opacity-100' : 'opacity-0'}`}
+          className={`transition-opacity text-start w-full text-white mt-5 inline-block outline-none active:outline-none ${
+            drawer?.name ? "opacity-100" : "opacity-0"
+          }`}
           defaultValue={drawer?.name}
           onChange={(e) => {
             setStateDrawerName(e.target.value);
@@ -102,10 +103,8 @@ export default function UpdateForm({
       </div>
       {updateDrop && (
         <button
-          className={
-            "w-full bg-blue-400 text-white rounded-3xl block p-2 cursor-pointer center xl:hover:scale-105 xl:active:scale-95 " +
-            (stateDrawerName === "" && " opacity-50")
-          }
+          className={`w-full bg-blue-400 text-white rounded-3xl block p-2 cursor-pointer center xl:hover:scale-105 xl:active:scale-95
+            ${stateDrawerName === "" && " opacity-50"}`}
           disabled={stateDrawerName === ""}
         >
           <span className="h-[20px] center">

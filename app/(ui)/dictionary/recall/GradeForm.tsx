@@ -5,20 +5,20 @@ import { TokenContext } from "../../../../components/TokenContextProvider";
 import { updateReviewDate } from "@/actions/manageNotes";
 import { useRouter } from "next/navigation";
 import { ChevronDown } from "lucide-react";
-import Loader from "../../../../components/Loader";
+import Loader from "../../../../components/common/Loader";
 
 export function GradeForm({
   toggleMenu,
   changeQuality,
   noteId,
   quality,
-  rerenderHandle,
+  rerenderParent,
 }: {
   toggleMenu: () => void;
   changeQuality: (e: number) => void;
   noteId: number;
   quality: number;
-  rerenderHandle: () => void;
+  rerenderParent: () => void;
 }) {
   const tokenContext = useContext(TokenContext);
   const [isPending, setIsPending] = useState(false);
@@ -35,7 +35,7 @@ export function GradeForm({
     if (!response?.success) {
       router.push("/sessionExpired");
     }
-    rerenderHandle(); //refresh parrent
+    rerenderParent();
   }
 
   return (
@@ -67,8 +67,8 @@ export function GradeForm({
             name="quality"
             onClick={() => toggleMenu()}
             onChange={(e) => changeQuality(Number(e.target.value))}
-            className="block text-white xl:hover:scale-105 bg-blue-400 w-full h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] appearance-none cursor-pointer py-2 rounded-3xl focus:outline-none px-3 text-xs sm:text-xl mt-2"
-          >
+            className="primary-btn appearance-none py-2 focus:outline-none px-3 text-xs sm:text-xl mt-2"
+          >            
             <option value="-1" disabled>
               Grade from 0-5{" "}
             </option>
@@ -92,7 +92,7 @@ export function GradeForm({
           <motion.button
             type="submit"
             variants={itemVariants}
-            className="primaryBtn center"
+            className="primary-btn center"
             onClick={() => setIsPending(true)}
           >
             {isPending ? <Loader /> : <b>Grade</b>}

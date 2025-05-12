@@ -17,7 +17,7 @@ export default function DrawerMenu({
 }) {  
 
   return (
-      <motion.div className="absolute flex flex-col justify-center items-center mr-3 sm:mr-8 top-0 right-0 mt-3 w-[30px]">
+      <motion.div className="absolute center-vertically mr-3 sm:mr-8 top-0 right-0 mt-3 w-[30px]">
         <motion.span
           onClick={(e) => {
             e.stopPropagation();

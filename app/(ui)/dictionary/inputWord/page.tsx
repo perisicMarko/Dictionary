@@ -1,9 +1,9 @@
 "use client";
-import { Help } from './Help';
+import { Help } from "./Help";
 import { useEffect, useState } from "react";
 import { generateNotes } from "@/actions/manageNotes";
 import { TWordApp } from "@/lib/types";
-import SaveNoteForm from './SaveNoteForm';
+import SaveNoteForm from "./SaveNoteForm";
 
 export default function UserInput() {
   const [help, setHelp] = useState(false);
@@ -21,13 +21,13 @@ export default function UserInput() {
         const response = await fetch(
           "https://api.dictionaryapi.dev/api/v2/entries/en/" + word.trim()
         );
-        if(response.ok){
+        if (response.ok) {
           const result = await response.json();
           const tmp = await generateNotes(result);
           setNote(tmp);
           setRequest(false);
           setError("");
-        }else{
+        } else {
           cleanUp(1);
         }
       } catch (error) {
@@ -45,41 +45,42 @@ export default function UserInput() {
     setGenerate(false);
     setRequest(false);
     setNote(null);
-    if (flag) {// when flag is 1 it should return <></> cause inside {} in return it is expected to return something
+    if (flag) {
+      // when flag is 1 it should return <></> cause inside {} in return it is expected to return something
       setError("Hm, there is a typo somewhere in your word spelling.");
       return <></>;
     }
     setWord("");
   }
-  
-  function toggleHelp(){
+
+  function toggleHelp() {
     setHelp(!help);
   }
-  function changeWord(e: string){
+  function changeWord(e: string) {
     setWord(e);
   }
-  function changeGenerate(e: boolean){
+  function changeGenerate(e: boolean) {
     setGenerate(e);
   }
 
-  function changeRequest(e: boolean){
+  function changeRequest(e: boolean) {
     setRequest(e);
   }
 
   return (
     <>
       {!help ? (
-        <SaveNoteForm 
-        cleanUp={cleanUp} 
-        note={note}
-        changeWord={changeWord}
-        error={error} 
-        generate={generate}
-        toggleHelp={toggleHelp}
-        isDisabled={isDisabled}
-        changeGenerate={changeGenerate}
-        changeRequest={changeRequest}
-        request={request}
+        <SaveNoteForm
+          cleanUp={cleanUp}
+          note={note}
+          changeWord={changeWord}
+          error={error}
+          generate={generate}
+          toggleHelp={toggleHelp}
+          isDisabled={isDisabled}
+          changeGenerate={changeGenerate}
+          changeRequest={changeRequest}
+          request={request}
         />
       ) : (
         <Help toggleHelp={toggleHelp} help={help} />

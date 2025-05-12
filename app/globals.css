@@ -2,7 +2,25 @@
 @import "normalize.css";
 
 
-body {
+
+.box-width {
+  @apply w-3/4 md:w-[600px];
+}
+
+.box-layout{
+  @apply bg-slate-800 rounded-3xl w-3/4 sm:w-[600px] p-5; 
+}
+
+.text-box{
+  @apply text-white text-center;
+}
+
+
+.collapse-window{
+  @apply absolute flex justify-end bg-slate-900 top-0 w-full right-0 rounded-t-3xl pr-2; 
+}
+
+body{
   font-family: var(--font-roboto), sans-serif;
 }
 
@@ -18,24 +36,25 @@ input{
   @apply active:outline-2 outline-blue-400;
 }
 
-.primaryBtn {
+.primary-btn {
   @apply w-full bg-blue-400 text-white rounded-3xl block m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer;
 }
-.primaryBtn:hover {
+
+.primary-btn:hover {
   @apply xl:scale-105;
 }
-.primaryBtn:active {
-  @apply xl:scale-95;
+.primary-btn:active {
+  @apply xl:scale-100;
 }
 
-.xBtn {
-  @apply scale-125 cursor-pointer;
+.x-btn {
+  @apply scale-125 cursor-pointer mr-3 py-1 text-white;
 }
-.xBtn:hover {
+.x-btn:hover {
   @apply xl:scale-150;
 }
 
-.textColor {
+.text-color {
   @apply text-slate-800;
 }
 
@@ -47,10 +66,13 @@ input{
   @apply flex justify-center items-center;
 }
 
+.center-vertically {
+  @apply flex flex-col justify-center items-center;
+}
 .form {
   @apply gap-2;
 }
-.formInput {
+.form-input {
   @apply block w-full p-2 mt-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] rounded-3xl text-slate-800 bg-white;
 }
 
@@ -74,7 +96,7 @@ input{
   z-index: -1;
 }
 
-.whiteSpaces {
+.white-spaces {
   white-space: pre-line;
 }
 
@@ -85,15 +107,11 @@ input{
   @apply underline;
 }
 
-.navigationBtn {
+.navigation-btn {
   @apply text-xs md:text-[14px] xl:text-[16px] cursor-pointer;
 }
-.navigationBtn:hover {
+.navigation-btn:hover {
   @apply text-blue-400;
-}
-
-.appWidth {
-  @apply w-3/4 sm:w-[600px];
 }
 
 label {
@@ -104,3 +122,4 @@ label {
 .authWidth {
   @apply w-3/4 sm:w-[500px];
 }
+

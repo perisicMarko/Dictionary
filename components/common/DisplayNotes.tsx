@@ -28,13 +28,13 @@ export default function DisplayNotes({
       <h2 className="mt-2 text-blue-400">
         <b>Your notes:</b>
       </h2>
-      <p className="whiteSpaces text-blue-300">
+      <p className="white-spaces text-blue-300">
         {userNotes ? userNotes : "You have not inserted yor notes."}
       </p>
       <h2 className="mt-2 text-blue-400">
         <b>Generated notes:</b>
       </h2>
-      <p className="whiteSpaces text-blue-300">{generatedNotes}</p>
+      <p className="white-spaces text-blue-300">{generatedNotes}</p>
     </motion.div>
   );
 }

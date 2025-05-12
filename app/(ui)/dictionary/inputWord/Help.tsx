@@ -21,14 +21,14 @@ export function Help({
     >
       <motion.h2
         variants={itemVariants}
-        className="hover:underline mb-5 cursor-pointer bg-slate-800 text-white p-2 text-center h-[30px] w-full rounded-3xl"
+        className="hover:underline mb-5 cursor-pointer bg-slate-800 text-box h-[30px] center w-full rounded-3xl"
         onClick={() => toggleHelp()}
       >
         {help ? "Go back" : "Need hlep?"}
       </motion.h2>
       <motion.div
         variants={itemVariants}
-        className="flex flex-col md:flex-row justify-center items-center"
+        className="center-vertically md:center"
       >
         <Image
           className="block xl:inline-block rounded-4xl mr-3 w-auto h-auto"
@@ -48,7 +48,7 @@ export function Help({
               x: 0,
             },
           }}
-          className="xl:inline-block bg-slate-800 text-white rounded-2xl p-2 text-center sm:w-[200px]"
+          className="xl:inline-block bg-slate-800 text-box rounded-2xl p-2 sm:w-[200px]"
         >
           Input the word you would like to remember, then click the
           &quot;Generate&quot; button.
@@ -56,7 +56,7 @@ export function Help({
       </motion.div>
       <motion.div
         variants={itemVariants}
-        className="mt-5 flex flex-col md:flex-row justify-center items-center"
+        className="mt-5 center-vertically md:center"
       >
         <Image
           className="block xl:inline-block rounded-4xl mr-3 w-auto h-auto"

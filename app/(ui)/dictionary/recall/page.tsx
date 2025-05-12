@@ -5,7 +5,7 @@ import { useState, useContext, useEffect } from "react";
 import { TDBNoteEntry } from "@/lib/types";
 import RecallNote from "@/app/(ui)/dictionary/recall/RecallNote";
 import { TokenContext } from "@/components/TokenContextProvider";
-import ZeroNotesMessage from "@/components/ZeroNotesMessage";
+import ZeroNotesMessage from "@/components/common/ZeroNotesMessage";
 import Loading from "../../loading";
 
 export default function Page() {
@@ -28,7 +28,6 @@ export default function Page() {
   return (
     <>
       <RecallNoteHelp />
-
       {!words ? (
         <Loading />
       ) : words.length > 0 ? (
@@ -37,7 +36,7 @@ export default function Page() {
             <RecallNote
               key={w.id}
               note={w}
-              rerenderHandle={onGradeSubmit}
+              rerenderParent={onGradeSubmit}
             ></RecallNote>
           );
         })

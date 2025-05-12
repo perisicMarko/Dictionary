@@ -2,7 +2,7 @@ import { TokenContext } from "@/components/TokenContextProvider";
 import { containerVariants } from "@/lib/animationVariants";
 import { useActionState, useContext, useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import Loader from "@/components/Loader";
+import Loader from "@/components/common/Loader";
 import { putWordInDrawer } from "@/actions/manageNotes/manageDrawers";
 import { useRouter } from "next/navigation";
 
@@ -40,6 +40,8 @@ export default function StrictAutocomplete({
   }, []);
 
 
+  console.log(words);
+  
   useEffect(() => {
     if(importState?.success){
       tokenContext?.setAccessToken(importState.accessToken);
@@ -61,7 +63,7 @@ export default function StrictAutocomplete({
       initial="hidden"
       animate="show"
       variants={containerVariants}
-      className="flex flex-col justify-center items-center gap-2 w-full"
+      className="center-vertically gap-2 w-full"
       onClick={(e) => e.stopPropagation()}
     >
       <input
@@ -91,7 +93,7 @@ export default function StrictAutocomplete({
       </datalist>
       <motion.button
        type="submit"
-       className={"w-full center cursor-pointer xl:hover:scale-105 xl:active:scale-95 bg-blue-400 p-2 rounded-3xl text-white " + ((value === '' || !validWord) ? " opacity-50" : "")}
+       className={`w-full center cursor-pointer xl:hover:scale-105 xl:active:scale-95 bg-blue-400 p-2 rounded-3xl text-white ${(value === '' || !validWord) ? " opacity-50" : ""}`}
        disabled={!validWord || value === ''}
       >
         <span className="h-[20px] center">

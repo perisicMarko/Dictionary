@@ -11,14 +11,9 @@ export default function AudioPlayer({ src }: { src: string }) {
     }
   }
 
-  let containerStyle = 
-  "inline-block cursor-pointer hover:scale-105 active:scale-95 rounded-3xl w-full h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] center my-2";
   let isDisabled = false;
-  if (src === null || src === undefined || src === "") {
+  if (!src)
     isDisabled = true;
-  } else {
-    containerStyle += " bg-blue-400";
-  }
 
   const title = isDisabled
     ? "Sorry, no sound for this one."
@@ -27,7 +22,7 @@ export default function AudioPlayer({ src }: { src: string }) {
 
   return (
     <div
-      className={containerStyle}
+      className={`inline-block cursor-pointer hover:scale-105 active:scale-95 rounded-3xl w-full h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] center my-2 ${!isDisabled && ' bg-blue-400'}`}
       title={title}
       onClick={(e) => {
         e.stopPropagation();

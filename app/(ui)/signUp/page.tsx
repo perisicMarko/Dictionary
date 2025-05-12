@@ -5,7 +5,7 @@ import { useActionState, useState } from "react";
 import { authenticateSignUp } from "@/actions/auth/user";
 import { motion } from "framer-motion";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
-import Loader from "@/components/Loader";
+import Loader from "@/components/common/Loader";
 
 export default function SignUp() {
   const [state, action, isPending] = useActionState(
@@ -26,7 +26,7 @@ export default function SignUp() {
           initial="hidden"
           animate="show"
           variants={containerVariants}
-          className="authWidth bg-slate-800 p-3 mt-15 sm:mt-20 rounded-3xl"
+          className="box-layout mt-15 sm:mt-20"
         >
           <motion.p variants={itemVariants} className="text-white text-center">
             <b>{state?.subscription}</b>
@@ -40,22 +40,22 @@ export default function SignUp() {
           initial="hidden"
           animate="show"
           variants={containerVariants}
-          className="mt-5 authWidth h-1/2 bg-slate-800 rounded-3xl border-2 border-blue-50"
+          className="mt-5 h-1/2 box-layout !p-0 border-2 border-blue-50 relative"
         >
-          <div className="flex justify-end items-start bg-slate-950 border-blue-50 rounded-t-3xl">
-            <Link className="xBtn mr-3 py-1 text-white" href="/">
+          <div className="collapse-window">
+            <Link className="x-btn" href="/">
               <b>x</b>
             </Link>
           </div>
 
-          <div className="center">
+          <div className="center mt-5">
             <form className="form w-full px-3 pb-5" action={action}>
               <motion.div variants={itemVariants} className="mt-3">
                 <label htmlFor="name" className="text-white">
                   Name:{" "}
                 </label>
                 <input
-                  className="formInput"
+                  className="form-input"
                   type="text"
                   name="name"
                   defaultValue={state?.name}
@@ -79,7 +79,7 @@ export default function SignUp() {
                   Last name:{" "}
                 </label>
                 <input
-                  className="formInput"
+                  className="form-input"
                   type="text"
                   name="lastName"
                   defaultValue={state?.lastName}
@@ -103,7 +103,7 @@ export default function SignUp() {
                   Email:{" "}
                 </label>
                 <input
-                  className="formInput"
+                  className="form-input"
                   type="text"
                   name="email"
                   defaultValue={state?.email}
@@ -127,7 +127,7 @@ export default function SignUp() {
                 <label htmlFor="password" className="text-white">
                   Password:{" "}
                 </label>
-                <input className="formInput" type="password" name="password" />
+                <input className="form-input" type="password" name="password" />
                 {state?.errors?.password && (
                   <p className="error" key="password">
                     Password:
@@ -147,7 +147,7 @@ export default function SignUp() {
                   Confirm password:{" "}
                 </label>
                 <input
-                  className="formInput"
+                  className="form-input"
                   type="password"
                   name="confirmPassword"
                 />
@@ -165,7 +165,7 @@ export default function SignUp() {
                 <button
                   disabled={isPending || email === ""}
                   className={
-                    "bg-blue-400 center text-white rounded-3xl block m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer w-1/2 hover:scale-105 active:scale-95 " +
+                    "primary-btn !w-1/2 " +
                     (email === "" && " opacity-50")
                   }
                 >

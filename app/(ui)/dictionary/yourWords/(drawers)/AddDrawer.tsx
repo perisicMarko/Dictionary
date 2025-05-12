@@ -4,7 +4,7 @@ import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { Plus } from "lucide-react";
 import { createDrawer } from "@/actions/manageNotes/manageDrawers";
 import { TokenContext } from "@/components/TokenContextProvider";
-import Loader from "@/components/Loader";
+import Loader from "@/components/common/Loader";
 import { useRouter } from "next/navigation";
 
 export default function AddDrawer({fetch} : {fetch : () => void}) {
@@ -41,13 +41,14 @@ export default function AddDrawer({fetch} : {fetch : () => void}) {
       initial="hidden"
       animate="show"
       variants={containerVariants}
-      className="rounded-3xl appWidth mt-5 bg-slate-800 h-[100px] flex flex-col gap-2 justify-center items-center relative"
+      className="box-layout mt-5 h-[100px] center-vertically gap-2 relative"
     >
       {addDrawer ? (
         <>
           <motion.span
             variants={itemVariants}
-            className="absolute text-white top-0 right-0 mr-4 mt-2 scale-105 hover:scale-115 cursor-pointer"
+            scale-125 cursor-pointer mr-3 py-1 text-white
+            className="absolute text-white top-0 right-3 mr-4 mt-2 scale-105 hover:scale-115 cursor-pointer"
             onClick={() => setAddDrawer(false)}
           >
             <b>x</b>
@@ -56,7 +57,7 @@ export default function AddDrawer({fetch} : {fetch : () => void}) {
           <motion.form
             variants={containerVariants}
             action={action}
-            className="p-5 flex flex-col justify-center items-center gap-3"
+            className="p-5 center-vertically gap-3"
           >
             <input
               name="accessToken"
@@ -74,8 +75,8 @@ export default function AddDrawer({fetch} : {fetch : () => void}) {
             <button
               type="submit"
               className={
-                "w-full bg-blue-400 text-white rounded-3xl block m-1 h-[30px] xl:h-[38px] cursor-pointer center xl:hover:scale-105 xl:active:scale-95 " +
-                (drawerName === "" && " opacity-50")
+                `primary-btn !h-[30px] !xl:h-[38px] center " +
+                ${drawerName === "" ? " opacity-50" : ""}`
               }
               disabled={drawerName === ''}
             >

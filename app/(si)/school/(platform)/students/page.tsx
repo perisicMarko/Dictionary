@@ -49,7 +49,7 @@ export default function Page() {
         initial="hidden"
         animate="show"
         variants={containerVariants}
-        className="rounded-3xl bg-slate-800 grid grid-cols-[auto_1fr] mt-20 appWidth p-3"
+        className="rounded-3xl bg-slate-800 grid grid-cols-[auto_1fr] mt-20 box-width p-3"
       >
         <UserSearchIcon color="white" />
         <input
@@ -66,7 +66,7 @@ export default function Page() {
               initial="hidden"
               animate="show"
               variants={containerVariants}
-              className="bg-slate-800 rounded-3xl p-5 appWidth"
+              className="bg-slate-800 rounded-3xl p-5 box-width"
             >
               <motion.h2
                 variants={itemVariants}

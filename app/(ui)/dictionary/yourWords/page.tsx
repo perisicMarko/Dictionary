@@ -34,12 +34,12 @@ export default function YourWords() {
         initial="hidden"
         animate="show"
         variants={containerVariants}
-        className="appWidth bg-slate-800 rounded-4xl grid grid-cols-2 relative border-4 sm:border-6 mt-17 z-0 border-slate-800"
+        className="box-layout !p-0 grid grid-cols-2 relative border-4 sm:border-6 mt-17 z-0 border-slate-800"
       >
         <div
           className={
-            "text-white rounded-l-3xl w-full h-full p-2 sm:p-3 cursor-pointer center z-10 " +
-            (showSwitch && " font-bold")
+            `text-white rounded-l-3xl w-full h-full p-2 sm:p-3 cursor-pointer center z-10 
+            ${showSwitch && " font-bold"}`
           }
           onClick={() => changeLayout('true')}
         >
@@ -56,8 +56,8 @@ export default function YourWords() {
         ></motion.div>
         <div
           className={
-            "text-white rounded-r-3xl w-full h-full p-2 sm:p-3 cursor-pointer center z-10 " +
-            (!showSwitch && " font-bold")
+            `text-white rounded-r-3xl w-full h-full p-2 sm:p-3 cursor-pointer center z-10 
+            ${!showSwitch && " font-bold"}`
           }
           onClick={() => changeLayout('false')}
         >

@@ -38,7 +38,7 @@ export function SearchBar({
       initial="hidden"
       animate="show"
       variants={itemVariants}
-      className="mt-5 w-3/4 sm:w-[600px] bg-slate-800 rounded-4xl grid grid-cols-[auto_auto_1fr] items-center"
+      className="mt-5 box-layout !p-0 grid grid-cols-[auto_auto_1fr] items-center"
     >
       <span
         className="text-white md:ml-4 ml-3 cursor-pointer hover:scale-115 rounded-full text-2xl"
@@ -70,10 +70,10 @@ export function SearchBar({
              initial="hidden"
              animate="show"
              variants={containerVariants}
-             className="bg-slate-800 w-3/4 sm:w-[600px] mt-5 rounded-3xl text-white"
+             className="box-layout mt-5 text-white relative"
            >
-        <div className="flex justify-end bg-slate-950 rounded-t-2xl">
-          <span className="xBtn mr-4 py-1" onClick={() => setHelp(!help)}>
+        <div className="collapse-window">
+          <span className="x-btn mr-4 py-1" onClick={() => setHelp(!help)}>
             <b>x</b>
           </span>
         </div>

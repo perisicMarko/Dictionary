@@ -7,11 +7,11 @@ export default function NoValidToken(){
         initial="hidden"
         animate="show"
         variants={containerVariants}
-        className="p-2 center w-full h-full mt-20"
+        className="center mt-20 box-layout"
       >
         <motion.p
           variants={itemVariants}
-          className="text-white text-center bg-slate-800 appWidth  rounded-3xl p-2"
+          className="text-box"
         >
           Sorry, no valid token.
         </motion.p>

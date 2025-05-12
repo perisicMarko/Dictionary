@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
-import Loader from "@/components/Loader";
+import Loader from "@/components/common/Loader";
 import Loading from "@/app/(ui)/loading";
 import { TokenContext } from "@/components/TokenContextProvider";
 
@@ -42,15 +42,15 @@ export default function Edit({pathSrc}: {pathSrc: string}) {
       initial="hidden"
       animate="show"
       variants={containerVariants}
-      className="flex flex-col justify-center items-center mt-15 bg-slate-800 rounded-4xl xl:h-[800px] h-3/4 w-3/4 xl:w-[600px] p-5"
+      className="box-layout center-vertically mt-15 xl:h-[800px] h-3/4"
     >
       <form
-        className="rounded-2xl space-y-4 w-full p-4"
+        className="rounded-3xl space-y-4 w-full p-4"
         action={(e) => onSubmitEditHandle(e)}
       >
         <motion.h2
           variants={itemVariants}
-          className="text-center text-white"
+          className="text-box"
         >
           Edit your notes for: <b title="word" className="hover:underline">{note.word}</b>
         </motion.h2>
@@ -62,7 +62,7 @@ export default function Edit({pathSrc}: {pathSrc: string}) {
             name="userNotes"
             id="userNotes"
             defaultValue={note?.user_notes}
-            className="bg-white rounded-2xl  xl:h-[180px] md:h-[220px] sm:h-[180px] h-[130px] block w-full p-2 mt-1 text-slate-800"
+            className="bg-white rounded-3xl xl:h-[180px] md:h-[220px] sm:h-[180px] h-[130px] block w-full p-2 mt-1 text-slate-800"
           ></textarea>
         </motion.div>
 
@@ -82,7 +82,7 @@ export default function Edit({pathSrc}: {pathSrc: string}) {
           animate={{ opacity: 1, y: 0, transition: { duration: 0.6 } }}
           className="center sm:my-3"
         >
-          <button className="primaryBtn center" onClick={() => setIsPending(true)}>
+          <button className="primary-btn center" onClick={() => setIsPending(true)}>
             {isPending ? (
               <Loader />
             ) : (

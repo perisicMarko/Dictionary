@@ -9,11 +9,11 @@ import { removeWordFromDrawer } from "@/actions/manageNotes/manageDrawers";
 export default function NoteMenu({
   noteId,
   drawerId,
-  handle,
+  rerenderParent,
 }: {
   noteId: number;
   drawerId: number;
-  handle: () => void;
+  rerenderParent: () => void;
 }) {
   const [isRemoving, setIsRemoving] = useState(false);
   const tokenContext = useContext(TokenContext);
@@ -47,7 +47,7 @@ export default function NoteMenu({
               drawerId,
               noteId
             );
-            handle();
+            rerenderParent();
           }}
         >
           <FolderMinus className={"hover:scale-105 mt-1 " + (isRemoving ? " animate-spin" : "")} />

@@ -7,8 +7,8 @@ import { TWordApp } from "@/lib/types";
 
 import { saveNotes } from "@/actions/manageNotes";
 import { TokenContext } from "@/components/TokenContextProvider";
-import AudioPlayer from "@/components/AudioPlayer";
-import Loader from "@/components/Loader";
+import AudioPlayer from "@/components/common/AudioPlayer";
+import Loader from "@/components/common/Loader";
 
 
 export default function SaveNoteForm({
@@ -95,15 +95,12 @@ export default function SaveNoteForm({
       }}
       variants={containerVariants}
       key="input"
-      className="flex flex-col justify-center items-center mt-25 xl:mt-70 w-3/4 h-3/4 sm:w-[500px] md: py-5 md-py-10 xl:py-16 sm:max-h-[400px] rounded-2xl"
+      className="center-verticaly mt-25 xl:mt-30 h-3/4 md:py-5 md-py-10 xl:py-16 sm:max-h-[400px]"
     >
-      <motion.div
-        variants={itemVariants}
-        className="flex flex-col justify-center items-center w-full"
-      >
-        <form
+        <motion.form
+          variants={itemVariants}
           action={(e) => {handleSubmit(e)}}
-          className="bg-slate-800 space-y-2 h-full rounded-4xl p-7 flex flex-col justify-center items-center w-full"
+          className="space-y-2 h-full center-verticaly box-layout !p-7"
         >
           <input
             name="accessToken"
@@ -115,7 +112,7 @@ export default function SaveNoteForm({
             defaultValue={!isErrorNote(note) && note?.word || ''}
             ref={wordInputRef}
             key="userWord"
-            className="rounded-3xl text-center textColor bg-white w-full h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] p-2 mt-5"
+            className="rounded-3xl text-center text-slate-800 bg-white w-full h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] p-2 mt-5"
             type="text"
             name="word"
             onChange={(e) => changeWord(e.target.value)}
@@ -171,7 +168,7 @@ export default function SaveNoteForm({
             </div>
             </>
           )}
-          <div className="w-full flex flex-col items-center">
+          <div className="w-full center-vertically">
             <div className="w-full grid grid-cols-2 gap-2">
               <motion.button
                 variants={itemVariants}
@@ -208,8 +205,7 @@ export default function SaveNoteForm({
               Need any help?
             </span>
           </div>
-        </form>
-      </motion.div>
+        </motion.form>
     </motion.div>
   );
 }

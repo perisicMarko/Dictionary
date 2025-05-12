@@ -13,6 +13,7 @@ export default function ResetPassword() {
   let token = params.token;
   if (typeof token === "object") token = token[0];
   const [user, setUser] = useState<TUser | undefined>();
+  const [isFetching, setIsFetching] = useState(true);
 
   useEffect(() => {
     if (!token) {
@@ -25,6 +26,7 @@ export default function ResetPassword() {
     };
 
     fetchUser();
+    setIsFetching(false);
   }, [token]);
 
   let isValid = false;
@@ -44,7 +46,7 @@ export default function ResetPassword() {
 
   return (
     <>
-      {!user ? (
+      {isFetching ? (
         <Loading />
       ) : !isValid ? (
         <NoValidToken />

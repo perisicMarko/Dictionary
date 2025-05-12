@@ -4,7 +4,7 @@ import { useActionState, useEffect, useState } from "react";
 import { authenticateSignUp } from "@/actions/auth/school";
 import { motion } from "framer-motion";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
-import Loader from "@/components/Loader";
+import Loader from "@/components/common/Loader";
 import { useRouter } from "next/navigation";
 
 

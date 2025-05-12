@@ -8,7 +8,7 @@ import UpdateForm from "./UpdateForm";
 import AddWordForm from "./AddWordForm";
 import { TokenContext } from "@/components/TokenContextProvider";
 import { deleteDrawer } from "@/actions/manageNotes/manageDrawers";
-import Loader from "@/components/Loader";
+import Loader from "@/components/common/Loader";
 
 export default function Drawer({
   drawer,
@@ -40,7 +40,6 @@ export default function Drawer({
     setIsDeleting(false);
   };
 
-  console.log(words);
   const deleteConfirmation = (v: boolean) => {
     setConfirmDelete(v);
   };
@@ -51,7 +50,7 @@ export default function Drawer({
         initial="hidden"
         animate="show"
         variants={containerVariants}
-        className="appWidth bg-slate-800 mt-5 rounded-3xl p-3 relative transition-transform flex flex-col justify-center items-center"
+        className="box-layout mt-3 relative transition-transform center-vertically"
         onClick={() => {
           setMenu(false);
           setAddDrop(false);
@@ -62,11 +61,11 @@ export default function Drawer({
             initial="hidden"
             animate="show"
             variants={containerVariants}
-            className="absolute z-20 bg-slate-800 rounded-3xl top-0 right-0 w-full h-full flex flex-col justify-center items-center"
+            className="absolute z-20 bg-slate-800 rounded-3xl top-0 right-0 w-full h-full center-vertically"
           >
             <motion.h2
               variants={itemVariants}
-              className="text-white text-center mb-3"
+              className="text-box mb-3"
             >
               Delete this drawer?
             </motion.h2>
@@ -109,7 +108,7 @@ export default function Drawer({
           confirmDelete={deleteConfirmation}
           rerender={rerender}
         />
-        <div className="flex flex-col justify-center items-center w-2/3 sm:w-1/2">
+        <div className="center-vertically w-2/3 sm:w-1/2">
           <UpdateForm
             updateDrop={updateDrop}
             setUpdateDrop={(v: boolean) => setUpdateDrop(v)}
@@ -150,7 +149,7 @@ export default function Drawer({
           )}
         </div>
 
-        <span title={openedDrawerId === -1 ? 'Open drawer' : 'CloseDrawer'}>
+        <span title={openedDrawerId === -1 ? 'Open drawer' : 'Close drawer'}>
           {openedDrawerId === -1 ? (
             <ChevronDown
               color="white"

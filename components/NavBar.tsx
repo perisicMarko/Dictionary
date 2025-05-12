@@ -37,7 +37,8 @@ export function NavBar() {
     "/dictionary/yourWords",
     "/dictionary/recall",
   ];
-  const isMatch = navigationRoutes.includes(path);
+
+  const isNavigationRoute = navigationRoutes.includes(path);
 
   const handleLogOut = async () => {
     tokenContext?.setAccessToken('');
@@ -47,7 +48,7 @@ export function NavBar() {
 
   return (
     isVisible &&
-    isMatch && (
+    isNavigationRoute && (
       <motion.nav
         initial="hidden"
         animate="show"
@@ -72,7 +73,7 @@ export function NavBar() {
             href="/dictionary/inputWord"
             className={`nav-link ${
               path === "/dictionary/inputWord" ? "text-blue-400" : "text-white"
-            } py-1 px-1 sm:px-3 navigationBtn`}
+            } py-1 px-1 sm:px-3 navigation-btn`}
           >
             {" "}
             Input word{" "}
@@ -82,7 +83,7 @@ export function NavBar() {
             href="/dictionary/recall"
             className={`nav-link ${
               path === "/dictionary/recall" ? "text-blue-400" : "text-white"
-            } py-1 px-1 sm:px-3 navigationBtn`}
+            } py-1 px-1 sm:px-3 navigation-btn`}
           >
             {" "}
             Recall{" "}
@@ -92,7 +93,7 @@ export function NavBar() {
             href="/dictionary/yourWords"
             className={`nav-link ${
               path === "/dictionary/yourWords" ? "text-blue-400" : "text-white"
-            } py-1 px-1 sm:px-3 navigationBtn`}
+            } py-1 px-1 sm:px-3 navigation-btn`}
           >
             {" "}
             Your words{" "}
@@ -102,7 +103,7 @@ export function NavBar() {
             href="/dictionary/history"
             className={`nav-link ${
               path === "/dictionary/history" ? "text-blue-400" : "text-white"
-            } py-1 px-1 sm:px-3 navigationBtn`}
+            } py-1 px-1 sm:px-3 navigation-btn`}
           >
             {" "}
             Learned words{" "}

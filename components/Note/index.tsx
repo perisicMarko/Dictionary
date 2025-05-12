@@ -1,8 +1,8 @@
 "use client";
-import DisplayNotes from "../DisplayNotes";
+import DisplayNotes from "../common/DisplayNotes";
 import HistoryNoteMenu from "./HistoryNoteMenu";
 import { TDBNoteEntry } from "@/lib/types";
-import AudioPlayer from "../AudioPlayer";
+import AudioPlayer from "../common/AudioPlayer";
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import NoteMenu from "./NoteMenu";
@@ -13,16 +13,16 @@ export default function Note({
   prop,
   historyNote,
   drawerId,
-  handle,
+  rerenderParent,
 }: {
   prop: TDBNoteEntry;
   historyNote: boolean;
   drawerId: number;
-  handle: () => void;
+  rerenderParent: () => void;
 }) {
   const [drop, setDrop] = useState(false);
   const [menu, setMenu] = useState(false);
-  const title = drop ? "Click to collapse." : "Click for notes.";
+  const containerTitle = drop ? "Click to collapse." : "Click for notes.";
   const containerRef = useRef(null);
   const note = prop;
 
@@ -36,8 +36,8 @@ export default function Note({
       animate="show"
       variants={containerVariants}
       ref={containerRef}
-      className="relative bg-slate-800 w-3/4 sm:w-[600px] max-h-[720px] sm:max-h-[800px] rounded-4xl mt-8 p-7"
-      title={title}
+      className="relative box-layout max-h-[720px] sm:max-h-[800px] mt-8 !p-7"
+      title={containerTitle}
       onClick={() => {
         setMenu(false);
         setDrop(!drop);
@@ -57,23 +57,23 @@ export default function Note({
 
         {menu && historyNote && (
           <HistoryNoteMenu
-            actionCallBack={handle}
+            rerenderParent={rerenderParent}
             toggleMenu={toggleMenu}
             noteId={note.id}
           />
         )}
         {menu && !historyNote && (
-          <NoteMenu noteId={note.id} drawerId={drawerId} handle={handle}/>
+          <NoteMenu noteId={note.id} drawerId={drawerId} rerenderParent={rerenderParent}/>
         )}
       </div>
 
       <h2 className="text-white mb-3 select-none" title="word">
         <b>{note.word}</b>
       </h2>
-      <div className="flex flex-col justify-center items-center space-y-2">
+      <div className="center-vertically space-y-2">
         <AudioPlayer src={note.audio}></AudioPlayer>
         <button
-          className="primaryBtn"
+          className="primary-btn"
           onClick={() => {
             setDrop(!drop);
             setMenu(false);

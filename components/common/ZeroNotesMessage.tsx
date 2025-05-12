@@ -9,9 +9,9 @@ export default function ZeroNotesMessage({ message }: { message: string }) {
       initial="hidden"
       animate="show"
       variants={containerVariants}
-      className="center bg-slate-800 w-3/4 sm:w-[600px] mt-10 rounded-4xl  p-2"
+      className="center mt-10 box-layout"
     >
-      <motion.h2 variants={itemVariants} className="text-center text-white">
+      <motion.h2 variants={itemVariants} className="text-box">
         <b>{message}</b>
       </motion.h2>
     </motion.div>
