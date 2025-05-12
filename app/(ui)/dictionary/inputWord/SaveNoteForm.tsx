@@ -95,12 +95,12 @@ export default function SaveNoteForm({
       }}
       variants={containerVariants}
       key="input"
-      className="center-verticaly mt-25 xl:mt-30 h-3/4 md:py-5 md-py-10 xl:py-16 sm:max-h-[400px]"
+      className="center-verticaly box-width mt-25 xl:mt-30 h-3/4 md:py-5 md-py-10 xl:py-16 sm:max-h-[400px]"
     >
         <motion.form
           variants={itemVariants}
           action={(e) => {handleSubmit(e)}}
-          className="space-y-2 h-full center-verticaly box-layout !p-7"
+          className="space-y-2 h-full bg-slate-800 rounded-3xl center-verticaly w-full p-6"
         >
           <input
             name="accessToken"
