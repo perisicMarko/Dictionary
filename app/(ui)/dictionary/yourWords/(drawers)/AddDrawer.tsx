@@ -7,7 +7,7 @@ import { TokenContext } from "@/components/TokenContextProvider";
 import Loader from "@/components/common/Loader";
 import { useRouter } from "next/navigation";
 
-export default function AddDrawer({fetch} : {fetch : () => void}) {
+export default function AddDrawer({rerender} : {rerender : () => void}) {
   const [addDrawer, setAddDrawer] = useState(false);
   const [state, action, isPending] = useActionState(createDrawer, undefined);
   const [drawerName, setDrawerName] = useState("");
@@ -27,7 +27,7 @@ export default function AddDrawer({fetch} : {fetch : () => void}) {
       tokenContext?.setAccessToken(state.accessToken);
       setAddDrawer(false);
     }
-    fetch();
+    rerender();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state?.success]);
 
@@ -47,7 +47,6 @@ export default function AddDrawer({fetch} : {fetch : () => void}) {
         <>
           <motion.span
             variants={itemVariants}
-            scale-125 cursor-pointer mr-3 py-1 text-white
             className="absolute text-white top-0 right-3 mr-4 mt-2 scale-105 hover:scale-115 cursor-pointer"
             onClick={() => setAddDrawer(false)}
           >

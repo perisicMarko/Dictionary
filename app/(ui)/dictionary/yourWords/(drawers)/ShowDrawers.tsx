@@ -9,15 +9,15 @@ import { TDBNoteEntry, TDrawer } from "@/lib/types";
 import Drawer from "./Drawer";
 import { getUsersNotes } from "@/actions/manageNotes";
 import Loading from "@/app/(ui)/loading";
-import OpenDrawer from "./OpenedDrawer";
+import OpenedDrawer from "./OpenedDrawer";
 
 export default function ShowDrawers() {
   const [search, setSearch] = useState("");
-  const tokenContext = useContext(TokenContext);
   const [drawers, setDrawers] = useState<TDrawer[]>();
   const [words, setWords] = useState<TDBNoteEntry[]>();
   const [refresh, setRefresh] = useState(false);
   const [openedDrawerId, setOpenedDrawerId] = useState(-1);
+  const tokenContext = useContext(TokenContext);
 
   useLayoutEffect(() => {
     const drawerId = sessionStorage.getItem("openedDrawerId");
@@ -71,6 +71,8 @@ export default function ShowDrawers() {
 
   const openedDrawer = drawers?.find((d) => d.id === openedDrawerId);
 
+  console.log(openedDrawerId);
+
   return (
     <>
       <SearchBar
@@ -114,7 +116,7 @@ export default function ShowDrawers() {
         </motion.p>
       </SearchBar>
 
-      {openedDrawerId === -1 && <AddDrawer fetch={() => fetch()} />}
+      {openedDrawerId === -1 && <AddDrawer rerender={rerender} />}
 
       {openedDrawerId === -1 &&
         (drawers ? (
@@ -122,7 +124,7 @@ export default function ShowDrawers() {
             <Drawer
               key={d.id}
               drawer={d as TDrawer}
-              words={words}
+              words={words as TDBNoteEntry[]}
               rerender={rerender}
               openDrawer={(id: number) => openDrawer(id)}
               openedDrawerId={openedDrawerId}
@@ -133,12 +135,12 @@ export default function ShowDrawers() {
         ))}
 
       {openedDrawerId != -1 && (
-        <OpenDrawer
+        <OpenedDrawer
           drawer={openedDrawer}
           search={search}
           openDrawer={(id: number) => openDrawer(id)}
           openedDrawerId={openedDrawerId}
-          allWords={words}
+          drawerWords={words as TDBNoteEntry[]}
         />
       )}
     </>

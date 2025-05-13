@@ -17,15 +17,15 @@ export default function Drawer({
   openDrawer,
   openedDrawerId,
 }: {
-  drawer: TDrawer | undefined;
-  words: TDBNoteEntry[] | undefined;
+  drawer: TDrawer;
+  words: TDBNoteEntry[];
   rerender: () => void;
   openDrawer: (id: number) => void;
   openedDrawerId: number;
 }) {
   const [menu, setMenu] = useState(false);
-  const [updateDrop, setUpdateDrop] = useState(false);
-  const [addDrop, setAddDrop] = useState(false);
+  const [updateFormShow, setUpdateFormShow] = useState(false);
+  const [addFormShow, setAddFormShow] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const tokenContext = useContext(TokenContext);
@@ -53,7 +53,7 @@ export default function Drawer({
         className="box-layout mt-3 relative transition-transform center-vertically"
         onClick={() => {
           setMenu(false);
-          setAddDrop(false);
+          setAddFormShow(false);
         }}
       >
         {confirmDelete && (
@@ -110,12 +110,12 @@ export default function Drawer({
         />
         <div className="center-vertically w-2/3 sm:w-1/2">
           <UpdateForm
-            updateDrop={updateDrop}
-            setUpdateDrop={(v: boolean) => setUpdateDrop(v)}
-            setAddDrop={(v: boolean) => setAddDrop(v)}
-            drawerId={drawer?.id || -1}
+            drawer={drawer}
+            updateFormShow={updateFormShow}
+            setUpdateFormShow={(v: boolean) => setUpdateFormShow(v)}
+            setAddFormShow={(v: boolean) => setAddFormShow(v)}
           />
-          {updateDrop === false && (
+          {updateFormShow === false && (
             <>
               <motion.span
                 variants={itemVariants}
@@ -123,7 +123,7 @@ export default function Drawer({
               >
                 Add word
               </motion.span>
-              {addDrop === false ? (
+              {addFormShow === false ? (
                 <motion.span
                   variants={itemVariants}
                   className="text-white xl:hover:text-blue-400 cursor-pointer"
@@ -131,7 +131,7 @@ export default function Drawer({
                   <Plus
                     onClick={(e) => {
                       e.stopPropagation();
-                      setAddDrop(true);
+                      setAddFormShow(true);
                     }}
                   />
                 </motion.span>
@@ -141,7 +141,7 @@ export default function Drawer({
                     word: w.word,
                     wordId: w.id,
                   }))}
-                  drawerId={drawer?.id || -1}
+                  drawerId={drawer.id}
                   rerender={rerender}
                 />
               )}

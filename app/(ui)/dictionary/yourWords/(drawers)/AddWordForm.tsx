@@ -51,8 +51,8 @@ export default function StrictAutocomplete({
   
   const handleImport = async (e: FormData) => {
     importAction(e);
-    rerender();
     setValue('');
+    rerender();
   }
 
   return (
