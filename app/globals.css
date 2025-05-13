@@ -37,7 +37,7 @@ input{
 }
 
 .primary-btn {
-  @apply w-full bg-blue-400 text-white rounded-3xl block m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer;
+  @apply w-full bg-blue-400 text-white rounded-3xl block m-1 h-[35px] sm:h-[40px] xl:h-[48px] cursor-pointer;
 }
 
 .primary-btn:hover {

@@ -49,7 +49,7 @@ export default function Page() {
         initial="hidden"
         animate="show"
         variants={containerVariants}
-        className="rounded-3xl bg-slate-800 grid grid-cols-[auto_1fr] mt-20 box-width p-3"
+        className="box-layout !p-2 grid grid-cols-[auto_1fr] mt-20"
       >
         <UserSearchIcon color="white" />
         <input
@@ -66,15 +66,15 @@ export default function Page() {
               initial="hidden"
               animate="show"
               variants={containerVariants}
-              className="bg-slate-800 rounded-3xl p-5 box-width"
+              className="box-layout"
             >
               <motion.h2
                 variants={itemVariants}
-                className="text-white text-center"
+                className="text-box"
               >
                 {u.firstName + " " + u.lastName}
               </motion.h2>
-              <div className="">
+              <div>
                 <User color="white" className="inline-block" />{" "}
                 <span className="text-white">User info:</span>
                 <span className="text-white block">

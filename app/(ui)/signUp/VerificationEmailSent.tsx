@@ -3,6 +3,7 @@ import { containerVariants, itemVariants } from '@/lib/animationVariants';
 import Link from 'next/link';
 import { useActionState } from 'react';
 import { resendVerificationMail } from '@/actions/auth/user';
+import Loader from '@/components/common/Loader';
 
 export default function VerificationEmailSent({ email }: { email: string }) {
       const [resendState, resendAction, isPendingReset] = useActionState(
@@ -15,9 +16,9 @@ export default function VerificationEmailSent({ email }: { email: string }) {
         initial="hidden"
         animate="show"
         variants={containerVariants}
-        className="flex flex-col items-center box-layout mt-15 sm:mt-20"
+        className="center-vertically box-layout mt-15 sm:mt-20"
       >
-        <motion.p variants={itemVariants} className="text-center text-white">
+        <motion.p variants={itemVariants} className="text-box">
           <b>Verification email has been sent.<br/> </b>
           Check your email <b className="text-blue-300"> spam</b> section and mark email as{" "}
           <b className="text-blue-300">report not spam</b> so you can receive our
@@ -32,8 +33,8 @@ export default function VerificationEmailSent({ email }: { email: string }) {
         </Link>
         <motion.form action={resendAction} className="w-full">
           <input name="email" defaultValue={email} hidden />
-          <button className="primaryBtn" type="submit">
-            {isPendingReset ? "Resending mail..." : "Resend mail"}
+          <button className="primary-btn center" type="submit">
+            {isPendingReset ? <Loader/> : "Resend mail"}
           </button>
         </motion.form>
         {resendState && (

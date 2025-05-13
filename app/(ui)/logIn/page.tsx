@@ -13,30 +13,23 @@ export default function LogIn() {
     undefined
   );
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [pass, setPass] = useState("");
+  const [formData, setFormData] = useState<{email: string, password: string}>({email: '', password: ''})
+  const {email, password} = formData;
   const [semaphore, setSemaphore] = useState(false);
 
   useEffect(() => {
     if (state?.success) router.push("/dictionary/inputWord");
   }, [router, state?.success]);
 
-  if (state?.errors?.email && email !== "" && semaphore) {
-    setEmail("");
-    setPass("");
+  if (state?.errors?.email && state?.subscription != "" && semaphore) {
+    setFormData({email: '', password: ''})
     setSemaphore(false);
   }
-  if (state?.errors?.password && pass !== "" && semaphore) {
-    setPass("");
+  if (state?.errors?.password && password !== "" && semaphore) {
+    setFormData({...formData, password: ''})
     setSemaphore(false);
   }
-  const emptyCredentials = pass === "" || email === "";
-
-  if (state?.subscription != "" && semaphore) {
-    setEmail("");
-    setPass("");
-    setSemaphore(false);
-  }
+  const emptyCredentials = password === "" || email === "";
 
   return (
     <>
@@ -87,7 +80,7 @@ export default function LogIn() {
               name="email"
               value={email}
               onChange={(e) => {
-                setEmail(e.target.value);
+                setFormData({...formData, email: e.target.value})
               }}
             />
             {state?.errors?.email != "" && (
@@ -102,8 +95,8 @@ export default function LogIn() {
               className="form-input"
               type="password"
               name="password"
-              value={pass}
-              onChange={(e) => setPass(e.target.value)}
+              value={password}
+              onChange={(e) => setFormData({...formData, password: e.target.value})}
             />
             {state?.errors?.password && (
               <p className="error ml-1">{state.errors.password}</p>

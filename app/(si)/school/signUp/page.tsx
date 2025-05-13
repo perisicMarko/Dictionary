@@ -7,7 +7,6 @@ import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import Loader from "@/components/common/Loader";
 import { useRouter } from "next/navigation";
 
-
 export default function SignUp() {
   const [state, action, isPending] = useActionState(
     authenticateSignUp,
@@ -15,46 +14,45 @@ export default function SignUp() {
   );
 
   const [email, setEmail] = useState("");
-  const router = useRouter(); 
+  const router = useRouter();
 
   if (state?.error === "Email already used.") {
     window.alert("This email is already used for another account.");
     state.error = "";
   }
 
-  useEffect(() => { 
-    if(state?.success)
-      router.push('/school');
-
-  }, [router, state?.success])
+  useEffect(() => {
+    if (state?.success) router.push("/school");
+  }, [router, state?.success]);
 
   return (
     <>
-      {state?.partner === false && <motion.div
-        initial="hidden"
-        animate="show"
-        variants={containerVariants}
-        className="mt-10 authWidth bg-slate-800 rounded-3xl border-2 border-blue-50 p-2"
-      >
-        <motion.p
-         variants={itemVariants}
-         className="text-white p-1">
-            Sorry, we are not partner with you at the momment. Please contact us!
-        </motion.p>
-      </motion.div>}
+      {state?.partner === false && (
+        <motion.div
+          initial="hidden"
+          animate="show"
+          variants={containerVariants}
+          className="mt-10 box-layout border-2 border-blue-50"
+        >
+          <motion.p variants={itemVariants} className="text-white p-1">
+            Sorry, we are not partner with you at the momment. Please contact
+            us!
+          </motion.p>
+        </motion.div>
+      )}
       <motion.div
         initial="hidden"
         animate="show"
         variants={containerVariants}
-        className="mt-10 authWidth bg-slate-800 rounded-3xl border-2 border-blue-50"
-      > 
-        <form className="form p-3" action={action}>
+        className="mt-10 box-layout border-2 border-blue-50"
+      >
+        <form className="form" action={action}>
           <motion.div variants={itemVariants} className="mt-3">
             <label htmlFor="name" className="text-white">
               School name:
             </label>
             <input
-              className="formInput"
+              className="form-input"
               type="text"
               name="name"
               defaultValue={state?.name}
@@ -78,7 +76,7 @@ export default function SignUp() {
               Email:{" "}
             </label>
             <input
-              className="formInput"
+              className="form-input"
               type="text"
               name="email"
               defaultValue={state?.email}
@@ -102,7 +100,7 @@ export default function SignUp() {
             <label htmlFor="password" className="text-white">
               Password:{" "}
             </label>
-            <input className="formInput" type="password" name="password" />
+            <input className="form-input" type="password" name="password" />
             {state?.errors?.password && (
               <p className="error" key="password">
                 Password:
@@ -122,7 +120,7 @@ export default function SignUp() {
               Confirm password:{" "}
             </label>
             <input
-              className="formInput"
+              className="form-input"
               type="password"
               name="confirmPassword"
             />
@@ -139,10 +137,8 @@ export default function SignUp() {
           >
             <button
               disabled={isPending || email === ""}
-              className={
-                "bg-blue-400 center text-white rounded-3xl block m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer w-1/2 hover:scale-105 active:scale-95 " +
-                (email === "" && " opacity-50")
-              }
+              className={`primary-btn !w-1/2 center" +
+                ${email === "" ? " opacity-50" : ""}`}
             >
               {isPending ? <Loader /> : "Sign up"}
             </button>
@@ -150,7 +146,7 @@ export default function SignUp() {
               variants={itemVariants}
               className="inline-block hover:scale-105 ml-3"
             >
-              <Link href="/school" className="text-white text-center">
+              <Link href="/school" className="text-box">
                 <i>
                   <u>Or log in here</u>
                 </i>

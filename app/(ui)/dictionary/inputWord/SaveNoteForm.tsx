@@ -95,7 +95,7 @@ export default function SaveNoteForm({
       }}
       variants={containerVariants}
       key="input"
-      className="center-verticaly box-width mt-25 xl:mt-30 h-3/4 md:py-5 md-py-10 xl:py-16 sm:max-h-[400px]"
+      className="center-verticaly box-width mt-25 h-3/4 md:py-5 md-py-10 xl:py-16 sm:max-h-[400px]"
     >
         <motion.form
           variants={itemVariants}

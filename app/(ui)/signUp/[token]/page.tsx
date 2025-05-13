@@ -8,6 +8,8 @@ import { isBefore } from "date-fns";
 import Link from "next/link";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import Loader from "@/components/common/Loader";
+import Loading from "../../loading";
+import NoValidToken from "./NoValidToken";
 
 export default function Page() {
   const params = useParams();
@@ -15,6 +17,7 @@ export default function Page() {
   if (typeof token === "object") token = token[0];
   const [user, setUser] = useState<TUser | undefined>();
   const [state, action, isPending] = useActionState(verifyUser, undefined);
+  const [isFetching, setIsFetching] = useState(true);
 
   useEffect(() => {
     if (!token) return;
@@ -25,6 +28,7 @@ export default function Page() {
     };
 
     fetchUser();
+    setIsFetching(false);
   }, [token]);
 
   let isValid = false;
@@ -46,7 +50,7 @@ export default function Page() {
 
   return (
     <>
-      {isValid ? (
+      {user ? (
         <>
           {state?.success === true ? (
             <motion.div
@@ -55,10 +59,7 @@ export default function Page() {
               variants={containerVariants}
               className="box-layout mt-30"
             >
-              <motion.p
-                variants={itemVariants}
-                className="text-box"
-              >
+              <motion.p variants={itemVariants} className="text-box">
                 <b>
                   Your account has been verified successfully.
                   <br /> Log in here:{" "}
@@ -72,7 +73,7 @@ export default function Page() {
                 .
               </motion.p>
             </motion.div>
-          ) : (
+          ) : isValid ? (
             <motion.div
               initial="hidden"
               animate="show"
@@ -90,19 +91,14 @@ export default function Page() {
                 </button>
               </motion.form>
             </motion.div>
+          ) : (
+            <NoValidToken />
           )}
         </>
+      ) : isFetching ? (
+        <Loading />
       ) : (
-        <motion.div
-          initial="hidden"
-          animate="show"
-          variants={containerVariants}
-          className="box-layout"
-        >
-          <motion.p className="text-white text-center">
-            <b>Sorry, no valid token.</b>
-          </motion.p>
-        </motion.div>
+        <NoValidToken />
       )}
     </>
   );

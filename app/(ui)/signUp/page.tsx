@@ -165,7 +165,7 @@ export default function SignUp() {
                 <button
                   disabled={isPending || email === ""}
                   className={
-                    "primary-btn !w-1/2 " +
+                    "primary-btn center !w-1/2 " +
                     (email === "" && " opacity-50")
                   }
                 >

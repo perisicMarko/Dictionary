@@ -9,10 +9,11 @@ import { SchoolLogIn } from "@/actions/auth/school";
 
 export default function LogIn() {
   const [logInState, action, isPending] = useActionState(SchoolLogIn, undefined);
-  const [email, setEmail] = useState("");
-  const [pass, setPass] = useState("");
+  const [formData, setFormData] = useState<{email: string, password: string}>({email: '', password: ''});
+  const {email, password} = formData;
+
   const router = useRouter();
-  const emptyCredentials = pass === "" || email === "";
+  const emptyCredentials = password === "" || email === "";
 
   useEffect(() => {
     if(logInState?.success)
@@ -24,13 +25,12 @@ export default function LogIn() {
       initial="hidden"
       animate="show"
       variants={containerVariants}
-      className="mt-25 sm:mt-30 md:mt-30 bg-slate-800 rounded-3xl border-2 border-blue-50 authWidth"
+      className="mt-25 sm:mt-30 md:mt-30 box-layout border-2 border-blue-50 p-5"
     >
       <form
-        className="form flex flex-col items-center justify-center p-4"
+        className="form center-vertically"
         action={(e) => {
-          setEmail('');
-          setPass('');
+          setFormData({email: '', password: ''});
           action(e);
         }}
       >
@@ -39,12 +39,12 @@ export default function LogIn() {
             Email:{" "}
           </label>
           <input
-            className="formInput"
+            className="form-input"
             type="text"
             name="email"
             value={email}
             onChange={(e) => {
-              setEmail(e.target.value);
+              setFormData({...formData, email: e.target.value});
             }}
           />
           {logInState?.errors?.email != "" && (
@@ -56,11 +56,11 @@ export default function LogIn() {
             Password:{" "}
           </label>
           <input
-            className="formInput"
+            className="form-input"
             type="password"
             name="password"
-            value={pass}
-            onChange={(e) => setPass(e.target.value)}
+            value={password}
+            onChange={(e) => setFormData({...formData, password: e.target.value})}
           />
           {logInState?.errors?.password && (
             <p className="error ml-1">{logInState?.errors.password}</p>
@@ -70,7 +70,7 @@ export default function LogIn() {
           <button
             disabled={isPending || emptyCredentials}
             className={
-              "primaryBtn center " + (emptyCredentials && " opacity-50")
+              "primary-btn center " + (emptyCredentials && " opacity-50")
             }
           >
             {isPending ? <Loader /> : "Log in"}
