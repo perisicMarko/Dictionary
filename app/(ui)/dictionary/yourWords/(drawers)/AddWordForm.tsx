@@ -39,8 +39,6 @@ export default function StrictAutocomplete({
       addWordInput.current.focus();
   }, []);
 
-
-  console.log(words);
   
   useEffect(() => {
     if(importState?.success){
