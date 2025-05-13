@@ -12,29 +12,29 @@ export default function OpenedDrawer({
   search,
   openDrawer,
   openedDrawerId,
-  drawerWords,
+  allWords,
 }: {
   drawer: TDrawer | undefined;
   search: string;
   openDrawer: (id: number) => void;
   openedDrawerId: number;
-  drawerWords: TDBNoteEntry[];
+  allWords: TDBNoteEntry[];
 }) {
-  const [words, setWords] = useState<TDBNoteEntry[]>();
+  const [drawerWords, setDrawerWords] = useState<TDBNoteEntry[]>();
   const [refresh, setRefresh] = useState(false);
   const [isFetchingContent, setIsFetchingContent] = useState(true);
 
   useEffect(() => {
     const fetchWords = async () => {
       const data = await getWordsOfDrawer(drawer?.id || -1);
-      setWords(data);
+      setDrawerWords(data);
     };
 
     fetchWords();
     setIsFetchingContent(false);
   }, [drawer?.id, refresh]);
 
-  const searchedWords = words?.filter((w) =>
+  const searchedWords = drawerWords?.filter((w) =>
     w.word.toLowerCase().includes(search.toLowerCase().trim())
   );
 
@@ -51,10 +51,10 @@ export default function OpenedDrawer({
             drawer={drawer as TDrawer}
             openDrawer={openDrawer}
             rerender={() => setRefresh(!refresh)}
-            words={drawerWords}
+            words={allWords}
             openedDrawerId={openedDrawerId}
           />
-          {words?.length === 0 ? (
+          {drawerWords?.length === 0 ? (
             <motion.div
               className="mt-5 box-layout"
               variants={containerVariants}

@@ -140,7 +140,7 @@ export default function ShowDrawers() {
           search={search}
           openDrawer={(id: number) => openDrawer(id)}
           openedDrawerId={openedDrawerId}
-          drawerWords={words as TDBNoteEntry[]}
+          allWords={words as TDBNoteEntry[]}
         />
       )}
     </>
