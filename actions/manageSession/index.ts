@@ -95,7 +95,6 @@ export async function createSession(email: string, schoolId: number){
   cookieStore.set('sessionToken', token, {
     httpOnly: true,
     secure: true,
-    //secure: false,
     sameSite: 'strict',
   });
 }

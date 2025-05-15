@@ -2,9 +2,11 @@ import { logOutUser } from "@/actions/auth/user";
 import { restoreSession } from "@/actions/manageSession/restoreSession";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { motion } from "framer-motion";
-import { Dispatch, SetStateAction, useActionState } from "react";
+import { Dispatch, SetStateAction, useActionState, useContext } from "react";
 import { useRouter } from "next/navigation";
 import Loader from "./common/Loader";
+import { TokenContext } from "./TokenContextProvider";
+
 
 export default function SessionExpiredWindow({
   collapseWindow,
@@ -13,12 +15,15 @@ export default function SessionExpiredWindow({
 }) {
   const router = useRouter();
   const [state, action, isPending] = useActionState(restoreSession, undefined);
+  const tokenContext = useContext(TokenContext);
 
   if (state?.status === 401) router.push("/");
+  if(state?.status === 200 && state.accessToken) tokenContext?.setAccessToken(state.accessToken)
 
   return (
+  <div className="inset-0 bg-white/80 fixed center z-100" onClick={(e) => e.stopPropagation()}>
     <motion.div
-      className="box-layout z-100 absolute top-30"
+      className="box-layout p-50"
       initial="hidden"
       animate="show"
       variants={containerVariants}
@@ -27,7 +32,7 @@ export default function SessionExpiredWindow({
         <b>Your session will expire very soon.</b>
       </motion.h2>
       <motion.p className="text-box" variants={itemVariants}>
-        Would you like to restore it and stay logged or do you want to log out?
+        Would you like to restore it and stay logged in or do you want to log out?
       </motion.p>
       <form
         action={() => {
@@ -37,11 +42,11 @@ export default function SessionExpiredWindow({
         className="mt-5"
       >
         <div className="grid grid-cols-2 gap-2">
-          <button className="primary-btn" type="submit">
-            {isPending ? "Restore Session" : <Loader />}
+          <button className="primary-btn center" type="submit">
+            {isPending ? <Loader /> : "Restore Session"}
           </button>
           <button
-            className="primary-btn"
+            className="primary-btn !px-3"
             onClick={(e) => {
               e.preventDefault();
               logOutUser();
@@ -53,5 +58,6 @@ export default function SessionExpiredWindow({
         </div>
       </form>
     </motion.div>
+    </div>
   );
 }

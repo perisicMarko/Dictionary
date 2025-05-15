@@ -4,7 +4,7 @@ import { addMinutes, isBefore } from "date-fns";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-
+//Api endpoint that is called every three minutes in order to restore the access token if refresh token exist an it is valid
 export async function POST(){
     const cookieStore = await cookies();
     const refreshToken = cookieStore.get('refreshToken')?.value;
@@ -17,7 +17,7 @@ export async function POST(){
 
     const payload = await decryptRefresh(refreshToken || '');
     const expirationTime = new Date((payload?.exp || 0) * 1000);
-    const nowPlus15 = addMinutes(new Date(), 1  );
+    const nowPlus15 = addMinutes(new Date(), 15);
     
     if(payload){
         const {email, userId} = payload;
