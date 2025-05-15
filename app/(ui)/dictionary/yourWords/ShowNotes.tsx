@@ -5,21 +5,23 @@ import { useState, useContext, useEffect } from "react";
 import { motion } from "framer-motion";
 import { TokenContext } from "@/components/TokenContextProvider";
 import ZeroNotesMessage from "@/components/common/ZeroNotesMessage";
-import { SearchBar } from "@/components/common/SearchBar";
+import SearchBar, { SORT } from "@/components/common/SearchBar";
 import { itemVariants } from "@/lib/animationVariants";
 import Loading from "../../loading";
+import { isBefore } from "date-fns";
 
 export default function ShowNotes() {
   const [words, setWords] = useState<TDBNoteEntry[] | undefined>();
   const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState(-1);
   const tokenContext = useContext(TokenContext);
 
   useEffect(() => {
-    const fetch = async () => { 
+    const fetch = async () => {
       const words = await getUsersNotes(tokenContext?.accessToken || "");
-      if(words){
+      if (words) {
         setWords(words.data);
-        tokenContext?.setAccessToken(words.accessToken || '');
+        tokenContext?.setAccessToken(words.accessToken || "");
       }
     };
     fetch();
@@ -33,13 +35,42 @@ export default function ShowNotes() {
     setSearch(word);
   }
 
+  const sortedWords = filteredWords;
+  if (sortBy != -1 && sortedWords != undefined) {
+    switch (sortBy) {
+      case SORT.BY_DATE_ASC:
+        sortedWords.sort((e1, e2) => e1.id - e2.id);
+        break;
+      case SORT.BY_DATE_DESC:
+        sortedWords.sort((e1, e2) => e2.id - e1.id);
+        break;
+      case SORT.BY_RECALL_DATE_ASC:
+        sortedWords.sort((e1, e2) => {
+          if (isBefore(e1.review_date, e2.review_date)) return -1;
+          else return 1;
+        });
+        break;
+      case SORT.BY_RECALL_DATE_DESC:
+        sortedWords.sort((e1, e2) => {
+          if (isBefore(e1.review_date, e2.review_date)) return 1;
+          else return -1;
+        });
+        break;
+    }
+  }
+
   return (
     <>
-      <SearchBar updateSearch={updateSearch} placeholder={'Search for words here...'}>
-        <motion.p variants={itemVariants} className="mt-5" >
+      <SearchBar
+        updateSearch={updateSearch}
+        placeholder={"Search for words here..."}
+        sortBy={true}
+        changeSortBy={(arg: number) => setSortBy(arg)}
+      >
+        <motion.p variants={itemVariants} className="mt-5">
           This page is where all the words you have not learned yet are stored.
-          Hence, if you have more spare time in the day you can review all the words
-          here. <br /> <br />
+          Hence, if you have more spare time in the day you can review all the
+          words here. <br /> <br />
           Bonus help: Press the F key to focus the search bar.
         </motion.p>
       </SearchBar>
@@ -50,8 +81,13 @@ export default function ShowNotes() {
         />
       )}
       {!filteredWords && <Loading />}
-      {filteredWords?.length != 0 && (
-        <Words props={filteredWords} historyNote={false} rerenderParent={() => {}} drawerId={-1}/>
+      {sortedWords?.length != 0 && (
+        <Words
+          props={sortedWords}
+          historyNote={false}
+          rerenderParent={() => {}}
+          drawerId={-1}
+        />
       )}
       {filteredWords?.length === 0 && search === "" && (
         <ZeroNotesMessage

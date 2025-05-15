@@ -32,7 +32,7 @@ export default function RecallNote({
       initial="hidden"
       animate="show"
       variants={containerVariants}
-      className="relative max-h-[800px] mt-8 box-layout !p-7"
+      className="relative max-h-[800px] mt-8 box-layout !p-7 center-vertically"
       onClick={() => {
         setMenu(false);
       }}
@@ -57,10 +57,9 @@ export default function RecallNote({
           />
         )}
       </div>
-      <span className="select-none text-white" title="word">
+      <h2 className="select-none text-white text-start w-full" title="word">
         <b>{note.word}</b>
-      </span>
-
+      </h2>
       {quality === 6 ? (
         <>
           <AudioPlayer src={note.audio}></AudioPlayer>

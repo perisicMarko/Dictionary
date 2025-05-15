@@ -1,4 +1,4 @@
-import { SearchBar } from "@/components/common/SearchBar";
+import SearchBar from "@/components/common/SearchBar";
 import { motion } from "framer-motion";
 import { itemVariants } from "@/lib/animationVariants";
 import { useState, useEffect, useContext, useLayoutEffect } from "react";
@@ -71,8 +71,6 @@ export default function ShowDrawers() {
 
   const openedDrawer = drawers?.find((d) => d.id === openedDrawerId);
 
-  console.log(openedDrawerId);
-
   return (
     <>
       <SearchBar
@@ -82,6 +80,8 @@ export default function ShowDrawers() {
             ? "Search for drawers here..."
             : "Search for words..."
         }
+        sortBy={false}
+        changeSortBy={() => {}}
       >
         <motion.p variants={itemVariants} className="pt-3">
           {openedDrawerId === -1 ? (

@@ -55,23 +55,27 @@ export default function Note({
           }}
         />
 
-        {menu && historyNote && (
-          <HistoryNoteMenu
-            rerenderParent={rerenderParent}
-            toggleMenu={toggleMenu}
-            noteId={note.id}
-          />
-        )}
-        {menu && !historyNote && (
-          <NoteMenu noteId={note.id} drawerId={drawerId} rerenderParent={rerenderParent}/>
+        {menu && (
+            historyNote ?
+            <HistoryNoteMenu
+              rerenderParent={rerenderParent}
+              toggleMenu={toggleMenu}
+              noteId={note.id}
+            />
+            :
+            <NoteMenu
+              noteId={note.id}
+              drawerId={drawerId}
+              rerenderParent={rerenderParent}
+            />
         )}
       </div>
 
       <h2 className="text-white mb-3 select-none" title="word">
         <b>{note.word}</b>
       </h2>
-      <div className="center-vertically space-y-2">
-        <AudioPlayer src={note.audio}></AudioPlayer>
+      <div className="center-vertically space-y-2 ">
+        <AudioPlayer src={note.audio}/>
         <button
           className="primary-btn"
           onClick={() => {

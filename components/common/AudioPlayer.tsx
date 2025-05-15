@@ -22,7 +22,7 @@ export default function AudioPlayer({ src }: { src: string }) {
 
   return (
     <div
-      className={`inline-block cursor-pointer hover:scale-105 active:scale-95 rounded-3xl w-full h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] center my-2 ${!isDisabled && ' bg-blue-400'}`}
+      className={`primary-btn center ${!isDisabled ? ' bg-blue-400' : 'bg-blue-400'}`}
       title={title}
       onClick={(e) => {
         e.stopPropagation();

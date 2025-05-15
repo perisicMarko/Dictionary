@@ -26,7 +26,6 @@ export default function UpdateForm({
     updateDrawerName,
     undefined
   );
-  console.log(drawer);
 
   useEffect(() => {
     const length = drawer?.name.length;

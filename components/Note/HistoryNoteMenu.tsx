@@ -64,7 +64,7 @@ export default function HistoryNoteMenu({
       </motion.form>
       <motion.form
         variants={itemVariants}
-        className="center"
+        className="center mt-2.5"
         onSubmit={onSubmitRelearnHandle}
       >
         <input type="text" name="noteId" defaultValue={noteId} hidden />
@@ -72,7 +72,7 @@ export default function HistoryNoteMenu({
           type="submit"
           className="text-center text-xs text-slate-800 cursor-pointer hover:scale-105"
           onClick={(e) => e.stopPropagation()}
-          title='Relearn note'
+          title='Relearn word'
         >
           <b>R</b>
         </button>

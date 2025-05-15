@@ -1,5 +1,5 @@
 "use client";
-import { SearchBar } from "../../../../components/common/SearchBar";
+import SearchBar from "../../../../components/common/SearchBar";
 import { getUsersHistory } from "@/actions/manageNotes";
 import Words from "@/components/common/Words";
 import { TDBNoteEntry } from "@/lib/types";
@@ -39,7 +39,7 @@ export default function History() {
   return (
     <>
       <div className="mt-15 w-full center-vertically">
-        <SearchBar updateSearch={updateSearch} placeholder={'Search for notes here...'}>
+        <SearchBar updateSearch={updateSearch} placeholder={'Search for notes here...'} sortBy={false} changeSortBy={() => {}}>
           <motion.p variants={itemVariants} className="pt-3">
             In menu, there is a delete icon for permanent word deletion and
             &quot;R&quot; for relearning the word.
@@ -63,7 +63,7 @@ export default function History() {
       )}
       {!filteredWords && <Loading />}
       {filteredWords?.length != 0 && (
-        <Words props={filteredWords} historyNote={false} rerenderParent={() => {setRefresh(!refresh)}} drawerId={-1} />
+        <Words props={filteredWords} historyNote={true} rerenderParent={() => {setRefresh(!refresh)}} drawerId={-1} />
       )}
       {filteredWords?.length === 0 && search === "" && (
         <ZeroNotesMessage

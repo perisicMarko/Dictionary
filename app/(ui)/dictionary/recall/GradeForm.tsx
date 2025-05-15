@@ -43,7 +43,7 @@ export function GradeForm({
       initial="hidden"
       animate="show"
       variants={containerVariants}
-      className="center"
+      className="center w-full"
     >
       <motion.form
         variants={itemVariants}
@@ -54,7 +54,7 @@ export function GradeForm({
         <label htmlFor="recall" className="text-white text-[16px] sm:text-xl">
           Remember this word?
         </label>
-        <div className="center relative">
+        <div className="center relative w-full">
           <ChevronDown
             color="white"
             width={25}
@@ -67,7 +67,7 @@ export function GradeForm({
             name="quality"
             onClick={() => toggleMenu()}
             onChange={(e) => changeQuality(Number(e.target.value))}
-            className="primary-btn appearance-none py-2 focus:outline-none px-3 text-xs sm:text-xl mt-2"
+            className="primary-btn appearance-none py-2 focus:outline-none px-3 text-xs sm:text-xl"
           >            
             <option value="-1" disabled>
               Grade from 0-5{" "}
@@ -87,7 +87,6 @@ export function GradeForm({
             <option value="5">5(perfect response)</option>
           </select>
         </div>
-
         {quality != -1 && (
           <motion.button
             type="submit"
@@ -98,6 +97,7 @@ export function GradeForm({
             {isPending ? <Loader /> : <b>Grade</b>}
           </motion.button>
         )}
+
       </motion.form>
     </motion.div>
   );
