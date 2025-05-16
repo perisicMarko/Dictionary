@@ -43,7 +43,7 @@ export default function Page() {
       ) : (
         <ZeroNotesMessage
           message={
-            "Hmm, looks like you don't have any words to recall for today. Keep up the good work!"
+            "Great! You have no words to recall right now. Keep up the good work!"
           }
         />
       )}

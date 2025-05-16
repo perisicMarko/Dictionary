@@ -23,7 +23,7 @@ export default function SessionExpiredWindow({
   return (
   <div className="inset-0 bg-white/80 fixed center z-100" onClick={(e) => e.stopPropagation()}>
     <motion.div
-      className="box-layout p-50"
+      className="box-layout"
       initial="hidden"
       animate="show"
       variants={containerVariants}

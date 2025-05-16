@@ -51,7 +51,7 @@ export default function SearchBar({
       className={`box-layout mt-5 !py-2 !px-1 grid grid-cols-[auto_auto_1fr] items-center ${sortBy ? '!rounded-b-none' : ''}`}
     >
       <span
-        className="text-white md:ml-4 ml-3 cursor-pointer hover:scale-115 rounded-full text-2xl"
+        className="text-white md:ml-4 ml-2 cursor-pointer hover:scale-115 rounded-full text-2xl"
         title="click for help"
         onClick={() => setHelp(!help)}
       >
@@ -59,7 +59,7 @@ export default function SearchBar({
       </span>
       <Search
        color="white"
-       className="inline-block md:ml-4 ml-1 scale-90"
+       className="inline-block md:mx-2 mx-1 scale-90"
        onClick={() => {
          searchBarRef?.current?.focus();
        }}
@@ -76,8 +76,7 @@ export default function SearchBar({
       />
     </motion.div>
     {sortBy && 
-    <motion.div initial='hidden' animate='show' variants={containerVariants} className="box-layout !py-0 !px-4 !rounded-t-none relative text-white">
-      <ArrowUpDown color='white' height={20} width={20} className="absolute right-3 top-auto pointer-events-none" />
+    <motion.div initial='hidden' animate='show' variants={containerVariants} className="box-layout !py-0 !px-4 !rounded-t-none text-white center justify-between">
               <select
                 className="w-full appearance-none bg-slate-800 text-white !py-2 !px-1 rounded-3xl h-full"
                 defaultValue={-1}
@@ -95,6 +94,7 @@ export default function SearchBar({
                   {"Recall date " + "\u2193"}
                 </option>
               </select>
+              <ArrowUpDown color='white' height={20} width={20} className="right-3 top-auto bottom-auto pointer-events-none" />
     </motion.div>
     }
     {help && 
