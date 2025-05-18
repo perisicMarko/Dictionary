@@ -37,18 +37,19 @@ input{
 }
 
 .primary-btn {
-  @apply w-full bg-blue-400 text-white rounded-3xl block my-1 h-[35px] sm:h-[40px] xl:h-[48px] cursor-pointer;
+  @apply w-full bg-blue-400 text-white rounded-3xl block my-1 h-[35px] sm:h-[40px] xl:h-[48px] cursor-pointer transition-all duration-100;
 }
 
 .primary-btn:hover {
   @apply md:scale-105
 }
+
 .primary-btn:active {
   @apply md:scale-100;
 }
 
 .x-btn {
-  @apply scale-125 cursor-pointer mr-3 py-1 text-white;
+  @apply scale-125 cursor-pointer mr-3 py-1 text-white transition-all duration-100;
 }
 .x-btn:hover {
   @apply xl:scale-150;
@@ -69,9 +70,11 @@ input{
 .center-vertically {
   @apply flex flex-col justify-center items-center;
 }
+
 .form {
   @apply gap-2;
 }
+
 .form-input {
   @apply block w-full p-2 mt-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] rounded-3xl text-slate-800 bg-white;
 }
@@ -108,8 +111,9 @@ input{
 }
 
 .navigation-btn {
-  @apply text-xs md:text-[14px] xl:text-[16px] cursor-pointer;
+  @apply text-[14px] xl:text-[16px] cursor-pointer transition-all duration-200;
 }
+
 .navigation-btn:hover {
   @apply text-blue-400;
 }

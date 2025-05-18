@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { containerVariants } from "@/lib/animationVariants";
+import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { ArrowUpDown, Search } from "lucide-react";
 
 export const SORT = {
@@ -44,11 +44,12 @@ export default function SearchBar({
 
   return (
     <>
+    <motion.div initial='hidden' animate='show' variants={containerVariants} className="box-layout !p-0 mt-5">
     <motion.div
       initial="hidden"
       animate="show"
-      variants={containerVariants}
-      className={`box-layout mt-5 !py-2 !px-1 grid grid-cols-[auto_auto_1fr] items-center ${sortBy ? '!rounded-b-none' : ''}`}
+      variants={itemVariants}
+      className={`!py-2 !px-1 grid grid-cols-[auto_auto_1fr] items-center ${sortBy ? '!rounded-b-none' : ''}`}
     >
       <span
         className="text-white md:ml-4 ml-2 cursor-pointer hover:scale-115 rounded-full text-2xl"
@@ -76,7 +77,7 @@ export default function SearchBar({
       />
     </motion.div>
     {sortBy && 
-    <motion.div initial='hidden' animate='show' variants={containerVariants} className="box-layout !py-0 !px-4 !rounded-t-none text-white center justify-between">
+    <motion.div initial='hidden' animate='show' variants={containerVariants} className="py-0 !px-4 !rounded-t-none text-white center justify-between">
               <select
                 className="w-full appearance-none bg-slate-800 text-white !py-2 !px-1 rounded-3xl h-full"
                 defaultValue={-1}
@@ -94,9 +95,10 @@ export default function SearchBar({
                   {"Recall date " + "\u2193"}
                 </option>
               </select>
-              <ArrowUpDown color='white' height={20} width={20} className="right-3 top-auto bottom-auto pointer-events-none" />
+              <ArrowUpDown color='white' height={20} width={20} className="right-3 pointer-events-none" />
     </motion.div>
     }
+    </motion.div>
     {help && 
       <motion.div
              initial="hidden"

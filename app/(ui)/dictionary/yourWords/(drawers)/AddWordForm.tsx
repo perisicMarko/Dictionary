@@ -82,9 +82,9 @@ export default function StrictAutocomplete({
         placeholder="Input your word..."
       />
       <datalist id="words">
-        {filtered?.map((opt) => (
+        {filtered?.map((opt, index) => (
           <option
-            key={opt}
+            key={opt + index}
             value={opt}
           />
         ))}

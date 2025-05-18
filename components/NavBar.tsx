@@ -4,15 +4,16 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { TokenContext } from "@/components/TokenContextProvider";
 import { motion } from "framer-motion";
-import { containerVariants } from "@/lib/animationVariants";
+import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { logOutUser } from "@/actions/auth/user";
-import { LogOut } from "lucide-react";
+import { LogOut, Menu, X } from "lucide-react";
 
 export function NavBar() {
   const path = usePathname();
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(true);
   const tokenContext = useContext(TokenContext);
+  const [mobileMenuToggle, setMobileMenuToggle] = useState(false);
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
@@ -32,84 +33,148 @@ export function NavBar() {
   }, []);
 
   const navigationRoutes = [
-    "/dictionary/inputWord",
-    "/dictionary/history",
-    "/dictionary/yourWords",
-    "/dictionary/recall",
+    {
+      path: "/dictionary/inputWord",
+      label: "Input word",
+    },
+    {
+      path: "/dictionary/recall",
+      label: "Recall",
+    },
+    {
+      path: "/dictionary/yourWords",
+      label: "Your words",
+    },
+    {
+      path: "/dictionary/history",
+      label: "Learned words",
+    },
   ];
 
-  const isNavigationRoute = navigationRoutes.includes(path);
+  const isNavigationRoute = navigationRoutes.map((e) => e.path).includes(path);
 
   const handleLogOut = async () => {
-    tokenContext?.setAccessToken('');
+    tokenContext?.setAccessToken("");
     await logOutUser();
-    router.push('/');
+    router.push("/");
   };
 
   return (
-    isVisible &&
-    isNavigationRoute && (
-      <motion.nav
+    <>
+      {/*Desktop nav menu */}
+      {isVisible && isNavigationRoute && (
+        <motion.nav
+          initial="hidden"
+          animate="show"
+          variants={containerVariants}
+          className="hidden fixed top-0 z-20 bg-slate-800 w-full h-[50px] sm:grid grid-cols-[auto_1fr] items-center transition-all"
+        >
+          <div className="flex justify-start items-center ml-3 md:ml-7">
+            <button
+              type="submit"
+              className="hover:scale-115 scale-105  transition-colors duration-300 cursor-pointer text-white hover:text-blue-400"
+              onClick={() => handleLogOut()}
+            >
+              <LogOut width={20} height={20} />
+            </button>
+          </div>
+          <div className="flex justify-end items-center xl:space-x-5 mr-2 sm:mr-5">
+            {navigationRoutes.map((route) => {
+              return (
+                <Link
+                  key={route.path}
+                  href={route.path}
+                  className={`navigation-btn ${
+                    path === route.path ? "text-blue-400" : "text-white"
+                  } py-1 px-1 sm:px-3`}
+                >
+                  {route.label}
+                </Link>
+              );
+            })}
+          </div>
+        </motion.nav>
+      )}
+
+      {/* Mobile nav menu*/}
+      {isNavigationRoute && isVisible && <motion.div
         initial="hidden"
         animate="show"
         variants={containerVariants}
-        className="fixed top-0 z-20 bg-slate-800 w-full h-[50px] grid grid-cols-[auto_1fr] items-center"
+        className="fixed top-0 z-20 bg-slate-800 w-full h-min-[50px] border-b-blue-400 gap-2 transition-all sm:hidden"
       >
-        <div className="flex justify-start items-center ml-3 md:ml-7">
-            <button
-              type="submit"
-              className="hover:scale-115 scale-105 cursor-pointer text-white hover:text-blue-400"
-              onClick={() => handleLogOut()}
+        <motion.div
+          initial="hidden"
+          animate="show"
+          variants={itemVariants}
+          className="w-full flex justify-end items-center pr-3 my-2"
+        >
+          <motion.span
+            initial="hidden"
+            animate="show"
+            variants={itemVariants}
+            onClick={() => setMobileMenuToggle(!mobileMenuToggle)}
+          >
+            {mobileMenuToggle ? (
+              <X color="white" width={25} height={25} />
+            ) : (
+              <Menu color="white" height={25} width={25} />
+            )}
+          </motion.span>
+        </motion.div>
+
+        {mobileMenuToggle && (
+          <>
+            <motion.hr
+              initial="hidden"
+              animate="show"
+              variants={itemVariants}
+              className="border-1 border-blue-400 w-full"
+            />
+
+            <motion.div
+              initial="hidden"
+              animate="show"
+              variants={containerVariants}
+              className="w-full flex flex-col justify-center items-start my-3"
             >
-              <LogOut
-                width={20}
-                height={20}
-              />
-            </button>
-        </div>
-        <div className="flex justify-end items-center xl:space-x-5 mr-2 sm:mr-5">
-          <Link
-            id="layoutInputLink"
-            href="/dictionary/inputWord"
-            className={`nav-link ${
-              path === "/dictionary/inputWord" ? "text-blue-400" : "text-white"
-            } py-1 px-1 sm:px-3 navigation-btn`}
-          >
-            {" "}
-            Input word{" "}
-          </Link>
-          <Link
-            id="layoutRecallLink"
-            href="/dictionary/recall"
-            className={`nav-link ${
-              path === "/dictionary/recall" ? "text-blue-400" : "text-white"
-            } py-1 px-1 sm:px-3 navigation-btn`}
-          >
-            {" "}
-            Recall{" "}
-          </Link>
-          <Link
-            id="layoutHistoryLink"
-            href="/dictionary/yourWords"
-            className={`nav-link ${
-              path === "/dictionary/yourWords" ? "text-blue-400" : "text-white"
-            } py-1 px-1 sm:px-3 navigation-btn`}
-          >
-            {" "}
-            Your words{" "}
-          </Link>
-          <Link
-            id="layoutLearnedLink"
-            href="/dictionary/history"
-            className={`nav-link ${
-              path === "/dictionary/history" ? "text-blue-400" : "text-white"
-            } py-1 px-1 sm:px-3 navigation-btn`}
-          >
-            {" "}
-            Learned words{" "}
-          </Link>
-        </div>
-      </motion.nav>
-    )
+              {navigationRoutes.map((route) => {
+                return (
+                  <motion.span
+                    key={route.path}
+                    initial="hidden"
+                    animate="show"
+                    variants={itemVariants}
+                    className="mt-2"
+                    onClick={() => setMobileMenuToggle(false)}
+                  >
+                    <Link
+                      href={route.path}
+                      className={`navigation-btn ${
+                        path === route.path
+                          ? "text-blue-400 font-bold"
+                          : "text-white"
+                      } py-1 px-3`}
+                    >
+                      {route.label}
+                    </Link>
+                  </motion.span>
+                );
+              })}
+
+              <div className="mt-7">
+                <button
+                  type="submit"
+                  className="hover:scale-115 scale-105 transition-colors duration-300 cursor-pointer text-white hover:text-blue-400 px-3"
+                  onClick={() => handleLogOut()}
+                >
+                  <LogOut width={20} height={20} />
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </motion.div>}
+    </>
   );
 }
