@@ -17,7 +17,7 @@ export default function AudioPlayer({ src }: { src: string }) {
 
   const title = isDisabled
     ? "Sorry, no sound for this one."
-    : "Click it to hear it.";
+    : "Click to hear it.";
   const srcAtt = src === "" ? undefined : src;
 
   return (

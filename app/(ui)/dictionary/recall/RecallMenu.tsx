@@ -60,7 +60,7 @@ export default function RecallNoteMenu({
         <Link
           href={"/dictionary/recall/edit/" + noteId}
           onClick={() => toggleMenu()}
-          title='edit note'
+          title='Edit note'
         >
           <NotebookPen
             color="#1E293B"
@@ -75,7 +75,7 @@ export default function RecallNoteMenu({
           changeQuality(6);
           toggleMenu();
         }}
-        title="show notes"
+        title="Show notes"
       >
         <b>N</b>
       </motion.span>
@@ -86,7 +86,7 @@ export default function RecallNoteMenu({
           changeQuality(-1);
           toggleMenu();
         }}
-        title="grade recall"
+        title="Grade recall"
       >
         <b>G</b>
       </motion.span>

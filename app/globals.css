@@ -41,11 +41,11 @@ input{
 }
 
 .primary-btn:hover {
-  @apply md:scale-105
+  @apply sm:scale-105
 }
 
 .primary-btn:active {
-  @apply md:scale-100;
+  @apply scale-95 sm:scale-100;
 }
 
 .x-btn {
@@ -118,12 +118,30 @@ input{
   @apply text-blue-400;
 }
 
+@keyframes show-up {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.btn {
+  @apply cursor-pointer;
+  animation: show-up 0.3s ease-out forwards;
+}
+
+.btn:hover{
+  @apply sm:scale-105;
+}
+
+.btn:active{
+  @apply scale-95;
+}
+
 label {
   @apply text-white;
 }
-
-
-.authWidth {
-  @apply w-3/4 sm:w-[500px];
-}
-

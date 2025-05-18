@@ -41,15 +41,15 @@ export default function History() {
       <div className="mt-15 w-full center-vertically">
         <SearchBar updateSearch={updateSearch} placeholder={'Search for notes here...'} sortBy={false} changeSortBy={() => {}}>
           <motion.p variants={itemVariants} className="pt-3">
-            In menu, there is a delete icon for permanent word deletion and
-            &quot;R&quot; for relearning the word.
-            <br />
             This page should help you review the words you have learned. So
             basically this page just stores learned words, like personal history.
             <br />
             <br />
+            In menu, there is a delete icon for permanent word deletion and
+            &quot;R&quot; for relearning the word.
+            <br />
             From this page, and this page only you can delete a note permanently or
-            return word to the learning process. <br />
+            return word to the learning process.
             <br /><br />
             Bonus help: Press the F key to focus the search bar.
           </motion.p>

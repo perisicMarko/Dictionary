@@ -35,7 +35,7 @@ export default function RecallNoteHelp() {
         initial="hidden"
         animate="show"
         variants={itemVariants}
-        className="box-layout mt-10 relative"
+        className="box-layout mt-5 relative"
       >
         <div className="collapse-window">
           <span
@@ -50,9 +50,9 @@ export default function RecallNoteHelp() {
         <h2 className="text-box mt-3 px-1">
           <b>Here is where you recall your words</b>
         </h2>
-        <motion.p variants={itemVariants} className="p-4 text-white">
+        <motion.p variants={itemVariants} className="mt-3 text-white">
           Click on the menu icon to open the menu. In menu, there are edit and
-          delete icons, also &quot;N&quot; for showing word notes and
+          delete icons(for deleting note from learning system, not from whole dictionary), also &quot;N&quot; for showing word notes and
           &quot;G&quot; for grading UI, the grading UI is initially selected.
           <br />
           <br />

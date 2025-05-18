@@ -28,7 +28,7 @@ export default function NoteMenu({
       <Link
         href={"/dictionary/yourWords/edit/" + noteId}
         onClick={(e) => e.stopPropagation()}
-        title="edit notes"
+        title="Edit notes"
       >
         <NotebookPen
           color="#1E293B"

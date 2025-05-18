@@ -6,7 +6,7 @@ import AudioPlayer from "../common/AudioPlayer";
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import NoteMenu from "./NoteMenu";
-import { ChevronDown, ChevronUp, Menu } from "lucide-react";
+import { ChevronDown, ChevronUp, Menu, X } from "lucide-react";
 import { containerVariants } from "@/lib/animationVariants";
 
 export default function Note({
@@ -44,38 +44,51 @@ export default function Note({
       }}
     >
       <div className="absolute flex flex-col items-center top-5 right-0 rounded-2xl w-[100px]">
-        <Menu
-          color="white"
-          width={30}
-          height={30}
-          className="scale-75 hover:scale-90 cursor-pointer"
-          onClick={(e) => {
-            e.stopPropagation();
-            setMenu(!menu);
-          }}
-        />
+        {menu ? (
+          <X
+            color="white"
+            width={25}
+            height={25}
+            className="btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              setMenu(!menu);
+            }}
+          />
+        ) : (
+          <Menu
+            color="white"
+            width={25}
+            height={25}
+            className="btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              setMenu(!menu);
+            }}
+          />
+        )}
 
-        {menu && (
-            historyNote ?
+        {menu &&
+          (historyNote ? (
             <HistoryNoteMenu
               rerenderParent={rerenderParent}
               toggleMenu={toggleMenu}
               noteId={note.id}
             />
-            :
+          ) : (
             <NoteMenu
               noteId={note.id}
               drawerId={drawerId}
               rerenderParent={rerenderParent}
             />
-        )}
+          ))}
       </div>
 
       <h2 className="text-white mb-3 select-none" title="word">
         <b>{note.word}</b>
       </h2>
       <div className="center-vertically space-y-2 ">
-        <AudioPlayer src={note.audio}/>
+        <AudioPlayer src={note.audio} />
         <button
           className="primary-btn"
           onClick={() => {

@@ -53,7 +53,7 @@ export default function SearchBar({
     >
       <span
         className="text-white md:ml-4 ml-2 cursor-pointer hover:scale-115 rounded-full text-2xl"
-        title="click for help"
+        title="Click for help"
         onClick={() => setHelp(!help)}
       >
         ?

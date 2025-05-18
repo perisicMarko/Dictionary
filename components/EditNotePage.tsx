@@ -52,7 +52,7 @@ export default function Edit({pathSrc}: {pathSrc: string}) {
           variants={itemVariants}
           className="text-box"
         >
-          Edit your notes for: <b title="word" className="hover:underline">{note.word}</b>
+          Edit your notes for: <b title="Word" className="hover:underline">{note.word}</b>
         </motion.h2>
         <motion.div variants={itemVariants}>
           <label htmlFor="userNotes" className="text-white">

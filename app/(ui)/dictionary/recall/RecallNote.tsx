@@ -4,7 +4,7 @@ import RecallMenu from "./RecallMenu";
 import { TDBNoteEntry } from "@/lib/types";
 import AudioPlayer from "../../../../components/common/AudioPlayer";
 import { useState } from "react";
-import { Menu } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { motion } from "framer-motion";
 import DisplayNotes from "@/components/common/DisplayNotes";
 import { containerVariants } from "@/lib/animationVariants";
@@ -38,16 +38,29 @@ export default function RecallNote({
       }}
     >
       <div className="absolute right-0 top-5 flex flex-col items-center rounded-2xl w-[100px] ">
-        <Menu
-          color="white"
-          className="scale-75 hover:scale-90 cursor-pointer"
-          width={30}
-          height={30}
-          onClick={(e) => {
-            e.stopPropagation();
-            setMenu(!menu);
-          }}
-        />
+        {menu ? (
+          <X
+            color="white"
+            className="btn"
+            width={25}
+            height={25}
+            onClick={(e) => {
+              e.stopPropagation();
+              setMenu(!menu);
+            }}
+          />
+        ) : (
+          <Menu
+            color="white"
+            className="btn"
+            width={25}
+            height={25}
+            onClick={(e) => {
+              e.stopPropagation();
+              setMenu(!menu);
+            }}
+          />
+        )}
         {menu && (
           <RecallMenu
             toggleMenu={toggleMenu}
@@ -57,7 +70,7 @@ export default function RecallNote({
           />
         )}
       </div>
-      <h2 className="select-none text-white text-start w-full" title="word">
+      <h2 className="select-none text-white text-start w-full" title="Word">
         <b>{note.word}</b>
       </h2>
       {quality === 6 ? (

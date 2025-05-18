@@ -116,9 +116,9 @@ export function NavBar() {
             onClick={() => setMobileMenuToggle(!mobileMenuToggle)}
           >
             {mobileMenuToggle ? (
-              <X color="white" width={25} height={25} />
+              <X color="white" className='btn' width={25} height={25} />
             ) : (
-              <Menu color="white" height={25} width={25} />
+              <Menu color="white" className='btn' height={25} width={25} />
             )}
           </motion.span>
         </motion.div>
@@ -136,7 +136,7 @@ export function NavBar() {
               initial="hidden"
               animate="show"
               variants={containerVariants}
-              className="w-full flex flex-col justify-center items-start my-3"
+              className="w-full center-vertically items-start my-3"
             >
               {navigationRoutes.map((route) => {
                 return (
@@ -145,7 +145,7 @@ export function NavBar() {
                     initial="hidden"
                     animate="show"
                     variants={itemVariants}
-                    className="mt-2"
+                    className="mt-4"
                     onClick={() => setMobileMenuToggle(false)}
                   >
                     <Link
