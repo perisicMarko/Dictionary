@@ -70,7 +70,7 @@ export default function SaveNoteForm({
   };
 
 
-  let buttonStyle = "center bg-blue-400 text-white xl:hover:scale-105 xl:active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block";
+  let buttonStyle = "center bg-blue-400 text-white sm:hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block transition-all";
   if(!isErrorNote(note) && note)
     buttonStyle += " col-span-1";
   else
@@ -118,7 +118,7 @@ export default function SaveNoteForm({
             onChange={(e) => changeWord(e.target.value)}
             placeholder="Enter new word here..."
           />
-          {error && <p className="error mt-1">{error}</p>}
+          {error && <p className="error mt-1 text-center">{error}</p>}
           <div className="flex justify-start w-full mt-2">
             <input
               key="audioInput"
@@ -189,7 +189,7 @@ export default function SaveNoteForm({
                 {request ? <Loader/> : <b>Generate</b>}
               </motion.button>
               {generate && (
-                <motion.button type="submit" className="bg-blue-400 center text-white hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block col-span-1"
+                <motion.button type="submit" className="bg-blue-400 center text-white sm:hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block col-span-1 transition-all"
                   hidden={wordInputRef && !isErrorNote(note) && wordInputRef.current?.value.toLowerCase() != note?.word.toLowerCase()}
                   variants={itemVariants}
                   onClick={() => setIsSaving(true)}

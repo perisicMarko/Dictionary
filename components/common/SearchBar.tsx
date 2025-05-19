@@ -79,7 +79,7 @@ export default function SearchBar({
     {sortBy && 
     <motion.div initial='hidden' animate='show' variants={containerVariants} className="py-0 !px-4 !rounded-t-none text-white center justify-between">
               <select
-                className="w-full appearance-none bg-slate-800 text-white !py-2 !px-1 rounded-3xl h-full"
+                className="w-full appearance-none bg-slate-800 sm:hover:text-blue-400 cursor-pointer text-white !py-2 !px-1 rounded-3xl h-full"
                 defaultValue={-1}
                 onChange={(e) => changeSortBy(Number(e.target.value))}
               >
@@ -95,7 +95,7 @@ export default function SearchBar({
                   {"Recall date " + "\u2193"}
                 </option>
               </select>
-              <ArrowUpDown color='white' height={20} width={20} className="right-3 pointer-events-none" />
+              <ArrowUpDown color='white' height={20} width={20} className="right-3 pointer-events-none"/>
     </motion.div>
     }
     </motion.div>

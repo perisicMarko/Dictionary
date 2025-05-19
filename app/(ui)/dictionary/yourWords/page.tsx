@@ -42,6 +42,7 @@ export default function YourWords() {
             ${showSwitch && " font-bold"}`
           }
           onClick={() => changeLayout('true')}
+          title="Show drawers"
         >
           Drawers
         </div>
@@ -60,6 +61,7 @@ export default function YourWords() {
             ${!showSwitch && " font-bold"}`
           }
           onClick={() => changeLayout('false')}
+          title='Show notes'
         >
           Notes
         </div>

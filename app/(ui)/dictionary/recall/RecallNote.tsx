@@ -37,7 +37,7 @@ export default function RecallNote({
         setMenu(false);
       }}
     >
-      <div className="absolute right-0 top-5 flex flex-col items-center rounded-2xl w-[100px] ">
+      <div className="absolute right-0 top-5 flex flex-col items-center rounded-2xl w-[100px]" title='Menu'>
         {menu ? (
           <X
             color="white"

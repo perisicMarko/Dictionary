@@ -35,7 +35,8 @@ export function Help({
           width={350}
           height={280}
           src="/wordInput.png"
-          alt="picture of word input"
+          alt="Picture of word input"
+          priority
         ></Image>
         <motion.p
           variants={{
@@ -63,7 +64,8 @@ export function Help({
           width={350}
           height={50}
           src="/generateNotes.png"
-          alt="generate notes"
+          alt="Generate notes"
+          priority
         ></Image>
         <motion.p
           variants={{

@@ -22,6 +22,7 @@ export default function DrawerMenu({
           e.stopPropagation();
           toggleMenu(!menu);
         }}
+        title="Menu"
       >
         {menu ? (
           <X

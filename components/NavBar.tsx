@@ -114,6 +114,7 @@ export function NavBar() {
             animate="show"
             variants={itemVariants}
             onClick={() => setMobileMenuToggle(!mobileMenuToggle)}
+            title='Menu'
           >
             {mobileMenuToggle ? (
               <X color="white" className='btn' width={25} height={25} />

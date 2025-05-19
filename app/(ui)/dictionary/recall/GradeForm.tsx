@@ -72,19 +72,22 @@ export function GradeForm({
             <option value="-1" disabled>
               Grade from 0-5{" "}
             </option>
-            <option value="0">0(complete blackout)</option>
+            <option value="0">0 – completely forgotten</option>
             <option value="1">
-              1(incorrect response, the correct one remembered after reading
-              notes)
+              1 – wrong, remembered after checking notes
             </option>
             <option value="2">
-              2(incorrect response, where the correct one seemed easy to recall)
+              2 – wrong, but felt easy to recall
             </option>
             <option value="3">
-              3(correct response, recalled with serious difficulty)
+              3 – correct, but with great effort
             </option>
-            <option value="4">4(correct response, after hestitation)</option>
-            <option value="5">5(perfect response)</option>
+            <option value="4"> 
+              4 – correct, some hesitation
+            </option>
+            <option value="5">
+              5 – perfect, immediate recall  
+            </option>
           </select>
         </div>
         {quality != -1 && (

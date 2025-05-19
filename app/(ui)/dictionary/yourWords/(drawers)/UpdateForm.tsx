@@ -70,16 +70,18 @@ export default function UpdateForm({
           }}
           disabled={updateFormShow === false}
         />
-        <Edit
-          color="white"
-          width={20}
-          height={20}
-          className="inline-block xl:hover:scale-105 cursor-pointer"
-          onClick={() => {
-            setUpdateFormShow(!updateFormShow);
-            setAddFormShow(false);
-          }}
-        />
+        <span title='Edit drawer name'>
+            <Edit
+              color="white"
+              width={20}
+              height={20}
+              className="inline-block xl:hover:scale-105 cursor-pointer"
+              onClick={() => {
+                setUpdateFormShow(!updateFormShow);
+                setAddFormShow(false);
+              }}
+            />
+          </span>
       </div>
       {updateFormShow && (
         <button

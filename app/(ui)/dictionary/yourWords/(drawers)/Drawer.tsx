@@ -127,6 +127,7 @@ export default function Drawer({
                 <motion.span
                   variants={itemVariants}
                   className="text-white xl:hover:text-blue-400 cursor-pointer"
+                  title='Add word to drawer'
                 >
                   <Plus
                     onClick={(e) => {

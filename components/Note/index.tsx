@@ -22,7 +22,7 @@ export default function Note({
 }) {
   const [drop, setDrop] = useState(false);
   const [menu, setMenu] = useState(false);
-  const containerTitle = drop ? "Click to collapse." : "Click for notes.";
+  const containerTitle = drop ? "Click to close notes" : "Click to show notes";
   const containerRef = useRef(null);
   const note = prop;
 
@@ -43,7 +43,7 @@ export default function Note({
         setDrop(!drop);
       }}
     >
-      <div className="absolute flex flex-col items-center top-5 right-0 rounded-2xl w-[100px]">
+      <div className="absolute flex flex-col items-center top-5 right-0 rounded-2xl w-[100px]" title='Menu'>
         {menu ? (
           <X
             color="white"
