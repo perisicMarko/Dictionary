@@ -37,20 +37,19 @@ export async function resetPassword(state: { message: string; status: number; er
 }
 
 
-
 function validateFields(password : string, confirmPassword : string){
   const errors : {password: string[], confirmPassword: boolean} = {password: [], confirmPassword: true};
 
   if(password.length < 5)
     errors.password.push('Must be at least five characters long!');
 
-  if(!(/[a-zA-Z]/.test(password || '')))
+  if(!(/[a-zA-Z]/.test(password)))
       errors.password.push('Must contain at least one character!');
 
-  if(!(/[0-9]/.test(password || '')))
+  if(!(/[0-9]/.test(password)))
       errors.password.push('Must contain at least one number!');
 
-  if(!(/[^a-zA-Z0-9]/.test(password || '')))
+  if(!(/[^a-zA-Z0-9]/.test(password)))
       errors.password.push('Must contain at least one special character!')
 
   if(password != confirmPassword)
@@ -64,17 +63,15 @@ function validateFields(password : string, confirmPassword : string){
 
 
 export async function updateUsersPassword(state : { errors: { password: string[]; confirmPassword: boolean; }; success: boolean; } | { errors: undefined; success: boolean; } | undefined, formData : FormData){
+  const pass = formData.get('password')?.toString().trim() as string;
+  const confirmPass = formData.get('confirmPassword')?.toString().trim() as string;
 
-  const pass = formData.get('password')?.toString().trim();
-  const confirmPass = formData.get('confirmPassword')?.toString().trim();
-
-  const validatedFields = validateFields(pass || '', confirmPass || '');
-
+  const validatedFields = validateFields(pass, confirmPass);
   
   if(!validatedFields.success)
       return validatedFields;
 
-  const password = await bcrypt.hash(pass || '', 10);
+  const password = await bcrypt.hash(pass, 10);
   const userId = Number(formData.get('userId'));
   await UpdateUsersPassword(userId, password);
   await UpdateUsersRefreshToken(userId, null, null);

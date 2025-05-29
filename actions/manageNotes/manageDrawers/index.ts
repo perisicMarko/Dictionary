@@ -11,7 +11,7 @@ type createState  = {
 } | undefined;
 
 export async function createDrawer(state : createState, formData : FormData){
-    const drawerTitle = formData.get('title')?.toString() || '';
+    const drawerTitle = formData.get('title')?.toString() as string;
     const aToken = formData.get('accessToken')?.toString() || '';
 
     const sessionStatus = await verifySession(aToken);

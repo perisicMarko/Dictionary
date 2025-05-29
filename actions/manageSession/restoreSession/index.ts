@@ -14,7 +14,7 @@ export async function restoreSession(){
   const {email, userId} = payload as TokenPayload;
   const subscription = await GetSubscription(email);
   
-  if(!subscription || isBefore(subscription.key_expiration_date || '', new Date()) || !payload) //unauthorized
+  if(!subscription || isBefore(subscription.key_expiration_date as Date, new Date()) || !payload) //unauthorized
       return {success:false, status:401};
   
   const newRefreshToken = await encryptRefresh({email, userId});

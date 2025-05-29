@@ -75,8 +75,8 @@ export async function authenticateSignUp(state: stateType, formData: FormData){
 
         return retObj;
     }else{
-        const tmp = formData.get('email')?.toString();
-        const res = await GetUserInfoByEmail(tmp || '');
+        const tmp = formData.get('email')?.toString() as string;
+        const res = await GetUserInfoByEmail(tmp);
         const alreadyExist = res != null;
         if(alreadyExist && validatedFields.success){
             const retObj = {
@@ -107,7 +107,7 @@ export async function authenticateSignUp(state: stateType, formData: FormData){
             success: false
         } ;
 
-    if(isBefore(subscription.key_expiration_date || '' , new Date()))
+    if(isBefore(subscription.key_expiration_date as Date, new Date()))
         return {
             errors: null,
             lastName: "", 
@@ -180,8 +180,8 @@ type logInStateType = {
 
 export async function authenticateLogIn(state: logInStateType, formData: FormData){
     
-    const inputEmail = formData.get('email')?.toString() || '';
-    const inputPassword = formData.get('password')?.toString() || '';
+    const inputEmail = formData.get('email')?.toString() as string;
+    const inputPassword = formData.get('password')?.toString() as string;
             
     const validatedFields = LogInSchema.safeParse({
         email: inputEmail,
@@ -217,7 +217,7 @@ export async function authenticateLogIn(state: logInStateType, formData: FormDat
                 success: false
             } ;
     
-        if(isBefore(subscription.key_expiration_date || '' , new Date()))
+        if(isBefore(subscription.key_expiration_date as Date, new Date()))
             return {
                 errors: undefined,
                 email: "",

@@ -19,7 +19,7 @@ export default async function middleware(req: NextRequest) {
     if(isProtected){
         if(!refreshToken)
             return NextResponse.redirect(new URL('/', req.nextUrl));
-        const payload = await decryptRefresh(refreshToken || '');
+        const payload = await decryptRefresh(refreshToken as string);
         if(!payload)
             return NextResponse.redirect(new URL('/', req.nextUrl));
         const { userId } = (payload as TokenPayload);
@@ -30,7 +30,7 @@ export default async function middleware(req: NextRequest) {
     }else if(isPublic){
         if(!refreshToken)
             return NextResponse.next();
-        const payload = await decryptRefresh(refreshToken || '');
+        const payload = await decryptRefresh(refreshToken as string);
         if(!payload)
             return NextResponse.next();
         const { userId } = payload as TokenPayload;

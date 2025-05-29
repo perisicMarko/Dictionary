@@ -16,7 +16,7 @@ export async function GET() {
 
         function determineUserDeletion(u: TUser){
             if(!u.email_verified) 
-                if(!u.refresh_token || (u.refresh_token && isBefore(u.refresh_token_expiration_date || '', now))) // if user is trying to register, do not delete him in 15 minutes window
+                if(!u.refresh_token || (u.refresh_token && isBefore(u.refresh_token_expiration_date as Date, now))) // if user is trying to register, do not delete him in 15 minutes window
                     return true;
             return false;
         }

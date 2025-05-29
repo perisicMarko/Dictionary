@@ -5,7 +5,7 @@ import { CreateActivationKey, GetSubscription, UpdateActivationKey } from "./db"
 import { GenerateSchema } from "@/lib/rules";
 
 export async function generateActivationKey(state: {success: boolean, message: string, email: string, date: string} | undefined, formData: FormData){
-    const inputEmail = formData.get('email')?.toString();
+    const inputEmail = formData.get('email')?.toString() as string;
 
     const validatedFields = GenerateSchema.safeParse({
         email: inputEmail,
@@ -32,24 +32,24 @@ export async function generateActivationKey(state: {success: boolean, message: s
     const now = new Date();
 
     // za sada je resenje da kurs ne moze biti duzi od 9 nedelja
-    const activationKeyExpirationDate = new Date(formData.get('courseEnd')?.toString() || '');
+    const activationKeyExpirationDate = new Date(formData.get('courseEnd')?.toString() as string);
 
     if(isBefore(addWeeks(now, 9), activationKeyExpirationDate))
         return {success: false, message: '', email: '', date:'Duration of the course is longer than the longest course in your school.'}
     else if(isBefore(activationKeyExpirationDate, now))
         return {success: false, message: '', email: '', date:'The time you enetered is in the past.'};
 
-    const subscription = await GetSubscription(inputEmail || '');
+    const subscription = await GetSubscription(inputEmail);
 
     if(!subscription){
-        const retVal = await CreateActivationKey(inputEmail || '', activationKeyExpirationDate, schoolId);
+        const retVal = await CreateActivationKey(inputEmail, activationKeyExpirationDate, schoolId);
         if(!retVal)
             throw new Error('Activation Key creation failed, check manageSchools.');
     }else{
-        if(!subscription?.languages?.includes(formData.get('language')?.toString() || '')){
+        if(!subscription?.languages?.includes(formData.get('language')?.toString() as string)){
             subscription.languages += 'e';
         }
-        const retVal = await UpdateActivationKey(inputEmail || '', activationKeyExpirationDate, schoolId);
+        const retVal = await UpdateActivationKey(inputEmail, activationKeyExpirationDate, schoolId);
         if(!retVal)
             throw new Error('Activation Key update failed, check manageSchools.');
     }
