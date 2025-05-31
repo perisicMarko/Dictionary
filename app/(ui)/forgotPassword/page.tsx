@@ -28,7 +28,7 @@ export default function ForgotPassword() {
           </span>
           <Link
             href="https://mail.google.com/"
-            className="hover:scale-115 mt-3 hover:underline text-blue-300"
+            className="hover:scale-115 mt-3 hover:underline text-blue-300 transition-all"
           >
             Link to Gmail.
           </Link>
@@ -44,7 +44,7 @@ export default function ForgotPassword() {
           </span>
         </motion.div>
       )}
-      <motion.span className="my-2 hover:underline hover:scale-105">
+      <motion.span className="my-2 hover:underline hover:scale-105 transition-all">
         <Link href="/" className="text-white">
           Back to home page
         </Link>

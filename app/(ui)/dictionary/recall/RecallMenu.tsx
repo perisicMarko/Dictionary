@@ -41,22 +41,22 @@ export default function RecallNoteMenu({
       initial="hidden"
       animate="show"
       variants={containerVariants}
-      className="bg-white/80 center-vertically pointer-events-auto z-10 left-2 gap-1 rounded-2xl p-2"
+      className="bg-white/80 center-vertically pointer-events-auto z-10 left-2 gap-1 rounded-2xl"
     >
       <motion.form
         variants={itemVariants}
-        className="center"
+        className="center w-full px-2 pt-2 mb-1"
         action={() => {
           onSubmitDeleteHandle();
         }}
       >
         <input type="text" name="noteId" defaultValue={Number(noteId)} hidden />
         <button type="submit" onClick={(e) => e.stopPropagation()} title='Mark note as learned'>
-          <Trash2 color="#1E293B" className="hover:scale-105 cursor-pointer"/>
+          <Trash2 color="#1E293B" className="hover:scale-105 cursor-pointer transition-all"/>
         </button>
       </motion.form>
 
-      <motion.span variants={itemVariants}>
+      <motion.span variants={itemVariants} className="w-full px-2 ">
         <Link
           href={"/dictionary/recall/edit/" + noteId}
           onClick={() => toggleMenu()}
@@ -64,13 +64,13 @@ export default function RecallNoteMenu({
         >
           <NotebookPen
             color="#1E293B"
-            className="hover:scale-105 cursor-pointer"
+            className="hover:scale-105 cursor-pointer transition-all"
           />
         </Link>
       </motion.span>
       <motion.span
         variants={itemVariants}
-        className="block hover:scale-105 text-slate-800 cursor-pointer"
+        className="block text-slate-800 hover:text-blue-400 cursor-pointer text-center transition-color w-full"
         onClick={() => {
           changeQuality(6);
           toggleMenu();
@@ -81,7 +81,7 @@ export default function RecallNoteMenu({
       </motion.span>
       <motion.span
         variants={itemVariants}
-        className="block hover:scale-105 text-slate-800 cursor-pointer text-center"
+        className="block hover:text-blue-400 text-slate-800 cursor-pointer text-center transition-color w-full pb-1"
         onClick={() => {
           changeQuality(-1);
           toggleMenu();

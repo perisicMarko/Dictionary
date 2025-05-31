@@ -5,7 +5,7 @@ import {
   itemVariants,
   transition,
 } from "@/lib/animationVariants";
-import { useRef, useContext, useState, useTransition } from "react";
+import { useRef, useContext, useState, useTransition, useEffect } from "react";
 import { TWordApp } from "@/lib/types";
 import { saveNotes } from "@/actions/manageNotes";
 import { TokenContext } from "@/components/TokenContextProvider";
@@ -80,11 +80,13 @@ export default function SaveNoteForm({
   else
     buttonStyle += " col-span-2";
 
-  wordInputRef.current?.focus(); // focus input on component mount
+  useEffect(() => {
+    wordInputRef.current?.focus();
+  }, []);
 
   if (note != null && isErrorNote(note) && note?.error) cleanUp(1);
 
-  const isDisabled = word.trim() === "";
+  const isDisabled = word.trim() === "" || (!isErrorNote(note) && word === note?.word);
 
   return (
     <motion.div
@@ -188,10 +190,7 @@ export default function SaveNoteForm({
               }
               onClick={async (e) => {
                 e.preventDefault();
-                if (isDisabled === true) {
-                  wordInputRef?.current?.focus();
-                  return;
-                }
+                wordInputRef.current?.blur();
 
                 startGenerating(async () => {
                   const notes = await fetchApiNotes(word.trim().toLowerCase())
@@ -206,6 +205,7 @@ export default function SaveNoteForm({
                 });
               }
             }
+            disabled={isDisabled}
             >
               {isGenerating ? <Loader /> : <b>Generate</b>}
             </motion.button>
@@ -220,14 +220,17 @@ export default function SaveNoteForm({
                     note?.word.toLowerCase()
                 }
                 variants={itemVariants}
-                onClick={() => setIsSaving(true)}
+                onClick={() => {
+                  wordInputRef.current?.focus();
+                  setIsSaving(true);
+                }}
               >
                 {isSaving ? <Loader /> : <b>Save</b>}
               </motion.button>
             )}
           </div>
           <span
-            className="hover:underline hover:scale-105 cursor-pointer text-white mt-3"
+            className="hover:underline hover:scale-105 cursor-pointer text-white mt-3 transition-all"
             onClick={() => toggleHelp()}
           >
             Need any help?

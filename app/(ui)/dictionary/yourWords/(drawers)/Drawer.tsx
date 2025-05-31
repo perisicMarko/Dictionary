@@ -156,7 +156,7 @@ export default function Drawer({
               color="white"
               width={25}
               height={25}
-              className="xl:hover:scale-105 mt-3 cursor-pointer"
+              className="xl:hover:scale-105 mt-3 cursor-pointer transition-all"
               onClick={() => openDrawer(drawer?.id || -1)}
             />
           ) : (
@@ -164,7 +164,7 @@ export default function Drawer({
               color="white"
               height={25}
               width={25}
-              className="xl:hover:scale-105 mt-3 cursor-pointer"
+              className="xl:hover:scale-105 mt-3 cursor-pointer transition-all"
               onClick={() => openDrawer(-1)}
             />
           )}

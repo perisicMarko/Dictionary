@@ -55,7 +55,7 @@ export default function DrawerMenu({
               confirmDelete(true);
             }}
           >
-            <Trash2 className="xl:hover:scale-105 cursor-pointer" />
+            <Trash2 className="xl:hover:scale-105 cursor-pointer transition-all" />
           </motion.span>
         </motion.div>
       )}

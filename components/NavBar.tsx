@@ -72,7 +72,7 @@ export function NavBar() {
           <div className="flex justify-start items-center ml-3 md:ml-7">
             <button
               type="submit"
-              className="hover:scale-115 scale-105  transition-colors duration-300 cursor-pointer text-white hover:text-blue-400"
+              className="hover:scale-115 scale-105 duration-300 cursor-pointer text-white hover:text-blue-400 transition-all"
               onClick={() => handleLogOut()}
             >
               <LogOut width={20} height={20} />
@@ -166,7 +166,7 @@ export function NavBar() {
               <div className="mt-7">
                 <button
                   type="submit"
-                  className="hover:scale-115 scale-105 transition-colors duration-300 cursor-pointer text-white hover:text-blue-400 px-3"
+                  className="hover:scale-115 scale-105 transition-all duration-300 cursor-pointer text-white hover:text-blue-400 px-3"
                   onClick={() => handleLogOut()}
                 >
                   <LogOut width={20} height={20} />

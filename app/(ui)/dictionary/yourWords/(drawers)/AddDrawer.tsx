@@ -47,7 +47,7 @@ export default function AddDrawer({rerender} : {rerender : () => void}) {
         <>
           <motion.span
             variants={itemVariants}
-            className="absolute text-white top-0 right-3 mr-4 mt-2 scale-105 hover:scale-115 cursor-pointer"
+            className="absolute text-white top-0 right-3 mr-4 mt-2 scale-105 hover:scale-115 cursor-pointer transition-all"
             onClick={() => setAddDrawer(false)}
           >
             <b>x</b>

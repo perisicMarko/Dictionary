@@ -26,7 +26,7 @@ export default function RecallNoteHelp() {
           setHelp(!help);
         }}
       >
-        <span className="block hover:scale-105 py-2 hover:underline cursor-pointer text-box">
+        <span className="block hover:scale-105 py-2 hover:underline cursor-pointer text-box transition-all">
           <u>Need help?</u>
         </span>
       </motion.div>

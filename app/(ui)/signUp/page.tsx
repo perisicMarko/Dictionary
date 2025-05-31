@@ -173,7 +173,7 @@ export default function SignUp() {
                 </button>
                 <motion.div
                   variants={itemVariants}
-                  className="inline-block hover:scale-105 ml-3"
+                  className="inline-block hover:scale-105 ml-3 transition-all"
                 >
                   <Link href="logIn" className="text-white">
                     <i>

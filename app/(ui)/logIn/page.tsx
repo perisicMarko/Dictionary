@@ -120,7 +120,7 @@ export default function LogIn() {
             className="center my-1"
           >
             <Link
-              className="flex items-start justify-end text-white hover:scale-105 hover:underline text-[14px] sm:text-[18px]"
+              className="flex items-start justify-end text-white hover:scale-105 hover:underline text-[14px] sm:text-[18px] transition-all"
               href="/forgotPassword"
             >
               <u>Forgot password?</u>

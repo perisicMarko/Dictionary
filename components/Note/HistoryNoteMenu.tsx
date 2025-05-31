@@ -50,27 +50,27 @@ export default function HistoryNoteMenu({
       initial="hidden"
       animate="show"
       variants={containerVariants}
-      className="bg-white/80 z-10 rounded-2xl p-2"
+      className="bg-white/80 z-10 rounded-2xl"
     >
       <motion.form
         variants={itemVariants}
-        className="center"
+        className="center w-full px-2 pt-2"
         action={onSubmitDeleteHandle}
       >
         <input type="text" name="noteId" defaultValue={noteId} hidden />
-        <button type="submit" onClick={(e) => e.stopPropagation()} title='Delete note permanently' className="hover:scale-105 cursor-pointer">
+        <button type="submit" onClick={(e) => e.stopPropagation()} title='Delete note permanently' className="hover:scale-105 cursor-pointer transition-all w-full">
           <Trash2 color="#1E293B"/>
         </button>
       </motion.form>
       <motion.form
         variants={itemVariants}
-        className="center mt-2.5"
+        className="center mt-3 px-2 mb-2 w-full"
         onSubmit={onSubmitRelearnHandle}
       >
         <input type="text" name="noteId" defaultValue={noteId} hidden />
         <button
           type="submit"
-          className="text-center text-xs text-slate-800 cursor-pointer hover:scale-115"
+          className="text-center text-xs text-slate-800 cursor-pointer hover:text-blue-400 transition-all w-full"
           onClick={(e) => e.stopPropagation()}
           title='Relearn word'
         >

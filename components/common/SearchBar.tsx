@@ -52,7 +52,7 @@ export default function SearchBar({
       className={`!py-2 !px-1 grid grid-cols-[auto_auto_1fr] items-center ${sortBy ? '!rounded-b-none' : ''}`}
     >
       <span
-        className="text-white md:ml-4 ml-2 cursor-pointer hover:scale-115 rounded-full text-2xl"
+        className="text-white md:ml-4 ml-2 cursor-pointer hover:scale-115 rounded-full text-2xl transition-all"
         title="Click for help"
         onClick={() => setHelp(!help)}
       >

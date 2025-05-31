@@ -63,7 +63,7 @@ export default function Home() {
 
       <motion.div className="relative z-10 w-full center-vertically">
         <Link
-          className="flex justify-end text-box hover:scale-105 hover:underline text-[14px] mb-2 sm:text-[18px]"
+          className="flex justify-end text-box hover:scale-105 hover:underline text-[14px] mb-2 sm:text-[18px] transition-all"
           href="/about"
         >
           <u>About the app</u>
@@ -73,13 +73,13 @@ export default function Home() {
         </Link>
         <div className="grid grid-cols-2 w-full mt-3">
           <Link
-            className="flex items-start justify-start text-white hover:scale-105 hover:underline text-[14px] sm:text-[18px]"
+            className="flex items-start justify-start text-white hover:scale-105 hover:underline text-[14px] sm:text-[18px] tranistion-all"
             href="/signUp"
           >
             <u>Sign up</u>
           </Link>
           <Link
-            className="flex items-start justify-end text-white hover:scale-105 hover:underline text-[14px] sm:text-[18px]"
+            className="flex items-start justify-end text-white hover:scale-105 hover:underline text-[14px] sm:text-[18px] transition-all"
             href="/forgotPassword"
           >
             <u>Forgot password?</u>

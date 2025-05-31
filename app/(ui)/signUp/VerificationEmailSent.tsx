@@ -27,7 +27,7 @@ export default function VerificationEmailSent({ email }: { email: string }) {
         </motion.p>
         <Link
           href="https://mail.google.com/"
-          className="hover:scale-115 text-white my-3"
+          className="hover:scale-115 text-white my-3 transition-all"
         >
           <u className="text-blue-300">Gmail link.</u>
         </Link>

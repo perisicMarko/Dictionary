@@ -41,7 +41,7 @@ export default function NavBar(){
         <div className="flex justify-start items-center ml-3 md:ml-7">
           <button
             onClick={() => handleLogOut()}
-            className="hover:scale-115 scale-105 cursor-pointer text-white hover:text-blue-400"
+            className="hover:scale-115 scale-105 transition-all cursor-pointer text-white hover:text-blue-400"
           >
             <LogOut
               width={20}
