@@ -16,7 +16,7 @@ export async function fetchApiNotes(word : string){
             if(!tmp.audio){
                 const API_KEY = process.env.API_KEY; // Replace with your API key
 
-                const pom = await fetch(`http://api.voicerss.org/?key=${API_KEY}&hl=en-us&v=Amy&src=${word.trim().toLowerCase()}`);
+                const pom = await fetch(`http://api.voicerss.org/?key=${API_KEY}&hl=en-gb&v=Alice&src=${word.trim().toLowerCase()}`);
 
                 tmp.audio = pom.url;
                 return tmp;

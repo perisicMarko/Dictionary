@@ -81,7 +81,7 @@ export default function RecallNoteMenu({
       </motion.span>
       <motion.span
         variants={itemVariants}
-        className="block hover:text-blue-400 text-slate-800 cursor-pointer text-center transition-color w-full pb-1"
+        className="block hover:text-blue-400 text-slate-800 cursor-pointer text-center transition-color w-full pb-2"
         onClick={() => {
           changeQuality(-1);
           toggleMenu();
