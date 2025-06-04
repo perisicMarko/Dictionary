@@ -6,6 +6,7 @@ import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/common/Loader";
 import { authenticateLogIn } from "@/actions/auth/user";
+import { generateVerificationMail } from "@/actions/auth/user/sendVerificationEmail";
 
 export default function LogIn() {
   const [state, action, isPending] = useActionState(
@@ -13,121 +14,170 @@ export default function LogIn() {
     undefined
   );
   const router = useRouter();
-  const [formData, setFormData] = useState<{email: string, password: string}>({email: '', password: ''})
-  const {email, password} = formData;
-  const [semaphore, setSemaphore] = useState(false);
+  const [formData, setFormData] = useState<{ email: string; password: string }>(
+    { email: "", password: "" }
+  );
+  const { email, password } = formData;
+  const [semaphore, setSemaphore] = useState(false); // used to manage the clean ups after each action
+
+  const logInStatus = {
+    SUCCESS: 0,
+    UNVERIFIED: 1,
+    WRONG_CREDENTIALS: 2,
+    INVALID_SUBSCRIPTION: 3,
+  };
 
   useEffect(() => {
-    if (state?.success) router.push("/dictionary/inputWord");
-  }, [router, state?.success]);
+    const sendVerificationEmail = async () => {
+      await generateVerificationMail(email);
+      setFormData({password: '', email: ''});
+    }
 
-  if (state?.errors?.email && state?.subscription != "" && semaphore) {
-    setFormData({email: '', password: ''})
+    if (state?.status === logInStatus.SUCCESS)
+      router.push("/dictionary/inputWord");
+    else if(state?.status === logInStatus.UNVERIFIED) {
+      sendVerificationEmail();
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state?.status, semaphore]);
+
+  if (
+    state?.errors?.email &&
+    state?.status != logInStatus.INVALID_SUBSCRIPTION &&
+    semaphore
+  ) {
+    setFormData({ email: "", password: "" });
     setSemaphore(false);
   }
   if (state?.errors?.password && password !== "" && semaphore) {
-    setFormData({...formData, password: ''})
+    setFormData({ ...formData, password: "" });
     setSemaphore(false);
   }
+  
   const emptyCredentials = password === "" || email === "";
 
   return (
     <>
-      {state && state?.subscription != "" && (
+      {(!state ||
+        state?.status === logInStatus.WRONG_CREDENTIALS ||
+        logInStatus.INVALID_SUBSCRIPTION) && (
         <motion.div
           initial="hidden"
           animate="show"
           variants={containerVariants}
-          className="box-layout mt-40 "
+          className={
+            "relative box-layout border-2 border-blue-50 mt-15 " +
+            (isPending && " opacity-50 ")
+          }
         >
-          <motion.p
-            variants={itemVariants}
-            className="text-box"
+          <div className="collapse-window">
+            <Link className="x-btn" href="/">
+              <b>x</b>
+            </Link>
+          </div>
+          <form
+            className="form flex flex-col items-center justify-center mt-5"
+            action={(e) => {
+              action(e);
+              setSemaphore(true);
+            }}
           >
-            <b>{state?.subscription}</b>
+            <motion.div variants={itemVariants} className="w-full">
+              <label htmlFor="email" className="text-white">
+                Email:{" "}
+              </label>
+              <input
+                className="form-input"
+                type="text"
+                name="email"
+                value={email}
+                onChange={(e) => {
+                  setFormData({ ...formData, email: e.target.value });
+                }}
+              />
+              {state?.errors?.email != "" && (
+                <p className="error ml-1">{state?.errors?.email}</p>
+              )}
+            </motion.div>
+            <motion.div variants={itemVariants} className="w-full">
+              <label htmlFor="password" className="text-white">
+                Password:{" "}
+              </label>
+              <input
+                className="form-input"
+                type="password"
+                name="password"
+                value={password}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
+              />
+              {state?.errors?.password && (
+                <p className="error ml-1">{state.errors.password}</p>
+              )}
+            </motion.div>
+            <motion.div variants={itemVariants} className="center mt-2 w-3/4">
+              <button
+                disabled={isPending || emptyCredentials}
+                className={
+                  "primary-btn center " + (emptyCredentials && " opacity-50")
+                }
+              >
+                {isPending ? <Loader /> : "Log in"}
+              </button>
+            </motion.div>
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 15 },
+                show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+              }}
+              className="center my-1"
+            >
+              <Link
+                className="flex items-start justify-end text-white hover:scale-105 hover:underline text-[14px] sm:text-[18px] transition-all"
+                href="/forgotPassword"
+              >
+                <u>Forgot password?</u>
+              </Link>
+            </motion.div>
+          </form>
+        </motion.div>
+      )}
+
+      {state?.status === logInStatus.INVALID_SUBSCRIPTION && (
+        <motion.div
+          initial="hidden"
+          animate="show"
+          variants={containerVariants}
+          className="box-layout mt-10"
+        >
+          <motion.p variants={itemVariants} className="text-box">
+            <b>There is no subscription for this email addres.</b>
           </motion.p>
         </motion.div>
       )}
-      <motion.div
-        initial="hidden"
-        animate="show"
-        variants={containerVariants}
-        className={
-          "relative box-layout border-2 border-blue-50 " + (isPending && " opacity-50 ") +
-          (state?.subscription !== "" ? " mt-5 " : " mt-8 sm:mt-10 md:mt-12 ")
-        }
-        
-      >
-        <div className="collapse-window">
-          <Link className="x-btn" href="/">
-            <b>x</b>
-          </Link>
-        </div>
-        <form
-          className="form flex flex-col items-center justify-center mt-5"
-          action={(e) => {
-            action(e);
-            setSemaphore(true);
-          }}
+
+      {state?.status === logInStatus.UNVERIFIED && (
+        <motion.div
+          className="box-layout center-vertically mt-15"
+          variants={containerVariants}
         >
-          <motion.div variants={itemVariants} className="w-full">
-            <label htmlFor="email" className="text-white">
-              Email:{" "}
-            </label>
-            <input
-              className="form-input"
-              type="text"
-              name="email"
-              value={email}
-              onChange={(e) => {
-                setFormData({...formData, email: e.target.value})
-              }}
-            />
-            {state?.errors?.email != "" && (
-              <p className="error ml-1">{state?.errors?.email}</p>
-            )}
-          </motion.div>
-          <motion.div variants={itemVariants} className="w-full">
-            <label htmlFor="password" className="text-white">
-              Password:{" "}
-            </label>
-            <input
-              className="form-input"
-              type="password"
-              name="password"
-              value={password}
-              onChange={(e) => setFormData({...formData, password: e.target.value})}
-            />
-            {state?.errors?.password && (
-              <p className="error ml-1">{state.errors.password}</p>
-            )}
-          </motion.div>
-          <motion.div variants={itemVariants} className="center mt-2 w-3/4">
-            <button
-              disabled={isPending || emptyCredentials}
-              className={
-                "primary-btn center " + (emptyCredentials && " opacity-50")
-              }
-            >
-              {isPending ? <Loader /> : "Log in"}
-            </button>
-          </motion.div>
-          <motion.div
-            variants={{
-              hidden: { opacity: 0, y: 15 },
-              show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-            }}
-            className="center my-1"
+          <motion.h2 className="text-box" variants={itemVariants}>
+            <b>Your account is not verified!</b>
+          </motion.h2>
+          <motion.span className="text-box" variants={itemVariants}>
+            Verification email has been sent to you.
+          </motion.span>
+          <br />
+          <Link
+            href="https://mail.google.com/"
+            className="hover:scale-115 text-white transition-all"
           >
-            <Link
-              className="flex items-start justify-end text-white hover:scale-105 hover:underline text-[14px] sm:text-[18px] transition-all"
-              href="/forgotPassword"
-            >
-              <u>Forgot password?</u>
-            </Link>
-          </motion.div>
-        </form>
-      </motion.div>
+            <u className="text-blue-300">Gmail link.</u>
+          </Link>
+        </motion.div>
+      )}
     </>
   );
 }

@@ -1,5 +1,5 @@
 "use client";
-import { useActionState, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { TUser } from "@/lib/types";
 import { getUserByToken, verifyUser } from "@/actions/auth/user/index";
@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 import { isBefore } from "date-fns";
 import Link from "next/link";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
-import Loader from "@/components/common/Loader";
 import Loading from "../../loading";
 import NoValidToken from "./NoValidToken";
 
@@ -16,7 +15,6 @@ export default function Page() {
   let token = params.token;
   if (typeof token === "object") token = token[0];
   const [user, setUser] = useState<TUser | undefined>();
-  const [state, action, isPending] = useActionState(verifyUser, undefined);
   const [isFetching, setIsFetching] = useState(true);
 
   useEffect(() => {
@@ -29,7 +27,16 @@ export default function Page() {
 
     fetchUser();
     setIsFetching(false);
+    
   }, [token]);
+
+  useEffect(() => { 
+    const setUserVerified = async () => {
+      if(user && isValid)
+        await verifyUser(user.id);
+    }
+      setUserVerified();
+  });
 
   let isValid = false;
   const now = new Date();
@@ -52,7 +59,7 @@ export default function Page() {
     <>
       {user ? (
         <>
-          {state?.success === true ? (
+          {isValid ? (
             <motion.div
               initial="hidden"
               animate="show"
@@ -73,27 +80,9 @@ export default function Page() {
                 .
               </motion.p>
             </motion.div>
-          ) : isValid ? (
-            <motion.div
-              initial="hidden"
-              animate="show"
-              variants={containerVariants}
-              className="box-layout mt-30"
-            >
-              <motion.form
-                variants={itemVariants}
-                className="w-full"
-                action={action}
-              >
-                <input name="userId" defaultValue={user?.id} hidden />
-                <button type="submit" className="primary-btn center">
-                  {isPending ? <Loader /> : "Click to verify"}
-                </button>
-              </motion.form>
-            </motion.div>
-          ) : (
+          ) : 
             <NoValidToken />
-          )}
+          }
         </>
       ) : isFetching ? (
         <Loading />
