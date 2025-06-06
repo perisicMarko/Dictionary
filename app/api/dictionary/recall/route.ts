@@ -35,7 +35,7 @@ export async function GET() {
   };
   for (const u of userIds) {
     const user = await GetUserInfoById(u);
-    if(user)
+    if(user && user.email_verified)
       mailOptions.to = user.email;
 
     try {
