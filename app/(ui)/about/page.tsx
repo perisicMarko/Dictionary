@@ -23,23 +23,6 @@ export default function Page() {
           following the concept called the &quot;forgetting curve&quot;, using
           spaced repetition technique.
           <br />
-          Learn more about it on{" "}
-          <Link
-            href="https://en.wikipedia.org/wiki/Spaced_repetition"
-            target="blank"
-            className="hover:underline"
-          >
-            <b>spaced repetition Wikipedia page</b>
-          </Link>
-          , or watch this{" "}
-          <Link
-            href="https://www.youtube.com/watch?v=X_TWGOxz8X4"
-            target="blank"
-            className="hover:underline"
-          >
-            <b>brief video</b>
-          </Link>{" "}
-          on spaced repetition and why it works.
         </p>
         <h2 className="title text-white">How to use this app?</h2>
         <p className="text-white">

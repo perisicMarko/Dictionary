@@ -27,9 +27,15 @@ export default function Home() {
   const dashLength = 2 * (rectWidth + rectHeight);
 
   return (
+    <>
+    <motion.div className="w-3/4 sm:h-1/2 sm:w-1/2 mt-15 center">
+      <video controls autoPlay muted className="rounded-3xl w-full">
+        <source src='/promo_video.mp4' type="video/mp4"/>
+      </video>
+    </motion.div>
     <motion.div
       ref={containerRef}
-      className="relative mt-15 sm:mt-30 md:mt-35 xl:mt-70 center-vertically box-layout"
+      className="relative mt-15 center-vertically box-layout"
     >
       <motion.svg
         width={dimensions.width}
@@ -87,5 +93,6 @@ export default function Home() {
         </div>
       </motion.div>
     </motion.div>
+    </>
   );
 }

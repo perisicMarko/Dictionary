@@ -45,7 +45,7 @@ export default function RecallNoteMenu({
     >
       <motion.form
         variants={itemVariants}
-        className="center w-full px-2 pt-2 mb-1"
+        className="center w-full px-2 pt-1 mb-1"
         action={() => {
           onSubmitDeleteHandle();
         }}
@@ -81,7 +81,7 @@ export default function RecallNoteMenu({
       </motion.span>
       <motion.span
         variants={itemVariants}
-        className="block hover:text-blue-400 text-slate-800 cursor-pointer text-center transition-color w-full pb-2"
+        className="block hover:text-blue-400 text-slate-800 cursor-pointer text-center transition-color w-full pb-1"
         onClick={() => {
           changeQuality(-1);
           toggleMenu();
