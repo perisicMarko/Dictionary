@@ -1,5 +1,5 @@
 'use server';
-import { TGeneratedNote, TGMeaning, TGPhonetic, TWordApp } from "@/lib/types";
+import { TGeneratedNote, TGMeaning, TGPhonetic, TWordApp, TMeaning, TDefinition } from "@/lib/types";
 
 
 export async function fetchApiNotes(word : string){
@@ -38,22 +38,19 @@ function filterApiNotes(data: TGeneratedNote) {
     word: data.word,
     audio: (tmpSound != undefined ? tmpSound : ''),
     meanings: data.meanings.map((e: TGMeaning) => {
-      const res: {
-        partOfSpeech: string;
-        definitions: { definition: string; example: string | undefined; }[];
-      } = {
+      const res : TMeaning = {
         partOfSpeech: "",
-        definitions: [] as { definition: string; example: string; }[]
+        definitions: [],
       };
+
       res.partOfSpeech = e.partOfSpeech;
       res.definitions = e.definitions.map((d: GDefinition) => {
-        const tmp: {
-          definition: string;
-          example: string | undefined;
-        } = { definition: "", example: "" };
+        const tmp : TDefinition = { definition: "", example: "", synonyms: []};
 
         tmp.definition = d.definition;
-        tmp.example = d.example;
+        tmp.example = d.example || '';
+        tmp.synonyms = d.synonyms || [];
+
         return tmp;
       });
       return res;
@@ -73,8 +70,20 @@ function stringifyNote(noteObj: TWordApp) {
   for (let i = 0; i < noteObj.meanings.length; i++) {
     res += 'Meaning ' + (i + 1) + '\n' + '-' + 'Part of speech: ' + noteObj.meanings[i].partOfSpeech + '\n';
     for (let j = 0; j < noteObj.meanings[i].definitions.length; j++) {
-      res += 'Definition ' + (j + 1) + ': ' + noteObj.meanings[i].definitions[j].definition +
-        (noteObj.meanings[i].definitions[j].example ? '\nExample: ' + noteObj.meanings[i].definitions[j].example + '\n' : '\n');
+      res += '-Definition ' + (j + 1) + ': ' + noteObj.meanings[i].definitions[j].definition +
+        (noteObj.meanings[i].definitions[j].example ? '\n-Example: ' + noteObj.meanings[i].definitions[j].example + '\n' : '\n');
+
+      if(noteObj.meanings[i].definitions[j].synonyms?.length != 0){
+        res += '-Synonyms: ';
+        const n = noteObj.meanings[i].definitions[j].synonyms?.length || 0;
+        for(let counter = 0; counter < n; counter++){
+          res += noteObj.meanings[i].definitions[j].synonyms[counter];
+          if(counter === n - 1)
+            res += '\n';
+          else
+            res += ', ';
+        }
+      }
 
       if (j != noteObj.meanings[i].definitions.length - 1)
         res += '\n';

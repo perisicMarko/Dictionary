@@ -49,12 +49,13 @@ export type TGeneratedNote = {
   sourceUrls: string[];
 };
 
-type TDefinition = {
+export type TDefinition = {
   definition: string;
-  example: string | undefined;
+  example: string;
+  synonyms: string[];
 };
 
-type TMeaning = {
+export type TMeaning = {
   partOfSpeech: string;
   definitions: TDefinition[];
 };
