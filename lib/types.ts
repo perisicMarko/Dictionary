@@ -64,8 +64,7 @@ export type TMeaning = {
 export type TWordApp = {
   word: string;
   audio: string;
-  meanings: TMeaning[];
-  parsedNote: string;
+  generated_notes: TMeaning[];
 };
 
 
@@ -74,7 +73,7 @@ export type TDBNoteEntry = {
   word: string
   status: boolean;
   user_notes: string;
-  generated_notes: string;
+  generated_notes: TMeaning[];
   audio: string;
   repetitions: number;
   days: number;

@@ -6,19 +6,20 @@ import {
   transition,
 } from "@/lib/animationVariants";
 import { useRef, useContext, useState, useTransition, useEffect } from "react";
-import { TWordApp } from "@/lib/types";
+import { TMeaning, TWordApp } from "@/lib/types";
 import { saveNotes } from "@/actions/manageNotes";
 import { TokenContext } from "@/components/TokenContextProvider";
 import AudioPlayer from "@/components/common/AudioPlayer";
 import Loader from "@/components/common/Loader";
 import { fetchApiNotes } from "@/actions/manageDictApi";
+import DisplayNotes from "@/components/common/DisplayNotes";
 
 export default function SaveNoteForm({
   toggleHelp,
 }: {
   toggleHelp: () => void;
 }) {
-  const [word, setWord] = useState('');
+  const [word, setWord] = useState("");
   const [note, setNote] = useState<TWordApp | { error: string } | null>(); // for preview of api response
   const [generate, setGenerate] = useState(false); // for displaying textarea for generated notes
   const [isGenerating, startGenerating] = useTransition(); // keeping track of generating notes action
@@ -43,7 +44,7 @@ export default function SaveNoteForm({
       return <></>;
     }
     setWord("");
-  }
+  };
 
   const handleSubmit = async (formData: FormData) => {
     if (tokenContext?.accessToken == undefined) {
@@ -53,32 +54,32 @@ export default function SaveNoteForm({
 
     cleanUp(0);
 
-    const res = await saveNotes(
-      formData.get("word")?.toString() as string,
-      formData.get("audio")?.toString() as string,
-      formData.get("userNotes")?.toString() as string,
-      formData.get("generatedNotes")?.toString() as string,
-      formData.get("accessToken")?.toString() as string
-    );
+    if (!isErrorNote(note)) {
+      const res = await saveNotes(
+        formData.get("word")?.toString() as string,
+        formData.get("audio")?.toString() as string,
+        formData.get("userNotes")?.toString() as string,
+        note?.generated_notes as TMeaning[],
+        formData.get("accessToken")?.toString() as string
+      );
 
-    if (wordInputRef.current)
-      // expanding cleanUp
-      wordInputRef.current.value = "";
+      if (wordInputRef.current)
+        // expanding cleanUp
+        wordInputRef.current.value = "";
 
-    if (res?.status === 201) {
-      const newToken = res.accessToken;
-      tokenContext?.setAccessToken(newToken);
-    } else if (res?.status === 401) router.push("/logIn");
+      if (res?.status === 201) {
+        const newToken = res.accessToken;
+        tokenContext?.setAccessToken(newToken);
+      } else if (res?.status === 401) router.push("/logIn");
 
-    setIsSaving(false);
-  }
+      setIsSaving(false);
+    }
+  };
 
   let buttonStyle =
     "center bg-blue-400 text-white sm:hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block transition-all";
-  if (!isErrorNote(note) && note)
-    buttonStyle += " col-span-1";
-  else
-    buttonStyle += " col-span-2";
+  if (!isErrorNote(note) && note) buttonStyle += " col-span-1";
+  else buttonStyle += " col-span-2";
 
   useEffect(() => {
     wordInputRef.current?.focus();
@@ -86,7 +87,8 @@ export default function SaveNoteForm({
 
   if (note != null && isErrorNote(note) && note?.error) cleanUp(1);
 
-  const isDisabled = word.trim() === "" || (!isErrorNote(note) && word === note?.word);
+  const isDisabled =
+    word.trim() === "" || (!isErrorNote(note) && word === note?.word);
 
   return (
     <motion.div
@@ -124,7 +126,7 @@ export default function SaveNoteForm({
           className="rounded-3xl text-center text-slate-800 bg-white w-full h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] p-2 mt-5"
           type="text"
           name="word"
-          onChange={(e) => setWord(e.target.value)}
+          onChange={(e) => setWord(e.target.value.toLowerCase())}
           placeholder="Enter new word here..."
         />
         {error && <p className="error mt-1 text-center">{error}</p>}
@@ -138,7 +140,7 @@ export default function SaveNoteForm({
               isErrorNote(note) || note === null ? undefined : note?.audio
             }
           />
-          {note != null && !isErrorNote(note) && note?.parsedNote && (
+          {note != null && !isErrorNote(note) && note?.generated_notes && (
             <div className="w-full">
               <AudioPlayer
                 src={isErrorNote(note) || note === null ? "" : note!.audio}
@@ -150,28 +152,25 @@ export default function SaveNoteForm({
           <>
             <div className="w-full center">
               <textarea
-                rows={5}
+                rows={1}
                 placeholder="Type your notes here..."
-                className="p-2 rounded-2xl w-full  mt-2 text-slate-800 bg-white max-h-40 xl:max-h-70"
+                className="p-2 rounded-2xl w-full  mt-2 text-slate-800 bg-white resize-none  h-fit"
                 name="userNotes"
                 key="userNotes"
-              />
-            </div>
-            <div className="p-3 w-full">
-              <h2 className="text-blue-400 self-start">
-                <b>{note?.word}</b>
-              </h2>
-              <textarea
-                rows={5}
-                placeholder="Notes will be generated here..."
-                className="w-full mt-2 text-blue-300 h-50 xl:h-100 xl:max-h-100 px-1 resize-none xl:resize-y"
-                name="generatedNotes"
-                key="genNotes"
-                value={note.parsedNote}
-                onChange={(e) => {
-                  note.parsedNote = e.target.value;
+                onInput={(e) => {
+                  const target = e.target as HTMLTextAreaElement;
+                  target.style.height = "auto";
+                  const lineHeight = parseFloat(
+                    getComputedStyle(target).lineHeight
+                  );
+                  const maxHeight = lineHeight * 5;
+                  target.style.height =
+                    Math.min(target.scrollHeight, maxHeight) + "px";
                 }}
               />
+            </div>
+            <div className="w-full overflow-auto">
+              <DisplayNotes word={note.word} meanings={note.generated_notes} includeWord={true} />
             </div>
           </>
         )}
@@ -186,26 +185,25 @@ export default function SaveNoteForm({
                 wordInputRef.current?.value.toLowerCase() !=
                   note?.word.toLowerCase()
                   ? " col-span-2"
-                  : "") + (isDisabled ? ' opacity-50' : '')
+                  : "") +
+                (isDisabled ? " opacity-50" : "")
               }
               onClick={async (e) => {
                 e.preventDefault();
                 wordInputRef.current?.blur();
 
                 startGenerating(async () => {
-                  const notes = await fetchApiNotes(word.trim().toLowerCase())
-              
-                  if (notes && !("error" in notes)) {
-                    setNote(notes);
+                  const note = await fetchApiNotes(word.trim().toLowerCase());
+                  if (note && !("error" in note)) {
+                    setNote(note);
                     setError("");
                   } else {
                     cleanUp(1);
                   }
                   setGenerate(true);
                 });
-              }
-            }
-            disabled={isDisabled}
+              }}
+              disabled={isDisabled}
             >
               {isGenerating ? <Loader /> : <b>Generate</b>}
             </motion.button>

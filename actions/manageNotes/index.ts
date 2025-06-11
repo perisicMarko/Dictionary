@@ -1,6 +1,6 @@
 'use server'
 import { ImportNotes, GetNotes, GetNoteById, UpdateRepetitionFactors, SetNoteAsLearned, ResetNoteRecallFactors, DeleteNote, EditNotes } from '@/actions/manageNotes/db';
-import { TDBNoteEntry } from '@/lib/types';
+import { TDBNoteEntry, TMeaning } from '@/lib/types';
 import { addDays, isBefore } from 'date-fns';
 import calc from '@/actions/manageNotes/spacedRepetition';
 import { decryptAccess, decryptRefresh, encryptAccess, TokenPayload, verifySession } from '@/actions/manageSession';
@@ -8,7 +8,7 @@ import { STATUS } from '@/actions/manageSession';
 import { logOutUser } from '../auth/user';
 import { cookies } from 'next/headers';
 
-export async function saveNotes(word: string, audio: string, user_notes: string, generated_notes: string, accessToken: string) {
+export async function saveNotes(word: string, audio: string, user_notes: string, generated_notes: TMeaning[], accessToken: string) {
   const now = new Date();
   const dbInput: TDBNoteEntry = {
     id: 0, // mock for schema
@@ -17,7 +17,7 @@ export async function saveNotes(word: string, audio: string, user_notes: string,
     status: false, //false meaning word is not learned 
     language: 'english',
     user_notes: user_notes || '',
-    generated_notes: generated_notes || '',
+    generated_notes: generated_notes,
     audio: audio || '',
     repetitions: 0,
     days: 1,
@@ -72,7 +72,7 @@ export async function getUsersNotes(accessToken: string) {
     let data = undefined;
 
     if (Array.isArray(notes))
-      data = notes.filter((w: TDBNoteEntry) => {
+      data = notes.filter((w) => {
         const res = w.status == false && w.user_id == userId;
         return res;
       });
@@ -92,7 +92,7 @@ export async function getUsersNotes(accessToken: string) {
     let data = undefined;
 
     if (Array.isArray(notes))
-      data = notes.filter((w: TDBNoteEntry) => {
+      data = notes.filter((w) => {
         const res = w.status == false && w.user_id == userId;
         return res;
       });
@@ -122,7 +122,7 @@ export async function getUsersHistory(accessToken: string) {
     let data = undefined;
 
     if (Array.isArray(notes))
-      data = notes.filter((w: TDBNoteEntry) => {
+      data = notes.filter((w) => {
         const res = w.status == true && w.user_id == userId;
         return res;
       });
@@ -142,7 +142,7 @@ export async function getUsersHistory(accessToken: string) {
     let data = undefined;
 
     if (Array.isArray(notes))
-      data = notes.filter((w: TDBNoteEntry) => {
+      data = notes.filter((w) => {
         const res = w.status == true && w.user_id == userId;
         return res;
       });
@@ -160,7 +160,7 @@ export async function getRecallNotes(accessToken: string) {
   const notes = await GetNotes();
   const currentDate = new Date().toISOString();
   if (Array.isArray(notes))
-    return notes.filter((n: TDBNoteEntry) => {
+    return notes.filter((n) => {
       const res = n.status === false && n.user_id == userId && isBefore(n.review_date, currentDate);
       return res;
     });
@@ -187,14 +187,14 @@ export async function updateReviewDate(quality: number, noteId: number, accessTo
     const refreshToken = cookieStore.get('refreshToken')?.value;
     const payload = await decryptRefresh(refreshToken || '');
     const { email, userId } = payload as TokenPayload;
-    const ret = await UpdateRepetitionFactors(note);
+    const ret = await UpdateRepetitionFactors(note.id, note.days, note.repetitions, note.ease_factor, note.review_date);
     if (!ret)
       console.log('An error has occured while updating review date, check manageNotes/index.');
     const accessToken = await encryptAccess({ email, userId });
 
     return { success: true, accessToken: accessToken, status: 201 };
   } else if (retVal === STATUS.VALID_ACCESS) {
-    const ret = await UpdateRepetitionFactors(note);
+    const ret = await UpdateRepetitionFactors(note.id, note.days, note.repetitions, note.ease_factor, note.review_date);
     if (!ret)
       console.log('An error has occured while updating review date, check manageNotes/index.');
     return { success: true, status: 200 };
@@ -222,7 +222,7 @@ export async function setAsLearned(noteId: number, status: boolean, accessToken:
   }
 }
 
-export async function editNote(userNotes: string, generatedNotes: string, noteId: number, accessToken: string) {
+export async function editNote(userNotes: string, noteId: number, accessToken: string) {
   const status = await verifySession(accessToken);
   if (status === STATUS.UNAUTHORIZED) { //unauthorized
     await logOutUser();
@@ -233,13 +233,13 @@ export async function editNote(userNotes: string, generatedNotes: string, noteId
     const refreshToken = cookieStore.get('refreshToken')?.value;
     const payload = await decryptRefresh(refreshToken || '');
     const { email, userId } = payload as TokenPayload;
-    const retVal = await EditNotes(userNotes, generatedNotes, noteId);
+    const retVal = await EditNotes(userNotes, noteId);
     if (!retVal)
       throw new Error('Note with noteId is missing in database check manageNotes and edit/[noteId]'); const accessToken = await encryptAccess({ email, userId });
 
     return { success: true, accessToken: accessToken, status: 201 };
   } else if (status === STATUS.VALID_ACCESS) {
-    const retVal = await EditNotes(userNotes, generatedNotes, noteId);
+    const retVal = await EditNotes(userNotes, noteId);
     if (!retVal)
       throw new Error('Note with noteId is missing in database check manageNotes and edit/[noteId]');
     return { success: true, status: 200 };

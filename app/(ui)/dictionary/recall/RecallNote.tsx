@@ -37,7 +37,10 @@ export default function RecallNote({
         setMenu(false);
       }}
     >
-      <div className="absolute right-0 top-5 flex flex-col items-center rounded-2xl w-[100px]" title='Menu'>
+      <div
+        className="absolute right-0 top-5 flex flex-col items-center rounded-2xl w-[100px]"
+        title="Menu"
+      >
         {menu ? (
           <X
             color="white"
@@ -76,11 +79,34 @@ export default function RecallNote({
       {quality === 6 ? (
         <>
           <AudioPlayer src={note.audio}></AudioPlayer>
-          <DisplayNotes
-            userNotes={note.user_notes}
-            generatedNotes={note.generated_notes}
-            recallNoteType={true}
-          />
+          <motion.div
+            initial={{
+              y: 15,
+              opacity: 0,
+            }}
+            animate={{
+              y: 0,
+              opacity: 1,
+            }}
+            className="p-1 h-[300px] xl:h-[400px] overflow-auto"
+          >
+            <h2 className="mt-2 text-blue-400">
+              <b>Your notes:</b>
+            </h2>
+            <p className={`white-spaces text-blue-300 ${(note.user_notes === "" ? "opacity-60 text-center" : "")}`}>
+              {note.user_notes != ""
+                ? note.user_notes
+                : "No your notes for this word."}
+            </p>
+            <h2 className="mt-2 text-blue-400">
+              <b>Generated notes:</b>
+            </h2>
+            <DisplayNotes
+              word={note.word}
+              meanings={note.generated_notes}
+              includeWord={false}
+            />
+          </motion.div>
         </>
       ) : (
         <GradeForm

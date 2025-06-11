@@ -37,7 +37,7 @@ function filterApiNotes(data: TGeneratedNote) {
   const retVal: TWordApp = {
     word: data.word,
     audio: (tmpSound != undefined ? tmpSound : ''),
-    meanings: data.meanings.map((e: TGMeaning) => {
+    generated_notes: data.meanings.map((e: TGMeaning) => {
       const res : TMeaning = {
         partOfSpeech: "",
         definitions: [],
@@ -54,42 +54,8 @@ function filterApiNotes(data: TGeneratedNote) {
         return tmp;
       });
       return res;
-    }),
-    parsedNote: ''
+    })
   };
 
-  retVal.parsedNote = stringifyNote(retVal);
-
   return retVal;
-}
-
-
-function stringifyNote(noteObj: TWordApp) {
-  let res = noteObj.word + ': ' + '\n';
-
-  for (let i = 0; i < noteObj.meanings.length; i++) {
-    res += 'Meaning ' + (i + 1) + '\n' + '-' + 'Part of speech: ' + noteObj.meanings[i].partOfSpeech + '\n';
-    for (let j = 0; j < noteObj.meanings[i].definitions.length; j++) {
-      res += '-Definition ' + (j + 1) + ': ' + noteObj.meanings[i].definitions[j].definition +
-        (noteObj.meanings[i].definitions[j].example ? '\n-Example: ' + noteObj.meanings[i].definitions[j].example + '\n' : '\n');
-
-      if(noteObj.meanings[i].definitions[j].synonyms?.length != 0){
-        res += '-Synonyms: ';
-        const n = noteObj.meanings[i].definitions[j].synonyms?.length || 0;
-        for(let counter = 0; counter < n; counter++){
-          res += noteObj.meanings[i].definitions[j].synonyms[counter];
-          if(counter === n - 1)
-            res += '\n';
-          else
-            res += ', ';
-        }
-      }
-
-      if (j != noteObj.meanings[i].definitions.length - 1)
-        res += '\n';
-    }
-    res += '----------------------------------\n';
-  }
-
-  return res;
 }

@@ -21,7 +21,6 @@ export async function GetNotes(){
 export async function ImportNotes(inputNote : TDBNoteEntry){
   
     try{
-
         const note = {
           user_id: inputNote.user_id,
           word: inputNote.word,
@@ -51,6 +50,8 @@ export async function ImportNotes(inputNote : TDBNoteEntry){
           }
         })
 
+        console.log('hello');
+
         return newNotes;
     } catch(error){
 
@@ -76,15 +77,15 @@ export async function GetNoteById(noteId : number){
   }
 }
 
-export async function UpdateRepetitionFactors(note : TDBNoteEntry){
+export async function UpdateRepetitionFactors(noteId : number, days : number, repetitions : number, ease_factor : number, review_date : Date){
   
     try{
-        const res = await prisma.words.update({where: {id: note.id}, 
+        const res = await prisma.words.update({where: {id: noteId}, 
             data: {
-                days: note.days,
-                repetitions: note.repetitions, 
-                ease_factor: note.ease_factor, 
-                review_date: note.review_date
+                days: days,
+                repetitions: repetitions, 
+                ease_factor: ease_factor, 
+                review_date: review_date
             }
         });
 
@@ -143,10 +144,10 @@ export async function SetNoteAsLearned(noteId : number, status : boolean){
   }
 }
 
-export async function EditNotes(userNotes : string, generatedNotes : string, noteId : number){
+export async function EditNotes(userNotes : string, noteId : number){
     
     try{
-        const res = await prisma.words.update({ where: {id: noteId}, data: {user_notes: userNotes, generated_notes: generatedNotes}});
+        const res = await prisma.words.update({ where: {id: noteId}, data: {user_notes: userNotes}});
       
         return res;
     } catch(error){
@@ -167,6 +168,24 @@ export async function EditNotes(userNotes : string, generatedNotes : string, not
                 ease_factor: easeFactor,
                 review_date: reviewDate,
                 status: false,
+            }
+        });
+        
+        return res;
+    } catch(error){
+  
+      if(error instanceof Error){
+        console.log('ResetNoteRecallFactors: ERROR: API - ' + error.message);
+      }
+
+    }
+  }
+
+  export async function updateNote(generated_notes : string){
+    try{
+        const res = await prisma.words.updateMany({
+            data: {
+                audio : generated_notes
             }
         });
         

@@ -27,7 +27,7 @@ export default function OpenedDrawer({
   useEffect(() => {
     const fetchWords = async () => {
       const data = await getWordsOfDrawer(drawer?.id || -1);
-      setDrawerWords(data);
+      setDrawerWords(data as TDBNoteEntry[]);
     };
 
     fetchWords();

@@ -81,7 +81,7 @@ model words {
   word              String
   status            Boolean
   user_notes        String
-  generated_notes   String
+  generated_notes   Json?
   audio             String
   repetitions       Int
   days              Int

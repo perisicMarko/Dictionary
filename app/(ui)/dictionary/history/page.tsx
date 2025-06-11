@@ -14,13 +14,13 @@ export default function History() {
   const tokenContext = useContext(TokenContext);
   const [search, setSearch] = useState("");
   const [refresh, setRefresh] = useState(false);
-  const [words, setWords] = useState<TDBNoteEntry[] | undefined>(undefined);
+  const [words, setWords] = useState<TDBNoteEntry[]>();
 
   useEffect(() => {
     const fetch = async () => {
       const words = await getUsersHistory(tokenContext?.accessToken || "");
       if(words){
-        setWords(words?.data);
+        setWords(words?.data as TDBNoteEntry[]);
         tokenContext?.setAccessToken(words.accessToken || '');
       }
     };

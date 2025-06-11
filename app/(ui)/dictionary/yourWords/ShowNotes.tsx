@@ -11,7 +11,7 @@ import Loading from "../../loading";
 import { isBefore } from "date-fns";
 
 export default function ShowNotes() {
-  const [words, setWords] = useState<TDBNoteEntry[] | undefined>();
+  const [words, setWords] = useState<TDBNoteEntry[]>();
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState(-1);
   const tokenContext = useContext(TokenContext);
@@ -20,7 +20,7 @@ export default function ShowNotes() {
     const fetch = async () => {
       const words = await getUsersNotes(tokenContext?.accessToken || "");
       if (words) {
-        setWords(words.data);
+        setWords(words.data as TDBNoteEntry[]);
         tokenContext?.setAccessToken(words.accessToken || "");
       }
     };

@@ -39,7 +39,7 @@ export default function ShowDrawers() {
     }
     if (allWords) {
       tokenContext?.setAccessToken(allWords.accessToken || "");
-      setWords(allWords.data);
+      setWords(allWords.data as TDBNoteEntry[]);
     }
   };
 

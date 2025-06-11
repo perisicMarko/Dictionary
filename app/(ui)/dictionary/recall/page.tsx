@@ -9,14 +9,14 @@ import ZeroNotesMessage from "@/components/common/ZeroNotesMessage";
 import Loading from "../../loading";
 
 export default function Page() {
-  const [words, setWords] = useState<TDBNoteEntry[] | undefined>();
+  const [words, setWords] = useState<TDBNoteEntry[]>();
   const [refresh, setRefresh] = useState(false);
   const tokenContext = useContext(TokenContext);
 
   useEffect(() => {
     async function fetchNotes() {
       const data = await getRecallNotes(tokenContext?.accessToken || "");
-      setWords(data);
+      setWords(data as TDBNoteEntry[]);
     }
     fetchNotes();
   }, [refresh, tokenContext?.accessToken]);

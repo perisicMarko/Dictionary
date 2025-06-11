@@ -13,7 +13,7 @@ import { TokenContext } from "@/components/TokenContextProvider";
 export default function Edit({pathSrc}: {pathSrc: string}) {
   const params = useParams();
   const noteId = params.noteId;
-  const [note, setNote] = useState<TDBNoteEntry | null>();
+  const [note, setNote] = useState<TDBNoteEntry>();
   const [isPending, setIsPending] = useState(false);
   const router = useRouter();
   const tokenContext = useContext(TokenContext);
@@ -21,13 +21,13 @@ export default function Edit({pathSrc}: {pathSrc: string}) {
   useEffect(() => {
     async function getNote() {
       const n = await getNoteById(Number(noteId));
-      setNote(n);
+      setNote(n as TDBNoteEntry);
     }
     getNote();
   }, [noteId]);
 
   async function onSubmitEditHandle(formData: FormData) {
-      const response = await editNote(formData.get('userNotes')?.toString() || '', formData.get('generatedNotes')?.toString() || '', Number(noteId), tokenContext?.accessToken || '');
+      const response = await editNote(formData.get('userNotes')?.toString() || '', Number(noteId), tokenContext?.accessToken || '');
       if (!response?.success)
         console.log('Note update failed, returning to yourWords page');
       else if(response.status === 201)
@@ -42,7 +42,7 @@ export default function Edit({pathSrc}: {pathSrc: string}) {
       initial="hidden"
       animate="show"
       variants={containerVariants}
-      className="box-layout center-vertically mt-15 xl:h-[800px] h-3/4"
+      className="box-layout center-vertically mt-15"
     >
       <form
         className="rounded-3xl space-y-4 w-full p-4"
@@ -62,21 +62,11 @@ export default function Edit({pathSrc}: {pathSrc: string}) {
             name="userNotes"
             id="userNotes"
             defaultValue={note?.user_notes}
-            className="bg-white rounded-3xl xl:h-[180px] md:h-[220px] sm:h-[180px] h-[130px] block w-full p-2 mt-1 text-slate-800"
+            className="bg-white rounded-3xl h-[350px] sm-h-[500px] resize-none block w-full p-3 mt-1 text-slate-800"
           ></textarea>
         </motion.div>
 
-        <motion.div variants={itemVariants}>
-          <label htmlFor="generatedNotes" className="text-white">
-            Generated notes:
-          </label>
-          <textarea
-            name="generatedNotes"
-            id="generatedNotes"
-            defaultValue={note?.generated_notes}
-            className=" bg-white rounded-2xl xl:h-[375px] md:h-[250px] sm:h-[200px] h-[150px] block w-full p-2 mt-1 text-slate-800"
-          ></textarea>
-        </motion.div>
+        
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0, transition: { duration: 0.6 } }}

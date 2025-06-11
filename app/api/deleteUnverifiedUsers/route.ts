@@ -1,6 +1,6 @@
 import { DeleteUnverifiedUsers, GetUsers } from '@/actions/manageUsers/db';
 import { DeleteUnverifiedNotes, GetNotes } from '@/actions/manageNotes/db';
-import { TDBNoteEntry, TUser } from '@/lib/types';
+import { TUser } from '@/lib/types';
 import { NextResponse } from 'next/server';
 import { isBefore } from 'date-fns';
 
@@ -32,7 +32,7 @@ export async function GET() {
         //filter all notes of unverified users
         let unverifiedNoteIds: number[] = [];
         if (Array.isArray(notes))
-            unverifiedNoteIds = notes?.filter((n: TDBNoteEntry) => unverifiedUserIds.includes(n.user_id)).map((n: TDBNoteEntry) => { return n.id });
+            unverifiedNoteIds = notes?.filter(n => unverifiedUserIds.includes(n.user_id)).map(n => { return n.id });
         //delete unverified notes
         await DeleteUnverifiedNotes(unverifiedNoteIds);
 
