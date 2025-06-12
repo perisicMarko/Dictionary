@@ -180,21 +180,3 @@ export async function EditNotes(userNotes : string, noteId : number){
 
     }
   }
-
-  export async function updateNote(generated_notes : string){
-    try{
-        const res = await prisma.words.updateMany({
-            data: {
-                audio : generated_notes
-            }
-        });
-        
-        return res;
-    } catch(error){
-  
-      if(error instanceof Error){
-        console.log('ResetNoteRecallFactors: ERROR: API - ' + error.message);
-      }
-
-    }
-  }

@@ -92,7 +92,7 @@ export default function ShowNotes() {
       {filteredWords?.length === 0 && search === "" && (
         <ZeroNotesMessage
           message={
-            "Hmm, it looks like you're not learning any words right now. Time to learn!"
+            "Hmm, seems like you're not learning any words yet. Time to get started!"
           }
         />
       )}

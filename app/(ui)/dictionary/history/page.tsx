@@ -68,7 +68,7 @@ export default function History() {
       {filteredWords?.length === 0 && search === "" && (
         <ZeroNotesMessage
           message={
-            "Hmm, it looks like you're not learning any words right now. Time to learn!"
+            "Hmm, it looks like you haven’t marked any words as learned yet."
           }
         />
       )}
