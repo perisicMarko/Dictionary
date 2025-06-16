@@ -1,6 +1,6 @@
 'use server'
 import { ImportNotes, GetNotes, GetNoteById, UpdateRepetitionFactors, SetNoteAsLearned, ResetNoteRecallFactors, DeleteNote, EditNotes } from '@/actions/manageNotes/db';
-import { TDBNoteEntry, TMeaning } from '@/lib/types';
+import { TMeaning } from '@/lib/types';
 import { addDays, isBefore } from 'date-fns';
 import calc from '@/actions/manageNotes/spacedRepetition';
 import { decryptAccess, decryptRefresh, encryptAccess, TokenPayload, verifySession } from '@/actions/manageSession';
@@ -8,22 +8,7 @@ import { STATUS } from '@/actions/manageSession';
 import { logOutUser } from '../auth/user';
 import { cookies } from 'next/headers';
 
-export async function saveNotes(word: string, audio: string, user_notes: string, generated_notes: TMeaning[], accessToken: string) {
-  const now = new Date();
-  const dbInput: TDBNoteEntry = {
-    id: 0, // mock for schema
-    user_id: -1,
-    word: word.toLowerCase() as string,
-    status: false, //false meaning word is not learned 
-    language: 'english',
-    user_notes: user_notes || '',
-    generated_notes: generated_notes,
-    audio: audio || '',
-    repetitions: 0,
-    days: 1,
-    ease_factor: 2.5,
-    review_date: addDays(now, 1)
-  };
+export async function saveNotes(word: string, audio: string, user_notes: string, generated_notes: TMeaning[], accessToken: string, wordId: number) {
   const retVal = await verifySession(accessToken);
   if (retVal === STATUS.UNAUTHORIZED) { //unauthorized
     await logOutUser();
@@ -34,16 +19,16 @@ export async function saveNotes(word: string, audio: string, user_notes: string,
     const refreshToken = cookieStore.get('refreshToken')?.value;
     const payload = await decryptRefresh(refreshToken || '');
     const { email, userId } = payload as TokenPayload;
-    dbInput.user_id = userId;
-    await ImportNotes(dbInput);
+    const status = await ImportNotes(userId, word, audio, user_notes, generated_notes, wordId);
+    if (!status)
+      throw new Error('Word is not imported in database, smth is wrong. Check manageNotes/saveNotes -> db/ImportNotes');
     const accessToken = await encryptAccess({ email, userId });
 
     return { success: true, accessToken: accessToken, status: 201 };
   } else if (retVal === STATUS.VALID_ACCESS) {
     const payload = await decryptAccess(accessToken);
     const { userId } = payload as TokenPayload;
-    dbInput.user_id = userId;
-    const status = await ImportNotes(dbInput);
+    const status = await ImportNotes(userId, word, audio, user_notes, generated_notes, wordId);
     if (!status)
       throw new Error('Word is not imported in database, smth is wrong. Check manageNotes/saveNotes -> db/ImportNotes');
     const token = accessToken;
@@ -158,7 +143,8 @@ export async function getRecallNotes(accessToken: string) {
     return;
   const { userId } = payload as TokenPayload;
   const notes = await GetNotes();
-  const currentDate = new Date().toISOString();
+  const currentDate = new Date();
+
   if (Array.isArray(notes))
     return notes.filter((n) => {
       const res = n.status === false && n.user_id == userId && isBefore(n.review_date, currentDate);

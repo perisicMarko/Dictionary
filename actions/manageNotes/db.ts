@@ -1,182 +1,231 @@
 import 'server-only';
 import { PrismaClient } from '@prisma/client';
-import { TDBNoteEntry } from '@/lib/types';
+import { TMeaning } from '@/lib/types';
+import { addDays } from 'date-fns';
 
 const prisma = new PrismaClient();
 
-export async function GetNotes(){
-
-    try{
-        const res = await prisma.words.findMany();
-        return res;
-    }catch (error) {
-        
-        if(error instanceof Error){
-            console.log('GetNotes: ERROR: API - ', error?.message);
-        }
-
-    }
-}
-
-export async function ImportNotes(inputNote : TDBNoteEntry){
-  
-    try{
-        const note = {
-          user_id: inputNote.user_id,
-          word: inputNote.word,
-          status: inputNote.status,
-          language: inputNote.language,
-          user_notes: inputNote.user_notes,
-          generated_notes: inputNote.generated_notes,
-          audio: inputNote.audio,
-          repetitions: inputNote.repetitions,
-          days: inputNote.days,
-          ease_factor: inputNote.ease_factor, 
-          review_date: inputNote.review_date
-        };
-        const newNotes = await prisma.words.create({
-          data:{
-            user_id: note.user_id,
-            word: note.word,
-            status: note.status,
-            language: note.language,
-            user_notes: note.user_notes,
-            generated_notes: note.generated_notes,
-            audio: note.audio,
-            repetitions: note.repetitions,
-            days: note.days,
-            ease_factor: note.ease_factor, 
-            review_date: note.review_date
+export async function GetNotes() {
+  try {
+    const res = await prisma.notes.findMany({
+      include: {
+        dictionary_words: {
+          select: {
+            word: true,
+            meanings: true,
+            audio: true
           }
-        })
-
-        console.log('hello');
-
-        return newNotes;
-    } catch(error){
-
-        if(error instanceof Error){
-          console.log('ImportNotes: ERROR: API - ' + error.message);  
         }
+      }
+    });
 
+    return res;
+  } catch (error) {
+
+    if (error instanceof Error) {
+      console.log('GetNotes: ERROR: API - ', error?.message);
     }
-}
-
-export async function GetNoteById(noteId : number){
-  
-    try{
-        const res = await prisma.words.findUnique({where: {id: noteId}});
-
-        return res;
-    } catch(error){
-
-        if(error instanceof Error){
-          console.log('GetNoteById: ERROR: API - ' + error.message);
-        }
 
   }
 }
 
-export async function UpdateRepetitionFactors(noteId : number, days : number, repetitions : number, ease_factor : number, review_date : Date){
-  
-    try{
-        const res = await prisma.words.update({where: {id: noteId}, 
-            data: {
-                days: days,
-                repetitions: repetitions, 
-                ease_factor: ease_factor, 
-                review_date: review_date
-            }
-        });
+export async function ImportNotes(userId: number, word: string, audio: string, user_notes: string, generated_notes: TMeaning[], wordId: number) {
+  const stored_locally = wordId != -1;
+  try {
+    if (!stored_locally) {
+      // save word to table in my database but do not wait it for performance, because users note is already imported, here i just scrape what user searched
+      const newWord = await prisma.dictionary_words.create({
+        data: {
+          word: word,
+          meanings: generated_notes,
+          audio: audio
+        }
+      });
+      if (!newWord)
+        throw new Error("Failed to import word locally.");
 
-        return res;
-    } catch(error){
 
-    if(error instanceof Error){
+      const newNotes = await prisma.notes.create({
+        data: {
+          user_id: userId,
+          status: false,
+          language: 'english',
+          user_notes: user_notes,
+          repetitions: 0,
+          days: 1,
+          ease_factor: 2.5,
+          review_date: addDays(new Date(), 1),
+          word_id: newWord.id
+        }
+      });
+
+      if (!newNotes)
+        throw new Error("Failed to import users note.");
+
+      return newNotes;
+    }
+
+    const newNotes = await prisma.notes.create({
+      data: {
+        user_id: userId,
+        status: false,
+        language: 'english',
+        user_notes: user_notes,
+        repetitions: 0,
+        days: 1,
+        ease_factor: 2.5,
+        review_date: addDays(new Date(), 1),
+        word_id: wordId
+      }
+    });
+
+    if (!newNotes)
+      throw new Error("Failed to import users note.");
+
+    return newNotes;
+  } catch (error) {
+
+    if (error instanceof Error) {
+      console.log('ImportNotes: ERROR: API - ' + error.message);
+    }
+
+  }
+}
+
+export async function GetNoteById(noteId: number) {
+
+  try {
+    const res = await prisma.notes.findUnique({ where: { id: noteId }, include: { dictionary_words: { select: { word: true, meanings: true, audio: true } } } });
+
+    return res;
+  } catch (error) {
+
+    if (error instanceof Error) {
+      console.log('GetNoteById: ERROR: API - ' + error.message);
+    }
+
+  }
+}
+
+export async function UpdateRepetitionFactors(noteId: number, days: number, repetitions: number, ease_factor: number, review_date: Date) {
+
+  try {
+    const res = await prisma.notes.update({
+      where: { id: noteId },
+      data: {
+        days: days,
+        repetitions: repetitions,
+        ease_factor: ease_factor,
+        review_date: review_date
+      }
+    });
+
+    return res;
+  } catch (error) {
+
+    if (error instanceof Error) {
       console.log('UpdateRepetitionFactors: ERROR: API - ' + error.message);
     }
 
   }
 }
 
-export async function DeleteNote(noteId : number){
-    
-    try{
-        const res = await prisma.words.delete({where: {id: noteId}});
-        
-        return res;
-    } catch(error){
+export async function DeleteNote(noteId: number) {
 
-    if(error instanceof Error){
+  try {
+    const res = await prisma.notes.delete({ where: { id: noteId } });
+
+    return res;
+  } catch (error) {
+
+    if (error instanceof Error) {
       console.log('DeleeteNote: ERROR: API - ' + error.message);
     }
   }
 }
 
-export async function  DeleteUnverifiedNotes(ids : number[]){
-  
-    try{
-        let res;
-        for(const id of ids)
-            res = await prisma.words.deleteMany({where: {id: id}});
+export async function DeleteUnverifiedNotes(ids: number[]) {
 
-        return res;
-    } catch(error){
+  try {
+    let res;
+    for (const id of ids)
+      res = await prisma.notes.deleteMany({ where: { id: id } });
 
-        if(error instanceof Error){
-            console.log('DeleteUnverifiedNotes: ERROR: API - ' + error.message);
-        }
+    return res;
+  } catch (error) {
+
+    if (error instanceof Error) {
+      console.log('DeleteUnverifiedNotes: ERROR: API - ' + error.message);
+    }
 
   }
 }
 
-export async function SetNoteAsLearned(noteId : number, status : boolean){
-  
-    try{
-        const res = await prisma.words.update({where: {id: noteId}, data: {status: status}});
-    
-        return res;
-    } catch(error){
+export async function SetNoteAsLearned(noteId: number, status: boolean) {
 
-        if(error instanceof Error){
-            console.log('SetNoteLearned: ERROR: API - ' + error.message);
-        }
+  try {
+    const res = await prisma.notes.update({ where: { id: noteId }, data: { status: status } });
+
+    return res;
+  } catch (error) {
+
+    if (error instanceof Error) {
+      console.log('SetNoteLearned: ERROR: API - ' + error.message);
+    }
   }
 }
 
-export async function EditNotes(userNotes : string, noteId : number){
-    
-    try{
-        const res = await prisma.words.update({ where: {id: noteId}, data: {user_notes: userNotes}});
-      
-        return res;
-    } catch(error){
-  
-      if(error instanceof Error){
-        console.log('EditNotes: ERROR: API - ' + error.message);
-      }
+export async function EditNotes(userNotes: string, noteId: number) {
 
-    }
-  }
-  
-  export async function ResetNoteRecallFactors(noteId : number, days : number, repetitions : number, easeFactor : number, reviewDate : Date){
-    try{
-        const res = await prisma.words.update({where: {id: noteId}, 
-            data: {
-                days: days, 
-                repetitions: repetitions,
-                ease_factor: easeFactor,
-                review_date: reviewDate,
-                status: false,
-            }
-        });
-        
-        return res;
-    } catch(error){
-  
-      if(error instanceof Error){
-        console.log('ResetNoteRecallFactors: ERROR: API - ' + error.message);
-      }
+  try {
+    const res = await prisma.notes.update({ where: { id: noteId }, data: { user_notes: userNotes } });
 
+    return res;
+  } catch (error) {
+
+    if (error instanceof Error) {
+      console.log('EditNotes: ERROR: API - ' + error.message);
     }
+
   }
+}
+
+export async function ResetNoteRecallFactors(noteId: number, days: number, repetitions: number, easeFactor: number, reviewDate: Date) {
+  try {
+    const res = await prisma.notes.update({
+      where: { id: noteId },
+      data: {
+        days: days,
+        repetitions: repetitions,
+        ease_factor: easeFactor,
+        review_date: reviewDate,
+        status: false,
+      }
+    });
+
+    return res;
+  } catch (error) {
+
+    if (error instanceof Error) {
+      console.log('ResetNoteRecallFactors: ERROR: API - ' + error.message);
+    }
+
+  }
+}
+
+
+
+export async function restoreNotes(noteId: number, audio: string) {
+
+  try {
+    const res = await prisma.dictionary_words.updateMany({ where: { id: noteId }, data: { audio: audio } });
+
+    return res;
+  } catch (error) {
+
+    if (error instanceof Error) {
+      console.log('EditNotes: ERROR: API - ' + error.message);
+    }
+
+  }
+}

@@ -1,11 +1,11 @@
 import SearchBar from "@/components/common/SearchBar";
 import { motion } from "framer-motion";
-import { itemVariants } from "@/lib/animationVariants";
+import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { useState, useEffect, useContext, useLayoutEffect } from "react";
 import { TokenContext } from "@/components/TokenContextProvider";
 import AddDrawer from "./AddDrawer";
 import { getUsersDrawers } from "@/actions/manageNotes/manageDrawers";
-import { TDBNoteEntry, TDrawer } from "@/lib/types";
+import { TDrawer, TNoteApp } from "@/lib/types";
 import Drawer from "./Drawer";
 import { getUsersNotes } from "@/actions/manageNotes";
 import Loading from "@/app/(ui)/loading";
@@ -14,7 +14,7 @@ import OpenedDrawer from "./OpenedDrawer";
 export default function ShowDrawers() {
   const [search, setSearch] = useState("");
   const [drawers, setDrawers] = useState<TDrawer[]>();
-  const [words, setWords] = useState<TDBNoteEntry[]>();
+  const [notes, setNotes] = useState<TNoteApp[]>();
   const [refresh, setRefresh] = useState(false);
   const [openedDrawerId, setOpenedDrawerId] = useState(-1);
   const tokenContext = useContext(TokenContext);
@@ -32,14 +32,14 @@ export default function ShowDrawers() {
 
   const fetch = async () => {
     const res = await getUsersDrawers(tokenContext?.accessToken || "");
-    const allWords = await getUsersNotes(tokenContext?.accessToken || "");
+    const allNotes = await getUsersNotes(tokenContext?.accessToken || "");
     if (res) {
       tokenContext?.setAccessToken(res.accessToken);
       setDrawers(res.data);
     }
-    if (allWords) {
-      tokenContext?.setAccessToken(allWords.accessToken || "");
-      setWords(allWords.data as TDBNoteEntry[]);
+    if (allNotes) {
+      tokenContext?.setAccessToken(allNotes.accessToken || "");
+      setNotes(allNotes.data as TNoteApp[]);
     }
   };
 
@@ -78,7 +78,7 @@ export default function ShowDrawers() {
         placeholder={
           openedDrawerId === -1
             ? "Search for drawers here..."
-            : "Search for words..."
+            : "Search for notes..."
         }
         sortBy={false}
         changeSortBy={() => {}}
@@ -87,16 +87,16 @@ export default function ShowDrawers() {
           {openedDrawerId === -1 ? (
             <>
               <b>
-                This is where you can recall words organized in your custom
+                This is where you can recall notes organized in your custom
                 drawers.
               </b>
               <br />
               <br />
               You can add a drawer and delete it. Also you can add and remove
-              words from drawers.
+              notes from drawers.
               <br />
               <br />
-              For example, you might have certain words that you need for a
+              For example, you might have certain notes that you need for a
               field like business economy. In that case, you can create a drawer
               called &quot;business economy&quot; and store in it every word
               related to that topic.
@@ -106,7 +106,7 @@ export default function ShowDrawers() {
             </>
           ) : (
             <>
-              Here are displayed only the words that belong to a certain drawer.
+              Here are displayed only the notes that belong to a certain drawer.
               You can edit the notes for a word or you can remove the word from
               the drawer.
               <br /> <br />
@@ -117,6 +117,8 @@ export default function ShowDrawers() {
       </SearchBar>
 
       {openedDrawerId === -1 && <AddDrawer rerender={rerender} />}
+      
+      {drawers?.length === 0 && <motion.div className="box-layout mt-5 center" variants={containerVariants}><motion.span className="text-box" variants={itemVariants}>No drawers created.</motion.span></motion.div>}
 
       {openedDrawerId === -1 &&
         (drawers ? (
@@ -124,7 +126,7 @@ export default function ShowDrawers() {
             <Drawer
               key={d.id}
               drawer={d as TDrawer}
-              words={words as TDBNoteEntry[]}
+              notes={notes as TNoteApp[]}
               rerender={rerender}
               openDrawer={(id: number) => openDrawer(id)}
               openedDrawerId={openedDrawerId}
@@ -140,7 +142,7 @@ export default function ShowDrawers() {
           search={search}
           openDrawer={(id: number) => openDrawer(id)}
           openedDrawerId={openedDrawerId}
-          allWords={words as TDBNoteEntry[]}
+          allNotes={notes as TNoteApp[]}
         />
       )}
     </>

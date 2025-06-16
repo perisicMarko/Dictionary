@@ -1,5 +1,5 @@
 import Note from "@/components/Note";
-import { TDBNoteEntry } from "@/lib/types";
+import { TNoteApp } from "@/lib/types";
 
 export default function Words({
   props,
@@ -7,14 +7,14 @@ export default function Words({
   drawerId,
   rerenderParent,
 }: {
-  props: TDBNoteEntry[] | undefined;
+  props: TNoteApp[] | undefined;
   historyNote: boolean;
   drawerId: number;
   rerenderParent: () => void;
 }) {
   return (
     <>
-      {props?.map((w: TDBNoteEntry) => {
+      {props?.map((w: TNoteApp) => {
         return (
           <Note
             key={w.id}

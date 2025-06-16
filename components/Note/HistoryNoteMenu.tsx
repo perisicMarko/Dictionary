@@ -65,7 +65,7 @@ export default function HistoryNoteMenu({
       <motion.form
         variants={itemVariants}
         className="center mt-3 px-2 mb-2 w-full"
-        onSubmit={onSubmitRelearnHandle}
+        action={onSubmitRelearnHandle}
       >
         <input type="text" name="noteId" defaultValue={noteId} hidden />
         <button

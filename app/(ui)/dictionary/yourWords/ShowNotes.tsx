@@ -1,6 +1,6 @@
 import { getUsersNotes } from "@/actions/manageNotes";
 import Words from "@/components/common/Words";
-import { TDBNoteEntry } from "@/lib/types";
+import { TNoteApp } from "@/lib/types";
 import { useState, useContext, useEffect } from "react";
 import { motion } from "framer-motion";
 import { TokenContext } from "@/components/TokenContextProvider";
@@ -11,7 +11,7 @@ import Loading from "../../loading";
 import { isBefore } from "date-fns";
 
 export default function ShowNotes() {
-  const [words, setWords] = useState<TDBNoteEntry[]>();
+  const [words, setWords] = useState<TNoteApp[]>();
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState(-1);
   const tokenContext = useContext(TokenContext);
@@ -20,7 +20,7 @@ export default function ShowNotes() {
     const fetch = async () => {
       const words = await getUsersNotes(tokenContext?.accessToken || "");
       if (words) {
-        setWords(words.data as TDBNoteEntry[]);
+        setWords(words.data as TNoteApp[]);
         tokenContext?.setAccessToken(words.accessToken || "");
       }
     };
@@ -28,7 +28,7 @@ export default function ShowNotes() {
   }, [tokenContext, tokenContext?.accessToken]);
 
   const filteredWords = words?.filter((w) => {
-    return w.word.toLowerCase().trim().includes(search.toLowerCase().trim());
+    return w.dictionary_words.word.toLowerCase().trim().includes(search.toLowerCase().trim());
   });
 
   function updateSearch(word: string) {

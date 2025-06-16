@@ -2,21 +2,21 @@
 import RecallNoteHelp from "@/app/(ui)/dictionary/recall/Help";
 import { getRecallNotes } from "@/actions/manageNotes";
 import { useState, useContext, useEffect } from "react";
-import { TDBNoteEntry } from "@/lib/types";
+import { TNoteApp } from "@/lib/types";
 import RecallNote from "@/app/(ui)/dictionary/recall/RecallNote";
 import { TokenContext } from "@/components/TokenContextProvider";
 import ZeroNotesMessage from "@/components/common/ZeroNotesMessage";
 import Loading from "../../loading";
 
 export default function Page() {
-  const [words, setWords] = useState<TDBNoteEntry[]>();
+  const [words, setWords] = useState<TNoteApp[]>();
   const [refresh, setRefresh] = useState(false);
   const tokenContext = useContext(TokenContext);
 
   useEffect(() => {
     async function fetchNotes() {
       const data = await getRecallNotes(tokenContext?.accessToken || "");
-      setWords(data as TDBNoteEntry[]);
+      setWords(data as TNoteApp[]);
     }
     fetchNotes();
   }, [refresh, tokenContext?.accessToken]);
@@ -31,7 +31,7 @@ export default function Page() {
       {!words ? (
         <Loading />
       ) : words.length > 0 ? (
-        words?.map((w: TDBNoteEntry) => {
+        words?.map((w: TNoteApp) => {
           return (
             <RecallNote
               key={w.id}

@@ -1,24 +1,24 @@
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
-import { TDBNoteEntry, TDrawer } from "@/lib/types";
+import { TDrawer, TNoteApp } from "@/lib/types";
 import { motion } from "framer-motion";
 import { ChevronDown, ChevronUp, Plus } from "lucide-react";
 import { useState, useContext } from "react";
 import DrawerMenu from "./DrawerMenu";
 import UpdateForm from "./UpdateForm";
-import AddWordForm from "./AddWordForm";
+import AddNoteForm from "./AddNoteForm";
 import { TokenContext } from "@/components/TokenContextProvider";
 import { deleteDrawer } from "@/actions/manageNotes/manageDrawers";
 import Loader from "@/components/common/Loader";
 
 export default function Drawer({
   drawer,
-  words,
+  notes,
   rerender,
   openDrawer,
   openedDrawerId,
 }: {
   drawer: TDrawer;
-  words: TDBNoteEntry[];
+  notes: TNoteApp[];
   rerender: () => void;
   openDrawer: (id: number) => void;
   openedDrawerId: number;
@@ -137,10 +137,10 @@ export default function Drawer({
                   />
                 </motion.span>
               ) : (
-                <AddWordForm
-                  words={words?.map((w: TDBNoteEntry) => ({
-                    word: w.word,
-                    wordId: w.id,
+                <AddNoteForm
+                  notes={notes?.map((w: TNoteApp) => ({
+                    word: w.dictionary_words.word,
+                    noteId: w.id,
                   }))}
                   drawerId={drawer.id}
                   rerender={rerender}

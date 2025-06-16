@@ -1,7 +1,7 @@
 "use client";
 import { GradeForm } from "./GradeForm";
 import RecallMenu from "./RecallMenu";
-import { TDBNoteEntry } from "@/lib/types";
+import { TNoteApp } from "@/lib/types";
 import AudioPlayer from "../../../../components/common/AudioPlayer";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
@@ -13,7 +13,7 @@ export default function RecallNote({
   note,
   rerenderParent,
 }: {
-  note: TDBNoteEntry;
+  note: TNoteApp;
   rerenderParent: () => void;
 }) {
   const [menu, setMenu] = useState(false);
@@ -74,11 +74,11 @@ export default function RecallNote({
         )}
       </div>
       <h2 className="select-none text-white text-start w-full" title="Word">
-        <b>{note.word}</b>
+        <b>{note.dictionary_words.word}</b>
       </h2>
       {quality === 6 ? (
         <>
-          <AudioPlayer src={note.audio}></AudioPlayer>
+          <AudioPlayer src={note.dictionary_words.audio}></AudioPlayer>
           <motion.div
             initial={{
               y: 15,
@@ -102,8 +102,8 @@ export default function RecallNote({
               <b>Generated notes:</b>
             </h2>
             <DisplayNotes
-              word={note.word}
-              meanings={note.generated_notes}
+              word={note.dictionary_words.word}
+              meanings={note.dictionary_words.meanings}
               includeWord={false}
             />
           </motion.div>

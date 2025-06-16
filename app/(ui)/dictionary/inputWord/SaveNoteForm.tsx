@@ -60,7 +60,8 @@ export default function SaveNoteForm({
         formData.get("audio")?.toString() as string,
         formData.get("userNotes")?.toString() as string,
         note?.generated_notes as TMeaning[],
-        formData.get("accessToken")?.toString() as string
+        formData.get("accessToken")?.toString() as string,
+        note?.word_id as number,
       );
 
       if (wordInputRef.current)

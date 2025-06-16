@@ -14,17 +14,7 @@ model drawers {
   name              String              @db.VarChar
   user_id           Int
   users             users               @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  drawers_and_words drawers_and_words[]
-}
-
-/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
-model drawers_and_words {
-  drawer_id Int
-  word_id   Int
-  drawers   drawers @relation(fields: [drawer_id], references: [id], onDelete: Cascade)
-  words     words   @relation(fields: [word_id], references: [id], onDelete: Cascade)
-
-  @@id([drawer_id, word_id])
+  drawers_and_notes drawers_and_notes[]
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -71,24 +61,42 @@ model users {
   school_id                     Int?
   languages                     String?   @db.VarChar
   drawers                       drawers[]
+  notes                         notes[]
   schools                       schools?  @relation(fields: [school_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  words                         words[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model dictionary_words {
+  id       Int     @id @default(autoincrement())
+  meanings Json
+  audio    String? @db.VarChar
+  word     String  @db.VarChar
+  notes    notes[]
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
-model words {
-  id                Int                 @id @unique @default(autoincrement())
-  word              String
+model notes {
+  id                Int                 @id(map: "words_pkey") @unique(map: "words_id_key") @default(autoincrement())
   status            Boolean
   user_notes        String
-  generated_notes   Json?
-  audio             String
   repetitions       Int
   days              Int
   review_date       DateTime
   ease_factor       Float
   user_id           Int
   language          String
-  drawers_and_words drawers_and_words[]
-  users             users               @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  word_id           Int?
+  drawers_and_notes drawers_and_notes[]
+  dictionary_words  dictionary_words?   @relation(fields: [word_id], references: [id], onDelete: Cascade)
+  users             users               @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "words_user_id_fkey")
+}
+
+model drawers_and_notes {
+  drawer_id Int
+  note_id   Int
+  drawers   drawers @relation(fields: [drawer_id], references: [id], onDelete: Cascade, map: "drawers_and_words_drawer_id_fkey")
+  notes     notes   @relation(fields: [note_id], references: [id], onDelete: Cascade, map: "drawers_and_words_note_id_fkey")
+
+  @@id([drawer_id, note_id], map: "drawers_and_words_pkey")
 }

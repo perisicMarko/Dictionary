@@ -65,6 +65,7 @@ export type TWordApp = {
   word: string;
   audio: string;
   generated_notes: TMeaning[];
+  word_id: number;
 };
 
 
@@ -73,8 +74,6 @@ export type TDBNoteEntry = {
   word: string
   status: boolean;
   user_notes: string;
-  generated_notes: TMeaning[];
-  audio: string;
   repetitions: number;
   days: number;
   review_date: Date;
@@ -82,6 +81,25 @@ export type TDBNoteEntry = {
   user_id: number;
   language: string;
 };
+
+export type TNoteApp = {
+  id: number;
+  status: boolean;
+  user_notes: string;
+  repetitions: number;
+  days: number;
+  review_date: Date;
+  ease_factor: number;
+  user_id: number;
+  language: string;
+  word_id: number;
+  dictionary_words: {
+    word: string;
+    meanings: TMeaning[];
+    audio: string;
+  };
+};
+
 
 export type TDrawer = {
   id: number;

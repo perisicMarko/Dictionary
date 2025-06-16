@@ -3,24 +3,24 @@ import { containerVariants } from "@/lib/animationVariants";
 import { useActionState, useContext, useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import Loader from "@/components/common/Loader";
-import { putWordInDrawer } from "@/actions/manageNotes/manageDrawers";
+import { putNoteInDrawer } from "@/actions/manageNotes/manageDrawers";
 import { useRouter } from "next/navigation";
 
 export default function StrictAutocomplete({
-  words,
+  notes,
   drawerId,
   rerender
 }: {
-  words: { word: string; wordId: number }[] | undefined;
+  notes: { word: string; noteId: number }[] | undefined;
   drawerId : number;
   rerender: () => void;
 }) {
-  const options = words?.map((o: { word: string; wordId: number }) => o.word);
+  const options = notes?.map((o: { word: string; noteId: number }) => o.word);
   const addWordInput = useRef<HTMLInputElement>(null);
   const [value, setValue] = useState("");
   const [filtered, setFiltered] = useState(options);
   const [validWord, setIsValidWord] = useState(false);
-  const [importState, importAction, isImporting] = useActionState(putWordInDrawer, undefined);
+  const [importState, importAction, isImporting] = useActionState(putNoteInDrawer, undefined);
   const tokenContext = useContext(TokenContext);
   const router = useRouter();
 
@@ -71,17 +71,17 @@ export default function StrictAutocomplete({
         hidden
       />
       <input name="drawerId" value={drawerId} readOnly hidden />
-      <input name="addedWordId" value={words?.find((w: { word: string; wordId: number }) => w.word === value)?.wordId || -1} readOnly hidden />
+      <input name="addedNoteId" value={notes?.find((w: { word: string; noteId: number }) => w.word === value)?.noteId || -1} readOnly hidden />
       <input
         ref={addWordInput}
-        list="words"
+        list="notes"
         value={value}
         name="word"
         onChange={handleChange}
         className="text-white p-2 outline-none active:outline-none rounded-3xl w-full"
         placeholder="Input your word..."
       />
-      <datalist id="words">
+      <datalist id="notes">
         {filtered?.map((opt, index) => (
           <option
             key={opt + index}

@@ -2,7 +2,7 @@
 import SearchBar from "../../../../components/common/SearchBar";
 import { getUsersHistory } from "@/actions/manageNotes";
 import Words from "@/components/common/Words";
-import { TDBNoteEntry } from "@/lib/types";
+import { TNoteApp } from "@/lib/types";
 import { useState, useContext, useEffect } from "react";
 import { TokenContext } from "@/components/TokenContextProvider";
 import ZeroNotesMessage from "@/components/common/ZeroNotesMessage";
@@ -14,13 +14,13 @@ export default function History() {
   const tokenContext = useContext(TokenContext);
   const [search, setSearch] = useState("");
   const [refresh, setRefresh] = useState(false);
-  const [words, setWords] = useState<TDBNoteEntry[]>();
+  const [words, setWords] = useState<TNoteApp[]>();
 
   useEffect(() => {
     const fetch = async () => {
       const words = await getUsersHistory(tokenContext?.accessToken || "");
       if(words){
-        setWords(words?.data as TDBNoteEntry[]);
+        setWords(words?.data as TNoteApp[]);
         tokenContext?.setAccessToken(words.accessToken || '');
       }
     };
@@ -29,7 +29,7 @@ export default function History() {
 
   const filteredWords =
     words?.filter((w) => {
-      return w.word.toLowerCase().trim().includes(search.toLowerCase().trim());
+      return w.dictionary_words.word.toLowerCase().trim().includes(search.toLowerCase().trim());
     });
 
   function updateSearch(word: string) {

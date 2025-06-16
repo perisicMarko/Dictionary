@@ -1,7 +1,7 @@
-import { getWordsOfDrawer } from "@/actions/manageNotes/manageDrawers";
+import { getNotesOfDrawer } from "@/actions/manageNotes/manageDrawers";
 import Loading from "@/app/(ui)/loading";
 import Words from "@/components/common/Words";
-import { TDBNoteEntry, TDrawer } from "@/lib/types";
+import { TNoteApp, TDrawer } from "@/lib/types";
 import { useEffect, useState } from "react";
 import Drawer from "./Drawer";
 import { motion } from "framer-motion";
@@ -12,30 +12,30 @@ export default function OpenedDrawer({
   search,
   openDrawer,
   openedDrawerId,
-  allWords,
+  allNotes,
 }: {
   drawer: TDrawer | undefined;
   search: string;
   openDrawer: (id: number) => void;
   openedDrawerId: number;
-  allWords: TDBNoteEntry[];
+  allNotes: TNoteApp[];
 }) {
-  const [drawerWords, setDrawerWords] = useState<TDBNoteEntry[]>();
+  const [drawerNotes, setDrawerNotes] = useState<TNoteApp[]>();
   const [refresh, setRefresh] = useState(false);
   const [isFetchingContent, setIsFetchingContent] = useState(true);
 
   useEffect(() => {
     const fetchWords = async () => {
-      const data = await getWordsOfDrawer(drawer?.id || -1);
-      setDrawerWords(data as TDBNoteEntry[]);
+      const data = await getNotesOfDrawer(drawer?.id || -1);
+      setDrawerNotes(data as TNoteApp[]);
     };
 
     fetchWords();
     setIsFetchingContent(false);
   }, [drawer?.id, refresh]);
 
-  const searchedWords = drawerWords?.filter((w) =>
-    w.word.toLowerCase().includes(search.toLowerCase().trim())
+  const searchedWords = drawerNotes?.filter((w) =>
+    w.dictionary_words.word.toLowerCase().includes(search.toLowerCase().trim())
   );
 
   return (
@@ -51,10 +51,10 @@ export default function OpenedDrawer({
             drawer={drawer as TDrawer}
             openDrawer={openDrawer}
             rerender={() => setRefresh(!refresh)}
-            words={allWords}
+            notes={allNotes}
             openedDrawerId={openedDrawerId}
           />
-          {drawerWords?.length === 0 ? (
+          {drawerNotes?.length === 0 ? (
             <motion.div
               className="mt-5 box-layout"
               variants={containerVariants}

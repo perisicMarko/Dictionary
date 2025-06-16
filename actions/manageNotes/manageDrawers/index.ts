@@ -1,6 +1,6 @@
 'use server'
 import { decryptRefresh, encryptAccess, TokenPayload, verifySession } from "@/actions/manageSession";
-import { CreateDrawer, DeleteDrawer, GetDrawerById, GetUsersDrawers, GetWordsOfDrawer, PutWordInDrawer, RemoveWordFromDrawer, UpdateDrawerName } from "./db";
+import { CreateDrawer, DeleteDrawer, GetDrawerById, GetNotesOfDrawer, GetUsersDrawers, PutNoteInDrawer, RemoveWordFromDrawer, UpdateDrawerName } from "./db";
 import { STATUS } from "@/actions/manageSession";
 import { logOutUser } from "@/actions/auth/user";
 import { cookies } from "next/headers";
@@ -147,11 +147,10 @@ export async function deleteDrawer(drawerId : number, aToken : string){
 }
 
 
-export async function putWordInDrawer(state : {success : boolean, accessToken : string} | undefined, formData : FormData){
+export async function putNoteInDrawer(state : {success : boolean, accessToken : string} | undefined, formData : FormData){
     const aToken = formData.get('accessToken')?.toString() || '';
-    const wordId = Number(formData.get('addedWordId'));
+    const wordId = Number(formData.get('addedNoteId'));
     const drawerId = Number(formData.get('drawerId'));
-
     if(wordId === -1)
         return;
     
@@ -164,7 +163,7 @@ export async function putWordInDrawer(state : {success : boolean, accessToken : 
     }else if(STATUS.ACCESS_NEEDED ===  sessionStatus){
         const refreshToken = (await cookies()).get('refreshToken')?.value;
         const payload = await decryptRefresh(refreshToken || '');
-        const res = await PutWordInDrawer(drawerId, wordId);
+        const res = await PutNoteInDrawer(drawerId, wordId);
 
         const accessToken = await encryptAccess(payload);
 
@@ -173,7 +172,7 @@ export async function putWordInDrawer(state : {success : boolean, accessToken : 
         
         return {success: false, accessToken: ''};
     }else if(STATUS.VALID_ACCESS === sessionStatus){    
-        const res = await PutWordInDrawer(drawerId, wordId);
+        const res = await PutNoteInDrawer(drawerId, wordId);
 
         if(res)
             return {success: true, accessToken: aToken};
@@ -183,12 +182,12 @@ export async function putWordInDrawer(state : {success : boolean, accessToken : 
 }
 
 
-export async function getWordsOfDrawer(drawerId : number){
+export async function getNotesOfDrawer(drawerId : number){
     if(drawerId === -1)
         return;
-    const words = await GetWordsOfDrawer(drawerId);
+    const notes = await GetNotesOfDrawer(drawerId);
 
-    return words?.map((entry) => entry.words);
+    return notes?.map((entry) => ({...entry.notes, dictionary_words: {meanings: entry.notes.dictionary_words?.meanings, word: entry.notes.dictionary_words?.word, audio: entry.notes.dictionary_words?.audio}}));
 }
 
 

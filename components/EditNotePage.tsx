@@ -1,6 +1,6 @@
 "use client";
 import { editNote, getNoteById } from "@/actions/manageNotes";
-import { TDBNoteEntry } from "@/lib/types";
+import { TNoteApp } from "@/lib/types";
 import { useEffect, useState, useContext } from "react";
 import { motion } from "framer-motion";
 import { useParams } from "next/navigation";
@@ -13,7 +13,7 @@ import { TokenContext } from "@/components/TokenContextProvider";
 export default function Edit({pathSrc}: {pathSrc: string}) {
   const params = useParams();
   const noteId = params.noteId;
-  const [note, setNote] = useState<TDBNoteEntry>();
+  const [note, setNote] = useState<TNoteApp>();
   const [isPending, setIsPending] = useState(false);
   const router = useRouter();
   const tokenContext = useContext(TokenContext);
@@ -21,7 +21,7 @@ export default function Edit({pathSrc}: {pathSrc: string}) {
   useEffect(() => {
     async function getNote() {
       const n = await getNoteById(Number(noteId));
-      setNote(n as TDBNoteEntry);
+      setNote(n as TNoteApp);
     }
     getNote();
   }, [noteId]);
@@ -52,7 +52,7 @@ export default function Edit({pathSrc}: {pathSrc: string}) {
           variants={itemVariants}
           className="text-box"
         >
-          Edit your notes for: <b title="Word" className="hover:underline">{note.word}</b>
+          Edit your notes for: <b title="Word" className="hover:underline">{note.dictionary_words.word}</b>
         </motion.h2>
         <motion.div variants={itemVariants}>
           <label htmlFor="userNotes" className="text-white">

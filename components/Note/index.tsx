@@ -1,7 +1,7 @@
 "use client";
 import DisplayNotes from "../common/DisplayNotes";
 import HistoryNoteMenu from "./HistoryNoteMenu";
-import { TDBNoteEntry } from "@/lib/types";
+import { TNoteApp } from "@/lib/types";
 import AudioPlayer from "../common/AudioPlayer";
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
@@ -15,7 +15,7 @@ export default function Note({
   drawerId,
   rerenderParent,
 }: {
-  prop: TDBNoteEntry;
+  prop: TNoteApp;
   historyNote: boolean;
   drawerId: number;
   rerenderParent: () => void;
@@ -88,10 +88,10 @@ export default function Note({
       </div>
 
       <h2 className="text-white mb-3 select-none ml-2 mt-1" title="word">
-        <b>{note.word}</b>
+        <b>{note.dictionary_words.word}</b>
       </h2>
       <div className="center-vertically space-y-2 ">
-        <AudioPlayer src={note.audio} />
+        <AudioPlayer src={note.dictionary_words.audio} />
         <button
           className="primary-btn"
           onClick={() => {
@@ -147,8 +147,8 @@ export default function Note({
               <b>Generated notes:</b>
             </h2>
           <DisplayNotes
-            word={note.word}
-            meanings={note.generated_notes}
+            word={note.dictionary_words.word}
+            meanings={note.dictionary_words.meanings}
             includeWord={false}
           />
         </motion.div>

@@ -68,11 +68,11 @@ export async function DeleteDrawer(drawerId: number){
 }
 
 
-export async function PutWordInDrawer(drawerId: number, wordId : number){
+export async function PutNoteInDrawer(drawerId: number, noteId : number){
     try {
-        const res =  await prisma.drawers_and_words.create({
+        const res =  await prisma.drawers_and_notes.create({
             data: {
-                word_id: wordId,
+                note_id: noteId,
                 drawer_id: drawerId
             }
         });
@@ -85,14 +85,18 @@ export async function PutWordInDrawer(drawerId: number, wordId : number){
 }
 
 
-export async function GetWordsOfDrawer(drawerId : number){
+export async function GetNotesOfDrawer(drawerId : number){
     try {
-        const res = await prisma.drawers_and_words.findMany({
+        const res = await prisma.drawers_and_notes.findMany({
             where: {
               drawer_id: drawerId,
             },
             include: {
-              words: true, 
+              notes: {
+                include: {
+                    dictionary_words: true
+                }
+              } 
             },
         });          
         
@@ -104,12 +108,12 @@ export async function GetWordsOfDrawer(drawerId : number){
 }
 
 
-export async function RemoveWordFromDrawer(wordId : number, drawerId : number){
+export async function RemoveWordFromDrawer(noteId : number, drawerId : number){
     try {
-        const res = await prisma.drawers_and_words.deleteMany({
+        const res = await prisma.drawers_and_notes.deleteMany({
             where: {
               drawer_id: drawerId,
-              word_id: wordId,
+              note_id: noteId,
             },
           });
         
