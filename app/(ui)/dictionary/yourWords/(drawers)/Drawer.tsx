@@ -61,7 +61,7 @@ export default function Drawer({
             initial="hidden"
             animate="show"
             variants={containerVariants}
-            className="absolute z-20 bg-slate-800 rounded-3xl top-0 right-0 w-full h-full center-vertically"
+            className="absolute z-20 bg-main rounded-3xl top-0 right-0 w-full h-full center-vertically"
           >
             <motion.h2
               variants={itemVariants}
@@ -75,7 +75,7 @@ export default function Drawer({
               ) : (
                 <>
                   <motion.span
-                    className="text-white cursor-pointer hover:bg-blue-400 rounded-2xl py-1 px-2"
+                    className="text-white cursor-pointer hover:bg-second rounded-2xl py-1 px-2"
                     variants={itemVariants}
                     onClick={async () => {
                       setIsDeleting(true);
@@ -86,7 +86,7 @@ export default function Drawer({
                     Yes
                   </motion.span>
                   <motion.span
-                    className="text-white cursor-pointer hover:bg-blue-400 rounded-2xl py-1 px-2"
+                    className="text-white cursor-pointer hover:bg-second rounded-2xl py-1 px-2"
                     variants={itemVariants}
                     onClick={() => {
                       setConfirmDelete(false);
@@ -126,7 +126,7 @@ export default function Drawer({
               {addFormShow === false ? (
                 <motion.span
                   variants={itemVariants}
-                  className="text-white xl:hover:text-blue-400 cursor-pointer"
+                  className="text-white xl:hover:text-second cursor-pointer"
                   title='Add word to drawer'
                 >
                   <Plus

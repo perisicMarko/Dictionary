@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "@/app/globals.css";
 import React from "react";
+import getThemeColors from "@/actions/utils";
+import { TColorsTheme } from "@/lib/types";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -16,13 +18,23 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // fetch custom 2 colors for school from users school
+  const theme = (await getThemeColors()) as TColorsTheme;
+
   return (
-    <html lang="en" className="background">
+    <html
+      lang="en"
+      className="background"
+      style={{
+        ["--main-color" as string]: theme.main,
+        ["--second-color" as string]: theme.second,
+      }}
+    >
       <body
         className={`${roboto.variable} antialiased center-vertically pb-20`}
       >

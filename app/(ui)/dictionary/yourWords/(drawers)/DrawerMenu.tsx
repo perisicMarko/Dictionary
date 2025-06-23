@@ -42,7 +42,7 @@ export default function DrawerMenu({
       </motion.span>
       {menu && (
         <motion.div
-          className="bg-white/80 text-slate-800 rounded-2xl p-2"
+          className="bg-white/80 text-main rounded-2xl p-2"
           initial="hidden"
           animate="show"
           variants={containerVariants}

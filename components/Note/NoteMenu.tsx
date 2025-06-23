@@ -35,7 +35,7 @@ export default function NoteMenu({
       </Link>
       {drawerId != -1 && (
         <span
-          className="text-slate-800 cursor-pointer w-full text-center"
+          className="text-main cursor-pointer w-full text-center"
           title="Remove from drawer"
           onClick={(e) => {
             e.stopPropagation();

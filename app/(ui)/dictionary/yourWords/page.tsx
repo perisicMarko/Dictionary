@@ -34,7 +34,7 @@ export default function YourWords() {
         initial="hidden"
         animate="show"
         variants={containerVariants}
-        className="box-layout !p-0 grid grid-cols-2 relative border-4 sm:border-6 mt-17 z-0 border-slate-800"
+        className="box-layout !p-0 grid grid-cols-2 relative border-4 sm:border-6 mt-17 z-0 border-main"
       >
         <div
           className={
@@ -53,7 +53,7 @@ export default function YourWords() {
             right: showSwitch ? "50%" : "0%",
           }}
           transition={{delay: 0.1, duration: 0.5}}
-          className="absolute bg-blue-400 z-5 w-1/2 h-full rounded-3xl right-0"
+          className="absolute bg-second z-5 w-1/2 h-full rounded-3xl right-0"
         ></motion.div>
         <div
           className={

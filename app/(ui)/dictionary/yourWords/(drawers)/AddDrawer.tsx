@@ -90,7 +90,7 @@ export default function AddDrawer({rerender} : {rerender : () => void}) {
           </motion.span>
           <motion.span
             variants={itemVariants}
-            className="hover:text-blue-400 cursor-pointer text-white"
+            className="hover:text-second cursor-pointer text-white"
             title='Add drawer'
           >
             <Plus width={30} height={30} onClick={() => setAddDrawer(true)}/>

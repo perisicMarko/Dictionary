@@ -62,7 +62,7 @@ export default function Edit({pathSrc}: {pathSrc: string}) {
             name="userNotes"
             id="userNotes"
             defaultValue={note?.user_notes}
-            className="bg-white rounded-3xl h-[350px] sm-h-[500px] resize-none block w-full p-3 mt-1 text-slate-800"
+            className="bg-white rounded-3xl h-[350px] sm-h-[500px] resize-none block w-full p-3 mt-1 text-main"
           ></textarea>
         </motion.div>
 

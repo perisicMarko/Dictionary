@@ -129,23 +129,23 @@ export default function Note({
           }}
           className="space-y-2 mt-2 justify-center overflow-auto items-center h-[200px] md:h-[250px] xl:h-[400px] p-1"
         >
-          <h2 className="mt-2 text-blue-400">
+          <h2 className="mt-2 text-second">
             <b>Your notes:</b>
           </h2>
           <p
             className={`white-spaces ${
               note.user_notes === ""
                 ? "opacity-60 text-white text-center"
-                : "text-blue-300"
+                : "text-second"
             }`}
           >
             {note.user_notes != ""
               ? note.user_notes
               : "No your notes for this word."}
           </p>
-          <h2 className="mt-2 text-blue-400">
-              <b>Generated notes:</b>
-            </h2>
+          <h2 className="mt-2 text-second">
+            <b>Generated notes:</b>
+          </h2>
           <DisplayNotes
             word={note.dictionary_words.word}
             meanings={note.dictionary_words.meanings}

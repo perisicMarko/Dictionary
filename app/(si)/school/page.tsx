@@ -25,7 +25,7 @@ export default function LogIn() {
       initial="hidden"
       animate="show"
       variants={containerVariants}
-      className="mt-25 sm:mt-30 md:mt-30 box-layout border-2 border-blue-50 p-5"
+      className="mt-25 sm:mt-30 md:mt-30 box-layout p-5"
     >
       <form
         className="form center-vertically"

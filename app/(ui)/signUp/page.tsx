@@ -40,7 +40,7 @@ export default function SignUp() {
           initial="hidden"
           animate="show"
           variants={containerVariants}
-          className="mt-5 h-1/2 box-layout !p-0 border-2 border-blue-50 relative"
+          className="mt-5 h-1/2 box-layout !p-0 relative"
         >
           <div className="collapse-window">
             <Link className="x-btn" href="/">

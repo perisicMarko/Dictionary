@@ -46,11 +46,6 @@ export default function ShowDrawers() {
   useEffect(() => {
     fetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    fetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh]);
 
   function updateSearch(word: string) {

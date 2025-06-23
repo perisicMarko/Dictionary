@@ -32,7 +32,7 @@ export default function SignUp() {
           initial="hidden"
           animate="show"
           variants={containerVariants}
-          className="mt-10 box-layout border-2 border-blue-50"
+          className="mt-10 box-layout"
         >
           <motion.p variants={itemVariants} className="text-white p-1">
             Sorry, we are not partner with you at the momment. Please contact
@@ -44,7 +44,7 @@ export default function SignUp() {
         initial="hidden"
         animate="show"
         variants={containerVariants}
-        className="mt-10 box-layout border-2 border-blue-50"
+        className="mt-10 box-layout"
       >
         <form className="form" action={action}>
           <motion.div variants={itemVariants} className="mt-3">

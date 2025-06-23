@@ -1,6 +1,15 @@
 @import "tailwindcss";
 @import "normalize.css";
 
+@theme {
+  --color-main: hsl(var(--main-color));
+  --color-second: hsl(var(--second-color));
+}
+
+:root {
+    --main-color: 222, 33%, 17%;
+    --second-color: 217 91% 59%;
+}
 
 @layer utilities {
   /* WebKit scrollbar stil za sve elemente */
@@ -27,7 +36,7 @@
 }
 
 .box-layout{
-  @apply bg-slate-800 rounded-3xl w-3/4 sm:w-[600px] p-5; 
+  @apply  rounded-3xl w-3/4 sm:w-[600px] p-5 bg-main;
 }
 
 .text-box{
@@ -52,11 +61,11 @@ textarea, button {
 }
 
 input{
-  @apply active:outline-2 outline-blue-400;
+  @apply active:outline-2 outline-second;
 }
 
 .primary-btn {
-  @apply w-full bg-blue-400 text-white rounded-3xl block my-1 h-[35px] sm:h-[40px] xl:h-[48px] cursor-pointer transition-all duration-100;
+  @apply bg-second w-full text-white rounded-3xl block my-1 h-[35px] sm:h-[40px] xl:h-[48px] cursor-pointer transition-all duration-100;
 }
 
 .primary-btn:hover {
@@ -75,7 +84,7 @@ input{
 }
 
 .text-color {
-  @apply text-slate-800;
+  @apply text-main;
 }
 
 .error {
@@ -95,12 +104,13 @@ input{
 }
 
 .form-input {
-  @apply block w-full p-2 mt-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] rounded-3xl text-slate-800 bg-white;
+  @apply block w-full p-2 mt-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] rounded-3xl text-main bg-white;
 }
 
 .background {
   position: relative;
   min-height: 100vh; /* Ensure it has height */
+  background-color: hsl(var(--second-color));
 }
 
 .background::before {
@@ -110,7 +120,7 @@ input{
   left: 0;
   width: 100%;
   height: 100vh; /* Covers full viewport */
-  background-image: url("/bgDictionary.png");
+  background-image: url("/app_bg.svg");
   background-size: cover; /* Adjust to fit */
   background-repeat: no-repeat;
   background-position: center;
@@ -134,7 +144,7 @@ input{
 }
 
 .navigation-btn:hover {
-  @apply text-blue-400;
+  @apply text-second
 }
 
 @keyframes show-up {

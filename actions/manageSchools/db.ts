@@ -8,7 +8,6 @@ export async function InsertSchoolInfo(name: string, email: string, password: st
     try{
         const res = await prisma.schools.create({
             data: {
-                name: name,
                 email: email,
                 password: password
             }

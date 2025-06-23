@@ -70,7 +70,7 @@ export default function RecallNoteMenu({
       </motion.span>
       <motion.span
         variants={itemVariants}
-        className="block text-slate-800 hover:text-blue-400 cursor-pointer text-center transition-color w-full"
+        className="block text-main hover:text-second cursor-pointer text-center transition-color w-full"
         onClick={() => {
           changeQuality(6);
           toggleMenu();
@@ -81,7 +81,7 @@ export default function RecallNoteMenu({
       </motion.span>
       <motion.span
         variants={itemVariants}
-        className="block hover:text-blue-400 text-slate-800 cursor-pointer text-center transition-color w-full pb-1"
+        className="block hover:text-second text-main cursor-pointer text-center transition-color w-full pb-1"
         onClick={() => {
           changeQuality(-1);
           toggleMenu();

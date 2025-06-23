@@ -67,12 +67,12 @@ export function NavBar() {
           initial="hidden"
           animate="show"
           variants={containerVariants}
-          className="hidden fixed top-0 z-20 bg-slate-800 w-full h-[50px] sm:grid grid-cols-[auto_1fr] items-center transition-all"
+          className="hidden fixed top-0 z-20 bg-main w-full h-[50px] sm:grid grid-cols-[auto_1fr] items-center transition-all"
         >
           <div className="flex justify-start items-center ml-3 md:ml-7">
             <button
               type="submit"
-              className="hover:scale-115 scale-105 duration-300 cursor-pointer text-white hover:text-blue-400 transition-all"
+              className="hover:scale-115 scale-105 duration-300 cursor-pointer text-white hover:text-second transition-all"
               onClick={() => handleLogOut()}
             >
               <LogOut width={20} height={20} />
@@ -85,7 +85,7 @@ export function NavBar() {
                   key={route.path}
                   href={route.path}
                   className={`navigation-btn ${
-                    path === route.path ? "text-blue-400" : "text-white"
+                    path === route.path ? "text-second" : "text-white"
                   } py-1 px-1 sm:px-3`}
                 >
                   {route.label}
@@ -101,7 +101,7 @@ export function NavBar() {
         initial="hidden"
         animate="show"
         variants={containerVariants}
-        className="fixed top-0 z-20 bg-slate-800 w-full h-min-[50px] border-b-blue-400 gap-2 transition-all sm:hidden"
+        className="fixed top-0 z-20 bg-main w-full h-min-[50px] border-b-second gap-2 transition-all sm:hidden"
       >
         <motion.div
           initial="hidden"
@@ -130,7 +130,7 @@ export function NavBar() {
               initial="hidden"
               animate="show"
               variants={itemVariants}
-              className="border-1 border-blue-400 w-full"
+              className="border-1 border-second w-full"
             />
 
             <motion.div
@@ -153,7 +153,7 @@ export function NavBar() {
                       href={route.path}
                       className={`navigation-btn ${
                         path === route.path
-                          ? "text-blue-400 font-bold"
+                          ? "text-second font-bold"
                           : "text-white"
                       } py-1 px-3`}
                     >
@@ -166,7 +166,7 @@ export function NavBar() {
               <div className="mt-7">
                 <button
                   type="submit"
-                  className="hover:scale-115 scale-105 transition-all duration-300 cursor-pointer text-white hover:text-blue-400 px-3"
+                  className="hover:scale-115 scale-105 transition-all duration-300 cursor-pointer text-white hover:text-second px-3"
                   onClick={() => handleLogOut()}
                 >
                   <LogOut width={20} height={20} />

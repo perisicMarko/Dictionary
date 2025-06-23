@@ -31,8 +31,8 @@ model school_partners {
 model schools {
   id              Int             @id @default(autoincrement())
   email           String          @db.VarChar
-  password        String?         @db.VarChar
-  name            String?         @db.VarChar
+  password        String          @db.VarChar
+  colors          Json?
   school_partners school_partners @relation(fields: [email], references: [school_email], onDelete: Cascade)
   subscriptions   subscriptions[]
   users           users[]

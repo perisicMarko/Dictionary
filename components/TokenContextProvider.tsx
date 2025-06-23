@@ -19,8 +19,8 @@ export function TokenContextProvider({
   const [sessionExpiring, setSessionExpiring] = useState(false);
   const router = useRouter();
 
-  // calling api every three minutes to fetch access token and if it couldn't be fetched (no refresh token) user gets logged out
-  // user will be logged out imediately if getAccessToken end point returns 401 (no valid refresh token founded)
+  // calls api every three minutes to fetch access token and if it fails (no refresh token)
+  // user will be logged out imediately if getAccessToken end point returns 401 (no valid refresh token founded) but this should not happen(only of token is deleted manually from storage)
   // if user do not take any action in session expiring window, the token will perish from the browser after remaining minutes of 7 days and when api gets called again it will 
   // return 401 and log out the user, session Expiring winwo will show up 10-15 minutes before session expires
   useEffect(() => {
@@ -44,7 +44,8 @@ export function TokenContextProvider({
     }, 1000 * 60 * 3);
 
     return () => clearInterval(intervalFetching);
-  }, [router]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <TokenContext.Provider value={{ accessToken, setAccessToken }}>

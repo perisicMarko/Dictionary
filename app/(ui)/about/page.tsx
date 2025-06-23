@@ -9,7 +9,7 @@ export default function Page() {
       initial="hidden"
       animate="show"
       variants={containerVariants}
-      className="mt-10 m-5 box-layout border-2 border-blue-50 overflow-auto relative"
+      className="mt-10 m-5 box-layout overflow-auto relative"
     >
       <div className="collapse-window">
         <Link className="x-btn mr-4 py-1 text-box" href="/">

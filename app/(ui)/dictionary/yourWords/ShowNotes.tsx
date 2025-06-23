@@ -25,7 +25,8 @@ export default function ShowNotes() {
       }
     };
     fetch();
-  }, [tokenContext, tokenContext?.accessToken]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const filteredWords = words?.filter((w) => {
     return w.dictionary_words.word.toLowerCase().trim().includes(search.toLowerCase().trim());

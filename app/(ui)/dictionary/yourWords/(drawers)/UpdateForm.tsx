@@ -86,7 +86,7 @@ export default function UpdateForm({
       {updateFormShow && (
         <button
           type='submit'
-          className={`w-full bg-blue-400 text-white rounded-3xl block p-2 cursor-pointer center xl:hover:scale-105 xl:active:scale-95 transition-all
+          className={`w-full bg-second text-white rounded-3xl block p-2 cursor-pointer center xl:hover:scale-105 xl:active:scale-95 transition-all
             ${(stateDrawerName === "" || stateDrawerName === drawer?.name) ? " opacity-50" : ""}`}
           disabled={stateDrawerName === "" || stateDrawerName === drawer?.name}
           onClick={() => drawer.name = stateDrawerName}

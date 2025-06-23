@@ -67,7 +67,7 @@ export default function LogIn() {
           animate="show"
           variants={containerVariants}
           className={
-            "relative box-layout border-2 border-blue-50 mt-15 " +
+            "relative box-layout mt-15 " +
             (isPending && " opacity-50 ")
           }
         >
@@ -174,7 +174,7 @@ export default function LogIn() {
             href="https://mail.google.com/"
             className="hover:scale-115 text-white transition-all"
           >
-            <u className="text-blue-300">Gmail link.</u>
+            <u className="text-second">Gmail link.</u>
           </Link>
         </motion.div>
       )}

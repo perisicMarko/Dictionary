@@ -20,8 +20,8 @@ export default function VerificationEmailSent({ email }: { email: string }) {
       >
         <motion.p variants={itemVariants} className="text-box">
           <b>Verification email has been sent.<br/> </b>
-          Check your email <b className="text-blue-300"> spam</b> section and mark email as{" "}
-          <b className="text-blue-300">report not spam</b> so you can receive our
+          Check your email <b className="text-second"> spam</b> section and mark email as{" "}
+          <b className="text-second">report not spam</b> so you can receive our
           messages.
           <br />
         </motion.p>
@@ -29,7 +29,7 @@ export default function VerificationEmailSent({ email }: { email: string }) {
           href="https://mail.google.com/"
           className="hover:scale-115 text-white my-3 transition-all"
         >
-          <u className="text-blue-300">Gmail link.</u>
+          <u className="text-second">Gmail link.</u>
         </Link>
         <motion.form action={resendAction} className="w-full">
           <input name="email" defaultValue={email} hidden />

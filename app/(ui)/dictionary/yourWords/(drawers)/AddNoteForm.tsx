@@ -91,7 +91,7 @@ export default function StrictAutocomplete({
       </datalist>
       <motion.button
        type="submit"
-       className={`w-full center cursor-pointer transition-all xl:hover:scale-105 xl:active:scale-95 bg-blue-400 p-2 rounded-3xl text-white ${(value === '' || !validWord) ? " opacity-50" : ""}`}
+       className={`w-full center cursor-pointer transition-all xl:hover:scale-105 xl:active:scale-95 bg-second p-2 rounded-3xl text-white ${(value === '' || !validWord) ? " opacity-50" : ""}`}
        disabled={!validWord || value === ''}
       >
         <span className="h-[20px] center">

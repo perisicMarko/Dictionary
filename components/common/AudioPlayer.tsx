@@ -22,7 +22,7 @@ export default function AudioPlayer({ src }: { src: string }) {
 
   return (
     <div
-      className={`primary-btn center ${!isDisabled ? ' bg-blue-400' : 'bg-blue-400'}`}
+      className={`primary-btn center ${!isDisabled ? ' bg-second' : 'bg-second'}`}
       title={title}
       onClick={(e) => {
         e.stopPropagation();

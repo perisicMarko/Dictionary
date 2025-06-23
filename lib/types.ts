@@ -100,6 +100,11 @@ export type TNoteApp = {
   };
 };
 
+export type TColorsTheme = {
+    main: string;
+    second: string;
+};
+
 
 export type TDrawer = {
   id: number;

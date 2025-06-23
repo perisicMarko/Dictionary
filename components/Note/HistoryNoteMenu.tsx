@@ -70,7 +70,7 @@ export default function HistoryNoteMenu({
         <input type="text" name="noteId" defaultValue={noteId} hidden />
         <button
           type="submit"
-          className="text-center text-xs text-slate-800 cursor-pointer hover:text-blue-400 transition-all w-full"
+          className="text-center text-xs text-main cursor-pointer hover:text-second transition-all w-full"
           onClick={(e) => e.stopPropagation()}
           title='Relearn word'
         >

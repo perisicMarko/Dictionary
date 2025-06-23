@@ -90,15 +90,15 @@ export default function RecallNote({
             }}
             className="p-1 h-[300px] xl:h-[400px] overflow-auto"
           >
-            <h2 className="mt-2 text-blue-400">
+            <h2 className="mt-2 text-second">
               <b>Your notes:</b>
             </h2>
-            <p className={`white-spaces text-blue-300 ${(note.user_notes === "" ? "opacity-60 text-center" : "")}`}>
+            <p className={`white-spaces text-second ${(note.user_notes === "" ? "opacity-60 text-center" : "")}`}>
               {note.user_notes != ""
                 ? note.user_notes
                 : "No your notes for this word."}
             </p>
-            <h2 className="mt-2 text-blue-400">
+            <h2 className="mt-2 text-second">
               <b>Generated notes:</b>
             </h2>
             <DisplayNotes

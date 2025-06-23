@@ -24,11 +24,11 @@ export default function ForgotPassword() {
         >
           <span className="text-center text-white">
             Email with instructions has been sent, please check your email<br/>
-            <b className="text-blue-300">(it may ends up in spam).</b>
+            <b className="text-second">(it may ends up in spam).</b>
           </span>
           <Link
             href="https://mail.google.com/"
-            className="hover:scale-115 mt-3 hover:underline text-blue-300 transition-all"
+            className="hover:scale-115 mt-3 hover:underline text-second transition-all"
           >
             Link to Gmail.
           </Link>

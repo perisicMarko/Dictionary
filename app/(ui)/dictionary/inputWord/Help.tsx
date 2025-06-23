@@ -21,7 +21,7 @@ export function Help({
     >
       <motion.h2
         variants={itemVariants}
-        className="hover:underline mb-5 cursor-pointer bg-slate-800 text-box py-2 text-center w-full rounded-3xl"
+        className="hover:underline mb-5 cursor-pointer bg-main text-box py-2 text-center w-full rounded-3xl"
         onClick={() => toggleHelp()}
       >
         {help ? "Go back" : "Need hlep?"}
@@ -49,7 +49,7 @@ export function Help({
               x: 0,
             },
           }}
-          className="bg-slate-800 text-box rounded-2xl p-3 w-full"
+          className="bg-main text-box rounded-2xl p-3 w-full"
         >
           Input the word you would like to remember, then click the
           &quot;Generate&quot; button.
@@ -78,7 +78,7 @@ export function Help({
               x: 0,
             },
           }}
-          className="block bg-slate-800 text-white rounded-3xl p-3 w-full text-center"
+          className="block bg-main text-white rounded-3xl p-3 w-full text-center"
         >
           Pronunciation of word and two text areas will pop up: one filled with
           generated notes from the app and an empty one reserved for your

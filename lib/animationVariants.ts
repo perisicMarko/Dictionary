@@ -1,3 +1,5 @@
+import { Transition } from "framer-motion";
+
 export const containerVariants = {
     hidden: { opacity: 0 },
     show: {
@@ -13,7 +15,7 @@ export const itemVariants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.1 } },
 };
 
-export const transition = {
+export const transition : Transition = {
   type: "spring",
   stiffness: 250,
   damping: 30,

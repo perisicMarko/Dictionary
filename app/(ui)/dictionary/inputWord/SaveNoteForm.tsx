@@ -78,7 +78,7 @@ export default function SaveNoteForm({
   };
 
   let buttonStyle =
-    "center bg-blue-400 text-white sm:hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block transition-all";
+    "center bg-second text-white sm:hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block transition-all";
   if (!isErrorNote(note) && note) buttonStyle += " col-span-1";
   else buttonStyle += " col-span-2";
 
@@ -112,7 +112,7 @@ export default function SaveNoteForm({
         action={(e) => {
           handleSubmit(e);
         }}
-        className="space-y-2 h-full bg-slate-800 rounded-3xl center-verticaly w-full p-6"
+        className="space-y-2 h-full bg-main rounded-3xl center-verticaly w-full p-6"
       >
         <input
           name="accessToken"
@@ -124,7 +124,7 @@ export default function SaveNoteForm({
           defaultValue={(!isErrorNote(note) && note?.word) || ""}
           ref={wordInputRef}
           key="userWord"
-          className="rounded-3xl text-center text-slate-800 bg-white w-full h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] p-2 mt-5"
+          className="rounded-3xl text-center text-main bg-white w-full h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] p-2 mt-5"
           type="text"
           name="word"
           onChange={(e) => setWord(e.target.value.toLowerCase())}
@@ -155,7 +155,7 @@ export default function SaveNoteForm({
               <textarea
                 rows={1}
                 placeholder="Type your notes here..."
-                className="p-2 rounded-2xl w-full  mt-2 text-slate-800 bg-white resize-none  h-fit"
+                className="p-2 rounded-2xl w-full  mt-2 text-main bg-white resize-none  h-fit"
                 name="userNotes"
                 key="userNotes"
                 onInput={(e) => {
@@ -211,7 +211,7 @@ export default function SaveNoteForm({
             {generate && (
               <motion.button
                 type="submit"
-                className="bg-blue-400 center text-white sm:hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block col-span-1 transition-all"
+                className="bg-second center text-white sm:hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block col-span-1 transition-all"
                 hidden={
                   wordInputRef &&
                   !isErrorNote(note) &&

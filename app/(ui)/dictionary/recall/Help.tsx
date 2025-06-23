@@ -96,7 +96,7 @@ export default function RecallNoteHelp() {
             -open{" "}
             <Link
               href="https://mail.google.com/mail"
-              className="text-blue-300 hover:underline"
+              className="text-second hover:underline"
               target="blank"
             >
               mail
