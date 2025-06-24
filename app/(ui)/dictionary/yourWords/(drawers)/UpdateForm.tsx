@@ -70,12 +70,11 @@ export default function UpdateForm({
           }}
           disabled={updateFormShow === false}
         />
-        <span title='Edit drawer name'>
+        <span title='Edit drawer name' className="text-white hover:text-second transition-all duration-200">
             <Edit
-              color="white"
               width={20}
               height={20}
-              className="inline-block xl:hover:scale-105 cursor-pointer transition-all"
+              className="inline-block cursor-pointer"
               onClick={() => {
                 setUpdateFormShow(!updateFormShow);
                 setAddFormShow(false);

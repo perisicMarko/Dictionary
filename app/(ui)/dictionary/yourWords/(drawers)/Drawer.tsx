@@ -121,12 +121,12 @@ export default function Drawer({
                 variants={itemVariants}
                 className="text-white mt-5 mb-2"
               >
-                Add word
+                Add note
               </motion.span>
               {addFormShow === false ? (
                 <motion.span
                   variants={itemVariants}
-                  className="text-white xl:hover:text-second cursor-pointer"
+                  className="text-white xl:hover:text-second cursor-pointer transition-all duration-200"
                   title='Add word to drawer'
                 >
                   <Plus
@@ -150,21 +150,19 @@ export default function Drawer({
           )}
         </div>
 
-        <span title={openedDrawerId === -1 ? 'Open drawer' : 'Close drawer'}>
+        <span title={openedDrawerId === -1 ? 'Open drawer' : 'Close drawer'} className="text-white hover:text-second transition-all duration-200">
           {openedDrawerId === -1 ? (
             <ChevronDown
-              color="white"
               width={25}
               height={25}
-              className="xl:hover:scale-105 mt-3 cursor-pointer transition-all"
+              className="mt-3 cursor-pointer"
               onClick={() => openDrawer(drawer?.id || -1)}
             />
           ) : (
             <ChevronUp
-              color="white"
               height={25}
               width={25}
-              className="xl:hover:scale-105 mt-3 cursor-pointer transition-all"
+              className="mt-3 cursor-pointer"
               onClick={() => openDrawer(-1)}
             />
           )}

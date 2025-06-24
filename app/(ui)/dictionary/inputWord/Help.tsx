@@ -16,7 +16,7 @@ export function Help({
       animate="show"
       variants={containerVariants}
       key="help"
-      className="w-3/4 sm:w-[500px] md:w-[600px] xl:w-[700px] xl:h-[400px] rounded-4xl mt-15 xl:mt-30 p-3"
+      className="w-3/4 sm:w-[500px] md:w-[600px] xl:w-[700px] xl:h-[400px] rounded-4xl mt-15 xl:mt-30 p-3 flex flex-col items-center"
       id="help"
     >
       <motion.h2
@@ -49,7 +49,7 @@ export function Help({
               x: 0,
             },
           }}
-          className="bg-main text-box rounded-2xl p-3 w-full"
+          className="bg-main text-box rounded-2xl p-3 mt-3 w-full"
         >
           Input the word you would like to remember, then click the
           &quot;Generate&quot; button.
@@ -78,7 +78,7 @@ export function Help({
               x: 0,
             },
           }}
-          className="block bg-main text-white rounded-3xl p-3 w-full text-center"
+          className="block bg-main text-white rounded-3xl p-3 mt-3 w-full text-center"
         >
           Pronunciation of word and two text areas will pop up: one filled with
           generated notes from the app and an empty one reserved for your

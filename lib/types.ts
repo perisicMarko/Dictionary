@@ -16,6 +16,7 @@ export type TStudent = {
   lastName: string;
   email: string;
   languages: string | null;
+  keyExpirationDate: Date;
 }
 
 export type TGPhonetic = {

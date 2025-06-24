@@ -46,16 +46,10 @@ export default function ShowNotes() {
         sortedWords.sort((e1, e2) => e2.id - e1.id);
         break;
       case SORT.BY_RECALL_DATE_ASC:
-        sortedWords.sort((e1, e2) => {
-          if (isBefore(e1.review_date, e2.review_date)) return -1;
-          else return 1;
-        });
+        sortedWords.sort((e1, e2) => isBefore(e1.review_date, e2.review_date) ? -1 : 1);
         break;
       case SORT.BY_RECALL_DATE_DESC:
-        sortedWords.sort((e1, e2) => {
-          if (isBefore(e1.review_date, e2.review_date)) return 1;
-          else return -1;
-        });
+        sortedWords.sort((e1, e2) => isBefore(e1.review_date, e2.review_date) ? 1 : -1);
         break;
     }
   }

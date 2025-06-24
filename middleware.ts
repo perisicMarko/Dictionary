@@ -46,7 +46,7 @@ export default async function middleware(req: NextRequest) {
             return NextResponse.next();
         const { email } = payload;
         if(email)
-            return NextResponse.redirect(new URL('/school/dashboard', req.nextUrl));
+            return NextResponse.redirect(new URL('/school/students', req.nextUrl));
         else
             return NextResponse.next();
     }else if(isSchoolProtected){

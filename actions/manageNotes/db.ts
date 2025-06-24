@@ -29,6 +29,32 @@ export async function GetNotes() {
   }
 }
 
+export async function GetUsersWords(userId : number) {
+  try {
+    const res = await prisma.notes.findMany({
+      include: {
+        dictionary_words: {
+          select: {
+            word: true,
+          }
+        }
+      },
+      where: {
+        user_id: userId
+      }
+    });
+
+    return res.map((n) => {return n.dictionary_words?.word});
+
+  } catch (error) {
+
+    if (error instanceof Error) {
+      console.log('GetNotes: ERROR: API - ', error?.message);
+    }
+
+  }
+}
+
 export async function ImportNotes(userId: number, word: string, audio: string, user_notes: string, generated_notes: TMeaning[], wordId: number) {
   const stored_locally = wordId != -1;
   try {
@@ -92,7 +118,7 @@ export async function ImportNotes(userId: number, word: string, audio: string, u
   }
 }
 
-export async function GetNoteById(noteId: number) {
+export async function GetNoteById(noteId : number) {
 
   try {
     const res = await prisma.notes.findUnique({ where: { id: noteId }, include: { dictionary_words: { select: { word: true, meanings: true, audio: true } } } });

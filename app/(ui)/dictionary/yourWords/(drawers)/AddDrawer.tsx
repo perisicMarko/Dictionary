@@ -55,7 +55,7 @@ export default function AddDrawer({rerender} : {rerender : () => void}) {
 
           <motion.form
             variants={containerVariants}
-            action={action}
+            action={(e) => {action(e); rerender();}}
             className="p-5 center-vertically gap-3"
           >
             <input
@@ -90,7 +90,7 @@ export default function AddDrawer({rerender} : {rerender : () => void}) {
           </motion.span>
           <motion.span
             variants={itemVariants}
-            className="hover:text-second cursor-pointer text-white"
+            className="hover:text-second cursor-pointer text-white transition-all duration-200"
             title='Add drawer'
           >
             <Plus width={30} height={30} onClick={() => setAddDrawer(true)}/>

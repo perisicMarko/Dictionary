@@ -46,23 +46,25 @@ model subscriptions {
   school_id           Int?
   languages           String?
   schools             schools?  @relation(fields: [school_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users               users?
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model users {
-  id                            Int       @id @unique(map: "id") @default(autoincrement())
+  id                            Int           @id @unique(map: "id") @default(autoincrement())
   first_name                    String
   last_name                     String
-  email                         String    @unique(map: "unique_email")
+  email                         String        @unique(map: "unique_email")
   password                      String
   refresh_token                 String?
   refresh_token_expiration_date DateTime?
-  email_verified                Boolean?  @default(false)
+  email_verified                Boolean?      @default(false)
   school_id                     Int?
-  languages                     String?   @db.VarChar
+  languages                     String?       @db.VarChar
   drawers                       drawers[]
   notes                         notes[]
-  schools                       schools?  @relation(fields: [school_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  subscriptions                 subscriptions @relation(fields: [email], references: [email], onDelete: Cascade)
+  schools                       schools?      @relation(fields: [school_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments

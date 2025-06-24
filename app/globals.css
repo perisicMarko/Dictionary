@@ -43,9 +43,8 @@
   @apply text-white text-center;
 }
 
-
 .collapse-window{
-  @apply absolute flex justify-end bg-slate-900 top-0 w-full right-0 rounded-t-3xl pr-2; 
+  @apply absolute flex justify-end bg-second/80 top-0 w-full right-0 rounded-t-3xl pr-2; 
 }
 
 body{

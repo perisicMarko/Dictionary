@@ -29,13 +29,13 @@ export default function NoteMenu({
         href={"/dictionary/yourWords/edit/" + noteId}
         onClick={(e) => e.stopPropagation()}
         title="Edit notes"
-        className="text-center w-full hover:scale-105 cursor-pointer transition-all"
+        className="text-center w-full hover:text-main cursor-pointer transition-all text-second"
       >
-        <NotebookPen color="#1E293B" width={25} height={25} />
+        <NotebookPen width={25} height={25} />
       </Link>
       {drawerId != -1 && (
         <span
-          className="text-main cursor-pointer w-full text-center"
+          className="text-second cursor-pointer w-full text-center"
           title="Remove from drawer"
           onClick={(e) => {
             e.stopPropagation();
@@ -50,7 +50,7 @@ export default function NoteMenu({
         >
           <FolderMinus
             className={
-              "hover:scale-105 transition-all mt-2 " +
+              "hover:text-main transition-all mt-2 " +
               (isRemoving ? " animate-spin" : "")
             }
           />

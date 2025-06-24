@@ -42,7 +42,7 @@ export default function DrawerMenu({
       </motion.span>
       {menu && (
         <motion.div
-          className="bg-white/80 text-main rounded-2xl p-2"
+          className="bg-white/80 text-second rounded-2xl p-2"
           initial="hidden"
           animate="show"
           variants={containerVariants}
@@ -55,7 +55,7 @@ export default function DrawerMenu({
               confirmDelete(true);
             }}
           >
-            <Trash2 className="xl:hover:scale-105 cursor-pointer transition-all" />
+            <Trash2 className="hover:text-main cursor-pointer transition-all" />
           </motion.span>
         </motion.div>
       )}

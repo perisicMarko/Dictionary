@@ -51,26 +51,26 @@ export default function RecallNoteMenu({
         }}
       >
         <input type="text" name="noteId" defaultValue={Number(noteId)} hidden />
-        <button type="submit" onClick={(e) => e.stopPropagation()} title='Mark note as learned'>
-          <Trash2 color="#1E293B" className="hover:scale-105 cursor-pointer transition-all"/>
+        <button type="submit" className="text-second" onClick={(e) => e.stopPropagation()} title='Mark note as learned'>
+          <Trash2 className="hover:text-main cursor-pointer transition-all"/>
         </button>
       </motion.form>
 
-      <motion.span variants={itemVariants} className="w-full px-2 ">
+      <motion.span variants={itemVariants} className="w-full px-2">
         <Link
           href={"/dictionary/recall/edit/" + noteId}
           onClick={() => toggleMenu()}
+          className="text-second"
           title='Edit note'
         >
           <NotebookPen
-            color="#1E293B"
-            className="hover:scale-105 cursor-pointer transition-all"
+            className="hover:text-main cursor-pointer transition-all"
           />
         </Link>
       </motion.span>
       <motion.span
         variants={itemVariants}
-        className="block text-main hover:text-second cursor-pointer text-center transition-color w-full"
+        className="block text-second hover:text-main cursor-pointer text-center transition-color w-full"
         onClick={() => {
           changeQuality(6);
           toggleMenu();
@@ -81,7 +81,7 @@ export default function RecallNoteMenu({
       </motion.span>
       <motion.span
         variants={itemVariants}
-        className="block hover:text-second text-main cursor-pointer text-center transition-color w-full pb-1"
+        className="block hover:text-main text-second cursor-pointer text-center transition-color w-full pb-1"
         onClick={() => {
           changeQuality(-1);
           toggleMenu();

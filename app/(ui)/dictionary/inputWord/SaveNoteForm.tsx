@@ -7,7 +7,7 @@ import {
 } from "@/lib/animationVariants";
 import { useRef, useContext, useState, useTransition, useEffect } from "react";
 import { TMeaning, TWordApp } from "@/lib/types";
-import { saveNotes } from "@/actions/manageNotes";
+import { getUsersWords, saveNotes } from "@/actions/manageNotes";
 import { TokenContext } from "@/components/TokenContextProvider";
 import AudioPlayer from "@/components/common/AudioPlayer";
 import Loader from "@/components/common/Loader";
@@ -19,6 +19,7 @@ export default function SaveNoteForm({
 }: {
   toggleHelp: () => void;
 }) {
+  const [words, setWords] = useState<string[]>();
   const [word, setWord] = useState("");
   const [note, setNote] = useState<TWordApp | { error: string } | null>(); // for preview of api response
   const [generate, setGenerate] = useState(false); // for displaying textarea for generated notes
@@ -83,16 +84,28 @@ export default function SaveNoteForm({
   else buttonStyle += " col-span-2";
 
   useEffect(() => {
+    const fetchWords = async () => {
+      const words = await getUsersWords();
+      if(words)
+        setWords(words as string[]);
+    }
+    fetchWords();
     wordInputRef.current?.focus();
   }, []);
 
   if (note != null && isErrorNote(note) && note?.error) cleanUp(1);
 
-  const isDisabled =
+  let isDisabled =
     word.trim() === "" || (!isErrorNote(note) && word === note?.word);
 
+  if(words?.indexOf(word) != -1 && wordInputRef.current){ // securing to not add the word which user already added
+      wordInputRef.current.value = "you have already added this word";
+      setWord("");
+      isDisabled = true;
+  }
+
   return (
-    <motion.div
+    words !== undefined && <motion.div
       layout
       transition={transition}
       initial={{

@@ -1,5 +1,5 @@
 'use server'
-import { ImportNotes, GetNotes, GetNoteById, UpdateRepetitionFactors, SetNoteAsLearned, ResetNoteRecallFactors, DeleteNote, EditNotes } from '@/actions/manageNotes/db';
+import { ImportNotes, GetNotes, GetNoteById, UpdateRepetitionFactors, SetNoteAsLearned, ResetNoteRecallFactors, DeleteNote, EditNotes, GetUsersWords } from '@/actions/manageNotes/db';
 import { TMeaning } from '@/lib/types';
 import { addDays, isBefore } from 'date-fns';
 import calc from '@/actions/manageNotes/spacedRepetition';
@@ -7,6 +7,19 @@ import { decryptAccess, decryptRefresh, encryptAccess, TokenPayload, verifySessi
 import { STATUS } from '@/actions/manageSession';
 import { logOutUser } from '../auth/user';
 import { cookies } from 'next/headers';
+
+export async function getUsersWords() {
+  const cookieStore = await cookies();
+  const refreshToken = cookieStore.get('refreshToken')?.value;
+  const payload = await decryptRefresh(refreshToken || '');
+  if(!payload)
+    return [];
+  const {userId} = payload;
+
+  const words = await GetUsersWords(userId);
+
+  return words;
+}
 
 export async function saveNotes(word: string, audio: string, user_notes: string, generated_notes: TMeaning[], accessToken: string, wordId: number) {
   const retVal = await verifySession(accessToken);

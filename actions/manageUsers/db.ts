@@ -180,6 +180,9 @@ export async function GetUsersBySchoolId(schoolId: number){
 
   try {
     const res = await prisma.users.findMany({
+      include: {
+        subscriptions: true
+      },
       where: { school_id: schoolId },
     });
     

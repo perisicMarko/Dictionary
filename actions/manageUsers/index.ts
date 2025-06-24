@@ -21,5 +21,5 @@ export async function getUsersBySchool(){
 
     const users = await GetUsersBySchoolId(schoolId);
 
-    return users?.map((u) => ({email: u.email, firstName: u.first_name, lastName: u.last_name, languages: u.languages}));
+    return users?.map((u) => ({email: u.email, firstName: u.first_name, lastName: u.last_name, languages: u.languages, keyExpirationDate: u.subscriptions.key_expiration_date as Date}));
 }

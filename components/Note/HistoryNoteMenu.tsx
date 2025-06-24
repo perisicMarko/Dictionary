@@ -58,8 +58,8 @@ export default function HistoryNoteMenu({
         action={onSubmitDeleteHandle}
       >
         <input type="text" name="noteId" defaultValue={noteId} hidden />
-        <button type="submit" onClick={(e) => e.stopPropagation()} title='Delete note permanently' className="hover:scale-105 cursor-pointer transition-all w-full">
-          <Trash2 color="#1E293B"/>
+        <button type="submit" onClick={(e) => e.stopPropagation()} title='Delete note permanently' className="hover:text-main text-second cursor-pointer transition-all w-full">
+          <Trash2/>
         </button>
       </motion.form>
       <motion.form
@@ -70,7 +70,7 @@ export default function HistoryNoteMenu({
         <input type="text" name="noteId" defaultValue={noteId} hidden />
         <button
           type="submit"
-          className="text-center text-xs text-main cursor-pointer hover:text-second transition-all w-full"
+          className="text-center text-xs text-second cursor-pointer hover:text-main transition-all w-full"
           onClick={(e) => e.stopPropagation()}
           title='Relearn word'
         >
