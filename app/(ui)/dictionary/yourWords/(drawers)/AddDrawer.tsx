@@ -55,7 +55,7 @@ export default function AddDrawer({rerender} : {rerender : () => void}) {
 
           <motion.form
             variants={containerVariants}
-            action={(e) => {action(e); rerender();}}
+            action={(e) => {action(e); rerender(); setDrawerName('')}}
             className="p-5 center-vertically gap-3"
           >
             <input
@@ -69,6 +69,7 @@ export default function AddDrawer({rerender} : {rerender : () => void}) {
               placeholder="Name you drawer"
               name="title"
               className="text-white p-1 outline-none selection:outline-0 text-center"
+              value={drawerName}
               onChange={(e) => setDrawerName(e.target.value)}
             />
             <button

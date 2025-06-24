@@ -83,7 +83,7 @@ export function GradeForm({
               3 – correct, but with great effort
             </option>
             <option value="4"> 
-              4 – correct, some hesitation
+              4 – correct, some hestitation
             </option>
             <option value="5">
               5 – perfect, immediate recall  
