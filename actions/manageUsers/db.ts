@@ -43,7 +43,8 @@ export async function InsertUserInfo(name: string, lastName: string, email: stri
         last_name: lastName,
         email: email,
         password: password,
-        school_id: schoolId
+        school_id: schoolId,
+        languages: 'e'
       }
     });
 

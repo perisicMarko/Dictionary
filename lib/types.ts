@@ -118,3 +118,10 @@ export type TWordsByDrawer = {
   word_id: number;
   name: string;
 }
+
+export type TSubscription = {
+  email: string;
+  key_expiration_date: Date;
+  school_id: number;
+  languages: string;
+}

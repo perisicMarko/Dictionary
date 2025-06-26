@@ -1,8 +1,9 @@
 'use server';
 import { decryptSession, SessionPayload } from "../manageSession";
 import { addWeeks, isBefore } from "date-fns";
-import { CreateActivationKey, GetSubscription, UpdateActivationKey } from "./db";
+import { CreateActivationKey, GetSubscription, GetSubscriptionsBySchool, UpdateActivationKey, UpdateSubscriptionEmail } from "./db";
 import { GenerateSchema } from "@/lib/rules";
+import { TSubscription } from "@/lib/types";
 
 export async function generateActivationKey(state: {success: boolean, message: string, email: string, date: string} | undefined, formData: FormData){
     const inputEmail = formData.get('email')?.toString() as string;
@@ -55,4 +56,28 @@ export async function generateActivationKey(state: {success: boolean, message: s
     }
     
     return {success: true, message: 'Key has been successfully generated. You can inform course atendee that he can access his account with this email.', email: '', date: ''};
+}
+
+export async function getSubscriptionsBySchool(){
+    const session = await decryptSession();
+    if(!session)
+        return [] as TSubscription[];
+
+    const { schoolId } = session;
+    const subscriptions = await GetSubscriptionsBySchool(schoolId);
+
+    return subscriptions;
+}
+
+export async function updateSubscriptionEmail(email : string, newEmail : string){
+    const session = await decryptSession();
+    if(!session)
+        return {success: false};
+
+    console.log('hello');
+    const res = await UpdateSubscriptionEmail(email, newEmail);
+    if(!res)
+        return {success: false};
+
+    return {success: true};
 }

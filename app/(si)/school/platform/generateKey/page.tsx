@@ -114,7 +114,7 @@ export default function Dashboard() {
           variants={containerVariants}
           className="box-layout mt-5"
         >
-          <motion.p variants={itemVariants} className="text-white">
+          <motion.p variants={itemVariants} className="text-box">
             <b>{state?.message}</b>
           </motion.p>
         </motion.div>

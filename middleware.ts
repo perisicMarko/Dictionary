@@ -1,19 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { decryptRefresh, decryptSession, TokenPayload } from "./actions/manageSession";
+import { decryptRefresh, decryptSession } from "./actions/manageSession";
 
-const protectedRoutes = [''];
+const protectedRoutes = ['/dictionary/yourWords', '/dictionary/inputWord', '/dictionary/history', '/dictionary/recall'];
 const publicRoutes = ['/', '/signUp', '/logIn', '/about'];
-const schoolProtectedRoutes = ['/school/students', '/school/generateKey'];
 const schoolPublicRoutes = ['/school', '/school/signUp'];
+const schoolProtectedRoutes = ['/school/platform/students', '/school/platform/generateKey', '/school/platform/subscriptions'];
 
 export default async function middleware(req: NextRequest) {
     const path = req.nextUrl.pathname;
-    const isProtected = protectedRoutes.includes(path) || path.startsWith('/dictionary');
+    const isProtected = path.startsWith('/dictionary');
     const isPublic = publicRoutes.includes(path);
     const refreshToken = req.cookies.get('refreshToken')?.value;
     
     const schoolSessionToken = req.cookies.get('sessionToken')?.value;
-    const isSchoolProtected = schoolProtectedRoutes.includes(path);
+    const isSchoolProtected = path.startsWith('/school/platform');
     const isSchoolPublic = schoolPublicRoutes.includes(path);
     
     if(isProtected){
@@ -22,44 +22,38 @@ export default async function middleware(req: NextRequest) {
         const payload = await decryptRefresh(refreshToken as string);
         if(!payload)
             return NextResponse.redirect(new URL('/', req.nextUrl));
-        const { userId } = (payload as TokenPayload);
-        if(userId)
+
+        if(protectedRoutes.includes(path)) // checking if typed route is correct if it is not but token is valid, redirect to input page
             return NextResponse.next();
-        else
-            return NextResponse.redirect(new URL('/', req.nextUrl));
+        else 
+            return NextResponse.redirect(new URL('/dictionary/inputWord', req.nextUrl));
     }else if(isPublic){
         if(!refreshToken)
             return NextResponse.next();
         const payload = await decryptRefresh(refreshToken as string);
         if(!payload)
             return NextResponse.next();
-        const { userId } = payload as TokenPayload;
-        if(userId)
-            return NextResponse.redirect(new URL('/dictionary/inputWord', req.nextUrl));
-        else
-            return NextResponse.next();
+        
+        return NextResponse.redirect(new URL('/dictionary/inputWord', req.nextUrl));
     }else if(isSchoolPublic){ // middleware for school platform
         if(!schoolSessionToken)
             return NextResponse.next();
         const payload = await decryptSession();
         if(!payload)
             return NextResponse.next();
-        const { email } = payload;
-        if(email)
-            return NextResponse.redirect(new URL('/school/students', req.nextUrl));
-        else
-            return NextResponse.next();
+
+        return NextResponse.redirect(new URL('/school/platform/students', req.nextUrl));
     }else if(isSchoolProtected){
         if(!schoolSessionToken)
             return NextResponse.redirect(new URL('/school', req.nextUrl));
         const payload = await decryptSession();
         if(!payload)
             return NextResponse.redirect(new URL('/school', req.nextUrl));
-        const { email } = payload;
-        if(email)
+
+        if(schoolProtectedRoutes.includes(path))
             return NextResponse.next();
         else
-            return NextResponse.redirect(new URL('/school', req.nextUrl));
+            return NextResponse.redirect(new URL('/school/platform/students', req.nextUrl));
     }
 
     return NextResponse.next(); // letting all other requests to pass

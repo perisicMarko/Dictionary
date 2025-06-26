@@ -3,9 +3,9 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function InsertSchoolInfo(name: string, email: string, password: string){
+export async function InsertSchoolInfo(name: string, email: string, password: string) {
 
-    try{
+    try {
         const res = await prisma.schools.create({
             data: {
                 email: email,
@@ -14,75 +14,76 @@ export async function InsertSchoolInfo(name: string, email: string, password: st
         });
 
         return res;
-    }catch (error) {
-        
-        if(error instanceof Error){
+    } catch (error) {
+
+        if (error instanceof Error) {
             console.log('InsertSchoolInfo: ERROR: API - ', error?.message);
         }
 
     }
 }
 
-export async function GetSchoolByEmail(email: string){
+export async function GetSchoolByEmail(email: string) {
 
-    try{
+    try {
         const res = await prisma.schools.findFirst({
-            where: {email: email}
+            where: { email: email }
         });
 
         return res;
-    }catch (error) {
-        
-        if(error instanceof Error){
+    } catch (error) {
+
+        if (error instanceof Error) {
             console.log('GetSchoolByEmail: ERROR: API - ', error?.message);
         }
 
     }
 }
 
-export async function CheckPartnership(email: string){
+export async function CheckPartnership(email: string) {
 
-    try{
+    try {
         const res = await prisma.school_partners.findFirst({
-            where: {school_email: email}
+            where: { school_email: email }
         });
 
         return res;
-    }catch (error) {
-        
-        if(error instanceof Error){
+    } catch (error) {
+
+        if (error instanceof Error) {
             console.log('CheckPartnership: ERROR: API - ', error?.message);
         }
 
     }
 }
 
-export async function CreateActivationKey(email: string, activationKeyExpirationDate: Date, schoolId: number){
+export async function CreateActivationKey(email: string, activationKeyExpirationDate: Date, schoolId: number) {
 
-    try{
-        const res = await prisma.subscriptions.create({ 
+    try {
+        const res = await prisma.subscriptions.create({
             data: {
                 email: email,
                 key_expiration_date: activationKeyExpirationDate,
                 school_id: schoolId,
+                languages: 'e'
             }
         });
 
         return res;
-    }catch (error) {
-        
-        if(error instanceof Error){
-            console.log('GenerateActivationKey: ERROR: API - ', error?.message);
+    } catch (error) {
+
+        if (error instanceof Error) {
+            console.log('CreateAcivationKey: ERROR: API - ', error?.message);
         }
 
     }
 }
 
 
-export async function UpdateActivationKey(email: string, activationKeyExpirationDate: Date, schoolId: number){
+export async function UpdateActivationKey(email: string, activationKeyExpirationDate: Date, schoolId: number) {
 
-    try{
-        const res = await prisma.subscriptions.update({ 
+    try {
+        const res = await prisma.subscriptions.update({
             where: {
                 email: email
             },
@@ -94,30 +95,71 @@ export async function UpdateActivationKey(email: string, activationKeyExpiration
         });
 
         return res;
-    }catch (error) {
-        
-        if(error instanceof Error){
-            console.log('GenerateActivationKey: ERROR: API - ', error?.message);
+    } catch (error) {
+
+        if (error instanceof Error) {
+            console.log('UpdateActivationKey: ERROR: API - ', error?.message);
         }
 
     }
 }
 
 
-export async function GetSubscription(email: string){
+export async function GetSubscription(email: string) {
 
-    try{
-        const res = await prisma.subscriptions.findUnique({ 
+    try {
+        const res = await prisma.subscriptions.findUnique({
             where: {
                 email: email
             }
         });
 
         return res;
-    }catch (error) {
-        
-        if(error instanceof Error){
-            console.log('GenerateActivationKey: ERROR: API - ', error?.message);
+    } catch (error) {
+
+        if (error instanceof Error) {
+            console.log('GetSubscription: ERROR: API - ', error?.message);
+        }
+
+    }
+}
+
+export async function GetSubscriptionsBySchool(schoolId: number) {
+
+    try {
+        const res = await prisma.subscriptions.findMany({
+            where: {
+                school_id: schoolId
+            }
+        });
+
+        return res;
+    } catch (error) {
+
+        if (error instanceof Error) {
+            console.log('GetSubscriptionsBySchool: ERROR: API - ', error?.message);
+        }
+
+    }
+}
+
+export async function UpdateSubscriptionEmail(email : string, newEmail : string) {
+
+    try {
+        const res = await prisma.subscriptions.update({
+            data: {
+                email: newEmail
+            },
+            where: {
+                email: email
+            }
+        });
+
+        return res;
+    } catch (error) {
+
+        if (error instanceof Error) {
+            console.log('UpdateSubscriptionEmail: ERROR: API - ', error?.message);
         }
 
     }
