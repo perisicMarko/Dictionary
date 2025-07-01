@@ -22,7 +22,7 @@ export default function SaveNoteForm({
   const [words, setWords] = useState<string[]>();
   const [word, setWord] = useState("");
   const [note, setNote] = useState<TWordApp | { error: string } | null>(); // for preview of api response
-  const [generate, setGenerate] = useState(false); // for displaying textarea for generated notes
+  const [generated, setGenerated] = useState(false); // for displaying textarea for generated notes
   const [isGenerating, startGenerating] = useTransition(); // keeping track of generating notes action
   const [error, setError] = useState(""); // if inputted word is not supported, this error should be displayed
   const [isSaving, setIsSaving] = useState(false); // true when action saveNote is active
@@ -36,13 +36,12 @@ export default function SaveNoteForm({
     return note != null && "error" in note;
   };
 
-  const cleanUp = (flag: number) => {
-    setGenerate(false);
+  const cleanUp = (flag: boolean) => {
+    setGenerated(false);
     setNote(null);
     if (flag) {
-      // when flag is 1 it should return <></> cause inside {} in return it is expected to return something
       setError("This word is not supported. Please check your spellng.");
-      return <></>;
+      return <></>; // when flag is true it should return <></> cause inside {} in return it is expected to return something
     }
     setWord("");
   };
@@ -53,7 +52,7 @@ export default function SaveNoteForm({
       return;
     }
 
-    cleanUp(0);
+    cleanUp(false);
 
     if (!isErrorNote(note)) {
       const res = await saveNotes(
@@ -62,7 +61,7 @@ export default function SaveNoteForm({
         formData.get("userNotes")?.toString() as string,
         note?.generated_notes as TMeaning[],
         formData.get("accessToken")?.toString() as string,
-        note?.word_id as number,
+        note?.word_id as number
       );
 
       if (wordInputRef.current)
@@ -86,26 +85,22 @@ export default function SaveNoteForm({
   useEffect(() => {
     const fetchWords = async () => {
       const words = await getUsersWords();
-      if(words)
-        setWords(words as string[]);
-    }
+      if (words) setWords(words as string[]);
+    };
     fetchWords();
     wordInputRef.current?.focus();
   }, []);
 
-  if (note != null && isErrorNote(note) && note?.error) cleanUp(1);
-
   let isDisabled =
-    word.trim() === "" || (!isErrorNote(note) && word === note?.word);
+    word.trim() === "" || String('word is already added') === word.trim() || (!isErrorNote(note) && word === note?.word) || words === undefined;
 
-  if(words?.indexOf(word) != -1 && wordInputRef.current){ // securing to not add the word which user already added
-      wordInputRef.current.value = "you have already added this word";
-      setWord("");
-      isDisabled = true;
+  if (words?.indexOf(word) != -1 && word != '') { // anitpattern but secure, it will not enter the statement unless user typed something that is already added
+    setWord("word is already added");
+    isDisabled = true;
   }
 
   return (
-    words !== undefined && <motion.div
+    <motion.div
       layout
       transition={transition}
       initial={{
@@ -134,13 +129,13 @@ export default function SaveNoteForm({
           readOnly
         />
         <input
-          defaultValue={(!isErrorNote(note) && note?.word) || ""}
+          value={word}
           ref={wordInputRef}
           key="userWord"
           className="rounded-3xl text-center text-main bg-white w-full h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] p-2 mt-5"
           type="text"
           name="word"
-          onChange={(e) => setWord(e.target.value.toLowerCase())}
+          onChange={(e) => {setWord(e.target.value.toLowerCase()); setError('')}}
           placeholder="Enter new word here..."
         />
         {error && <p className="error mt-1 text-center">{error}</p>}
@@ -162,13 +157,13 @@ export default function SaveNoteForm({
             </div>
           )}
         </div>
-        {generate && !isErrorNote(note) && note && (
+        {generated && !isErrorNote(note) && note && (
           <>
             <div className="w-full center">
               <textarea
                 rows={1}
                 placeholder="Type your notes here..."
-                className="p-2 rounded-2xl w-full  mt-2 text-main bg-white resize-none  h-fit"
+                className="p-2 sm:p-4 rounded-2xl w-full mt-2 text-main bg-white resize-none h-fit"
                 name="userNotes"
                 key="userNotes"
                 onInput={(e) => {
@@ -184,7 +179,11 @@ export default function SaveNoteForm({
               />
             </div>
             <div className="w-full overflow-auto">
-              <DisplayNotes word={note.word} meanings={note.generated_notes} includeWord={true} />
+              <DisplayNotes
+                word={note.word}
+                meanings={note.generated_notes}
+                includeWord={true}
+              />
             </div>
           </>
         )}
@@ -212,16 +211,16 @@ export default function SaveNoteForm({
                     setNote(note);
                     setError("");
                   } else {
-                    cleanUp(1);
+                    cleanUp(true);
                   }
-                  setGenerate(true);
+                  setGenerated(true);
                 });
               }}
               disabled={isDisabled}
             >
               {isGenerating ? <Loader /> : <b>Generate</b>}
             </motion.button>
-            {generate && (
+            {generated && (
               <motion.button
                 type="submit"
                 className="bg-second center text-white sm:hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block col-span-1 transition-all"

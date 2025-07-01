@@ -101,6 +101,9 @@ export async function createSession(email: string, schoolId: number){
 
 export async function decryptSession(){
   const token = (await cookies()).get('sessionToken')?.value || '';
+  if(token == '')
+    return;
+  
   try {
     const { payload } = await jwtVerify(token, ACCESS_SECRET, {
       algorithms: ['HS256'],

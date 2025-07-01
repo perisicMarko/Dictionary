@@ -28,10 +28,10 @@ export function Help({
       </motion.h2>
       <motion.div
         variants={itemVariants}
-        className="center-vertically w-full"
+        className="center-vertically"
       >
         <Image
-          className="block rounded-4xl mr-3 w-auto h-auto"
+          className="block rounded-4xl w-auto h-auto"
           width={350}
           height={280}
           src="/wordInput.png"
@@ -60,7 +60,7 @@ export function Help({
         className="mt-5 center-vertically"
       >
         <Image
-          className="block rounded-4xl mr-3 w-auto h-auto"
+          className="block rounded-4xl w-auto h-auto"
           width={350}
           height={50}
           src="/generateNotes.png"
@@ -78,7 +78,7 @@ export function Help({
               x: 0,
             },
           }}
-          className="block bg-main text-white rounded-3xl p-3 mt-3 w-full text-center"
+          className="block bg-main text-box rounded-3xl p-3 mt-3 w-full text-center"
         >
           Pronunciation of word and two text areas will pop up: one filled with
           generated notes from the app and an empty one reserved for your
