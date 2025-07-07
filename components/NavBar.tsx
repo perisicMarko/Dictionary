@@ -97,85 +97,93 @@ export function NavBar() {
       )}
 
       {/* Mobile nav menu*/}
-      {isNavigationRoute && isVisible && <motion.div
-        initial="hidden"
-        animate="show"
-        variants={containerVariants}
-        className="fixed top-0 z-20 bg-main w-full h-min-[50px] border-b-second gap-2 transition-all sm:hidden"
-      >
+      {isNavigationRoute && isVisible && (
         <motion.div
           initial="hidden"
           animate="show"
-          variants={itemVariants}
-          className="w-full flex justify-end items-center pr-3 my-2"
+          variants={containerVariants}
+          className="fixed top-0 z-20 bg-main w-full h-min-[50px] gap-2 transition-all sm:hidden"
         >
-          <motion.span
+          <motion.div
             initial="hidden"
             animate="show"
             variants={itemVariants}
-            onClick={() => setMobileMenuToggle(!mobileMenuToggle)}
-            title='Menu'
+            className="w-full flex justify-end items-center pr-3 my-2"
           >
-            {mobileMenuToggle ? (
-              <X color="white" className='btn' width={25} height={25} />
-            ) : (
-              <Menu color="white" className='btn' height={25} width={25} />
-            )}
-          </motion.span>
-        </motion.div>
-
-        {mobileMenuToggle && (
-          <>
-            <motion.hr
+            <motion.span
               initial="hidden"
               animate="show"
               variants={itemVariants}
-              className="border-1 border-second w-full"
-            />
-
-            <motion.div
-              initial="hidden"
-              animate="show"
-              variants={containerVariants}
-              className="w-full center-vertically items-start my-3"
+              onClick={() => setMobileMenuToggle(!mobileMenuToggle)}
+              title="Menu"
             >
-              {navigationRoutes.map((route) => {
-                return (
-                  <motion.span
-                    key={route.path}
-                    initial="hidden"
-                    animate="show"
-                    variants={itemVariants}
-                    className="mt-4"
-                    onClick={() => setMobileMenuToggle(false)}
-                  >
-                    <Link
-                      href={route.path}
-                      className={`navigation-btn ${
-                        path === route.path
-                          ? "text-second font-bold"
-                          : "text-white"
-                      } py-1 px-3`}
-                    >
-                      {route.label}
-                    </Link>
-                  </motion.span>
-                );
-              })}
+              {mobileMenuToggle ? (
+                <X color="white" className="btn" width={25} height={25} />
+              ) : (
+                <Menu color="white" className="btn" height={25} width={25} />
+              )}
+            </motion.span>
+          </motion.div>
 
-              <div className="mt-7">
-                <button
-                  type="submit"
-                  className="hover:scale-115 scale-105 transition-all duration-300 cursor-pointer text-white hover:text-second px-3"
-                  onClick={() => handleLogOut()}
-                >
-                  <LogOut width={20} height={20} />
-                </button>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </motion.div>}
+          {mobileMenuToggle && (
+            <>
+              <motion.hr
+                initial="hidden"
+                animate="show"
+                variants={itemVariants}
+                className="border-1 border-second w-full"
+              />
+
+              <motion.div
+                initial="hidden"
+                animate="show"
+                variants={containerVariants}
+                className="w-full center-vertically items-start my-3"
+              >
+                {navigationRoutes.map((route) => {
+                  return (
+                    <motion.span
+                      key={route.path}
+                      initial="hidden"
+                      animate="show"
+                      variants={itemVariants}
+                      className="mt-4"
+                      onClick={() => setMobileMenuToggle(false)}
+                    >
+                      <Link
+                        href={route.path}
+                        className={`navigation-btn ${
+                          path === route.path
+                            ? "text-second font-bold"
+                            : "text-white"
+                        } py-1 px-3`}
+                      >
+                        {route.label}
+                      </Link>
+                    </motion.span>
+                  );
+                })}
+
+                <div className="mt-7">
+                  <button
+                    type="submit"
+                    className="hover:scale-115 scale-105 transition-all duration-300 cursor-pointer text-white hover:text-second px-3"
+                    onClick={() => handleLogOut()}
+                  >
+                    <LogOut width={20} height={20} />
+                  </button>
+                </div>
+              </motion.div>
+              <motion.hr
+                initial="hidden"
+                animate="show"
+                variants={itemVariants}
+                className="border-1 border-second w-full"
+              />
+            </>
+          )}
+        </motion.div>
+      )}
     </>
   );
 }

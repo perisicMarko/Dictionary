@@ -56,7 +56,7 @@ export default function SaveNoteForm({
 
     if (!isErrorNote(note)) {
       const res = await saveNotes(
-        formData.get("word")?.toString() as string,
+        formData.get("word")?.toString().toLowerCase() as string,
         formData.get("audio")?.toString() as string,
         formData.get("userNotes")?.toString() as string,
         note?.generated_notes as TMeaning[],

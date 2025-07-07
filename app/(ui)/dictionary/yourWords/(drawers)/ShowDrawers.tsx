@@ -112,21 +112,38 @@ export default function ShowDrawers() {
       </SearchBar>
 
       {openedDrawerId === -1 && <AddDrawer rerender={rerender} />}
-      
-      {drawers?.length === 0 && <motion.div className="box-layout mt-5 center" variants={containerVariants}><motion.span className="text-box" variants={itemVariants}>No drawers created.</motion.span></motion.div>}
+
+      {drawers?.length === 0 && (
+        <motion.div
+          className="box-layout mt-5 center"
+          variants={containerVariants}
+        >
+          <motion.span className="text-box" variants={itemVariants}>
+            No drawers created.
+          </motion.span>
+        </motion.div>
+      )}
 
       {openedDrawerId === -1 &&
-        (drawers ? (
-          searchedDrawers?.map((d) => (
-            <Drawer
-              key={d.id}
-              drawer={d as TDrawer}
-              notes={notes as TNoteApp[]}
-              rerender={rerender}
-              openDrawer={(id: number) => openDrawer(id)}
-              openedDrawerId={openedDrawerId}
-            />
-          ))
+        (searchedDrawers ? (
+          searchedDrawers.length != 0 ? (
+            searchedDrawers?.map((d) => (
+              <Drawer
+                key={d.id}
+                drawer={d as TDrawer}
+                notes={notes as TNoteApp[]}
+                rerender={rerender}
+                openDrawer={(id: number) => openDrawer(id)}
+                openedDrawerId={openedDrawerId}
+              />
+            ))
+          ) : (
+            drawers?.length != 0 && (
+              <motion.div className="box-layout text-box mt-5">
+                No drawers found.
+              </motion.div>
+            )
+          )
         ) : (
           <Loading />
         ))}

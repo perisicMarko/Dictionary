@@ -75,7 +75,7 @@ export default function StrictAutocomplete({
       <input
         ref={addWordInput}
         list="notes"
-        value={value}
+        value={value.toLowerCase()}
         name="word"
         onChange={handleChange}
         className="text-white p-2 outline-none active:outline-none rounded-3xl w-full"

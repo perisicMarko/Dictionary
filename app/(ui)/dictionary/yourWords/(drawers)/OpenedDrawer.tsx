@@ -63,6 +63,10 @@ export default function OpenedDrawer({
                 This drawer is empty.
               </motion.p>
             </motion.div>
+          ) : searchedWords?.length === 0 ? (
+            <motion.div className="box-layout mt-5 text-box">
+              No words found.
+            </motion.div>
           ) : (
             <Words
               props={searchedWords}

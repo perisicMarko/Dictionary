@@ -55,12 +55,14 @@ export function GradeForm({
           Remember this word?
         </label>
         <div className="center relative w-full">
-          <ChevronDown
-            color="white"
-            width={25}
-            height={25}
-            className="absolute right-5 z-5 pointer-events-none"
-          />
+          {quality === -1 && (
+            <ChevronDown
+              color="white"
+              width={25}
+              height={25}
+              className="absolute right-5 z-5 pointer-events-none"
+            />
+          )}
           <select
             id="recall"
             defaultValue={-1}
@@ -68,7 +70,7 @@ export function GradeForm({
             onClick={() => toggleMenu()}
             onChange={(e) => changeQuality(Number(e.target.value))}
             className="primary-btn appearance-none py-2 focus:outline-none px-3 text-xs sm:text-xl"
-          >            
+          >
             <option value="-1" disabled>
               Grade from 0-5{" "}
             </option>
@@ -76,18 +78,10 @@ export function GradeForm({
             <option value="1">
               1 – wrong, remembered after checking notes
             </option>
-            <option value="2">
-              2 – wrong, but felt easy to recall
-            </option>
-            <option value="3">
-              3 – correct, but with great effort
-            </option>
-            <option value="4"> 
-              4 – correct, some hestitation
-            </option>
-            <option value="5">
-              5 – perfect, immediate recall  
-            </option>
+            <option value="2">2 – wrong, but felt easy to recall</option>
+            <option value="3">3 – correct, but with great effort</option>
+            <option value="4">4 – correct, some hestitation</option>
+            <option value="5">5 – perfect, immediate recall</option>
           </select>
         </div>
         {quality != -1 && (
@@ -100,7 +94,6 @@ export function GradeForm({
             {isPending ? <Loader /> : <b>Grade</b>}
           </motion.button>
         )}
-
       </motion.form>
     </motion.div>
   );

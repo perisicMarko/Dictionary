@@ -48,6 +48,9 @@ export default function UpdateForm({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateState?.success, isUpdating]);
 
+
+  const drawerNameValue = updateFormShow ? stateDrawerName : drawer?.name;
+
   return (
     <form className="center-vertically gap-2 w-full" action={updateAction}>
       <input
@@ -64,7 +67,7 @@ export default function UpdateForm({
           className={`transition-opacity text-start w-full text-white mt-5 inline-block outline-none active:outline-none ${
             drawer?.name ? "opacity-100" : "opacity-0"
           }`}
-          defaultValue={drawer?.name}
+          value={drawerNameValue}
           onChange={(e) => {
             setStateDrawerName(e.target.value);
           }}
