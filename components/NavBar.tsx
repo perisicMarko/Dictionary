@@ -77,7 +77,7 @@ export function NavBar({shouldCollapse, resetCollapseFromParent} : {shouldCollap
           initial="hidden"
           animate="show"
           variants={containerVariants}
-          className="hidden fixed top-0 z-20 bg-main w-full h-[50px] sm:grid grid-cols-[auto_1fr] items-center transition-all"
+          className="hidden fixed top-0 z-50 bg-main w-full h-[50px] sm:grid grid-cols-[auto_1fr] items-center transition-all"
         >
           <div className="flex justify-start items-center ml-3 md:ml-7">
             <button
@@ -112,7 +112,7 @@ export function NavBar({shouldCollapse, resetCollapseFromParent} : {shouldCollap
           initial="hidden"
           animate="show"
           variants={containerVariants}
-          className="fixed top-0 z-20 bg-main w-full h-min-[50px] gap-2 transition-all sm:hidden"
+          className="fixed top-0 z-50 bg-main w-full h-min-[50px] gap-2 transition-all sm:hidden"
         >
           <motion.div
             initial="hidden"
