@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function CreateDrawer(title : string, userId : number){
+export async function CreateDrawer(title: string, userId: number) {
     try {
         const res = await prisma.drawers.create({
             data: {
@@ -13,30 +13,30 @@ export async function CreateDrawer(title : string, userId : number){
         });
 
         return res;
-    }catch(e){
-        if(e instanceof Error)
+    } catch (e) {
+        if (e instanceof Error)
             console.log('Error while creating drawer, err message: ' + e.message);
     }
 }
 
-export async function GetUsersDrawers(userId : number){
+export async function GetUsersDrawers(userId: number) {
     try {
-        const drawers =  await prisma.drawers.findMany({
+        const drawers = await prisma.drawers.findMany({
             where: {
-                user_id : userId
+                user_id: userId
             }
         });
 
         return drawers;
-    }catch(e){
-        if(e instanceof Error)
+    } catch (e) {
+        if (e instanceof Error)
             console.log('Error while fetching drawers, err message: ' + e.message);
     }
 }
 
-export async function UpdateDrawerName(drawerName : string, drawerId: number){
+export async function UpdateDrawerName(drawerName: string, drawerId: number) {
     try {
-        const res =  await prisma.drawers.update({
+        const res = await prisma.drawers.update({
             where: {
                 id: drawerId
             },
@@ -46,31 +46,36 @@ export async function UpdateDrawerName(drawerName : string, drawerId: number){
         });
 
         return res;
-    }catch(e){
-        if(e instanceof Error)
+    } catch (e) {
+        if (e instanceof Error)
             console.log('Error updating drawer name, err message: ' + e.message);
     }
 }
 
-export async function DeleteDrawer(drawerId: number){
+export async function DeleteDrawer(drawerId: number) {
     try {
-        const res =  await prisma.drawers.delete({
+        const res = await prisma.drawers.delete({
             where: {
                 id: drawerId
             }
         });
 
         return res;
-    }catch(e){
-        if(e instanceof Error)
+    } catch (e) {
+        if (e instanceof Error)
             console.log('Error deleting drawer, err message: ' + e.message);
     }
 }
 
 
-export async function PutNoteInDrawer(drawerId: number, noteId : number){
+export async function PutNoteInDrawer(drawerId: number, noteId: number) {
     try {
-        const res =  await prisma.drawers_and_notes.create({
+
+        const exist = await prisma.drawers_and_notes.findFirst({ where: { drawer_id: drawerId, note_id: noteId } });
+        if(exist)
+            return {success: true, message: 'Item already exists.'};
+
+        const res = await prisma.drawers_and_notes.create({
             data: {
                 note_id: noteId,
                 drawer_id: drawerId
@@ -78,64 +83,64 @@ export async function PutNoteInDrawer(drawerId: number, noteId : number){
         });
 
         return res;
-    }catch(e){
-        if(e instanceof Error)
+    } catch (e) {
+        if (e instanceof Error)
             console.log('Error putting word in drawer, err message: ' + e.message);
     }
 }
 
 
-export async function GetNotesOfDrawer(drawerId : number){
+export async function GetNotesOfDrawer(drawerId: number) {
     try {
         const res = await prisma.drawers_and_notes.findMany({
             where: {
-              drawer_id: drawerId,
+                drawer_id: drawerId,
             },
             include: {
-              notes: {
-                include: {
-                    dictionary_words: true
+                notes: {
+                    include: {
+                        dictionary_words: true
+                    }
                 }
-              } 
             },
-        });          
-        
+        });
+
         return res;
-    }catch(e){
-        if(e instanceof Error)
+    } catch (e) {
+        if (e instanceof Error)
             console.log('Error fetching words in opened drawer, err message: ' + e.message);
     }
 }
 
 
-export async function RemoveWordFromDrawer(noteId : number, drawerId : number){
+export async function RemoveWordFromDrawer(noteId: number, drawerId: number) {
     try {
         const res = await prisma.drawers_and_notes.deleteMany({
             where: {
-              drawer_id: drawerId,
-              note_id: noteId,
+                drawer_id: drawerId,
+                note_id: noteId,
             },
-          });
-        
+        });
+
         return res;
-    }catch(e){
-        if(e instanceof Error)
+    } catch (e) {
+        if (e instanceof Error)
             console.log('Error removing word from drawer, err message: ' + e.message);
     }
 }
 
 
-export async function GetDrawerById(drawerId : number){
+export async function GetDrawerById(drawerId: number) {
     try {
         const res = await prisma.drawers.findUnique({
             where: {
-              id: drawerId
+                id: drawerId
             },
-          });
-        
+        });
+
         return res;
-    }catch(e){
-        if(e instanceof Error)
+    } catch (e) {
+        if (e instanceof Error)
             console.log('Error removing word from drawer, err message: ' + e.message);
     }
 }

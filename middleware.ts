@@ -23,7 +23,7 @@ export default async function middleware(req: NextRequest) {
         if(!payload)
             return NextResponse.redirect(new URL('/', req.nextUrl));
 
-        if(protectedRoutes.includes(path)) // checking if typed route is correct if it is not but token is valid, redirect to input page
+        if(protectedRoutes.includes(path) || path.includes('edit')) // checking if typed route is correct if it is not but token is valid, redirect to input page
             return NextResponse.next();
         else 
             return NextResponse.redirect(new URL('/dictionary/inputWord', req.nextUrl));

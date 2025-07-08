@@ -8,12 +8,22 @@ import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { logOutUser } from "@/actions/auth/user";
 import { LogOut, Menu, X } from "lucide-react";
 
-export function NavBar() {
+export function NavBar({shouldCollapse, resetCollapseFromParent} : {shouldCollapse : boolean, resetCollapseFromParent: (a : boolean) => void}) {
   const path = usePathname();
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(true);
   const tokenContext = useContext(TokenContext);
   const [mobileMenuToggle, setMobileMenuToggle] = useState(false);
+
+  useEffect(() => {
+    if(shouldCollapse && mobileMenuToggle){
+      setMobileMenuToggle(false);
+      resetCollapseFromParent(false);
+    }else if(shouldCollapse && !mobileMenuToggle)
+      resetCollapseFromParent(false);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mobileMenuToggle, shouldCollapse])
 
   useEffect(() => {
     let lastScrollY = window.scrollY;

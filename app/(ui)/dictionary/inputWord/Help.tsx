@@ -31,7 +31,7 @@ export function Help({
         className="center-vertically"
       >
         <Image
-          className="block rounded-4xl w-auto h-auto"
+          className="block rounded-4xl"
           width={350}
           height={280}
           src="/wordInput.png"
@@ -60,9 +60,9 @@ export function Help({
         className="mt-5 center-vertically"
       >
         <Image
-          className="block rounded-4xl w-auto h-auto"
+          className="block rounded-4xl"
           width={350}
-          height={50}
+          height={500}
           src="/generateNotes.png"
           alt="Generate notes"
           priority
