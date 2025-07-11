@@ -7,7 +7,7 @@ export default function DisplayNotes({
 }: {
   word: string;
   meanings: TMeaning[];
-  includeWord: boolean; //used to determin should word be displayed with generated notes, in Note component should not but for SaveNoteForm should
+  includeWord: boolean; //used to determin should word be displayed with generated notes, in Note component it should not but for SaveNoteForm should
 }) {
   
   return (

@@ -25,7 +25,8 @@ export default function SaveNoteForm({
   const [generated, setGenerated] = useState(false); // for displaying textarea for generated notes
   const [isGenerating, startGenerating] = useTransition(); // keeping track of generating notes action
   const [error, setError] = useState(""); // if inputted word is not supported, this error should be displayed
-  const [isSaving, setIsSaving] = useState(false); // true when action saveNote is active
+  const [isSaving, setIsSaving] = useState(false); // true when action saveNote is active, used for displaying loader on save button
+  const [isWordAdded, setIsWordAdded] = useState(false); // used to check if word is already added, it is in state variable because typing new word should not reset the error message
   const tokenContext = useContext(TokenContext);
   const router = useRouter();
   const wordInputRef = useRef<HTMLInputElement>(null);
@@ -33,7 +34,7 @@ export default function SaveNoteForm({
   const isErrorNote = (
     note: TWordApp | { error: string } | null | undefined
   ): note is { error: string } => {
-    return note != null && "error" in note;
+    return note != null && note != undefined && "error" in note;
   };
 
   const cleanUp = (flag: boolean) => {
@@ -91,14 +92,11 @@ export default function SaveNoteForm({
     wordInputRef.current?.focus();
   }, []);
 
-  let isDisabled =
-    word.trim() === "" || String('word is already added') === word.trim() || (!isErrorNote(note) && word === note?.word) || words === undefined;
-
-  if (words?.indexOf(word) != -1 && word != '') { // anitpattern but secure, it will not enter the statement unless user typed something that is already added
-    setWord("word is already added");
-    isDisabled = true;
-  }
-
+  const isDisabled =
+    word.trim() === "" ||
+    (!isErrorNote(note) && word === note?.word) ||
+    words === undefined;
+    
   return (
     <motion.div
       layout
@@ -135,7 +133,10 @@ export default function SaveNoteForm({
           className="rounded-3xl text-center text-main bg-white w-full h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] p-2 mt-5"
           type="text"
           name="word"
-          onChange={(e) => {setWord(e.target.value.toLowerCase()); setError('')}}
+          onChange={(e) => {
+            setWord(e.target.value.toLowerCase());
+            if (!isWordAdded) setError("");
+          }}
           placeholder="Enter new word here..."
         />
         {error && <p className="error mt-1 text-center">{error}</p>}
@@ -213,6 +214,12 @@ export default function SaveNoteForm({
                   } else {
                     cleanUp(true);
                   }
+                  if (words?.indexOf(word) != -1) {
+                    setIsWordAdded(true);
+                    setError("word is already added");
+                  }else
+                    setIsWordAdded(false);
+
                   setGenerated(true);
                 });
               }}
@@ -223,7 +230,9 @@ export default function SaveNoteForm({
             {generated && (
               <motion.button
                 type="submit"
-                className="bg-second center text-white sm:hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block col-span-1 transition-all"
+                className={`bg-second center text-white sm:hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block col-span-1 transition-all ${
+                  isWordAdded ? "opacity-50" : ""
+                }`}
                 hidden={
                   wordInputRef &&
                   !isErrorNote(note) &&
@@ -235,6 +244,7 @@ export default function SaveNoteForm({
                   wordInputRef.current?.focus();
                   setIsSaving(true);
                 }}
+                disabled={isWordAdded}
               >
                 {isSaving ? <Loader /> : <b>Save</b>}
               </motion.button>
