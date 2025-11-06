@@ -1,5 +1,6 @@
 import Note from "@/components/Note";
 import { TNoteApp } from "@/lib/types";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 export default function Words({
   props,
@@ -12,8 +13,10 @@ export default function Words({
   drawerId: number;
   rerenderParent: () => void;
 }) {
+  const [parent] = useAutoAnimate();
+
   return (
-    <>
+    <div ref={parent} className="w-full flex flex-col justify-center items-center">
       {props?.map((w: TNoteApp) => {
         return (
           <Note
@@ -25,6 +28,6 @@ export default function Words({
           ></Note>
         );
       })}
-    </>
+    </div>
   );
 }
