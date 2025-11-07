@@ -5,6 +5,7 @@ import { TokenContext } from "../TokenContextProvider";
 import { useContext } from "react";
 import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
+import { useState } from "react";
 
 export default function HistoryNoteMenu({
   rerenderParent,
@@ -17,31 +18,41 @@ export default function HistoryNoteMenu({
 }) {
   const tokenContext = useContext(TokenContext);
   const router = useRouter();
+  const [actionActive, setActionActive] = useState<{
+    delete: boolean;
+    relearn: boolean;
+  }>({ delete: false, relearn: false });
 
   async function onSubmitRelearnHandle() {
     toggleMenu();
     if (tokenContext?.accessToken === undefined) return;
-    const res = await backToRecallSystem(noteId, tokenContext?.accessToken || '');
+    const res = await backToRecallSystem(
+      noteId,
+      tokenContext?.accessToken || ""
+    );
 
-    if(!res?.success){
-      tokenContext.setAccessToken('');
-      router.push('/logIn');    
-    }else if(res.status === 201)
-      tokenContext.setAccessToken(res.accessToken || '');
+    if (!res?.success) {
+      tokenContext.setAccessToken("");
+      router.push("/logIn");
+    } else if (res.status === 201)
+      tokenContext.setAccessToken(res.accessToken || "");
     rerenderParent(); //rerendering parent
   }
 
   async function onSubmitDeleteHandle(formData: FormData) {
     toggleMenu();
     if (tokenContext?.accessToken === undefined) return;
-    const res = await deleteNote(Number(formData.get('noteId')), tokenContext?.accessToken);
+    const res = await deleteNote(
+      Number(formData.get("noteId")),
+      tokenContext?.accessToken
+    );
 
-    if(!res?.success){ 
-      tokenContext.setAccessToken('');
-      router.push('/logIn');    
-    }else if(res.status === 201)
-      tokenContext.setAccessToken(res.accessToken || '');
-      
+    if (!res?.success) {
+      tokenContext.setAccessToken("");
+      router.push("/logIn");
+    } else if (res.status === 201)
+      tokenContext.setAccessToken(res.accessToken || "");
+
     rerenderParent(); //rerendering parent
   }
 
@@ -58,8 +69,19 @@ export default function HistoryNoteMenu({
         action={onSubmitDeleteHandle}
       >
         <input type="text" name="noteId" defaultValue={noteId} hidden />
-        <button type="submit" onClick={(e) => e.stopPropagation()} title='Delete note permanently' className="hover:text-main text-second cursor-pointer transition-all w-full">
-          <Trash2/>
+        <button
+          type="submit"
+          onClick={(e) => {
+            e.stopPropagation();
+            setActionActive({ ...actionActive, delete: true });
+          }}
+          title="Delete note permanently"
+          className={
+            "hover:text-main text-second cursor-pointer transition-all w-full " +
+            (actionActive.delete ? " animate-spin" : "")
+          }
+        >
+          <Trash2 />
         </button>
       </motion.form>
       <motion.form
@@ -70,9 +92,15 @@ export default function HistoryNoteMenu({
         <input type="text" name="noteId" defaultValue={noteId} hidden />
         <button
           type="submit"
-          className="text-center text-xs text-second cursor-pointer hover:text-main transition-all w-full"
-          onClick={(e) => e.stopPropagation()}
-          title='Relearn word'
+          className={
+            "text-center text-xs text-second cursor-pointer hover:text-main transition-all w-full " +
+            (actionActive.relearn ? " animate-spin" : "")
+          }
+          onClick={(e) => {
+            e.stopPropagation();
+            setActionActive({ ...actionActive, relearn: true });
+          }}
+          title="Relearn word"
         >
           <b>R</b>
         </button>

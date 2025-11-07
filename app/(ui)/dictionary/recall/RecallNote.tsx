@@ -29,9 +29,11 @@ export default function RecallNote({
 
   return (
     <motion.div
+      layout
       initial="hidden"
       animate="show"
       variants={containerVariants}
+      exit={{ opacity: 0, y: 8, scale: 0.98 }}
       className="relative max-h-[800px] mt-8 box-layout !p-7 center-vertically"
       onClick={() => {
         setMenu(false);

@@ -10,6 +10,7 @@ import Drawer from "./Drawer";
 import { getUsersNotes } from "@/actions/manageNotes";
 import Loading from "@/app/(ui)/loading";
 import OpenedDrawer from "./OpenedDrawer";
+import { AnimatePresence } from "framer-motion";
 
 export default function ShowDrawers() {
   const [search, setSearch] = useState("");
@@ -111,7 +112,7 @@ export default function ShowDrawers() {
         </motion.p>
       </SearchBar>
 
-      {openedDrawerId === -1 && <AddDrawer rerender={rerender} />}
+      {openedDrawerId === -1 && <AddDrawer rerender={rerender} drawerNames={drawers?.map(d => d.name)} />}
 
       {drawers?.length === 0 && (
         <motion.div
@@ -127,16 +128,18 @@ export default function ShowDrawers() {
       {openedDrawerId === -1 &&
         (searchedDrawers ? (
           searchedDrawers.length != 0 ? (
-            searchedDrawers?.map((d) => (
-              <Drawer
-                key={d.id}
-                drawer={d as TDrawer}
-                notes={notes as TNoteApp[]}
-                rerender={rerender}
-                openDrawer={(id: number) => openDrawer(id)}
-                openedDrawerId={openedDrawerId}
-              />
-            ))
+            <AnimatePresence mode="popLayout">
+              {searchedDrawers?.map((d) => (
+                <Drawer
+                  key={d.id}
+                  drawer={d as TDrawer}
+                  notes={notes as TNoteApp[]}
+                  rerender={rerender}
+                  openDrawer={(id: number) => openDrawer(id)}
+                  openedDrawerId={openedDrawerId}
+                />
+              ))}
+            </AnimatePresence>
           ) : (
             drawers?.length != 0 && (
               <motion.div className="box-layout text-box mt-5">

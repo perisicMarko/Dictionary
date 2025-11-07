@@ -6,6 +6,7 @@ import { setAsLearned } from "@/actions/manageNotes";
 import { TokenContext } from "../../../../components/TokenContextProvider";
 import { useContext } from "react";
 import { NotebookPen, Trash2 } from "lucide-react";
+import { useState } from "react";
 
 export default function RecallNoteMenu({
   toggleMenu,
@@ -20,6 +21,7 @@ export default function RecallNoteMenu({
 }) {
   const router = useRouter();
   const tokenContext = useContext(TokenContext);
+  const [isRemoving, setIsRemoving] = useState(false)
 
   async function onSubmitDeleteHandle() {
     if (tokenContext?.accessToken === undefined) return;
@@ -33,7 +35,7 @@ export default function RecallNoteMenu({
       router.push("/logIn");
     } else if (response.status === 201)
       tokenContext.setAccessToken(response.accessToken || "");
-
+      
     rerenderParent();
   }
   return (
@@ -51,8 +53,13 @@ export default function RecallNoteMenu({
         }}
       >
         <input type="text" name="noteId" defaultValue={Number(noteId)} hidden />
-        <button type="submit" className="text-second" onClick={(e) => e.stopPropagation()} title='Mark note as learned'>
-          <Trash2 className="hover:text-main cursor-pointer transition-all"/>
+        <button
+          type="submit"
+          className="text-second"
+          onClick={(e) => {e.stopPropagation(); setIsRemoving(true);}}
+          title="Mark note as learned"
+        >
+          <Trash2 className={"hover:text-main cursor-pointer transition-all " + (isRemoving ? "animate-spin" : "")} />
         </button>
       </motion.form>
 
@@ -61,11 +68,9 @@ export default function RecallNoteMenu({
           href={"/dictionary/recall/edit/" + noteId}
           onClick={() => toggleMenu()}
           className="text-second"
-          title='Edit note'
+          title="Edit note"
         >
-          <NotebookPen
-            className="hover:text-main cursor-pointer transition-all"
-          />
+          <NotebookPen className="hover:text-main cursor-pointer transition-all" />
         </Link>
       </motion.span>
       <motion.span

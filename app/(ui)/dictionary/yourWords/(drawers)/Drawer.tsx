@@ -31,7 +31,10 @@ export default function Drawer({
   const tokenContext = useContext(TokenContext);
 
   const handleDelete = async () => {
-    const res = await deleteDrawer(drawer?.id || -1, tokenContext?.accessToken || "");
+    const res = await deleteDrawer(
+      drawer?.id || -1,
+      tokenContext?.accessToken || ""
+    );
     if (!res?.success) tokenContext?.setAccessToken("");
     else if (res.success && res.accessToken)
       tokenContext?.setAccessToken(res?.accessToken);
@@ -47,10 +50,12 @@ export default function Drawer({
   return (
     <>
       <motion.div
+        layout
         initial="hidden"
         animate="show"
         variants={containerVariants}
         className="box-layout mt-3 relative transition-transform center-vertically"
+        exit={{ opacity: 0, y: 8, scale: 0.98 }}
         onClick={() => {
           setMenu(false);
           setAddFormShow(false);
@@ -63,10 +68,7 @@ export default function Drawer({
             variants={containerVariants}
             className="absolute z-20 bg-main rounded-3xl top-0 right-0 w-full h-full center-vertically"
           >
-            <motion.h2
-              variants={itemVariants}
-              className="text-box mb-3"
-            >
+            <motion.h2 variants={itemVariants} className="text-box mb-3">
               Delete this drawer?
             </motion.h2>
             <div className="center gap-5">
@@ -127,7 +129,7 @@ export default function Drawer({
                 <motion.span
                   variants={itemVariants}
                   className="text-white xl:hover:text-second cursor-pointer transition-all duration-200"
-                  title='Add word to drawer'
+                  title="Add word to drawer"
                 >
                   <Plus
                     onClick={(e) => {
@@ -150,7 +152,10 @@ export default function Drawer({
           )}
         </div>
 
-        <span title={openedDrawerId === -1 ? 'Open drawer' : 'Close drawer'} className="text-white hover:text-second transition-all duration-200">
+        <span
+          title={openedDrawerId === -1 ? "Open drawer" : "Close drawer"}
+          className="text-white hover:text-second transition-all duration-200"
+        >
           {openedDrawerId === -1 ? (
             <ChevronDown
               width={25}

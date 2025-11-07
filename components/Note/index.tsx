@@ -32,9 +32,11 @@ export default function Note({
 
   return (
     <motion.div
+      layout
       initial="hidden"
       animate="show"
       variants={containerVariants}
+      exit={{ opacity: 0, y: 8, scale: 0.98 }}
       ref={containerRef}
       className="relative box-layout max-h-[720px] sm:max-h-[800px] mt-8"
       title={containerTitle}

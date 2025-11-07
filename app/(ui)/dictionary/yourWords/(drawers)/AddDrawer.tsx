@@ -7,7 +7,13 @@ import { TokenContext } from "@/components/TokenContextProvider";
 import Loader from "@/components/common/Loader";
 import { useRouter } from "next/navigation";
 
-export default function AddDrawer({rerender} : {rerender : () => void}) {
+export default function AddDrawer({
+  rerender,
+  drawerNames,
+}: {
+  rerender: () => void;
+  drawerNames: string[] | undefined;
+}) {
   const [addDrawer, setAddDrawer] = useState(false);
   const [state, action, isPending] = useActionState(createDrawer, undefined);
   const [drawerName, setDrawerName] = useState("");
@@ -16,9 +22,10 @@ export default function AddDrawer({rerender} : {rerender : () => void}) {
   const router = useRouter();
 
   useEffect(() => {
-    if (state?.success === false) { //unauthorized
-      tokenContext?.setAccessToken('');
-      router.push('/');
+    if (state?.success === false) {
+      //unauthorized
+      tokenContext?.setAccessToken("");
+      router.push("/");
     }
   }, [state?.success, router, tokenContext]);
 
@@ -28,13 +35,21 @@ export default function AddDrawer({rerender} : {rerender : () => void}) {
       setAddDrawer(false);
     }
     rerender();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state?.success]);
 
   useEffect(() => {
-    if(addDrawer && drawerAddRef.current)
-      drawerAddRef.current.focus();
-  })
+    if (addDrawer && drawerAddRef.current) drawerAddRef.current.focus();
+  });
+
+  function isValidDrawerName(){
+    if(drawerName === "")
+      return false;
+    else if(drawerNames?.includes(drawerName))
+      return false;
+    else 
+      return true;
+  }
 
   return (
     <motion.div
@@ -55,7 +70,11 @@ export default function AddDrawer({rerender} : {rerender : () => void}) {
 
           <motion.form
             variants={containerVariants}
-            action={(e) => {action(e); rerender(); setDrawerName('')}}
+            action={(e) => {
+              action(e);
+              rerender();
+              setDrawerName("");
+            }}
             className="p-5 center-vertically gap-3"
           >
             <input
@@ -74,11 +93,9 @@ export default function AddDrawer({rerender} : {rerender : () => void}) {
             />
             <button
               type="submit"
-              className={
-                `primary-btn !h-[30px] !xl:h-[38px] center " +
-                ${drawerName === "" ? " opacity-50" : ""}`
-              }
-              disabled={drawerName === ''}
+              className={`primary-btn !h-[30px] !xl:h-[38px] center " +
+                ${!isValidDrawerName() ? " opacity-50" : ""}`}
+              disabled={!isValidDrawerName()}
             >
               {isPending ? <Loader /> : "Create drawer"}
             </button>
@@ -92,9 +109,9 @@ export default function AddDrawer({rerender} : {rerender : () => void}) {
           <motion.span
             variants={itemVariants}
             className="hover:text-second cursor-pointer text-white transition-all duration-200"
-            title='Add drawer'
+            title="Add drawer"
           >
-            <Plus width={30} height={30} onClick={() => setAddDrawer(true)}/>
+            <Plus width={30} height={30} onClick={() => setAddDrawer(true)} />
           </motion.span>
         </>
       )}
