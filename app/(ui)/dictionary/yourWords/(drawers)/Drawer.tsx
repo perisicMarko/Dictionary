@@ -50,11 +50,11 @@ export default function Drawer({
   return (
     <>
       <motion.div
-        layout
+        layout="position"
         initial="hidden"
         animate="show"
         variants={containerVariants}
-        className="box-layout mt-3 relative transition-transform center-vertically"
+        className="box-layout mt-3 relative center-vertically"
         exit={{ opacity: 0, y: 8, scale: 0.98 }}
         onClick={() => {
           setMenu(false);

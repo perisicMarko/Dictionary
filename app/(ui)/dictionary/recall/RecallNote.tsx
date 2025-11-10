@@ -29,7 +29,7 @@ export default function RecallNote({
 
   return (
     <motion.div
-      layout
+      layout="position"
       initial="hidden"
       animate="show"
       variants={containerVariants}

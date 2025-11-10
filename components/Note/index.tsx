@@ -32,9 +32,9 @@ export default function Note({
 
   return (
     <motion.div
-      layout
-      initial="hidden"
-      animate="show"
+      layout="position"
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
       variants={containerVariants}
       exit={{ opacity: 0, y: 8, scale: 0.98 }}
       ref={containerRef}

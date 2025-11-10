@@ -25,34 +25,44 @@ export default function ShowNotes() {
       }
     };
     fetch();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const filteredWords = words?.filter((w) => {
-    return w.dictionary_words.word.toLowerCase().trim().includes(search.toLowerCase().trim());
-  });
 
   function updateSearch(word: string) {
     setSearch(word);
   }
 
-  const sortedWords = filteredWords;
-  if (sortBy != -1 && sortedWords != undefined) {
-    switch (sortBy) {
-      case SORT.BY_DATE_ASC:
-        sortedWords.sort((e1, e2) => e1.id - e2.id);
-        break;
-      case SORT.BY_DATE_DESC:
-        sortedWords.sort((e1, e2) => e2.id - e1.id);
-        break;
-      case SORT.BY_RECALL_DATE_ASC:
-        sortedWords.sort((e1, e2) => isBefore(e1.review_date, e2.review_date) ? -1 : 1);
-        break;
-      case SORT.BY_RECALL_DATE_DESC:
-        sortedWords.sort((e1, e2) => isBefore(e1.review_date, e2.review_date) ? 1 : -1);
-        break;
+  function sortWordsByFilter() {
+    const searchedWords = words?.filter((w) => {
+      return w.dictionary_words.word
+        .toLowerCase()
+        .trim()
+        .includes(search.toLowerCase().trim());
+    });
+    if (sortBy != -1 && searchedWords != undefined) {
+      switch (sortBy) {
+        case SORT.BY_DATE_ASC:
+          searchedWords.sort((e1, e2) => e1.id - e2.id);
+          break;
+        case SORT.BY_DATE_DESC:
+          searchedWords.sort((e1, e2) => e2.id - e1.id);
+          break;
+        case SORT.BY_RECALL_DATE_ASC:
+          searchedWords.sort((e1, e2) =>
+            isBefore(e1.review_date, e2.review_date) ? -1 : 1
+          );
+          break;
+        case SORT.BY_RECALL_DATE_DESC:
+          searchedWords.sort((e1, e2) =>
+            isBefore(e1.review_date, e2.review_date) ? 1 : -1
+          );
+          break;
+      }
     }
+    return searchedWords;
   }
+
+  const sortedWords = sortWordsByFilter();
 
   return (
     <>
@@ -70,12 +80,12 @@ export default function ShowNotes() {
         </motion.p>
       </SearchBar>
 
-      {filteredWords?.length === 0 && search != "" && (
+      {sortedWords?.length === 0 && search != "" && (
         <ZeroNotesMessage
           message={"There is no word like that within your words."}
         />
       )}
-      {!filteredWords && <Loading />}
+      {!sortedWords && <Loading />}
       {sortedWords?.length != 0 && (
         <Words
           props={sortedWords}
@@ -84,7 +94,7 @@ export default function ShowNotes() {
           drawerId={-1}
         />
       )}
-      {filteredWords?.length === 0 && search === "" && (
+      {sortedWords?.length === 0 && search === "" && (
         <ZeroNotesMessage
           message={
             "Hmm, seems like you're not learning any words yet. Time to get started!"
