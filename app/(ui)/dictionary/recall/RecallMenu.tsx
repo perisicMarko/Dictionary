@@ -11,17 +11,19 @@ import { useState } from "react";
 export default function RecallNoteMenu({
   toggleMenu,
   changeQuality,
+  showNotes,
   noteId,
   rerenderParent,
 }: {
   toggleMenu: () => void;
   changeQuality: (e: number) => void;
+  showNotes: boolean;
   noteId: number;
   rerenderParent: () => void;
 }) {
   const router = useRouter();
   const tokenContext = useContext(TokenContext);
-  const [isRemoving, setIsRemoving] = useState(false)
+  const [isRemoving, setIsRemoving] = useState(false);
 
   async function onSubmitDeleteHandle() {
     if (tokenContext?.accessToken === undefined) return;
@@ -35,7 +37,7 @@ export default function RecallNoteMenu({
       router.push("/logIn");
     } else if (response.status === 201)
       tokenContext.setAccessToken(response.accessToken || "");
-      
+
     rerenderParent();
   }
   return (
@@ -56,13 +58,20 @@ export default function RecallNoteMenu({
         <button
           type="submit"
           className="text-second"
-          onClick={(e) => {e.stopPropagation(); setIsRemoving(true);}}
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsRemoving(true);
+          }}
           title="Mark note as learned"
         >
-          <Trash2 className={"hover:text-main cursor-pointer transition-all " + (isRemoving ? "animate-spin" : "")} />
+          <Trash2
+            className={
+              "hover:text-main cursor-pointer transition-all " +
+              (isRemoving ? "animate-spin" : "")
+            }
+          />
         </button>
       </motion.form>
-
       <motion.span variants={itemVariants} className="w-full px-2">
         <Link
           href={"/dictionary/recall/edit/" + noteId}
@@ -73,28 +82,31 @@ export default function RecallNoteMenu({
           <NotebookPen className="hover:text-main cursor-pointer transition-all" />
         </Link>
       </motion.span>
-      <motion.span
-        variants={itemVariants}
-        className="block text-second hover:text-main cursor-pointer text-center transition-color w-full"
-        onClick={() => {
-          changeQuality(6);
-          toggleMenu();
-        }}
-        title="Show notes"
-      >
-        <b>N</b>
-      </motion.span>
-      <motion.span
-        variants={itemVariants}
-        className="block hover:text-main text-second cursor-pointer text-center transition-color w-full pb-1"
-        onClick={() => {
-          changeQuality(-1);
-          toggleMenu();
-        }}
-        title="Grade recall"
-      >
-        <b>G</b>
-      </motion.span>
+      {!showNotes ? ( // if notes are not displayed, put N in menu, otherwise put G in menu, good for ux
+        <motion.span
+          variants={itemVariants}
+          className="block text-second hover:text-main cursor-pointer text-center transition-color w-full pb-1"
+          onClick={() => {
+            changeQuality(6);
+            toggleMenu();
+          }}
+          title="Show notes"
+        >
+          <b>N</b>
+        </motion.span>
+      ) : (
+        <motion.span
+          variants={itemVariants}
+          className="block hover:text-main text-second cursor-pointer text-center transition-color w-full pb-1"
+          onClick={() => {
+            changeQuality(-1);
+            toggleMenu();
+          }}
+          title="Grade recall"
+        >
+          <b>G</b>
+        </motion.span>
+      )}
     </motion.div>
   );
 }

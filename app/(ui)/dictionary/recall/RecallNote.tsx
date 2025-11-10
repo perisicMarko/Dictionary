@@ -17,7 +17,7 @@ export default function RecallNote({
   rerenderParent: () => void;
 }) {
   const [menu, setMenu] = useState(false);
-  const [quality, setQuality] = useState(-1);
+  const [quality, setQuality] = useState(-1); // 1..5 are quality grades, -1 means that grade ui is displayed, 6 means notes are displayed
 
   function toggleMenu() {
     setMenu(!menu);
@@ -26,6 +26,8 @@ export default function RecallNote({
   function changeQuality(quality: number) {
     setQuality(quality);
   }
+
+  const showNotes = quality === 6; // if quality is 6(not valid quality), show notes to the user
 
   return (
     <motion.div
@@ -70,6 +72,7 @@ export default function RecallNote({
           <RecallMenu
             toggleMenu={toggleMenu}
             changeQuality={changeQuality}
+            showNotes={showNotes}
             noteId={note.id}
             rerenderParent={rerenderParent}
           />
@@ -78,7 +81,7 @@ export default function RecallNote({
       <h2 className="select-none text-white text-start w-full" title="Word">
         <b>{note.dictionary_words.word}</b>
       </h2>
-      {quality === 6 ? (
+      {showNotes ? (
         <>
           <AudioPlayer src={note.dictionary_words.audio}></AudioPlayer>
           <motion.div
@@ -95,7 +98,11 @@ export default function RecallNote({
             <h2 className="mt-2 text-second">
               <b>Your notes:</b>
             </h2>
-            <p className={`white-spaces text-second ${(note.user_notes === "" ? "opacity-60 text-center" : "")}`}>
+            <p
+              className={`white-spaces text-second ${
+                note.user_notes === "" ? "opacity-60 text-center" : ""
+              }`}
+            >
               {note.user_notes != ""
                 ? note.user_notes
                 : "No your notes for this word."}
