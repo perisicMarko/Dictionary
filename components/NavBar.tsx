@@ -11,7 +11,7 @@ import { LogOut, Menu, X } from "lucide-react";
 export function NavBar({shouldCollapse, resetCollapseFromParent} : {shouldCollapse : boolean, resetCollapseFromParent: (a : boolean) => void}) {
   const path = usePathname();
   const router = useRouter();
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(true); // on scroll, should navbar appear or not
   const tokenContext = useContext(TokenContext);
   const [mobileMenuToggle, setMobileMenuToggle] = useState(false);
 
@@ -112,7 +112,7 @@ export function NavBar({shouldCollapse, resetCollapseFromParent} : {shouldCollap
           initial="hidden"
           animate="show"
           variants={containerVariants}
-          className="fixed top-0 z-50 bg-main w-full h-min-[50px] gap-2 transition-all sm:hidden"
+          className="fixed top-0 z-50 bg-main w-full min-h-[50px] gap-2 transition-all sm:hidden"
         >
           <motion.div
             initial="hidden"

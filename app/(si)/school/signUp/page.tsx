@@ -23,7 +23,8 @@ export default function SignUp() {
 
   useEffect(() => {
     if (state?.success) router.push("/school");
-  }, [router, state?.success]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state?.success]);
 
   return (
     <>

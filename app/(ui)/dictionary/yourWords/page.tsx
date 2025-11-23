@@ -8,7 +8,7 @@ import { ChevronUp } from "lucide-react";
 
 export default function YourWords() {
   const [showSwitch, setShowSwitch] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
+  const [scrollToTop, setScrollToTop] = useState(false);
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
@@ -16,8 +16,8 @@ export default function YourWords() {
     const controlScroll = () => {
       const currentScrollY = window.scrollY;
       if (currentScrollY > lastScrollY && currentScrollY > 100)
-        setIsVisible(true);
-      else setIsVisible(false);
+        setScrollToTop(true);
+      else setScrollToTop(false);
 
       lastScrollY = currentScrollY;
     };
@@ -46,7 +46,7 @@ export default function YourWords() {
 
   return (
     <>
-      {isVisible && (
+      {scrollToTop && (
         <motion.div
           title="Back to top"
           initial="hidden"

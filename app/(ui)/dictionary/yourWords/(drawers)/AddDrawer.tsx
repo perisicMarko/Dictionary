@@ -27,7 +27,8 @@ export default function AddDrawer({
       tokenContext?.setAccessToken("");
       router.push("/");
     }
-  }, [state?.success, router, tokenContext]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state?.success]);
 
   useEffect(() => {
     if (state?.success && state?.accessToken) {

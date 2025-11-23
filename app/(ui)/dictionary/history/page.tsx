@@ -21,11 +21,14 @@ export default function History() {
       const words = await getUsersHistory(tokenContext?.accessToken || "");
       if(words){
         setWords(words?.data as TNoteApp[]);
-        tokenContext?.setAccessToken(words.accessToken || '');
+
+        if(tokenContext?.accessToken === words.accessToken)
+          tokenContext?.setAccessToken(words.accessToken || '');
       }
     };
     fetch();
-  }, [tokenContext?.accessToken, refresh, tokenContext]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tokenContext?.accessToken, refresh]);
 
   const filteredWords =
     words?.filter((w) => {
@@ -61,7 +64,7 @@ export default function History() {
           message={"There is no word like that within your words."}
         />
       )}
-      {!filteredWords && <Loading />}
+      {!filteredWords && <Loading />}  {/* fetching words */}
       {filteredWords?.length != 0 && (
         <Words props={filteredWords} historyNote={true} rerenderParent={() => {setRefresh(!refresh)}} drawerId={-1} />
       )}
