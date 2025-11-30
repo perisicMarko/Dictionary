@@ -20,8 +20,7 @@ export default function Page() {
         <h2 className="title text-white">What does this app do?</h2>
         <p className="text-white">
           This app helps you actively recall words you would like to learn by
-          following the concept called the &quot;forgetting curve&quot;, using
-          spaced repetition technique.
+          calculating the optimal time for you to recall them.
           <br />
         </p>
         <h2 className="title text-white">How to use this app?</h2>
@@ -30,8 +29,7 @@ export default function Page() {
           &quot;Learned Words&quot; page), as well as the words you still need
           to learn (on the &quot;Your Words&quot; page).
           <br />
-          The main function of the app is to repeat words based on the above
-          explanation. The page dedicated to that purpose is called
+          Words you should recall will show up on page called 
           &quot;Recall.&quot; <br />
           You will receive an email when it&apos;s time to recall certain words.{" "}
           <br />
@@ -46,7 +44,7 @@ export default function Page() {
         </p>
         <h3 className="title text-white">
           More information about the app can be found on each page&apos;s
-          dedicated help link.
+          dedicated help button.
         </h3>
       </motion.div>
     </motion.div>

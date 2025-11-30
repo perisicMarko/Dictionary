@@ -17,7 +17,7 @@ export default function LogIn() {
 
   useEffect(() => {
     if(logInState?.success)
-      router.push('/school/students');
+      router.push('/school/platform/students');
   }, [router, logInState?.success]);
 
   return (

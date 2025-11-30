@@ -30,7 +30,7 @@ export function GradeForm({
     const response = await updateReviewDate(
       Number(formData.get("quality")),
       noteId,
-      tokenContext.accessToken || ""
+      tokenContext.accessToken
     );
     if (!response?.success) {
       router.push("/sessionExpired");
