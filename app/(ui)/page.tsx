@@ -28,7 +28,7 @@ export default function Home() {
 
   return (
     <>
-    <motion.div className="w-3/4 sm:h-1/2 sm:w-1/2 mt-15 center">
+    <motion.div className="box-layout !bg-transparent mt-15 center">
       <video controls autoPlay muted className="rounded-3xl w-full">
         <source src='/promo_video.mp4' type="video/mp4"/>
       </video>

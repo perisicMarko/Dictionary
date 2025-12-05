@@ -9,16 +9,16 @@ import { authenticateLogIn } from "@/actions/auth/user";
 import { generateVerificationMail } from "@/actions/auth/user/sendVerificationEmail";
 
 export default function LogIn() {
+  const initialState = { error: { message: "" }, status: -1 };
   const [state, action, isPending] = useActionState(
     authenticateLogIn,
-    undefined
+    initialState
   );
   const router = useRouter();
   const [formData, setFormData] = useState<{ email: string; password: string }>(
     { email: "", password: "" }
   );
   const { email, password } = formData;
-  const [semaphore, setSemaphore] = useState(false); // used to manage the clean ups after each action
 
   const logInStatus = {
     SUCCESS: 0,
@@ -30,31 +30,20 @@ export default function LogIn() {
   useEffect(() => {
     const sendVerificationEmail = async () => {
       await generateVerificationMail(email);
-      setFormData({password: '', email: ''});
-    }
+      setFormData({ password: "", email: "" });
+    };
 
     if (state?.status === logInStatus.SUCCESS)
       router.push("/dictionary/inputWord");
-    else if(state?.status === logInStatus.UNVERIFIED) {
+    else if (state?.status === logInStatus.UNVERIFIED) {
       sendVerificationEmail();
-    }
+      setFormData({ email: "", password: "" });
+    } else if (state.status === logInStatus.WRONG_CREDENTIALS)
+      setFormData({ email: "", password: "" });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state?.status, semaphore]);
+  }, [state?.status, isPending]);
 
-  if (
-    state?.errors?.email &&
-    state?.status != logInStatus.INVALID_SUBSCRIPTION &&
-    semaphore
-  ) {
-    setFormData({ email: "", password: "" });
-    setSemaphore(false);
-  }
-  if (state?.errors?.password && password !== "" && semaphore) {
-    setFormData({ ...formData, password: "" });
-    setSemaphore(false);
-  }
-  
   const emptyCredentials = password === "" || email === "";
 
   return (
@@ -67,8 +56,7 @@ export default function LogIn() {
           animate="show"
           variants={containerVariants}
           className={
-            "relative box-layout mt-15 " +
-            (isPending && " opacity-50 ")
+            "relative box-layout mt-15 " + (isPending && " opacity-50 ")
           }
         >
           <div className="collapse-window">
@@ -78,10 +66,7 @@ export default function LogIn() {
           </div>
           <form
             className="form flex flex-col items-center justify-center mt-5"
-            action={(e) => {
-              action(e);
-              setSemaphore(true);
-            }}
+            action={action}
           >
             <motion.div variants={itemVariants} className="w-full">
               <label htmlFor="email" className="text-white">
@@ -96,9 +81,6 @@ export default function LogIn() {
                   setFormData({ ...formData, email: e.target.value });
                 }}
               />
-              {state?.errors?.email != "" && (
-                <p className="error ml-1">{state?.errors?.email}</p>
-              )}
             </motion.div>
             <motion.div variants={itemVariants} className="w-full">
               <label htmlFor="password" className="text-white">
@@ -113,10 +95,17 @@ export default function LogIn() {
                   setFormData({ ...formData, password: e.target.value })
                 }
               />
-              {state?.errors?.password && (
-                <p className="error ml-1">{state.errors.password}</p>
-              )}
             </motion.div>
+            {state.status === logInStatus.WRONG_CREDENTIALS && !isPending  && !formData.email && (
+                <motion.div variants={itemVariants} className="w-full">
+                  <h2 className="error text-center">
+                    <b>Wrong credentials</b>
+                  </h2>
+                  <p className="error text-center">
+                    Invalid email or password.
+                  </p>
+                </motion.div>
+              )}
             <motion.div variants={itemVariants} className="center mt-2 w-3/4">
               <button
                 disabled={isPending || emptyCredentials}

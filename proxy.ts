@@ -6,7 +6,7 @@ const publicRoutes = ['/', '/signUp', '/logIn', '/about'];
 const schoolPublicRoutes = ['/school', '/school/signUp'];
 const schoolProtectedRoutes = ['/school/platform/students', '/school/platform/generateKey', '/school/platform/subscriptions'];
 
-export default async function middleware(req: NextRequest) {
+export default async function proxy(req: NextRequest) {
     const path = req.nextUrl.pathname;
     const isProtected = path.startsWith('/dictionary');
     const isPublic = publicRoutes.includes(path);

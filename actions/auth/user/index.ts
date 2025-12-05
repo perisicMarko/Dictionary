@@ -95,36 +95,36 @@ export async function authenticateSignUp(state: stateType, formData: FormData) {
 
     const { name, lastName, email } = validatedFields.data;
     const subscription = await GetSubscription(email);
-    if (!subscription)
-        return {
-            errors: null,
-            lastName: "",
-            name: "",
-            email: "",
-            error: '',
-            subscription: 'Sorry, there is no valid subscription for this email address.',
-            success: false
-        };
+    // if (!subscription)
+    //     return {
+    //         errors: null,
+    //         lastName: "",
+    //         name: "",
+    //         email: "",
+    //         error: '',
+    //         subscription: 'Sorry, there is no valid subscription for this email address.',
+    //         success: false
+    //     };
 
-    if (isBefore(subscription.key_expiration_date as Date, new Date()))
-        return {
-            errors: null,
-            lastName: "",
-            name: "",
-            email: "",
-            error: '',
-            subscription: 'Sorry, there is no valid subscription for this email address.',
-            success: false
-        };
+    // if (isBefore(subscription.key_expiration_date as Date, new Date()))
+    //     return {
+    //         errors: null,
+    //         lastName: "",
+    //         name: "",
+    //         email: "",
+    //         error: '',
+    //         subscription: 'Sorry, there is no valid subscription for this email address.',
+    //         success: false
+    //     };
 
 
     let { password } = validatedFields.data;
     password = await bcrypt.hash(password, 10);
 
-    if (!subscription.school_id)
-        throw new Error('School id is null in subsription retrieval.');
+    // if (!subscription.school_id)
+    //     throw new Error('School id is null in subsription retrieval.');
 
-    const status = await InsertUserInfo(name, lastName, email, password, subscription.school_id);
+    const status = await InsertUserInfo(name, lastName, email, password, subscription?.school_id || 1); // hardcoded 1, should be deleted for production
 
     if (!status)
         throw new Error('Error: InsertUserInfor status in authenthicateSignUp');
@@ -171,8 +171,7 @@ export async function getUserByToken(token: Base64URLString) {
 }
 
 type logInStateType = {
-    errors: { email?: string[] | string | undefined; password?: string[] | string | undefined } | undefined,
-    email: string,
+    error: {message: string} | undefined
     status: number,
 } | undefined;
 
@@ -193,62 +192,50 @@ export async function authenticateLogIn(state: logInStateType, formData: FormDat
         password: inputPassword,
     });
 
-    const retObj: logInStateType = {
-        errors: undefined,
-        email: '',
-        status: -1
-    };
-
     if (!validatedFields.success) {
-        retObj.errors = validatedFields.error.flatten().fieldErrors
-        if (!retObj.errors.email)
-            retObj.email = inputEmail;
-
-        return retObj;
-
+        return { error : {message : "Wrong email or password."}, status: logInStatus.WRONG_CREDENTIALS };;
     } else {
         const { email, password } = validatedFields.data as { email: string, password: string };
         const user = await GetUserInfoByEmail(email);
 
-        if (!user) return { errors: { email: '-Wrong email.', password: '' }, email: '', status: logInStatus.WRONG_CREDENTIALS };
+        if (!user) return { error : {message : "Wrong email or password."}, status: logInStatus.WRONG_CREDENTIALS };
 
-        const subscription = await GetSubscription(email);
-        if (!subscription)
-            return {
-                errors: undefined,
-                email: "",
-                status: logInStatus.INVALID_SUBSCRIPTION
-            };
+        // UNCOMMENT IN PRODUCTION
+        //const subscription = await GetSubscription(email);
+        // if (!subscription)
+        //     return {
+        //         error: undefined,
+        //         status: logInStatus.INVALID_SUBSCRIPTION
+        //     };
 
-        if (isBefore(subscription.key_expiration_date as Date, new Date()))
-            return {
-                errors: undefined,
-                email: "",
-                status: logInStatus.INVALID_SUBSCRIPTION
-            };
+        // if (isBefore(subscription.key_expiration_date as Date, new Date()))
+        //     return {
+        //         error: undefined,
+        //         status: logInStatus.INVALID_SUBSCRIPTION
+        //     };
 
 
         const cmpStatus = await bcrypt.compare(password, user?.password);
         if (!cmpStatus)
             return {
-                errors: { password: '-Wrong password.', email: '' },
-                email: email,
+                error: {message: "Wrong email or password."},
                 status: logInStatus.WRONG_CREDENTIALS
             };
 
         if (!user.email_verified)
             return {
-                errors: undefined,
-                email: "",
+                error: undefined,
                 status: logInStatus.UNVERIFIED
             };
 
-        if (!subscription.school_id)
-            throw new Error('School id is null in subsription retrieval.');
 
-        if (user.school_id != subscription.school_id) {
-            await ChangeUsersSchool(user.id, subscription.school_id);
-        }
+        // should be uncommented in production
+        // if (!subscription.school_id)
+        //     throw new Error('School id is null in subsription retrieval.');
+
+        // if (user.school_id != subscription.school_id) {
+        //     await ChangeUsersSchool(user.id, subscription.school_id);
+        // }
 
         const refreshToken = await encryptRefresh({ email: user.email, userId: user.id })
 
@@ -258,10 +245,10 @@ export async function authenticateLogIn(state: logInStateType, formData: FormDat
                 secure: true,
                 path: '/',
                 sameSite: 'lax',
-                maxAge: 60 * 60 * 24 * 7 // 7 dana
+                maxAge: 60 * 60 * 24 * 7 // 7 days
             });
 
-        return { errors: undefined, email: '', status: logInStatus.SUCCESS };
+        return { error: undefined, status: logInStatus.SUCCESS };
     }
 }
 
