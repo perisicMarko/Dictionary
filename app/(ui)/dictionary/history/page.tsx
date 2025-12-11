@@ -48,7 +48,7 @@ export default function History() {
             basically this page just stores learned words, like personal history.
             <br />
             <br />
-            In menu, there are a delete icon for permanent word deletion and
+            In the menu, there are a delete icon for permanent word deletion and
             &quot;R&quot; for relearning the word.
             <br />
             From this page, and this page only you can delete a note permanently or

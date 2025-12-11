@@ -112,13 +112,13 @@ export function NavBar({shouldCollapse, resetCollapseFromParent} : {shouldCollap
           initial="hidden"
           animate="show"
           variants={containerVariants}
-          className="fixed top-0 z-50 bg-main w-full min-h-[50px] gap-2 transition-all sm:hidden"
+          className="fixed top-0 z-50 bg-main w-full min-h-[50px] gap-2 transition-all sm:hidden py-2"
         >
           <motion.div
             initial="hidden"
             animate="show"
             variants={itemVariants}
-            className="w-full flex justify-end items-center pr-3 my-2"
+            className={"w-full flex justify-end items-center pr-3 py-2 " + (mobileMenuToggle && " mb-2")}
           >
             <motion.span
               initial="hidden"
@@ -184,12 +184,6 @@ export function NavBar({shouldCollapse, resetCollapseFromParent} : {shouldCollap
                   </button>
                 </div>
               </motion.div>
-              <motion.hr
-                initial="hidden"
-                animate="show"
-                variants={itemVariants}
-                className="border-1 border-second w-full"
-              />
             </>
           )}
         </motion.div>
