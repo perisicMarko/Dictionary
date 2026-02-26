@@ -41,7 +41,7 @@ export default function History() {
 
   return (
     <>
-      <div className="mt-15 w-full center-vertically">
+      <div className="mt-12 w-full center-vertically">
         <SearchBar updateSearch={updateSearch} placeholder={'Search for notes here...'} sortBy={false} changeSortBy={() => {}}>
           <motion.p variants={itemVariants} className="pt-3">
             This page should help you review the words you have learned. So

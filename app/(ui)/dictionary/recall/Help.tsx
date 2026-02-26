@@ -21,7 +21,7 @@ export default function RecallNoteHelp() {
             y: 0,
           },
         }}
-        className="center box-layout mt-15 !py-0 !px-3"
+        className="center box-layout mt-17 !py-0 !px-3"
         onClick={() => {
           setHelp(!help);
         }}
