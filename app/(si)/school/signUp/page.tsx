@@ -35,7 +35,7 @@ export default function SignUp() {
           variants={containerVariants}
           className="mt-10 box-layout"
         >
-          <motion.p variants={itemVariants} className="text-white p-1">
+          <motion.p variants={itemVariants} className="text-text-main p-1">
             Sorry, we are not partner with you at the momment. Please contact
             us!
           </motion.p>
@@ -49,7 +49,7 @@ export default function SignUp() {
       >
         <form className="form" action={action}>
           <motion.div variants={itemVariants} className="mt-3">
-            <label htmlFor="name" className="text-white">
+            <label htmlFor="name" className="text-text-main">
               School name:
             </label>
             <input
@@ -73,7 +73,7 @@ export default function SignUp() {
             </ul>
           </motion.div>
           <motion.div variants={itemVariants} className="mt-3">
-            <label htmlFor="email" className="text-white">
+            <label htmlFor="email" className="text-text-main">
               Email:{" "}
             </label>
             <input
@@ -98,7 +98,7 @@ export default function SignUp() {
             </ul>
           </motion.div>
           <motion.div variants={itemVariants} className="mt-3">
-            <label htmlFor="password" className="text-white">
+            <label htmlFor="password" className="text-text-main">
               Password:{" "}
             </label>
             <input className="form-input" type="password" name="password" />
@@ -117,7 +117,7 @@ export default function SignUp() {
             </ul>
           </motion.div>
           <motion.div variants={itemVariants} className="mt-3">
-            <label htmlFor="confirmPassword" className="text-white">
+            <label htmlFor="confirmPassword" className="text-text-main">
               Confirm password:{" "}
             </label>
             <input

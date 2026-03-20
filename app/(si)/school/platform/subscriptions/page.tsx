@@ -80,7 +80,7 @@ export default function Page() {
           <KeyIcon color="white" />
           <input
             placeholder="Search your subscriptions here..."
-            className="text-white outline-0 w-full h-full pl-3"
+            className="text-text-main outline-0 w-full h-full pl-3"
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
@@ -89,10 +89,10 @@ export default function Page() {
           initial="hidden"
           animate="show"
           variants={containerVariants}
-          className="px-3 rounded-t-none text-white center justify-between w-full"
+          className="px-3 rounded-t-none text-text-main center justify-between w-full"
         >
           <select
-            className="w-full appearance-none sm:hover:text-second cursor-pointer !py-2 rounded-3xl h-full"
+            className="w-full appearance-none sm:hover:text-text-second cursor-pointer !py-2 rounded-3xl h-full"
             defaultValue={-1}
             onChange={(e) => {
               setFilterBy(Number(e.target.value));

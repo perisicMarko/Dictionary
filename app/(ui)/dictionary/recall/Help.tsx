@@ -50,7 +50,7 @@ export default function RecallNoteHelp() {
         <h2 className="text-box mt-3 px-1">
           <b>Here is where you recall your words</b>
         </h2>
-        <motion.p variants={itemVariants} className="mt-3 text-white">
+        <motion.p variants={itemVariants} className="mt-3 text-text-main">
           Click on the menu icon to open the menu. In menu, there are edit and
           delete icons(for deleting note from learning system, not from whole dictionary), also &quot;N&quot; for showing word notes and
           &quot;G&quot; for grading UI, the grading UI is initially selected.
@@ -96,7 +96,7 @@ export default function RecallNoteHelp() {
             -open{" "}
             <Link
               href="https://mail.google.com/mail"
-              className="text-second hover:underline"
+              className="text-text-second hover:underline"
               target="blank"
             >
               mail

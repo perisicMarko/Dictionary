@@ -45,7 +45,7 @@ export default function NavBar() {
         <div className="flex justify-start items-center ml-3 md:ml-7">
           <button
             onClick={() => handleLogOut()}
-            className="hover:scale-115 scale-105 transition-all cursor-pointer text-white hover:text-second"
+            className="hover:scale-115 scale-105 transition-all cursor-pointer text-text-main hover:text-text-second"
           >
             <LogOut width={20} height={20} />
           </button>
@@ -54,7 +54,7 @@ export default function NavBar() {
           <Link
             href="/school/platform/generateKey"
             className={`nav-link ${
-              path === "/school/platform/generateKey" ? "text-second" : "text-white"
+              path === "/school/platform/generateKey" ? "text-text-second" : "text-text-main"
             } py-1 px-1 sm:px-3 navigationBtn`}
           >
             Generate key
@@ -62,7 +62,7 @@ export default function NavBar() {
           <Link
             href="/school/platform/students"
             className={`nav-link ${
-              path === "/school/platform/students" ? "text-second" : "text-white"
+              path === "/school/platform/students" ? "text-text-second" : "text-text-main"
             } py-1 px-1 sm:px-3 navigationBtn`}
           >
             Students
@@ -70,7 +70,7 @@ export default function NavBar() {
           <Link
             href="/school/platform/subscriptions"
             className={`nav-link ${
-              path === "/school/platform/subscriptions" ? "text-second" : "text-white"
+              path === "/school/platform/subscriptions" ? "text-text-second" : "text-text-main"
             } py-1 px-1 sm:px-3 navigationBtn`}
           >
             Subscriptions

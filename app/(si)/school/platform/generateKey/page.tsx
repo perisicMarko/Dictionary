@@ -47,7 +47,7 @@ export default function Dashboard() {
             <input
               name="email"
               type="text"
-              className="w-full bg-white text-main rounded-3xl block p-2"
+              className="w-full bg-white text-text-main rounded-3xl block p-2"
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
@@ -64,7 +64,7 @@ export default function Dashboard() {
             <input
               name="courseEnd"
               type="date"
-              className="text-white block w-full appearance-none outline-2 !outline-white rounded-3xl p-1"
+              className="text-text-main block w-full appearance-none outline-2 !outline-white rounded-3xl p-1"
               onChange={(e) =>
                 setFormData({ ...formData, date: e.target.value })
               }
@@ -80,7 +80,7 @@ export default function Dashboard() {
             <label htmlFor="language">Key for:</label>
             <select
               name="language"
-              className="text-white outline-none appearance-none rounded-3xl border-2 border-white p-1 w-full hover:text-second"
+              className="text-text-main outline-none appearance-none rounded-3xl border-2 border-white p-1 w-full hover:text-text-second"
               defaultValue={-1}
               onChange={(e) =>
                 setFormData({ ...formData, language: e.target.value })

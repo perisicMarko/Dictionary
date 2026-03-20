@@ -104,6 +104,8 @@ export type TNoteApp = {
 export type TColorsTheme = {
     main: string;
     second: string;
+    text_main: string;
+    text_second: string;
 };
 
 

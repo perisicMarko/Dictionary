@@ -10,7 +10,7 @@ export default function NoValidToken(){
         variants={containerVariants}
         className="box-layout mt-15"
       >
-        <motion.p className="text-white text-center">
+        <motion.p className="text-text-main text-center">
           <b>Sorry, no valid token.</b>
         </motion.p>
       </motion.div>

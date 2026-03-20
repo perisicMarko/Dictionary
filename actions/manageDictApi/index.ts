@@ -18,25 +18,25 @@ export async function fetchApiNotes(word : string){
           return retVal;
         }
 
-        // if word is not founded locally, find it through apis
+        // if word is not founded in database, find it through on of the api
         const response = await fetch(
         "https://api.dictionaryapi.dev/api/v2/entries/en/" + word
         );
         if (response.ok) {
-            const result = (await response.json())[0]; // the data that api returns is one object in an array, hence [0]
-            if (result?.word === undefined)
+            const rawApiData = (await response.json())[0]; // the data that api returns is one object in an array, hence [0]
+            if (rawApiData?.word === undefined)
             return { error: 'Hm, that word has no definitions.' };
             
-            const tmp = filterApiNotes(result);
-            if(!tmp.audio){
-                const API_KEY = process.env.API_KEY; // Replace with your API key
+            const notes = reformatApiNotes(rawApiData);
+            if(!notes.audio){
+                const API_KEY = process.env.API_KEY; 
 
                 const pom = await fetch(`https://api.voicerss.org/?key=${API_KEY}&hl=en-gb&v=Alice&src=${word.trim().toLowerCase()}`);
 
-                tmp.audio = pom.url;
-                return tmp;
+                notes.audio = pom.url;
+                return notes;
             }else
-                return tmp;
+                return notes;
         }
     }catch(e){
         if(e instanceof Error)
@@ -47,7 +47,7 @@ export async function fetchApiNotes(word : string){
 
 type GDefinition = { definition: string; example?: string; synonyms?: string[]; antonyms?: string[] };
 
-function filterApiNotes(data: TGeneratedNote) {
+function reformatApiNotes(data: TGeneratedNote) {
   const tmpSound = data.phonetics.filter((p: TGPhonetic) => p.audio != undefined && p.audio != '')[0]?.audio;
   const retVal: TWordApp = {
     word: data.word,

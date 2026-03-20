@@ -64,17 +64,17 @@ export default function SubscriptionComponent({
           <div className="bg-white/80 center-vertically pointer-events-auto z-10 left-2 gap-1 px-2 py-1 rounded-2xl">
             <Edit
               onClick={() => setEditSubscription(true)}
-              className="text-second hover:text-main cursor-pointer"
+              className="text-text-second hover:text-text-main cursor-pointer"
             />
           </div>
         )}
       </div>
-      <div className="text-white">
+      <div className="text-text-main">
         {editSubscription ? (
           <>
-            <h2 className="text-white mt-3">Edit key email address:</h2>
+            <h2 className="text-text-main mt-3">Edit key email address:</h2>
             <input
-              className="w-full text-white rounded-3xl border-2 py-1 px-2 !my-2 border-white h-[38px]"
+              className="w-full text-text-main rounded-3xl border-2 py-1 px-2 !my-2 border-white h-[38px]"
               value={newSubscriptionEmail}
               onChange={(e) => setNewSubscriptionEmail(e.target.value)}
             ></input>

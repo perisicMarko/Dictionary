@@ -77,7 +77,7 @@ export default function Drawer({
               ) : (
                 <>
                   <motion.span
-                    className="text-white cursor-pointer hover:bg-second rounded-2xl py-1 px-2"
+                    className="text-text-main cursor-pointer hover:bg-second rounded-2xl py-1 px-2"
                     variants={itemVariants}
                     onClick={async () => {
                       setIsDeleting(true);
@@ -88,7 +88,7 @@ export default function Drawer({
                     Yes
                   </motion.span>
                   <motion.span
-                    className="text-white cursor-pointer hover:bg-second rounded-2xl py-1 px-2"
+                    className="text-text-main cursor-pointer hover:bg-second rounded-2xl py-1 px-2"
                     variants={itemVariants}
                     onClick={() => {
                       setConfirmDelete(false);
@@ -121,14 +121,14 @@ export default function Drawer({
             <>
               <motion.span
                 variants={itemVariants}
-                className="text-white mt-5 mb-2"
+                className="text-text-main mt-5 mb-2"
               >
                 Add note
               </motion.span>
               {addFormShow === false ? (
                 <motion.span
                   variants={itemVariants}
-                  className="text-white xl:hover:text-second cursor-pointer transition-all duration-200"
+                  className="text-text-main xl:hover:text-text-second cursor-pointer transition-all duration-200"
                   title="Add word to drawer"
                 >
                   <Plus
@@ -154,7 +154,7 @@ export default function Drawer({
 
         <span
           title={openedDrawerId === -1 ? "Open drawer" : "Close drawer"}
-          className="text-white hover:text-second transition-all duration-200"
+          className="text-text-main hover:text-text-second transition-all duration-200"
         >
           {openedDrawerId === -1 ? (
             <ChevronDown

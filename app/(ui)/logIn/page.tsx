@@ -69,7 +69,7 @@ export default function LogIn() {
             action={action}
           >
             <motion.div variants={itemVariants} className="w-full">
-              <label htmlFor="email" className="text-white">
+              <label htmlFor="email" className="text-text-main">
                 Email:{" "}
               </label>
               <input
@@ -83,7 +83,7 @@ export default function LogIn() {
               />
             </motion.div>
             <motion.div variants={itemVariants} className="w-full">
-              <label htmlFor="password" className="text-white">
+              <label htmlFor="password" className="text-text-main">
                 Password:{" "}
               </label>
               <input
@@ -124,7 +124,7 @@ export default function LogIn() {
               className="center my-1"
             >
               <Link
-                className="flex items-start justify-end text-white hover:scale-105 hover:underline text-[14px] sm:text-[18px] transition-all"
+                className="flex items-start justify-end text-text-main hover:scale-105 hover:underline text-[14px] sm:text-[18px] transition-all"
                 href="/forgotPassword"
               >
                 <u>Forgot password?</u>
@@ -161,9 +161,9 @@ export default function LogIn() {
           <br />
           <Link
             href="https://mail.google.com/"
-            className="hover:scale-115 text-white transition-all"
+            className="hover:scale-115 text-text-main transition-all"
           >
-            <u className="text-second">Gmail link.</u>
+            <u className="text-text-second">Gmail link.</u>
           </Link>
         </motion.div>
       )}

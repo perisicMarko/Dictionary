@@ -54,7 +54,6 @@ export async function decryptRefresh(token: string) {
   }
 }
 
-// 1 access token valid, 0 unauthorized, 2 no valid access(valid refresh) -> new access token needed
 export const STATUS = {
   UNAUTHORIZED: 0,
   VALID_ACCESS: 1,

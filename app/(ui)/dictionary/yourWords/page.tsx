@@ -52,7 +52,7 @@ export default function YourWords() {
           initial="hidden"
           animate="show"
           variants={containerVariants}
-          className="cursor-pointer fixed z-100 bottom-5 sm:right-4 right-0.5 rounded-2xl bg-white/80 p-3 text-main transition-all duration-200 hover:text-second"
+          className="cursor-pointer fixed z-100 bottom-5 sm:right-4 right-0.5 rounded-2xl bg-white/80 p-3 text-text-main transition-all duration-200 hover:text-text-second"
           onClick={() => {
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
@@ -67,7 +67,7 @@ export default function YourWords() {
         className="box-layout !p-0 grid grid-cols-2 relative border-4 sm:border-6 mt-17 z-0 border-main"
       >
         <div
-          className={`text-white rounded-l-3xl w-full h-full p-2 sm:p-3 cursor-pointer center z-10 
+          className={`text-text-main rounded-l-3xl w-full h-full p-2 sm:p-3 cursor-pointer center z-10 
             ${showSwitch && " font-bold"}`}
           onClick={() => changeLayout("true")}
           title="Show drawers"
@@ -84,7 +84,7 @@ export default function YourWords() {
           className="absolute bg-second z-5 w-1/2 h-full rounded-3xl right-0"
         ></motion.div>
         <div
-          className={`text-white rounded-r-3xl w-full h-full p-2 sm:p-3 cursor-pointer center z-10 
+          className={`text-text-main rounded-r-3xl w-full h-full p-2 sm:p-3 cursor-pointer center z-10 
             ${!showSwitch && " font-bold"}`}
           onClick={() => changeLayout("false")}
           title="Show notes"

@@ -22,13 +22,13 @@ export default function ForgotPassword() {
           variants={itemVariants}
           className="box-layout absolute top-auto left-auto h-[200px] sm:h-[250px] center-vertically z-20"
         >
-          <span className="text-center text-white">
+          <span className="text-center text-text-main">
             Email with instructions has been sent, please check your email<br/>
-            <b className="text-second">(it may ends up in spam).</b>
+            <b className="text-text-second">(it may ends up in spam).</b>
           </span>
           <Link
             href="https://mail.google.com/"
-            className="hover:scale-115 mt-3 hover:underline text-second transition-all"
+            className="hover:scale-115 mt-3 hover:underline text-text-second transition-all"
           >
             Link to Gmail.
           </Link>
@@ -45,7 +45,7 @@ export default function ForgotPassword() {
         </motion.div>
       )}
       <motion.span className="my-2 hover:underline hover:scale-105 transition-all">
-        <Link href="/" className="text-white">
+        <Link href="/" className="text-text-main">
           Back to home page
         </Link>
       </motion.span>

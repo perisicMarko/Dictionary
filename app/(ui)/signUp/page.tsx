@@ -28,7 +28,7 @@ export default function SignUp() {
           variants={containerVariants}
           className="box-layout mt-15 sm:mt-20"
         >
-          <motion.p variants={itemVariants} className="text-white text-center">
+          <motion.p variants={itemVariants} className="text-text-main text-center">
             <b>{state?.subscription}</b>
           </motion.p>
         </motion.div>
@@ -51,7 +51,7 @@ export default function SignUp() {
           <div className="center mt-5">
             <form className="form w-full px-3 pb-5" action={action}>
               <motion.div variants={itemVariants} className="mt-3">
-                <label htmlFor="name" className="text-white">
+                <label htmlFor="name" className="text-text-main">
                   Name:{" "}
                 </label>
                 <input
@@ -75,7 +75,7 @@ export default function SignUp() {
                 </ul>
               </motion.div>
               <motion.div variants={itemVariants} className="mt-3">
-                <label htmlFor="lastName" className="text-white">
+                <label htmlFor="lastName" className="text-text-main">
                   Last name:{" "}
                 </label>
                 <input
@@ -99,7 +99,7 @@ export default function SignUp() {
                 </ul>
               </motion.div>
               <motion.div variants={itemVariants} className="mt-3">
-                <label htmlFor="email" className="text-white">
+                <label htmlFor="email" className="text-text-main">
                   Email:{" "}
                 </label>
                 <input
@@ -124,7 +124,7 @@ export default function SignUp() {
                 </ul>
               </motion.div>
               <motion.div variants={itemVariants} className="mt-3">
-                <label htmlFor="password" className="text-white">
+                <label htmlFor="password" className="text-text-main">
                   Password:{" "}
                 </label>
                 <input className="form-input" type="password" name="password" />
@@ -143,7 +143,7 @@ export default function SignUp() {
                 </ul>
               </motion.div>
               <motion.div variants={itemVariants} className="mt-3">
-                <label htmlFor="confirmPassword" className="text-white">
+                <label htmlFor="confirmPassword" className="text-text-main">
                   Confirm password:{" "}
                 </label>
                 <input
@@ -175,7 +175,7 @@ export default function SignUp() {
                   variants={itemVariants}
                   className="inline-block hover:scale-105 ml-3 transition-all"
                 >
-                  <Link href="logIn" className="text-white">
+                  <Link href="logIn" className="text-text-main">
                     <i>
                       <u>Or log in here</u>
                     </i>

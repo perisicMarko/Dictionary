@@ -63,7 +63,7 @@ export default function AddDrawer({
         <>
           <motion.span
             variants={itemVariants}
-            className="absolute text-white top-0 right-3 mr-4 mt-2 scale-105 hover:scale-115 cursor-pointer transition-all"
+            className="absolute text-text-main top-0 right-3 mr-4 mt-2 scale-105 hover:scale-115 cursor-pointer transition-all"
             onClick={() => setAddDrawer(false)}
           >
             <b>x</b>
@@ -88,7 +88,7 @@ export default function AddDrawer({
               ref={drawerAddRef}
               placeholder="Name you drawer"
               name="title"
-              className="text-white p-1 outline-none selection:outline-0 text-center"
+              className="text-text-main p-1 outline-none selection:outline-0 text-center"
               value={drawerName}
               onChange={(e) => setDrawerName(e.target.value)}
             />
@@ -104,12 +104,12 @@ export default function AddDrawer({
         </>
       ) : (
         <>
-          <motion.span variants={itemVariants} className="text-white">
+          <motion.span variants={itemVariants} className="text-text-main">
             Add drawer
           </motion.span>
           <motion.span
             variants={itemVariants}
-            className="hover:text-second cursor-pointer text-white transition-all duration-200"
+            className="hover:text-text-second cursor-pointer text-text-main transition-all duration-200"
             title="Add drawer"
           >
             <Plus width={30} height={30} onClick={() => setAddDrawer(true)} />

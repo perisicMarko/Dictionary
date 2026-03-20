@@ -64,7 +64,7 @@ export default function UpdateForm({
         <input
           ref={nameRef}
           name="drawerName"
-          className={`transition-opacity text-start w-full text-white mt-5 inline-block outline-none active:outline-none ${
+          className={`transition-opacity text-start w-full text-text-main mt-5 inline-block outline-none active:outline-none ${
             drawer?.name ? "opacity-100" : "opacity-0"
           }`}
           value={drawerNameValue}
@@ -73,7 +73,7 @@ export default function UpdateForm({
           }}
           disabled={updateFormShow === false}
         />
-        <span title='Edit drawer name' className="text-white hover:text-second transition-all duration-200">
+        <span title='Edit drawer name' className="text-text-main hover:text-text-second transition-all duration-200">
             <Edit
               width={20}
               height={20}
@@ -88,7 +88,7 @@ export default function UpdateForm({
       {updateFormShow && (
         <button
           type='submit'
-          className={`w-full bg-second text-white rounded-3xl block p-2 cursor-pointer center xl:hover:scale-105 xl:active:scale-95 transition-all
+          className={`w-full bg-second text-text-main rounded-3xl block p-2 cursor-pointer center xl:hover:scale-105 xl:active:scale-95 transition-all
             ${(stateDrawerName === "" || stateDrawerName === drawer?.name) ? " opacity-50" : ""}`}
           disabled={stateDrawerName === "" || stateDrawerName === drawer?.name}
           onClick={() => drawer.name = stateDrawerName}

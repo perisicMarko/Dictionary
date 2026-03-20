@@ -10,6 +10,37 @@ type createState  = {
     accessToken: string | undefined;
 } | undefined;
 
+
+// async function processDrawerAction(aToken : string, sessionStatus : number, drawerAction : Function){
+//     if(STATUS.UNAUTHORIZED === sessionStatus){
+//         await logOutUser();
+
+//         return {success: false, accessToken: ''};
+//     }else if(STATUS.ACCESS_NEEDED ===  sessionStatus){
+//         const refreshToken = (await cookies()).get('refreshToken')?.value;
+//         const payload = await decryptRefresh(refreshToken || '');
+//         const {userId} = payload as TokenPayload;
+//         const res = await drawerAction();
+
+//         const accessToken = await encryptAccess(payload);
+
+//         if(res)
+//             return {success: true, accessToken: accessToken};
+        
+//         return {success: false, accessToken: ''};
+//     }else if(STATUS.VALID_ACCESS === sessionStatus){    
+//         const refreshToken = (await cookies()).get('refreshToken')?.value;
+//         const payload = await decryptRefresh(refreshToken || '');
+//         const {userId} = payload as TokenPayload;
+//         const res = await drawerAction();
+
+//         if(res)
+//             return {success: true, accessToken: aToken};
+        
+//         return {success: false, accessToken: ''};
+//     }
+// }
+
 export async function createDrawer(state : createState, formData : FormData){
     const drawerTitle = formData.get('title')?.toString() as string;
     const aToken = formData.get('accessToken')?.toString() || '';

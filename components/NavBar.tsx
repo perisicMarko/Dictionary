@@ -82,7 +82,7 @@ export function NavBar({shouldCollapse, resetCollapseFromParent} : {shouldCollap
           <div className="flex justify-start items-center ml-3 md:ml-7">
             <button
               type="submit"
-              className="hover:scale-115 scale-105 duration-300 cursor-pointer text-white hover:text-second transition-all"
+              className="hover:scale-115 scale-105 duration-300 cursor-pointer text-text-main hover:text-text-second transition-all"
               onClick={() => handleLogOut()}
             >
               <LogOut width={20} height={20} />
@@ -95,7 +95,7 @@ export function NavBar({shouldCollapse, resetCollapseFromParent} : {shouldCollap
                   key={route.path}
                   href={route.path}
                   className={`navigation-btn ${
-                    path === route.path ? "text-second" : "text-white"
+                    path === route.path ? "text-text-second" : "text-text-main"
                   } py-1 px-1 sm:px-3`}
                 >
                   {route.label}
@@ -164,8 +164,8 @@ export function NavBar({shouldCollapse, resetCollapseFromParent} : {shouldCollap
                         href={route.path}
                         className={`navigation-btn ${
                           path === route.path
-                            ? "text-second font-bold"
-                            : "text-white"
+                            ? "text-text-second font-bold"
+                            : "text-text-main"
                         } py-1 px-3`}
                       >
                         {route.label}
@@ -177,7 +177,7 @@ export function NavBar({shouldCollapse, resetCollapseFromParent} : {shouldCollap
                 <div className="mt-7">
                   <button
                     type="submit"
-                    className="hover:scale-115 scale-105 transition-all duration-300 cursor-pointer text-white hover:text-second px-3"
+                    className="scale-105 transition-all duration-300 cursor-pointer text-text-main hover:text-text-second px-3"
                     onClick={() => handleLogOut()}
                   >
                     <LogOut width={20} height={20} />

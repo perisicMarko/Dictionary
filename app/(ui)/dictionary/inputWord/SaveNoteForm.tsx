@@ -79,7 +79,7 @@ export default function SaveNoteForm({
   };
 
   let buttonStyle =
-    "center bg-second text-white sm:hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block transition-all";
+    "center bg-second text-text-main sm:hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block transition-all";
   if (!isErrorNote(note) && note) buttonStyle += " col-span-1";
   else buttonStyle += " col-span-2";
 
@@ -130,7 +130,7 @@ export default function SaveNoteForm({
           value={word}
           ref={wordInputRef}
           key="userWord"
-          className="rounded-3xl text-center text-main bg-white w-full h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] p-2 mt-5"
+          className="rounded-3xl text-center text-text-main w-full h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] p-2 mt-5"
           type="text"
           name="word"
           onChange={(e) => {
@@ -164,7 +164,7 @@ export default function SaveNoteForm({
               <textarea
                 rows={1}
                 placeholder="Type your notes here..."
-                className="p-2 sm:p-4 rounded-2xl w-full mt-2 text-main bg-white resize-none h-fit"
+                className="p-2 sm:p-4 rounded-2xl w-full mt-2 text-text-main bg-white resize-none h-fit"
                 name="userNotes"
                 key="userNotes"
                 onInput={(e) => {
@@ -230,7 +230,7 @@ export default function SaveNoteForm({
             {generated && (
               <motion.button
                 type="submit"
-                className={`bg-second center text-white sm:hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block col-span-1 transition-all ${
+                className={`bg-second center text-text-main sm:hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block col-span-1 transition-all ${
                   isWordAdded ? "opacity-50" : ""
                 }`}
                 hidden={
@@ -251,7 +251,7 @@ export default function SaveNoteForm({
             )}
           </div>
           <span
-            className="hover:underline hover:scale-105 cursor-pointer text-white mt-3 transition-all"
+            className="hover:underline hover:scale-105 cursor-pointer text-text-main mt-3 transition-all"
             onClick={() => toggleHelp()}
           >
             Need any help?

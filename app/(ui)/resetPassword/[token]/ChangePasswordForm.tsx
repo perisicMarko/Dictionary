@@ -41,7 +41,7 @@ export default function ChangePasswordForm({
           >
             <input name="userId" defaultValue={user?.id} hidden />
             <div>
-              <label htmlFor="password" className="text-white">
+              <label htmlFor="password" className="text-text-main">
                 Enter new password:
               </label>
               <input type="password" name="password" className="form-input" 

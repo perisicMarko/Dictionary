@@ -77,7 +77,7 @@ export default function HistoryNoteMenu({
           }}
           title="Delete note permanently"
           className={
-            "hover:text-main text-second cursor-pointer transition-all w-full " +
+            "hover:text-text-main text-text-second cursor-pointer transition-all w-full " +
             (actionActive.delete ? " animate-spin" : "")
           }
         >
@@ -93,7 +93,7 @@ export default function HistoryNoteMenu({
         <button
           type="submit"
           className={
-            "text-center text-xs text-second cursor-pointer hover:text-main transition-all w-full " +
+            "text-center text-xs text-text-second cursor-pointer hover:text-text-main transition-all w-full " +
             (actionActive.relearn ? " animate-spin" : "")
           }
           onClick={(e) => {

@@ -51,7 +51,7 @@ export function GradeForm({
         action={(e) => onSubmitGradeHandle(e)}
       >
         <input type="text" name="noteId" defaultValue={Number(noteId)} hidden />
-        <label htmlFor="recall" className="text-white text-[16px] sm:text-xl">
+        <label htmlFor="recall" className="text-text-main text-[16px] sm:text-xl">
           Remember this word?
         </label>
         <div className="center relative w-full">

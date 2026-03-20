@@ -23,7 +23,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // fetch custom 2 colors for school from users school
+  // fetch custom colors for school from users school
   const theme = (await getThemeColors()) as TColorsTheme;
 
   return (
@@ -33,6 +33,8 @@ export default async function RootLayout({
       style={{
         ["--main-color" as string]: theme.main,
         ["--second-color" as string]: theme.second,
+        ["--text-main-color" as string]: theme.text_main,
+        ["--text-second-color" as string]: theme.text_second,
       }}
     >
       <body

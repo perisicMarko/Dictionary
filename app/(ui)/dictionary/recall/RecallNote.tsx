@@ -78,7 +78,7 @@ export default function RecallNote({
           />
         )}
       </div>
-      <h2 className="select-none text-white text-start w-full" title="Word">
+      <h2 className="select-none text-text-main text-start w-full" title="Word">
         <b>{note.dictionary_words.word}</b>
       </h2>
       {showNotes ? (
@@ -95,11 +95,11 @@ export default function RecallNote({
             }}
             className="p-1 h-[300px] xl:h-[400px] overflow-auto"
           >
-            <h2 className="mt-2 text-second">
+            <h2 className="my-2 text-text-main">
               <b>Your notes:</b>
             </h2>
             <p
-              className={`white-spaces text-second ${
+              className={`white-spaces text-text-second ${
                 note.user_notes === "" ? "opacity-60 text-center" : ""
               }`}
             >
@@ -107,7 +107,7 @@ export default function RecallNote({
                 ? note.user_notes
                 : "No your notes for this word."}
             </p>
-            <h2 className="mt-2 text-second">
+            <h2 className="mt-2 text-text-main">
               <b>Generated notes:</b>
             </h2>
             <DisplayNotes

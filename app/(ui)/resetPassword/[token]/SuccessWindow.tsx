@@ -18,7 +18,7 @@ export default function SuccessWindow(){
               </motion.p>
               <Link
                 href="/logIn"
-                className="text-second mt-3 hover:underline hover:scale-115 transition-all"
+                className="text-text-second mt-3 hover:underline hover:scale-115 transition-all"
               >
                 <u>
                   <i>Click to log in.</i>

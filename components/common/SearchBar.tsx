@@ -62,7 +62,7 @@ export default function SearchBar({
           }`}
         >
           <span
-            className="text-white md:ml-4 ml-2 cursor-pointer hover:scale-115 rounded-full text-2xl transition-all"
+            className="text-text-main md:ml-4 ml-2 cursor-pointer hover:scale-115 rounded-full text-2xl transition-all"
             title="Click for help"
             onClick={() => setHelp(!help)}
           >
@@ -76,7 +76,7 @@ export default function SearchBar({
             }}
           />
           <input
-            className="text-white inline-block outline-0 focus:outline-none rounded-r-4xl"
+            className="text-text-main inline-block outline-0 focus:outline-none rounded-r-4xl"
             ref={searchBarRef}
             type="text"
             name="search"
@@ -91,10 +91,10 @@ export default function SearchBar({
             initial="hidden"
             animate="show"
             variants={containerVariants}
-            className="py-0 !px-4 !rounded-t-none text-white center justify-between"
+            className="py-0 !px-4 !rounded-t-none text-text-main center justify-between"
           >
             <select
-              className="w-full appearance-none sm:hover:text-second cursor-pointer text-white !py-2 !px-1 rounded-3xl h-full"
+              className="w-full appearance-none sm:hover:text-text-second cursor-pointer text-text-main !py-2 !px-1 rounded-3xl h-full"
               defaultValue={-1}
               onChange={(e) => changeSortBy(Number(e.target.value))}
             >
@@ -124,7 +124,7 @@ export default function SearchBar({
           initial="hidden"
           animate="show"
           variants={containerVariants}
-          className="box-layout mt-5 text-white relative"
+          className="box-layout mt-5 text-text-main relative"
         >
           <div className="collapse-window">
             <span className="x-btn mr-4 py-1" onClick={() => setHelp(!help)}>

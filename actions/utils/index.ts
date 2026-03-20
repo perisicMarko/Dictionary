@@ -6,8 +6,10 @@ import { GetSchoolByEmail } from '../manageSchools/db';
 
 
 const DEFAULT_THEME_COLORS = {
-    main: '222 33% 17%',
-    second: '217 92% 67%'
+  "main": "222 20% 10%",
+  "second": "222 25% 32%",
+  "text_main": "0 0% 92%",
+  "text_second": "222 15% 65%"
 };
 
 export default async function getThemeColors(){

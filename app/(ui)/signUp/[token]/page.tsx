@@ -73,7 +73,7 @@ export default function Page() {
                 </b>
                 <Link
                   href="/logIn"
-                  className="hover:scale-115 hover:underline text-second transition-all"
+                  className="hover:scale-115 hover:underline text-text-second transition-all"
                 >
                   log in page link
                 </Link>

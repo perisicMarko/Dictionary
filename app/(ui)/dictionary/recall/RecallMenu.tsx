@@ -57,7 +57,7 @@ export default function RecallNoteMenu({
         <input type="text" name="noteId" defaultValue={Number(noteId)} hidden />
         <button
           type="submit"
-          className="text-second"
+          className="text-text-second"
           onClick={(e) => {
             e.stopPropagation();
             setIsRemoving(true);
@@ -66,7 +66,7 @@ export default function RecallNoteMenu({
         >
           <Trash2
             className={
-              "hover:text-main cursor-pointer transition-all " +
+              "hover:text-text-main cursor-pointer transition-all " +
               (isRemoving ? "animate-spin" : "")
             }
           />
@@ -76,16 +76,16 @@ export default function RecallNoteMenu({
         <Link
           href={"/dictionary/recall/edit/" + noteId}
           onClick={() => toggleMenu()}
-          className="text-second"
+          className="text-text-second"
           title="Edit note"
         >
-          <NotebookPen className="hover:text-main cursor-pointer transition-all" />
+          <NotebookPen className="hover:text-text-main cursor-pointer transition-all" />
         </Link>
       </motion.span>
       {!showNotes ? ( // if notes are not displayed, put N in menu, otherwise put G in menu, good for ux
         <motion.span
           variants={itemVariants}
-          className="block text-second hover:text-main cursor-pointer text-center transition-color w-full pb-1"
+          className="block text-text-second hover:text-text-main cursor-pointer text-center transition-color w-full pb-1"
           onClick={() => {
             changeQuality(6);
             toggleMenu();
@@ -97,7 +97,7 @@ export default function RecallNoteMenu({
       ) : (
         <motion.span
           variants={itemVariants}
-          className="block hover:text-main text-second cursor-pointer text-center transition-color w-full pb-1"
+          className="block hover:text-text-main text-text-second cursor-pointer text-center transition-color w-full pb-1"
           onClick={() => {
             changeQuality(-1);
             toggleMenu();
