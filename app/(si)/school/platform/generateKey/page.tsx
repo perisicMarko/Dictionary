@@ -47,7 +47,7 @@ export default function Dashboard() {
             <input
               name="email"
               type="text"
-              className="w-full bg-white text-text-main rounded-3xl block p-2"
+              className="w-full bg-white text-text-second rounded-3xl block p-2"
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }

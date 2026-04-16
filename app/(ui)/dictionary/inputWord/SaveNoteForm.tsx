@@ -164,7 +164,7 @@ export default function SaveNoteForm({
               <textarea
                 rows={1}
                 placeholder="Type your notes here..."
-                className="p-2 sm:p-4 rounded-2xl w-full mt-2 text-text-main bg-white resize-none h-fit"
+                className="p-2 sm:p-4 rounded-2xl w-full mt-2 text-text-second bg-white resize-none h-fit"
                 name="userNotes"
                 key="userNotes"
                 onInput={(e) => {

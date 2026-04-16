@@ -8,24 +8,29 @@ import { encryptRefresh } from '@/actions/manageSession';
 import { cookies } from 'next/headers';
 import { GetSubscription } from '@/actions/manageSchools/db';
 
-type stateType = {
-    errors: {
-        email?: string[] | undefined;
-        password?: string[] | undefined;
-    };
-    email: string;
-} | {
-    errors: {
-        password: string;
-    };
-    email?: undefined;
-} | {
-    errors: {
-        password: string;
-    };
-    email: string;
-    subscription: string;
-} | undefined | { error: string };
+type SignUpFieldErrors = Partial<Record<'name' | 'lastName' | 'email' | 'password' | 'confirmPassword', string[]>>;
+
+// Primer tipa za useActionState na front-u: state je isti oblik kao povratna vrednost action-a.
+export type SignUpActionState =
+    | {
+        errors: SignUpFieldErrors;
+        name: string;
+        lastName: string;
+        email: string;
+        error: string;
+        subscription: string;
+        success: boolean;
+    }
+    | {
+        errors: null;
+        name: string;
+        lastName: string;
+        email: string;
+        error: string;
+        subscription: string;
+        success: boolean;
+    }
+    | undefined;
 
 export async function verifyUser(userId: number) {
     if (!userId)
@@ -39,7 +44,7 @@ export async function verifyUser(userId: number) {
     return { success: false };
 }
 
-export async function authenticateSignUp(state: stateType, formData: FormData) {
+export async function authenticateSignUp(state: SignUpActionState, formData: FormData) {
 
     const validatedFields = SignUpSchema.safeParse({
         name: formData.get("name"),
@@ -142,7 +147,9 @@ export async function authenticateSignUp(state: stateType, formData: FormData) {
         };
 }
 
-export async function resendVerificationMail(state: boolean | undefined, formData: FormData) {
+export type ResendVerificationState = boolean | undefined;
+
+export async function resendVerificationMail(state: ResendVerificationState, formData: FormData) {
     const email = formData.get('email')?.toString() || '';
     if (email === '')
         return false;
@@ -170,9 +177,9 @@ export async function getUserByToken(token: Base64URLString) {
     return user;
 }
 
-type logInStateType = {
-    error: {message: string} | undefined
-    status: number,
+export type LogInActionState = {
+    error: { message: string } | undefined;
+    status: number;
 } | undefined;
 
 const logInStatus = {
@@ -182,7 +189,7 @@ const logInStatus = {
     INVALID_SUBSCRIPTION: 3
 };
 
-export async function authenticateLogIn(state: logInStateType, formData: FormData) {
+export async function authenticateLogIn(state: LogInActionState, formData: FormData) {
 
     const inputEmail = formData.get('email')?.toString() as string;
     const inputPassword = formData.get('password')?.toString() as string;

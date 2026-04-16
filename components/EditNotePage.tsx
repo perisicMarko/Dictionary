@@ -55,14 +55,14 @@ export default function Edit({pathSrc}: {pathSrc: string}) {
           Edit your notes for: <b title="Word" className="hover:underline">{note.dictionary_words.word}</b>
         </motion.h2>
         <motion.div variants={itemVariants}>
-          <label htmlFor="userNotes" className="text-text-main">
+          <label htmlFor="userNotes" className="inline-block text-text-main my-3">
             Your notes:
           </label>
           <textarea
             name="userNotes"
             id="userNotes"
             defaultValue={note?.user_notes}
-            className="bg-white rounded-3xl h-[350px] sm-h-[500px] resize-none block w-full p-3 mt-1 text-text-main"
+            className="bg-white rounded-3xl h-[350px] sm-h-[500px] resize-none block w-full p-3 text-text-second"
           ></textarea>
         </motion.div>
 

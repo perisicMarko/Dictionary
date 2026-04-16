@@ -105,7 +105,7 @@ input{
 }
 
 .form-input {
-  @apply block w-full p-2 mt-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] rounded-3xl text-text-main bg-white;
+  @apply block w-full p-2 mt-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] rounded-3xl text-text-second bg-white;
 }
 
 .background {
