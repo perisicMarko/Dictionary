@@ -1,9 +1,9 @@
 'use server';
 import { decryptSession, SessionPayload } from "../manageSession";
-import { addWeeks, isBefore } from "date-fns";
 import { CreateActivationKey, GetSubscription, GetSubscriptionsBySchool, UpdateActivationKey, UpdateSubscriptionEmail } from "./db";
 import { GenerateSchema } from "@/lib/rules";
 import { TSubscription } from "@/lib/types";
+import { validateActivationKeyExpirationDate } from "./validation";
 
 export async function generateActivationKey(state: {success: boolean, message: string, email: string, date: string} | undefined, formData: FormData){
     const inputEmail = formData.get('email')?.toString() as string;
@@ -35,10 +35,9 @@ export async function generateActivationKey(state: {success: boolean, message: s
     // za sada je resenje da kurs ne moze biti duzi od 9 nedelja
     const activationKeyExpirationDate = new Date(formData.get('courseEnd')?.toString() as string);
 
-    if(isBefore(addWeeks(now, 9), activationKeyExpirationDate))
-        return {success: false, message: '', email: '', date:'Duration of the course is longer than the longest course in your school.'}
-    else if(isBefore(activationKeyExpirationDate, now))
-        return {success: false, message: '', email: '', date:'The time you enetered is in the past.'};
+    const dateValidationError = validateActivationKeyExpirationDate(now, activationKeyExpirationDate);
+    if(dateValidationError)
+        return {success: false, message: '', email: '', date: dateValidationError};
 
     const subscription = await GetSubscription(inputEmail);
 

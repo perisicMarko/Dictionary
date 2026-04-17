@@ -47,7 +47,7 @@ export async function fetchApiNotes(word : string){
 
 type GDefinition = { definition: string; example?: string; synonyms?: string[]; antonyms?: string[] };
 
-function reformatApiNotes(data: TGeneratedNote) {
+export function reformatApiNotes(data: TGeneratedNote) {
   const tmpSound = data.phonetics.filter((p: TGPhonetic) => p.audio != undefined && p.audio != '')[0]?.audio;
   const retVal: TWordApp = {
     word: data.word,

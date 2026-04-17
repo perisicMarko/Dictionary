@@ -3,7 +3,7 @@ import { z } from 'zod'
 export const SignUpSchema = z.object({
     name: z.string().min(1, { message: "Must not be empty!" }).regex(/^[a-zA-Z]+$/, { message: "Contains only letters!" }),
     lastName: z.string().min(1, { message: "Not be empty!" }).regex(/^[a-zA-Z]+$/, { message: "Contains only letters!" }),
-    email: z.string().email('Please enter a valid email!').trim(),
+    email: z.string().trim().email('Please enter a valid email!'),
     password: z.string().min(5, { message: "Must be at least five characters long!" })
         .regex(/[a-zA-Z]/, { message: "Must contain at least one letter!" }).regex(/[0-9]/, { message: "Must contain at least one number!" })
         .regex(/[^a-zA-Z0-9]/, { message: "Must contain at least one special character!" }).trim(),
@@ -19,14 +19,14 @@ export const SignUpSchema = z.object({
 });
 
 export const LogInSchema = z.object({
-    email: z.string().email('Please enter a valid email!').trim(),
+    email: z.string().trim().email('Please enter a valid email!'),
     password: z.string().min(1, { message: "Password is required" }).trim()
 });
 
 
 export const SchoolSignUpSchema = z.object({
     name: z.string().min(1, { message: "Must not be empty!" }).regex(/^[a-zA-Z]+$/, { message: "Contains only letters!" }),
-    email: z.string().email('Please enter a valid email!').trim(),
+    email: z.string().trim().email('Please enter a valid email!'),
     password: z.string().min(5, { message: "Must be at least five characters long!" })
         .regex(/[a-zA-Z]/, { message: "Must contain at least one letter!" }).regex(/[0-9]/, { message: "Must contain at least one number!" })
         .regex(/[^a-zA-Z0-9]/, { message: "Must contain at least one special character!" }).trim(),
@@ -42,5 +42,5 @@ export const SchoolSignUpSchema = z.object({
 });
 
 export const GenerateSchema = z.object({
-    email: z.string().email('Please enter a valid email!').trim(),
+    email: z.string().trim().email('Please enter a valid email!'),
 });
