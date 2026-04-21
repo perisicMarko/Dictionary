@@ -6,7 +6,7 @@ import sendEmail, { generateVerificationMail } from './sendVerificationEmail';
 import { isBefore } from 'date-fns';
 import { encryptRefresh } from '@/actions/manageSession';
 import { cookies } from 'next/headers';
-import { GetSubscription } from '@/actions/manageSchools/db';
+import { CreateActivationKey, GetSubscription } from '@/actions/manageSchools/db';
 
 type SignUpFieldErrors = Partial<Record<'name' | 'lastName' | 'email' | 'password' | 'confirmPassword', string[]>>;
 
@@ -99,7 +99,11 @@ export async function authenticateSignUp(state: SignUpActionState, formData: For
 
 
     const { name, lastName, email } = validatedFields.data;
-    const subscription = await GetSubscription(email);
+
+    // this is subscription logic, only someone with subscription can create account
+    // while app is free to use, this segment should be commented out, in production it should be uncommented
+    //const subscription = await GetSubscription(email);
+    // this segment should be commented while app is free to use
     // if (!subscription)
     //     return {
     //         errors: null,
@@ -129,10 +133,22 @@ export async function authenticateSignUp(state: SignUpActionState, formData: For
     // if (!subscription.school_id)
     //     throw new Error('School id is null in subsription retrieval.');
 
-    const status = await InsertUserInfo(name, lastName, email, password, subscription?.school_id || 1); // hardcoded 1, should be deleted for production
+    // this fails because if no subscription exists it would cause f key violation, but since subscription logic is commented out for free to use app
+    // subscription is mocked with next line
+    const mock_subscription = await CreateActivationKey(email, new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), 1);
 
+
+    // hardcoded 1, in production with school program subscription.school_id should always be valid and not null
+    const status = await InsertUserInfo(name, lastName, email, password, 1); 
+
+    // subscription commented logic, uncomment in school program production
+    //const status = await InsertUserInfo(name, lastName, email, password, subscription.school_id); 
+    
+
+
+    // this breaks program
     if (!status)
-        throw new Error('Error: InsertUserInfor status in authenthicateSignUp');
+        throw new Error('Error: InsertUserInfo status in authenthicateSignUp');
 
     const verified = await generateVerificationMail(email);
     if (verified)
