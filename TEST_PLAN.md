@@ -238,3 +238,5 @@ tests/
 - Nema flaky testova u 3 uzastopna CI run-a.
 - Coverage prag ispunjen.
 - Kriticni tokovi (user i school) pokriveni E2E testovima.
+
+run codex resume 019d9c38-0dae-79b0-bec9-e76b572e3db3
