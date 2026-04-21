@@ -135,7 +135,8 @@ export async function authenticateSignUp(state: SignUpActionState, formData: For
 
     // this fails because if no subscription exists it would cause f key violation, but since subscription logic is commented out for free to use app
     // subscription is mocked with next line
-    const mock_subscription = await CreateActivationKey(email, new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), 1);
+    const oneYear = 1000 * 60 * 60 * 24 * 365;
+    const mock_subscription = await CreateActivationKey(email, new Date(Date.now() + oneYear), 1);
 
 
     // hardcoded 1, in production with school program subscription.school_id should always be valid and not null
