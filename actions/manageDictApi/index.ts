@@ -45,7 +45,7 @@ export async function fetchApiNotes(word : string){
 }
 
 
-type GDefinition = { definition: string; example?: string; synonyms?: string[]; antonyms?: string[] };
+type GDefinition = { definition: string; examples: string[]; synonyms: string[]; antonyms: string[] };
 
 function reformatApiNotes(data: TGeneratedNote) {
   const tmpSound = data.phonetics.filter((p: TGPhonetic) => p.audio != undefined && p.audio != '')[0]?.audio;
@@ -63,7 +63,7 @@ function reformatApiNotes(data: TGeneratedNote) {
         const tmp: TDefinition = { definition: "", example: "", synonyms: [] };
 
         tmp.definition = d.definition;
-        tmp.example = d.example || '';
+        tmp.examplse = d.example || '';
         tmp.synonyms = d.synonyms || [];
 
         return tmp;

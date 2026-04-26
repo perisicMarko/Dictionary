@@ -7,7 +7,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "dictionary_words": "node scripts/db_words_manipulation.js",
+    "dictionary_words:populate": "npm run dictionary_words -- populate-dictionary"
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.9.0",

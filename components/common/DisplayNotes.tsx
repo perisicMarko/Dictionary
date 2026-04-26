@@ -31,20 +31,39 @@ export default function DisplayNotes({
                   className="mt-2 border-second w-full border-1 p-2 sm:p-3 rounded-2xl"
                 >
                   <div className="text-text-second w-full resize-none overflow-hidden mb-0">
-                    <i><b>-Definition</b></i>{" "}
-                    {j + 1 + ": " + d.definition}
+                    <i><b>Definition:</b></i>{" "}
+                    <p className="pl-2">{d.definition}</p>
                   </div>
 
-                  {d.example != "" && (
-                    <div className="text-text-second w-full resize-none overflow-hidden mb-0">
-                      <i><b>-Example:</b></i> {d.example}
+                  {d.examples.length > 0 && (
+                    <div className="text-text-second w-full resize-none mb-0">
+                      <i><b>Examples:</b></i>
+                      <ul className="ml-2 list-none">
+                        {
+                          d.examples.map((e, k) => (
+                            <li
+                              key={k}
+                              className="p-0 before:content-['•'] before:mr-1 before:inline-block"
+                            >
+                              <i>{e}</i>
+                            </li>
+                          ))
+                        }
+                      </ul>
                     </div>
                   )}
 
-                  {d.synonyms.length != 0 && (
+                  {d.synonyms.length > 0 && (
                     <div className="text-text-second w-full inline-block resize-none overflow-hidden mb-0">
-                      <i><b>-Synonyms:</b></i>{" "}
+                      <i><b>Synonyms:</b></i>{" "}
                       {d.synonyms.join(", ")}
+                    </div>
+                  )}
+
+                  {d.antonyms.length != 0 && (
+                    <div className="text-text-second w-full inline-block resize-none overflow-hidden mb-0">
+                      <i><b>Antonyms:</b></i>{" "}
+                      {d.antonyms.join(", ")}
                     </div>
                   )}
                 </div>

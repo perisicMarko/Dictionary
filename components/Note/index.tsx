@@ -135,7 +135,7 @@ export default function Note({
             <b>Your notes:</b>
           </h2>
           <p
-            className={`white-spaces ${
+            className={`white-spaces px-2 ${
               note.user_notes === ""
                 ? "opacity-60 text-text-main text-center"
                 : "text-text-second"

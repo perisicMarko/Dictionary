@@ -33,9 +33,9 @@ export type TGMeaning = {
   partOfSpeech: string;
   definitions: {
     definition: string;
-    example?: string;
-    synonyms?: string[];
-    antonyms?: string[];
+    examples: string[];
+    synonyms: string[];
+    antonyms: string[];
   }[];
 };
 
@@ -52,8 +52,9 @@ export type TGeneratedNote = {
 
 export type TDefinition = {
   definition: string;
-  example: string;
+  examples: string[];
   synonyms: string[];
+  antonyms: string[];
 };
 
 export type TMeaning = {
