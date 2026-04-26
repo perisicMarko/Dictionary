@@ -24,6 +24,7 @@
     "next": "16.0.10",
     "nodemailer": "^6.10.0",
     "normalize.css": "^8.0.1",
+    "openai": "^6.34.0",
     "postgres": "^3.4.5",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",

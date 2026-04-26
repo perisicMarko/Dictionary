@@ -52,7 +52,7 @@ export default function YourWords() {
           initial="hidden"
           animate="show"
           variants={containerVariants}
-          className="cursor-pointer fixed z-100 bottom-5 sm:right-4 right-0.5 rounded-2xl bg-white/80 p-3 text-text-main transition-all duration-200 hover:text-text-second"
+          className="cursor-pointer fixed z-100 bottom-5 sm:right-4 right-0.5 rounded-2xl bg-main/80 p-3 text-text-main transition-all duration-200 hover:text-text-second"
           onClick={() => {
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}

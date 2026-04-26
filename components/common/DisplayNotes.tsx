@@ -30,13 +30,13 @@ export default function DisplayNotes({
                   key={j}
                   className="mt-2 border-second w-full border-1 p-2 sm:p-3 rounded-2xl"
                 >
-                  <div className="text-text-second w-full resize-none overflow-hidden mb-0">
+                  <div className="text-text-second w-full resize-none overflow-hidden mb-2">
                     <i><b>Definition:</b></i>{" "}
                     <p className="pl-2">{d.definition}</p>
                   </div>
 
                   {d.examples.length > 0 && (
-                    <div className="text-text-second w-full resize-none mb-0">
+                    <div className="text-text-second w-full resize-none mb-2">
                       <i><b>Examples:</b></i>
                       <ul className="ml-2 list-none">
                         {
@@ -54,7 +54,7 @@ export default function DisplayNotes({
                   )}
 
                   {d.synonyms.length > 0 && (
-                    <div className="text-text-second w-full inline-block resize-none overflow-hidden mb-0">
+                    <div className="text-text-second w-full inline-block resize-none overflow-hidden mb-2">
                       <i><b>Synonyms:</b></i>{" "}
                       {d.synonyms.join(", ")}
                     </div>
