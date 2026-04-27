@@ -76,7 +76,7 @@ export async function UpdateUsersRefreshToken(userId: number, refreshToken: Base
   }
 }
 
-export async function GetUserByToken(refreshToken: Base64URLString) {
+export async function findUserByToken(refreshToken: Base64URLString) {
 
   try {
     const res = await prisma.users.findFirst({ where: { refresh_token: refreshToken } });
@@ -85,7 +85,7 @@ export async function GetUserByToken(refreshToken: Base64URLString) {
   } catch (error) {
 
     if (error instanceof Error) {
-      console.log('GetuserByToken: ERROR: API - ' + error.message);
+      console.log('findUserByToken: ERROR: API - ' + error.message);
     }
 
   }
@@ -108,7 +108,7 @@ export async function UpdateUsersPassword(userId: number, password: string) {
 }
 
 
-export async function VerifyUser(userId: number) {
+export async function isUserVerifiedById(userId: number) {
 
   try {
     const res = await prisma.users.update({ where: { id: userId }, data: { refresh_token: null, refresh_token_expiration_date: null, email_verified: true } });
@@ -117,7 +117,7 @@ export async function VerifyUser(userId: number) {
   } catch (error) {
 
     if (error instanceof Error) {
-      console.log('VerifyUser: ERROR: API - ' + error.message);
+      console.log('isUserVerifiedById: ERROR: API - ' + error.message);
     }
 
   }

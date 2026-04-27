@@ -1,102 +1,104 @@
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useActionState, useEffect, useState } from "react";
+import { useState, useTransition } from "react";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/common/Loader";
-import { authenticateLogIn } from "@/features/auth/application/userAuth";
+import {
+  authenticateLogIn,
+  type LogInActionState,
+} from "@/features/auth/application/userAuth";
+import { LogInStatus } from "@/shared/auth/loginStatus";
 import { generateVerificationMail } from "@/features/auth/application/sendVerificationEmail";
 
 export default function LogIn() {
-  const initialState = { error: { message: "" }, status: -1 };
-  const [state, action, isPending] = useActionState(
-    authenticateLogIn,
-    initialState
-  );
+  const initialState: LogInActionState = {
+    success: false,
+    errorMessage: "",
+    status: LogInStatus.EMPTY,
+  };
+  const [state, setState] = useState<LogInActionState>(initialState);
+  const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const [formData, setFormData] = useState<{ email: string; password: string }>(
     { email: "", password: "" }
   );
   const { email, password } = formData;
 
-  const logInStatus = {
-    SUCCESS: 0,
-    UNVERIFIED: 1,
-    WRONG_CREDENTIALS: 2,
-    INVALID_SUBSCRIPTION: 3,
-  };
+  async function onSubmit(formData: FormData) {
+    const loginEmail = (formData.get("email") as FormDataEntryValue).toString();
+    startTransition(() => {
+      void (async () => {
+        const result = await authenticateLogIn(state, formData);
+        setState(result);
 
-  useEffect(() => {
-    const sendVerificationEmail = async () => {
-      await generateVerificationMail(email);
-      setFormData({ password: "", email: "" });
-    };
+        if (result.success) {
+          router.replace("/dictionary/inputWord");
+          return;
+        }
 
-    if (state?.status === logInStatus.SUCCESS)
-      router.push("/dictionary/inputWord");
-    else if (state?.status === logInStatus.UNVERIFIED) {
-      sendVerificationEmail();
-      setFormData({ email: "", password: "" });
-    } else if (state.status === logInStatus.WRONG_CREDENTIALS)
-      setFormData({ email: "", password: "" });
+        if (result.status === LogInStatus.UNVERIFIED) {
+          await generateVerificationMail(loginEmail);
+        }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state?.status, isPending]);
+        setFormData({ email: "", password: "" });
+      })();
+    });
+  }
 
   const emptyCredentials = password === "" || email === "";
 
   return (
     <>
-      {(!state ||
-        state?.status === logInStatus.WRONG_CREDENTIALS ||
-        logInStatus.INVALID_SUBSCRIPTION) && (
-        <motion.div
-          initial="hidden"
-          animate="show"
-          variants={containerVariants}
-          className={
-            "relative box-layout mt-15 " + (isPending && " opacity-50 ")
-          }
-        >
-          <div className="collapse-window">
-            <Link className="x-btn" href="/">
-              <b>x</b>
-            </Link>
-          </div>
-          <form
-            className="form flex flex-col items-center justify-center mt-5"
-            action={action}
+      {(state.status !== LogInStatus.INVALID_SUBSCRIPTION && state.status !== LogInStatus.UNVERIFIED)
+        && (
+          <motion.div
+            initial="hidden"
+            animate="show"
+            variants={containerVariants}
+            className={
+              "relative box-layout mt-15 " + (isPending && " opacity-50 ")
+            }
           >
-            <motion.div variants={itemVariants} className="w-full">
-              <label htmlFor="email" className="text-text-main">
-                Email:{" "}
-              </label>
-              <input
-                className="form-input"
-                type="text"
-                name="email"
-                value={email}
-                onChange={(e) => {
-                  setFormData({ ...formData, email: e.target.value });
-                }}
-              />
-            </motion.div>
-            <motion.div variants={itemVariants} className="w-full">
-              <label htmlFor="password" className="text-text-main">
-                Password:{" "}
-              </label>
-              <input
-                className="form-input"
-                type="password"
-                name="password"
-                value={password}
-                onChange={(e) =>
-                  setFormData({ ...formData, password: e.target.value })
-                }
-              />
-            </motion.div>
-            {state.status === logInStatus.WRONG_CREDENTIALS && !isPending  && !formData.email && (
+            <div className="collapse-window">
+              <Link className="x-btn" href="/">
+                <b>x</b>
+              </Link>
+            </div>
+            <form
+              className="form flex flex-col items-center justify-center mt-5"
+              action={onSubmit}
+            >
+              <motion.div variants={itemVariants} className="w-full">
+                <label htmlFor="email" className="text-text-main">
+                  Email:{" "}
+                </label>
+                <input
+                  className="form-input"
+                  type="text"
+                  name="email"
+                  value={email}
+                  onChange={(e) => {
+                    setFormData({ ...formData, email: e.target.value });
+                  }}
+                />
+              </motion.div>
+              <motion.div variants={itemVariants} className="w-full">
+                <label htmlFor="password" className="text-text-main">
+                  Password:{" "}
+                </label>
+                <input
+                  className="form-input"
+                  type="password"
+                  name="password"
+                  value={password}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
+                />
+              </motion.div>
+              {state.status === LogInStatus.WRONG_CREDENTIALS && !isPending && !formData.email && (
                 <motion.div variants={itemVariants} className="w-full">
                   <h2 className="error text-center">
                     <b>Wrong credentials</b>
@@ -106,35 +108,35 @@ export default function LogIn() {
                   </p>
                 </motion.div>
               )}
-            <motion.div variants={itemVariants} className="center mt-2 w-3/4">
-              <button
-                disabled={isPending || emptyCredentials}
-                className={
-                  "primary-btn center " + (emptyCredentials && " opacity-50")
-                }
+              <motion.div variants={itemVariants} className="center mt-2 w-3/4">
+                <button
+                  disabled={isPending || emptyCredentials}
+                  className={
+                    "primary-btn center " + (emptyCredentials && " opacity-50")
+                  }
+                >
+                  {isPending ? <Loader /> : "Log in"}
+                </button>
+              </motion.div>
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: 15 },
+                  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+                }}
+                className="center my-1"
               >
-                {isPending ? <Loader /> : "Log in"}
-              </button>
-            </motion.div>
-            <motion.div
-              variants={{
-                hidden: { opacity: 0, y: 15 },
-                show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-              }}
-              className="center my-1"
-            >
-              <Link
-                className="flex items-start justify-end text-text-main hover:scale-105 hover:underline text-[14px] sm:text-[18px] transition-all"
-                href="/forgotPassword"
-              >
-                <u>Forgot password?</u>
-              </Link>
-            </motion.div>
-          </form>
-        </motion.div>
-      )}
+                <Link
+                  className="flex items-start justify-end text-text-main hover:scale-105 hover:underline text-[14px] sm:text-[18px] transition-all"
+                  href="/forgotPassword"
+                >
+                  <u>Forgot password?</u>
+                </Link>
+              </motion.div>
+            </form>
+          </motion.div>
+        )}
 
-      {state?.status === logInStatus.INVALID_SUBSCRIPTION && (
+      {state.status === LogInStatus.INVALID_SUBSCRIPTION && (
         <motion.div
           initial="hidden"
           animate="show"
@@ -147,7 +149,7 @@ export default function LogIn() {
         </motion.div>
       )}
 
-      {state?.status === logInStatus.UNVERIFIED && (
+      {state.status === LogInStatus.UNVERIFIED && (
         <motion.div
           className="box-layout center-vertically mt-15"
           variants={containerVariants}

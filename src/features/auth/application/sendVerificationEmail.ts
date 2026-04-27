@@ -44,6 +44,6 @@ export default async function sendEmail(email : string, token : Base64URLString)
       return { message: 'Mejl je uspešno poslat.' , status: 200};
     } catch (error) {
       const message =  (error instanceof Error && error.message);
-      return { error: 'Greska prilikom slanja mejla: ' + message, status: 500};
+      return { error: 'Greška prilikom slanja mejla: ' + message, status: 500};
     }
 }

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { TUser } from "@/lib/types";
-import { getUserByToken, verifyUser } from "@/features/auth/application/userAuth";
+import { getUserByToken, isUserVerified } from "@/features/auth/application/userAuth";
 import { motion } from "framer-motion";
 import { isBefore } from "date-fns";
 import Link from "next/link";
@@ -33,7 +33,7 @@ export default function Page() {
   useEffect(() => { 
     const setUserVerified = async () => {
       if(user && isValid)
-        await verifyUser(user.id);
+        await isUserVerified(user.id);
     }
       setUserVerified();
   });
