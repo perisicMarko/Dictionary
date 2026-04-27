@@ -147,7 +147,6 @@ export async function authenticateSignUp(state: SignUpActionState, formData: For
     
 
 
-    // this breaks program
     if (!status)
         throw new Error('Error: InsertUserInfo status in authenthicateSignUp');
 
