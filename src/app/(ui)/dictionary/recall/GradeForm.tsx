@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { useContext, useState } from "react";
-import { TokenContext } from "../../../../components/TokenContextProvider";
 import { updateReviewDate } from "@/features/notes/application";
 import { useRouter } from "next/navigation";
 import { ChevronDown } from "lucide-react";
@@ -20,17 +19,14 @@ export function GradeForm({
   quality: number;
   rerenderParent: () => void;
 }) {
-  const tokenContext = useContext(TokenContext);
   const [isPending, setIsPending] = useState(false);
   const router = useRouter();
 
   async function onSubmitGradeHandle(formData: FormData) {
-    if (tokenContext?.accessToken === undefined) return;
     changeQuality(-1);
     const response = await updateReviewDate(
       Number(formData.get("quality")),
-      noteId,
-      tokenContext.accessToken
+      noteId
     );
     if (!response?.success) {
       router.push("/sessionExpired");

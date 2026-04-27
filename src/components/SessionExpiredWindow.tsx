@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { Dispatch, SetStateAction, useActionState, useContext } from "react";
 import { useRouter } from "next/navigation";
 import Loader from "./common/Loader";
-import { TokenContext } from "./TokenContextProvider";
 
 
 export default function SessionExpiredWindow({
@@ -15,10 +14,9 @@ export default function SessionExpiredWindow({
 }) {
   const router = useRouter();
   const [state, action, isPending] = useActionState(restoreSession, undefined);
-  const tokenContext = useContext(TokenContext);
 
-  if (state?.status === 401) router.push("/");
-  if(state?.status === 200 && state.accessToken) tokenContext?.setAccessToken(state.accessToken)
+  // if (state?.status === 401) router.push("/");
+  // if(state?.status === 200 && state.accessToken) tokenContext?.setAccessToken(state.accessToken)
 
   return (
   <div className="inset-0 bg-white/80 fixed center z-100" onClick={(e) => e.stopPropagation()}>

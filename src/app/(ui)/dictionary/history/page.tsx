@@ -4,31 +4,26 @@ import { getUsersHistory } from "@/features/notes/application";
 import Words from "@/components/common/Words";
 import { TNoteApp } from "@/lib/types";
 import { useState, useContext, useEffect } from "react";
-import { TokenContext } from "@/components/TokenContextProvider";
 import ZeroNotesMessage from "@/components/common/ZeroNotesMessage";
 import { itemVariants } from "@/lib/animationVariants";
 import { motion } from "framer-motion";
 import Loading from "../../loading";
 
 export default function History() {
-  const tokenContext = useContext(TokenContext);
   const [search, setSearch] = useState("");
   const [refresh, setRefresh] = useState(false);
   const [words, setWords] = useState<TNoteApp[]>();
 
   useEffect(() => {
     const fetch = async () => {
-      const words = await getUsersHistory(tokenContext?.accessToken || "");
+      const words = await getUsersHistory();
       if(words){
         setWords(words?.data as TNoteApp[]);
-
-        if(tokenContext?.accessToken === words.accessToken)
-          tokenContext?.setAccessToken(words.accessToken || '');
       }
     };
     fetch();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tokenContext?.accessToken, refresh]);
+  }, [refresh]);
 
   const filteredWords =
     words?.filter((w) => {

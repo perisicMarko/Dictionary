@@ -4,7 +4,7 @@ import { ChangeUsersSchool, findUserByToken, GetUserInfoByEmail, InsertUserInfo,
 import bcrypt from 'bcrypt';
 import sendEmail, { generateVerificationMail } from './sendVerificationEmail';
 import { isBefore } from 'date-fns';
-import { encryptAccess, encryptRefresh } from '@/server/auth/session';
+import { encryptAccess, encryptRefresh, issueTokensForUser } from '@/server/auth/session';
 import { cookies } from 'next/headers';
 import { CreateActivationKey, GetSubscription } from '@/features/schools/infrastructure/repository';
 import { LogInStatus, LoginStatus } from '@/shared/auth/loginStatus';
@@ -14,14 +14,14 @@ type SignUpFieldErrors = Partial<Record<'name' | 'lastName' | 'email' | 'passwor
 
 
 export type SignUpActionState = {
-        errors: SignUpFieldErrors | null;
-        name: string;
-        lastName: string;
-        email: string;
-        errorMessage: string;
-        subscriptionStatusMessage: string;
-        success: boolean;
-    };
+    errors: SignUpFieldErrors | null;
+    name: string;
+    lastName: string;
+    email: string;
+    errorMessage: string;
+    subscriptionStatusMessage: string;
+    success: boolean;
+};
 
 export async function isUserVerified(userId: number) {
     const status = await isUserVerifiedById(userId);
@@ -66,7 +66,7 @@ export async function authenticateSignUp(state: SignUpActionState, formData: For
             res.email = emailError;
 
         return res;
-    } 
+    }
 
     const user = await GetUserInfoByEmail((formData.get('email') as FormDataEntryValue).toString() as string);
     const alreadyExist = user != null;
@@ -122,10 +122,10 @@ export async function authenticateSignUp(state: SignUpActionState, formData: For
     // this fails because if no subscription exists it would cause f key violation, but since subscription logic is commented out for free to use app
     // subscription is mocked with next line
     const oneYear = 1000 * 60 * 60 * 24 * 365;
-    
+
     const mock_subscription = await CreateActivationKey(email, new Date(Date.now() + oneYear), 1);
     // hardcoded 1, in production with school program subscription.school_id should always be valid and not null
-    const status = await InsertUserInfo(name, lastName, email, password, 1); 
+    const status = await InsertUserInfo(name, lastName, email, password, 1);
 
     // subscription commented logic, uncomment in school program production
     //const status = await InsertUserInfo(name, lastName, email, password, subscription.school_id); 
@@ -146,7 +146,7 @@ export async function authenticateSignUp(state: SignUpActionState, formData: For
         };
 }
 
-export type ResendVerificationState = {success: boolean};
+export type ResendVerificationState = { success: boolean };
 
 export async function resendVerificationMail(state: ResendVerificationState, formData: FormData) {
     const email = (formData.get('email') as FormDataEntryValue).toString();
@@ -172,12 +172,12 @@ export async function getUserByToken(token: Base64URLString) {
     const user = await findUserByToken(token);
 
     if (!user)
-        return  { success: false, user: undefined };
+        return { success: false, user: undefined };
 
-    return  { success: true, user };
+    return { success: true, user };
 }
 
-export type LogInActionState = {success: boolean, errorMessage: string, status: number};
+export type LogInActionState = { success: boolean, errorMessage: string, status: number };
 
 export async function authenticateLogIn(state: LogInActionState, formData: FormData) {
 
@@ -237,25 +237,7 @@ export async function authenticateLogIn(state: LogInActionState, formData: FormD
         //     await ChangeUsersSchool(user.id, subscription.school_id);
         // }
 
-        const refreshToken = await encryptRefresh({ email: user.email, userId: user.id });
-        const accessToken = await encryptAccess({ email: user.email, userId: user.id });
-
-        //iz nekog razloga mi je trazio await ne znam zasto
-        (await cookies()).set('refreshToken', refreshToken, {
-            httpOnly: true,
-            secure: true,
-            path: '/',
-            sameSite: 'lax',
-            maxAge: 60 * 60 * 24 * 7 // 7 days
-        });
-
-        (await cookies()).set('accessToken', accessToken, {
-            httpOnly: true,
-            secure: true,
-            path: '/',
-            sameSite: 'lax',
-            maxAge: 60 * 60 * 15 // 15 minutes
-        });
+        await issueTokensForUser(user.email, user.id);
 
         return { success: true, errorMessage: "All good.", status: LogInStatus.SUCCESS };
     }

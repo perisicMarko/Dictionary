@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 import { isBefore } from 'date-fns';
 import { GetUserInfoById } from '@/features/auth/infrastructure/usersRepository';
-import { GetNotes } from '@/features/notes/infrastructure/repository';
+import { findAllNotesWithDictionaryWord } from '@/features/notes/infrastructure/repository';
 import nodemailer from 'nodemailer';
 
 
 export async function GET() {
 
-  const notes = await GetNotes();
+  const notes = await findAllNotesWithDictionaryWord();
   const currentDate = new Date();
   const userIds = new Set<number>();
   if (notes) {

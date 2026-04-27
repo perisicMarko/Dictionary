@@ -1,8 +1,6 @@
 import { motion } from "framer-motion";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { backToRecallSystem, deleteNote } from "@/features/notes/application";
-import { TokenContext } from "../TokenContextProvider";
-import { useContext } from "react";
 import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
@@ -16,7 +14,6 @@ export default function HistoryNoteMenu({
   toggleMenu: () => void;
   noteId: number;
 }) {
-  const tokenContext = useContext(TokenContext);
   const router = useRouter();
   const [actionActive, setActionActive] = useState<{
     delete: boolean;
@@ -25,35 +22,24 @@ export default function HistoryNoteMenu({
 
   async function onSubmitRelearnHandle() {
     toggleMenu();
-    if (tokenContext?.accessToken === undefined) return;
     const res = await backToRecallSystem(
-      noteId,
-      tokenContext?.accessToken || ""
+      noteId
     );
-
-    if (!res?.success) {
-      tokenContext.setAccessToken("");
+    if (!res.success) {
       router.push("/logIn");
-    } else if (res.status === 201)
-      tokenContext.setAccessToken(res.accessToken || "");
-    rerenderParent(); //rerendering parent
+    }
+    rerenderParent(); 
   }
 
   async function onSubmitDeleteHandle(formData: FormData) {
     toggleMenu();
-    if (tokenContext?.accessToken === undefined) return;
     const res = await deleteNote(
-      Number(formData.get("noteId")),
-      tokenContext?.accessToken
+      Number(formData.get("noteId"))
     );
-
-    if (!res?.success) {
-      tokenContext.setAccessToken("");
+    if (!res.success) {
       router.push("/logIn");
-    } else if (res.status === 201)
-      tokenContext.setAccessToken(res.accessToken || "");
-
-    rerenderParent(); //rerendering parent
+    }
+    rerenderParent(); 
   }
 
   return (

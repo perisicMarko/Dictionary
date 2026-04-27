@@ -2,8 +2,7 @@ import { motion } from "framer-motion";
 import { containerVariants } from "@/lib/animationVariants";
 import Link from "next/link";
 import { FolderMinus, NotebookPen } from "lucide-react";
-import { TokenContext } from "../TokenContextProvider";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { removeWordFromDrawer } from "@/features/drawers/application";
 
 export default function NoteMenu({
@@ -16,7 +15,6 @@ export default function NoteMenu({
   rerenderParent: () => void;
 }) {
   const [isRemoving, setIsRemoving] = useState(false);
-  const tokenContext = useContext(TokenContext);
 
   return (
     <motion.div
@@ -41,7 +39,6 @@ export default function NoteMenu({
             e.stopPropagation();
             setIsRemoving(true);
             removeWordFromDrawer(
-              tokenContext?.accessToken || "",
               drawerId,
               noteId
             );

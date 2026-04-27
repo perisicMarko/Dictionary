@@ -86,7 +86,7 @@ export type TDBNoteEntry = {
 
 export type TNoteApp = {
   id: number;
-  status: boolean;
+  isLearned: boolean;
   user_notes: string;
   repetitions: number;
   days: number;

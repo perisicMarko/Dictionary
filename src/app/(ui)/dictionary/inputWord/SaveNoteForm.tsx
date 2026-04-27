@@ -8,7 +8,6 @@ import {
 import { useRef, useContext, useState, useTransition, useEffect } from "react";
 import { TMeaning, TWordApp } from "@/lib/types";
 import { getUsersWords, saveNotes } from "@/features/notes/application";
-import { TokenContext } from "@/components/TokenContextProvider";
 import AudioPlayer from "@/components/common/AudioPlayer";
 import Loader from "@/components/common/Loader";
 import { fetchApiNotes } from "@/features/dictionary/application";
@@ -27,7 +26,6 @@ export default function SaveNoteForm({
   const [error, setError] = useState(""); // if inputted word is not supported, this error should be displayed
   const [isSaving, setIsSaving] = useState(false); // true when action saveNote is active, used for displaying loader on save button
   const [isWordAdded, setIsWordAdded] = useState(false); // used to check if word is already added, it is in state variable because typing new word should not reset the error message
-  const tokenContext = useContext(TokenContext);
   const router = useRouter();
   const wordInputRef = useRef<HTMLInputElement>(null);
 
@@ -48,20 +46,13 @@ export default function SaveNoteForm({
   };
 
   const handleSubmit = async (formData: FormData) => {
-    if (tokenContext?.accessToken == undefined) {
-      setIsSaving(false);
-      return;
-    }
-
     cleanUp(false);
-
     if (!isErrorNote(note)) {
       const res = await saveNotes(
         formData.get("word")?.toString().toLowerCase() as string,
         formData.get("audio")?.toString() as string,
         formData.get("userNotes")?.toString() as string,
         note?.generated_notes as TMeaning[],
-        formData.get("accessToken")?.toString() as string,
         note?.word_id as number
       );
 
@@ -69,10 +60,9 @@ export default function SaveNoteForm({
         // expanding cleanUp
         wordInputRef.current.value = "";
 
-      if (res?.status === 201) {
-        const newToken = res.accessToken;
-        tokenContext?.setAccessToken(newToken);
-      } else if (res?.status === 401) router.push("/logIn");
+    
+      if(!res.success)
+        router.push("/logIn");
 
       setIsSaving(false);
     }
@@ -86,7 +76,7 @@ export default function SaveNoteForm({
   useEffect(() => {
     const fetchWords = async () => {
       const words = await getUsersWords();
-      if (words) setWords(words as string[]);
+      if (words) setWords(words.data as string[]);
     };
     fetchWords();
     wordInputRef.current?.focus();
@@ -120,12 +110,6 @@ export default function SaveNoteForm({
         }}
         className="space-y-2 h-full bg-main rounded-3xl center-verticaly w-full p-6"
       >
-        <input
-          name="accessToken"
-          value={tokenContext?.accessToken}
-          hidden
-          readOnly
-        />
         <input
           value={word}
           ref={wordInputRef}

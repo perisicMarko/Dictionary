@@ -25,12 +25,12 @@ export default function RootLayout({
   const [appClickInteraction, setAppClickInteraction] = useState(false); // used to inform NavBar that should collapse on the phones when something is clicked
 
   return (
-    <TokenContextProvider>
+    <>
       <NavBar
         shouldCollapse={appClickInteraction}
         resetCollapseFromParent={(a: boolean) => setAppClickInteraction(a)}
       />
       {children}
-    </TokenContextProvider>
+    </>
   );
 }

@@ -1,5 +1,5 @@
 import { DeleteUnverifiedUsers, GetUsers } from '@/features/auth/infrastructure/usersRepository';
-import { DeleteUnverifiedNotes, GetNotes } from '@/features/notes/infrastructure/repository';
+import { DeleteUnverifiedNotes, findAllNotesWithDictionaryWord } from '@/features/notes/infrastructure/repository';
 import { TUser } from '@/lib/types';
 import { NextResponse } from 'next/server';
 import { isBefore } from 'date-fns';
@@ -27,7 +27,7 @@ export async function GET() {
         await DeleteUnverifiedUsers(unverifiedUserIds);
         
         //retrieve all db notes
-        const notes = await GetNotes();
+        const notes = await findAllNotesWithDictionaryWord();
 
         //filter all notes of unverified users
         let unverifiedNoteIds: number[] = [];

@@ -8,10 +8,10 @@ import {
   updateReviewDate,
 } from "@/features/notes/application";
 import {
-  ImportNotes,
-  GetNoteById,
-  GetNotes,
-  UpdateRepetitionFactors,
+  createUserNote,
+  findNoteById,
+  findAllNotesWithDictionaryWord,
+  updateNoteReviewFactors,
 } from "@/features/notes/infrastructure/repository";
 import {
   verifySession,
@@ -29,15 +29,15 @@ vi.mock("@/features/auth/application/userAuth", () => ({
 }));
 
 vi.mock("@/features/notes/infrastructure/repository", () => ({
-  ImportNotes: vi.fn(),
-  GetNotes: vi.fn(),
-  GetNoteById: vi.fn(),
-  UpdateRepetitionFactors: vi.fn(),
-  SetNoteAsLearned: vi.fn(),
-  ResetNoteRecallFactors: vi.fn(),
-  DeleteNote: vi.fn(),
-  EditNotes: vi.fn(),
-  GetUsersWords: vi.fn(),
+  createUserNote: vi.fn(),
+  findAllNotesWithDictionaryWord: vi.fn(),
+  findNoteById: vi.fn(),
+  updateNoteReviewFactors: vi.fn(),
+  updateNoteLearnedStatus: vi.fn(),
+  resetNoteReviewFactors: vi.fn(),
+  deleteNoteById: vi.fn(),
+  updateNoteUserText: vi.fn(),
+  findUserWordTexts: vi.fn(),
 }));
 
 const STATUS = {
@@ -79,11 +79,11 @@ describe("manageNotes integration", () => {
         userId: 5,
       } as never);
       vi.mocked(encryptAccess).mockResolvedValue("new-access-token" as never);
-      vi.mocked(ImportNotes).mockResolvedValue({ id: 1 } as never);
+      vi.mocked(createUserNote).mockResolvedValue({ id: 1 } as never);
 
       const response = await saveNotes("word", "audio", "note", [], "expired", 2);
 
-      expect(ImportNotes).toHaveBeenCalledWith(5, "word", "audio", "note", [], 2);
+      expect(createUserNote).toHaveBeenCalledWith(5, "word", "audio", "note", [], 2);
       expect(response).toEqual({
         success: true,
         accessToken: "new-access-token",
@@ -94,11 +94,11 @@ describe("manageNotes integration", () => {
     it("saves note with valid access token", async () => {
       vi.mocked(verifySession).mockResolvedValue(STATUS.VALID_ACCESS as never);
       vi.mocked(decryptAccess).mockResolvedValue({ userId: 3 } as never);
-      vi.mocked(ImportNotes).mockResolvedValue({ id: 1 } as never);
+      vi.mocked(createUserNote).mockResolvedValue({ id: 1 } as never);
 
       const response = await saveNotes("word", "audio", "note", [], "valid-token", 2);
 
-      expect(ImportNotes).toHaveBeenCalledWith(3, "word", "audio", "note", [], 2);
+      expect(createUserNote).toHaveBeenCalledWith(3, "word", "audio", "note", [], 2);
       expect(response).toEqual({
         success: true,
         accessToken: "valid-token",
@@ -110,7 +110,7 @@ describe("manageNotes integration", () => {
   describe("getRecallNotes", () => {
     it("returns only due notes for current user", async () => {
       vi.mocked(decryptAccess).mockResolvedValue({ userId: 10 } as never);
-      vi.mocked(GetNotes).mockResolvedValue([
+      vi.mocked(findAllNotesWithDictionaryWord).mockResolvedValue([
         {
           id: 1,
           status: false,
@@ -147,7 +147,7 @@ describe("manageNotes integration", () => {
   describe("updateReviewDate", () => {
     it("returns unauthorized response and logs out user", async () => {
       vi.mocked(verifySession).mockResolvedValue(STATUS.UNAUTHORIZED as never);
-      vi.mocked(GetNoteById).mockResolvedValue({
+      vi.mocked(findNoteById).mockResolvedValue({
         id: 1,
         days: 1,
         repetitions: 0,
@@ -162,17 +162,17 @@ describe("manageNotes integration", () => {
 
     it("updates repetition factors for valid access token", async () => {
       vi.mocked(verifySession).mockResolvedValue(STATUS.VALID_ACCESS as never);
-      vi.mocked(GetNoteById).mockResolvedValue({
+      vi.mocked(findNoteById).mockResolvedValue({
         id: 9,
         days: 1,
         repetitions: 1,
         ease_factor: 2.5,
       } as never);
-      vi.mocked(UpdateRepetitionFactors).mockResolvedValue({ id: 9 } as never);
+      vi.mocked(updateNoteReviewFactors).mockResolvedValue({ id: 9 } as never);
 
       const result = await updateReviewDate(4, 9, "valid-access");
 
-      expect(UpdateRepetitionFactors).toHaveBeenCalledWith(
+      expect(updateNoteReviewFactors).toHaveBeenCalledWith(
         9,
         6,
         2,
@@ -184,7 +184,7 @@ describe("manageNotes integration", () => {
 
     it("refreshes access token when ACCESS_NEEDED", async () => {
       vi.mocked(verifySession).mockResolvedValue(STATUS.ACCESS_NEEDED as never);
-      vi.mocked(GetNoteById).mockResolvedValue({
+      vi.mocked(findNoteById).mockResolvedValue({
         id: 5,
         days: 1,
         repetitions: 1,
@@ -198,7 +198,7 @@ describe("manageNotes integration", () => {
         userId: 5,
       } as never);
       vi.mocked(encryptAccess).mockResolvedValue("new-access-token" as never);
-      vi.mocked(UpdateRepetitionFactors).mockResolvedValue({ id: 5 } as never);
+      vi.mocked(updateNoteReviewFactors).mockResolvedValue({ id: 5 } as never);
 
       const result = await updateReviewDate(4, 5, "expired-access");
 

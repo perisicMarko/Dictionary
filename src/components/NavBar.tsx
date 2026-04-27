@@ -1,8 +1,7 @@
 "use client";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-import { TokenContext } from "@/components/TokenContextProvider";
 import { motion } from "framer-motion";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { logOutUser } from "@/features/auth/application/userAuth";
@@ -12,7 +11,7 @@ export function NavBar({shouldCollapse, resetCollapseFromParent} : {shouldCollap
   const path = usePathname();
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(true); // on scroll, should navbar appear or not
-  const tokenContext = useContext(TokenContext);
+
   const [mobileMenuToggle, setMobileMenuToggle] = useState(false);
 
   useEffect(() => {
@@ -64,7 +63,6 @@ export function NavBar({shouldCollapse, resetCollapseFromParent} : {shouldCollap
   const isNavigationRoute = navigationRoutes.map((e) => e.path).includes(path);
 
   const handleLogOut = async () => {
-    tokenContext?.setAccessToken("");
     await logOutUser();
     router.push("/");
   };

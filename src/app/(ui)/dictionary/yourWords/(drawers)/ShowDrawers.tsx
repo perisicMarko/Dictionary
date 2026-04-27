@@ -2,7 +2,6 @@ import SearchBar from "@/components/common/SearchBar";
 import { motion } from "framer-motion";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { useState, useEffect, useContext, useLayoutEffect } from "react";
-import { TokenContext } from "@/components/TokenContextProvider";
 import AddDrawer from "./AddDrawer";
 import { getUsersDrawers } from "@/features/drawers/application";
 import { TDrawer, TNoteApp } from "@/lib/types";
@@ -18,7 +17,7 @@ export default function ShowDrawers() {
   const [notes, setNotes] = useState<TNoteApp[]>();
   const [refresh, setRefresh] = useState(false);
   const [openedDrawerId, setOpenedDrawerId] = useState(-1);
-  const tokenContext = useContext(TokenContext);
+
 
   useLayoutEffect(() => {
     const drawerId = sessionStorage.getItem("openedDrawerId");

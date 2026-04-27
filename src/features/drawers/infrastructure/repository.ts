@@ -90,7 +90,7 @@ export async function PutNoteInDrawer(drawerId: number, noteId: number) {
 }
 
 
-export async function GetNotesOfDrawer(drawerId: number) {
+export async function findAllNotesWithDictionaryWordOfDrawer(drawerId: number) {
     try {
         const res = await prisma.drawers_and_notes.findMany({
             where: {

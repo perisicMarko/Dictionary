@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import Loader from "@/components/common/Loader";
 import Loading from "@/app/(ui)/loading";
-import { TokenContext } from "@/components/TokenContextProvider";
 
 export default function Edit({pathSrc}: {pathSrc: string}) {
   const params = useParams();
@@ -16,7 +15,6 @@ export default function Edit({pathSrc}: {pathSrc: string}) {
   const [note, setNote] = useState<TNoteApp>();
   const [isPending, setIsPending] = useState(false);
   const router = useRouter();
-  const tokenContext = useContext(TokenContext);
 
   useEffect(() => {
     async function getNote() {
@@ -27,13 +25,11 @@ export default function Edit({pathSrc}: {pathSrc: string}) {
   }, [noteId]);
 
   async function onSubmitEditHandle(formData: FormData) {
-      const response = await editNote(formData.get('userNotes')?.toString() || '', Number(noteId), tokenContext?.accessToken || '');
-      if (!response?.success)
-        console.log('Note update failed, returning to yourWords page');
-      else if(response.status === 201)
-        tokenContext?.setAccessToken(response.accessToken || '');
-
-      router.push(pathSrc);
+      const response = await editNote((formData.get('userNotes') as FormDataEntryValue).toString(), Number(noteId));
+      if (!response.success)
+        router.push('/logIn');
+      else 
+        router.push(pathSrc);
     };
 
   return (

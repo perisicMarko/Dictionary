@@ -1,11 +1,11 @@
 import 'server-only';
 import { PrismaClient } from '@prisma/client';
-import { TMeaning } from '@/lib/types';
+import { TMeaning, TWordApp } from '@/lib/types';
 import { addDays } from 'date-fns';
 
 const prisma = new PrismaClient();
 
-export async function GetNotes() {
+export async function findAllNotesWithDictionaryWord(userId : number) {
   try {
     const res = await prisma.notes.findMany({
       include: {
@@ -16,6 +16,9 @@ export async function GetNotes() {
             audio: true
           }
         }
+      },
+      where: {
+        user_id: userId
       }
     });
 
@@ -23,13 +26,13 @@ export async function GetNotes() {
   } catch (error) {
 
     if (error instanceof Error) {
-      console.log('GetNotes: ERROR: API - ', error?.message);
+      console.log('findAllNotesWithDictionaryWord: ERROR: API - ', error?.message);
     }
 
   }
 }
 
-export async function GetUsersWords(userId : number) {
+export async function findUserWordTexts(userId : number) {
   try {
     const res = await prisma.notes.findMany({
       include: {
@@ -49,13 +52,13 @@ export async function GetUsersWords(userId : number) {
   } catch (error) {
 
     if (error instanceof Error) {
-      console.log('GetNotes: ERROR: API - ', error?.message);
+      console.log('findAllNotesWithDictionaryWord: ERROR: API - ', error?.message);
     }
 
   }
 }
 
-export async function ImportNotes(userId: number, word: string, audio: string, user_notes: string, generated_notes: TMeaning[], wordId: number) {
+export async function createUserNote(userId: number, word: string, audio: string, user_notes: string, generated_notes: TMeaning[], wordId: number) {
   const stored_locally = wordId != -1;
   try {
     if (!stored_locally) {
@@ -112,13 +115,13 @@ export async function ImportNotes(userId: number, word: string, audio: string, u
   } catch (error) {
 
     if (error instanceof Error) {
-      console.log('ImportNotes: ERROR: API - ' + error.message);
+      console.log('createUserNote: ERROR: API - ' + error.message);
     }
 
   }
 }
 
-export async function GetNoteById(noteId : number) {
+export async function findNoteById(noteId : number) {
 
   try {
     const res = await prisma.notes.findUnique({ where: { id: noteId }, include: { dictionary_words: { select: { word: true, meanings: true, audio: true } } } });
@@ -127,13 +130,13 @@ export async function GetNoteById(noteId : number) {
   } catch (error) {
 
     if (error instanceof Error) {
-      console.log('GetNoteById: ERROR: API - ' + error.message);
+      console.log('findNoteById: ERROR: API - ' + error.message);
     }
 
   }
 }
 
-export async function UpdateRepetitionFactors(noteId: number, days: number, repetitions: number, ease_factor: number, review_date: Date) {
+export async function updateNoteReviewFactors(noteId: number, days: number, repetitions: number, ease_factor: number, review_date: Date) {
 
   try {
     const res = await prisma.notes.update({
@@ -150,13 +153,13 @@ export async function UpdateRepetitionFactors(noteId: number, days: number, repe
   } catch (error) {
 
     if (error instanceof Error) {
-      console.log('UpdateRepetitionFactors: ERROR: API - ' + error.message);
+      console.log('updateNoteReviewFactors: ERROR: API - ' + error.message);
     }
 
   }
 }
 
-export async function DeleteNote(noteId: number) {
+export async function deleteNoteById(noteId: number) {
 
   try {
     const res = await prisma.notes.delete({ where: { id: noteId } });
@@ -187,7 +190,7 @@ export async function DeleteUnverifiedNotes(ids: number[]) {
   }
 }
 
-export async function SetNoteAsLearned(noteId: number, status: boolean) {
+export async function updateNoteLearnedStatus(noteId: number, status: boolean) {
 
   try {
     const res = await prisma.notes.update({ where: { id: noteId }, data: { status: status } });
@@ -201,7 +204,7 @@ export async function SetNoteAsLearned(noteId: number, status: boolean) {
   }
 }
 
-export async function EditNotes(userNotes: string, noteId: number) {
+export async function updateNoteUserText(userNotes: string, noteId: number) {
 
   try {
     const res = await prisma.notes.update({ where: { id: noteId }, data: { user_notes: userNotes } });
@@ -210,13 +213,13 @@ export async function EditNotes(userNotes: string, noteId: number) {
   } catch (error) {
 
     if (error instanceof Error) {
-      console.log('EditNotes: ERROR: API - ' + error.message);
+      console.log('updateNoteUserText: ERROR: API - ' + error.message);
     }
 
   }
 }
 
-export async function ResetNoteRecallFactors(noteId: number, days: number, repetitions: number, easeFactor: number, reviewDate: Date) {
+export async function resetNoteReviewFactors(noteId: number, days: number, repetitions: number, easeFactor: number, reviewDate: Date) {
   try {
     const res = await prisma.notes.update({
       where: { id: noteId },
@@ -233,7 +236,7 @@ export async function ResetNoteRecallFactors(noteId: number, days: number, repet
   } catch (error) {
 
     if (error instanceof Error) {
-      console.log('ResetNoteRecallFactors: ERROR: API - ' + error.message);
+      console.log('resetNoteReviewFactors: ERROR: API - ' + error.message);
     }
 
   }
@@ -250,7 +253,7 @@ export async function restoreNotes(noteId: number, audio: string) {
   } catch (error) {
 
     if (error instanceof Error) {
-      console.log('EditNotes: ERROR: API - ' + error.message);
+      console.log('updateNoteUserText: ERROR: API - ' + error.message);
     }
 
   }

@@ -22,7 +22,7 @@ export async function GetThemeColors(userId: number) {
     } catch (error) {
 
         if (error instanceof Error) {
-            console.log('GetNotes: ERROR: API - ', error?.message);
+            console.log('findAllNotesWithDictionaryWord: ERROR: API - ', error?.message);
         }
 
     }

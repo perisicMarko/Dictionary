@@ -1,6 +1,6 @@
 'use server'
 import { decryptRefresh, encryptAccess, TokenPayload, verifySession, STATUS } from "@/server/auth/session";
-import { CreateDrawer, DeleteDrawer, GetDrawerById, GetNotesOfDrawer, GetUsersDrawers, PutNoteInDrawer, RemoveWordFromDrawer, UpdateDrawerName } from "@/features/drawers/infrastructure/repository";
+import { CreateDrawer, DeleteDrawer, GetDrawerById, findAllNotesWithDictionaryWordOfDrawer, GetUsersDrawers, PutNoteInDrawer, RemoveWordFromDrawer, UpdateDrawerName } from "@/features/drawers/infrastructure/repository";
 import { logOutUser } from "@/features/auth/application/userAuth";
 import { cookies } from "next/headers";
 
@@ -177,7 +177,7 @@ export async function deleteDrawer(drawerId : number, aToken : string){
 }
 
 
-export async function putNoteInDrawer(state : {success : boolean, accessToken : string} | undefined, formData : FormData){
+export async function putNoteInDrawer(state : {success : boolean} | undefined, formData : FormData){
     const aToken = formData.get('accessToken')?.toString() || '';
     const wordId = Number(formData.get('addedNoteId'));
     const drawerId = Number(formData.get('drawerId'));
@@ -215,9 +215,21 @@ export async function putNoteInDrawer(state : {success : boolean, accessToken : 
 export async function getNotesOfDrawer(drawerId : number){
     if(drawerId === -1)
         return;
-    const notes = await GetNotesOfDrawer(drawerId);
+    const notes = await findAllNotesWithDictionaryWordOfDrawer(drawerId);
 
-    return notes?.map((entry) => ({...entry.notes, dictionary_words: {meanings: entry.notes.dictionary_words?.meanings, word: entry.notes.dictionary_words?.word, audio: entry.notes.dictionary_words?.audio}}));
+    return notes?.map((entry) => {
+      const { status, ...rest } = entry.notes;
+
+      return {
+        ...rest,
+        isLearned: status,
+        dictionary_words: {
+            meanings: entry.notes.dictionary_words?.meanings,
+            word: entry.notes.dictionary_words?.word,
+            audio: entry.notes.dictionary_words?.audio
+        }
+      };
+    });
 }
 
 

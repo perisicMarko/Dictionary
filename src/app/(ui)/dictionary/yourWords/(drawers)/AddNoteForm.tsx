@@ -1,4 +1,3 @@
-import { TokenContext } from "@/components/TokenContextProvider";
 import { containerVariants } from "@/lib/animationVariants";
 import { useActionState, useContext, useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
@@ -21,7 +20,7 @@ export default function StrictAutocomplete({
   const [filtered, setFiltered] = useState(options);
   const [validWord, setIsValidWord] = useState(false);
   const [importState, importAction, isImporting] = useActionState(putNoteInDrawer, undefined);
-  const tokenContext = useContext(TokenContext);
+
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +40,7 @@ export default function StrictAutocomplete({
 
   
   useEffect(() => {
-    if(importState?.success){
+    if(!importState.success){
       tokenContext?.setAccessToken(importState.accessToken);
     }else if(importState?.success === false)
       router.push('/');
@@ -64,12 +63,6 @@ export default function StrictAutocomplete({
       className="center-vertically gap-2 w-full"
       onClick={(e) => e.stopPropagation()}
     >
-      <input
-        name="accessToken"
-        value={tokenContext?.accessToken}
-        readOnly
-        hidden
-      />
       <input name="drawerId" value={drawerId} readOnly hidden />
       <input name="addedNoteId" value={notes?.find((w: { word: string; noteId: number }) => w.word === value)?.noteId || -1} readOnly hidden />
       <input

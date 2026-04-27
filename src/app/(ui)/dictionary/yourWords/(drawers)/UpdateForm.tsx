@@ -1,6 +1,5 @@
 import { updateDrawerName } from "@/features/drawers/application";
 import Loader from "@/components/common/Loader";
-import { TokenContext } from "@/components/TokenContextProvider";
 import { TDrawer } from "@/lib/types";
 import { Edit } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -18,7 +17,7 @@ export default function UpdateForm({
   setAddFormShow: (v: boolean) => void;
 }) {
   const nameRef = useRef<HTMLInputElement>(null);
-  const tokenContext = useContext(TokenContext);
+
   const router = useRouter();
   const [refreshUponUpdate, setRefreshUponUpdate] = useState(false);
   const [stateDrawerName, setStateDrawerName] = useState(drawer?.name);

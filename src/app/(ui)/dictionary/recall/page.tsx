@@ -4,7 +4,6 @@ import { getRecallNotes } from "@/features/notes/application";
 import { useState, useContext, useEffect } from "react";
 import { TNoteApp } from "@/lib/types";
 import RecallNote from "@/app/(ui)/dictionary/recall/RecallNote";
-import { TokenContext } from "@/components/TokenContextProvider";
 import ZeroNotesMessage from "@/components/common/ZeroNotesMessage";
 import Loading from "../../loading";
 import { AnimatePresence } from "framer-motion";
@@ -12,15 +11,14 @@ import { AnimatePresence } from "framer-motion";
 export default function Page() {
   const [words, setWords] = useState<TNoteApp[]>();
   const [refresh, setRefresh] = useState(false);
-  const tokenContext = useContext(TokenContext);
 
   useEffect(() => {
     async function fetchNotes() {
-      const data = await getRecallNotes(tokenContext?.accessToken || "");
+      const data = await getRecallNotes();
       setWords(data as TNoteApp[]);
     }
     fetchNotes();
-  }, [refresh, tokenContext?.accessToken]);
+  }, [refresh]);
 
   function onGradeSubmit() {
     setRefresh(!refresh);

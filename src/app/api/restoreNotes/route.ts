@@ -1,5 +1,4 @@
-import { GetNotes, restoreNotes } from '@/features/notes/infrastructure/repository';
-import { TNoteApp } from '@/lib/types';
+import { findAllNotesWithDictionaryWord, restoreNotes } from '@/features/notes/infrastructure/repository';
 import { NextResponse } from 'next/server';
 
 
@@ -8,7 +7,7 @@ export async function GET() {
 
     try {
         //retrieve all notes from the db
-        const notes = (await GetNotes())  as TNoteApp[];
+        const notes = await findAllNotesWithDictionaryWord();
 
         const API_KEY = process.env.API_KEY;
         for (const n of notes){

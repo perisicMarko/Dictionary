@@ -1,5 +1,6 @@
 'server-only';
 import { JWTPayload, SignJWT, jwtVerify } from 'jose';
+import { User } from 'lucide-react';
 import { cookies } from 'next/headers';
 
 const REFRESH_SECRET = new TextEncoder().encode(process.env.REFRESH_SECRET);
@@ -76,6 +77,37 @@ export async function verifySession(accessString : string) {
   return STATUS.UNAUTHORIZED;
 }
 
+export async function requireAuthenticatedUser(){
+  const cookieStore = await cookies();
+
+  const refreshTokenCookie = cookieStore.get('refreshToken')?.value;
+  if(!refreshTokenCookie){
+    return undefined;
+  }
+  const refreshToken = await decryptRefresh(refreshTokenCookie);
+  if(!refreshToken){
+    return undefined;
+  }
+
+  const accessTokenCookie = cookieStore.get('accessToken')?.value;
+  if(!accessTokenCookie){
+    await issueTokensForUser(refreshToken.email, refreshToken.userId);
+    return {email: refreshToken.email, userId: refreshToken.userId};
+  }
+
+  const newAccessToken = await encryptAccess({email: refreshToken.email, userId: refreshToken.userId});
+
+  (await cookies()).set('accessToken', newAccessToken, {
+      httpOnly: true,
+      secure: true,
+      path: '/',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 15 // 15 minutes
+  });
+
+  return {email: refreshToken.email, userId: refreshToken.userId};
+}
+
 
 export type SessionPayload = {
   email: string;
@@ -113,4 +145,26 @@ export async function decryptSession(){
   } catch (error) {
     console.log('Failed session token decryption, error: ' + error);
   } 
+}
+
+export async function issueTokensForUser(email: string, userId: number){
+  const refreshToken = await encryptRefresh({ email: email, userId: userId });
+  const accessToken = await encryptAccess({ email: email, userId: userId });
+
+  //iz nekog razloga mi je trazio await ne znam zasto
+  (await cookies()).set('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: true,
+      path: '/',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7 // 7 days
+  });
+
+  (await cookies()).set('accessToken', accessToken, {
+      httpOnly: true,
+      secure: true,
+      path: '/',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 15 // 15 minutes
+  });
 }

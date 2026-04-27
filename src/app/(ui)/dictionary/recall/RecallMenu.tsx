@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { useRouter } from "next/navigation";
 import { setAsLearned } from "@/features/notes/application";
-import { TokenContext } from "../../../../components/TokenContextProvider";
 import { useContext } from "react";
 import { NotebookPen, Trash2 } from "lucide-react";
 import { useState } from "react";
@@ -22,22 +21,16 @@ export default function RecallNoteMenu({
   rerenderParent: () => void;
 }) {
   const router = useRouter();
-  const tokenContext = useContext(TokenContext);
   const [isRemoving, setIsRemoving] = useState(false);
 
   async function onSubmitDeleteHandle() {
-    if (tokenContext?.accessToken === undefined) return;
     const response = await setAsLearned(
       noteId,
       true,
-      tokenContext?.accessToken
     );
-    if (!response?.status) {
-      tokenContext.setAccessToken("");
+    if (!response.success) {
       router.push("/logIn");
-    } else if (response.status === 201)
-      tokenContext.setAccessToken(response.accessToken || "");
-
+    }
     rerenderParent();
   }
   return (

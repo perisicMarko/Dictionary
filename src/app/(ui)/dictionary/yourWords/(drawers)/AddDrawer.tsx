@@ -3,7 +3,6 @@ import { useState, useContext, useActionState, useEffect, useRef } from "react";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { Plus } from "lucide-react";
 import { createDrawer } from "@/features/drawers/application";
-import { TokenContext } from "@/components/TokenContextProvider";
 import Loader from "@/components/common/Loader";
 import { useRouter } from "next/navigation";
 
@@ -18,13 +17,12 @@ export default function AddDrawer({
   const [state, action, isPending] = useActionState(createDrawer, undefined);
   const [drawerName, setDrawerName] = useState("");
   const drawerAddRef = useRef<HTMLInputElement>(null);
-  const tokenContext = useContext(TokenContext);
+
   const router = useRouter();
 
   useEffect(() => {
-    if (state?.success === false) {
+    if (!state.success === false) {
       //unauthorized
-      tokenContext?.setAccessToken("");
       router.push("/");
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

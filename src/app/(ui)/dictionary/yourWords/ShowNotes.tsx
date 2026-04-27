@@ -1,9 +1,8 @@
-import { getUsersNotes } from "@/features/notes/application";
+import { getUsersWords } from "@/features/notes/application";
 import Words from "@/components/common/Words";
 import { TNoteApp } from "@/lib/types";
 import { useState, useContext, useEffect } from "react";
 import { motion } from "framer-motion";
-import { TokenContext } from "@/components/TokenContextProvider";
 import ZeroNotesMessage from "@/components/common/ZeroNotesMessage";
 import SearchBar, { SORT } from "@/components/common/SearchBar";
 import { itemVariants } from "@/lib/animationVariants";
@@ -11,17 +10,15 @@ import Loading from "../../loading";
 import { isBefore } from "date-fns";
 
 export default function ShowNotes() {
-  const [words, setWords] = useState<TNoteApp[]>();
+  const [words, setWords] = useState<TNoteApp[] | undefined>();
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState(-1);
-  const tokenContext = useContext(TokenContext);
 
   useEffect(() => {
     const fetch = async () => {
-      const words = await getUsersNotes(tokenContext?.accessToken || "");
+      const words = await getUsersWords();
       if (words) {
-        setWords(words.data as TNoteApp[]);
-        tokenContext?.setAccessToken(words.accessToken || "");
+        setWords(words.data);
       }
     };
     fetch();

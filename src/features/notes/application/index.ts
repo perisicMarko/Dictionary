@@ -1,172 +1,109 @@
 'use server'
-import { ImportNotes, GetNotes, GetNoteById, UpdateRepetitionFactors, SetNoteAsLearned, ResetNoteRecallFactors, DeleteNote, EditNotes, GetUsersWords } from '@/features/notes/infrastructure/repository';
-import { TMeaning } from '@/lib/types';
+import { createUserNote, findAllNotesWithDictionaryWord, findNoteById, updateNoteReviewFactors, updateNoteLearnedStatus, resetNoteReviewFactors, deleteNoteById, updateNoteUserText, findUserWordTexts } from '@/features/notes/infrastructure/repository';
+import { TMeaning, TNoteApp } from '@/lib/types';
 import { addDays, isBefore } from 'date-fns';
 import calc from '@/features/notes/domain/spacedRepetition';
-import { decryptAccess, decryptRefresh, encryptAccess, TokenPayload, verifySession, STATUS } from '@/server/auth/session';
+import { decryptAccess, decryptRefresh, encryptAccess, TokenPayload, verifySession, STATUS, requireAuthenticatedUser } from '@/server/auth/session';
 import { logOutUser } from '@/features/auth/application/userAuth';
 import { cookies } from 'next/headers';
 
+function toAppNote(note: any): TNoteApp {
+  const { status, ...rest } = note;
+  return { ...rest, isLearned: status };
+}
+
 export async function getUsersWords() {
-  const cookieStore = await cookies();
-  const refreshToken = cookieStore.get('refreshToken')?.value;
-  const payload = await decryptRefresh(refreshToken || '');
-  if(!payload)
-    return [];
-  const {userId} = payload;
-
-  const words = await GetUsersWords(userId);
-
-  return words;
-}
-
-export async function saveNotes(word: string, audio: string, user_notes: string, generated_notes: TMeaning[], accessToken: string, wordId: number) {
-  const retVal = await verifySession(accessToken);
-  if (retVal === STATUS.UNAUTHORIZED) { //unauthorized
+  const user = await requireAuthenticatedUser();
+  if (!user) {
     await logOutUser();
-    return { success: false, accessToken: '', status: 401 }
+    return { success: false};
   }
-  else if (retVal === STATUS.ACCESS_NEEDED) {
-    const cookieStore = await cookies();
-    const refreshToken = cookieStore.get('refreshToken')?.value;
-    const payload = await decryptRefresh(refreshToken || '');
-    const { email, userId } = payload as TokenPayload;
-    const status = await ImportNotes(userId, word, audio, user_notes, generated_notes, wordId);
-    if (!status)
-      throw new Error('Word is not imported in database, smth is wrong. Check manageNotes/saveNotes -> db/ImportNotes');
-    const accessToken = await encryptAccess({ email, userId });
 
-    return { success: true, accessToken: accessToken, status: 201 };
-  } else if (retVal === STATUS.VALID_ACCESS) {
-    const payload = await decryptAccess(accessToken);
-    const { userId } = payload as TokenPayload;
-    const status = await ImportNotes(userId, word, audio, user_notes, generated_notes, wordId);
-    if (!status)
-      throw new Error('Word is not imported in database, smth is wrong. Check manageNotes/saveNotes -> db/ImportNotes');
-    const token = accessToken;
+  const { userId } = user;  
+  const words = (await findAllNotesWithDictionaryWord(userId) as any[]).map(toAppNote);
 
-    return { success: true, accessToken: token, status: 200 };
-  }
+  return { success: true, data: words };
 }
 
-export async function getUsersNotes(accessToken: string) {
-  const retVal = await verifySession(accessToken);
-
-  if (retVal === STATUS.UNAUTHORIZED) { //unauthorized
+export async function saveNotes(word: string, audio: string, user_notes: string, generated_notes: TMeaning[], wordId: number) {
+  const user = await requireAuthenticatedUser();
+  if (!user) {
     await logOutUser();
     return { success: false };
   }
-  else if (retVal === STATUS.ACCESS_NEEDED) {
-    const cookieStore = await cookies();
-    const refreshToken = cookieStore.get('refreshToken')?.value;
-    const payload = await decryptRefresh(refreshToken || '');
-    const { email, userId } = payload as TokenPayload;
 
-    if (!payload)
-      return {success: false};
+  const { email, userId } = user;
+  const status = await createUserNote(userId, word, audio, user_notes, generated_notes, wordId);
 
-    const notes = await GetNotes();
-    let data = undefined;
-
-    if (Array.isArray(notes))
-      data = notes.filter((w) => {
-        const res = w.status == false && w.user_id == userId;
-        return res;
-      });
-    const accessToken = await encryptAccess({ email, userId });
-
-    return { success: true, accessToken: accessToken, data: data};
-  } else if (retVal === STATUS.VALID_ACCESS) {
-    const cookieStore = await cookies();
-    const refreshToken = cookieStore.get('refreshToken')?.value;
-    const payload = await decryptRefresh(refreshToken || '');
-    const { userId } = payload as TokenPayload;
-    
-    if (!payload)
-      return {success: false};
-
-    const notes = await GetNotes();
-    let data = undefined;
-
-    if (Array.isArray(notes))
-      data = notes.filter((w) => {
-        const res = w.status == false && w.user_id == userId;
-        return res;
-      });
-
-    return { success: true, accessToken: accessToken, data: data};
-  }
+  return { success: true };
 }
 
-
-export async function getUsersHistory(accessToken: string) {
-  const retVal = await verifySession(accessToken);
-
-  if (retVal === STATUS.UNAUTHORIZED) { //unauthorized
+export async function getUsersNote() {
+  const user = await requireAuthenticatedUser();
+  if (!user) {
     await logOutUser();
     return { success: false };
   }
-  else if (retVal === STATUS.ACCESS_NEEDED) {
-    const cookieStore = await cookies();
-    const refreshToken = cookieStore.get('refreshToken')?.value;
-    const payload = await decryptRefresh(refreshToken || '');
-    const { email, userId} = payload as TokenPayload;
 
-    if (!payload)
-      return {success: false};
-
-    const notes = await GetNotes();
-    let data = undefined;
-
-    if (Array.isArray(notes))
-      data = notes.filter((w) => {
-        const res = w.status == true && w.user_id == userId;
-        return res;
-      });
-    const accessToken = await encryptAccess({ email, userId });
-
-    return { success: true, accessToken: accessToken, data: data};
-  } else if (retVal === STATUS.VALID_ACCESS) {
-    const cookieStore = await cookies();
-    const refreshToken = cookieStore.get('refreshToken')?.value;
-    const payload = await decryptRefresh(refreshToken || '');
-    const { userId } = payload as TokenPayload;
-    
-    if (!payload)
-      return {success: false};
-
-    const notes = await GetNotes();
-    let data = undefined;
-
-    if (Array.isArray(notes))
-      data = notes.filter((w) => {
-        const res = w.status == true && w.user_id == userId;
-        return res;
-      });
-
-    return { success: true, accessToken: accessToken, data: data};
-  }
+  const { email, userId } = user;
+  const notes = (await findAllNotesWithDictionaryWord(userId) as any[]).map(toAppNote);
+  
+  return {
+    success: true,
+    data: notes.filter((w) => {
+      const res = w.isLearned == false;
+      return res;
+    })};
 }
 
-export async function getRecallNotes(accessToken: string) {
+export async function getUsersHistory() {
+  const user = await requireAuthenticatedUser();
+  if (!user) {
+    await logOutUser();
+    return { success: false };
+  }
 
-  const payload = await decryptAccess(accessToken);
-  if (!payload)
-    return;
-  const { userId } = payload as TokenPayload;
-  const notes = await GetNotes();
+  const { email, userId } = user;
+
+  const notes = (await findAllNotesWithDictionaryWord(userId) as any[]).map(toAppNote);
+  let data = undefined;
+
+  return {
+    success: true,
+    data: notes.filter((w) => {
+      const res = w.isLearned == true;
+      return res;
+    })};
+}
+
+export async function getRecallNotes() {
+  const user = await requireAuthenticatedUser();
+  if (!user) {
+    await logOutUser();
+    return { success: false };
+  }
+
+  const { email, userId } = user;
+  const notes = (await findAllNotesWithDictionaryWord(userId) as any[]).map(toAppNote);
+
   const currentDate = new Date();
 
-  if (Array.isArray(notes))
-    return notes.filter((n) => {
-      const res = n.status === false && n.user_id == userId && isBefore(n.review_date, currentDate);
+  return {
+    success: true,
+    data: notes.filter((n) => {
+      const res = n.isLearned === false && n.user_id == userId && isBefore(n.review_date, currentDate);
       return res;
-    });
+    })};
 }
 
-export async function updateReviewDate(quality: number, noteId: number, accessToken: string) {
-  const retVal = await verifySession(accessToken);
-  const note = await GetNoteById(noteId);
+export async function updateReviewDate(quality: number, noteId: number) {
+  const user = await requireAuthenticatedUser();
+  if (!user) {
+    await logOutUser();
+    return { success: false };
+  }
+
+  const note = await findNoteById(noteId);
   if (!note)
     throw new Error('Note that should be graded does not exist in database.');
   const nextReviewValues = calc(quality, note.days, note.repetitions, note.ease_factor);
@@ -176,121 +113,62 @@ export async function updateReviewDate(quality: number, noteId: number, accessTo
   note.ease_factor = nextReviewValues.easeFactor;
   note.review_date = addDays(new Date(), note.days);
 
-  if (retVal === STATUS.UNAUTHORIZED) { //unauthorized
-    await logOutUser();
-    return { success: false };
-  }
-  else if (retVal === STATUS.ACCESS_NEEDED) {
-    const cookieStore = await cookies();
-    const refreshToken = cookieStore.get('refreshToken')?.value;
-    const payload = await decryptRefresh(refreshToken || '');
-    const { email, userId } = payload as TokenPayload;
-    const ret = await UpdateRepetitionFactors(note.id, note.days, note.repetitions, note.ease_factor, note.review_date);
-    if (!ret)
-      console.log('An error has occured while updating review date, check manageNotes/index.');
-    const accessToken = await encryptAccess({ email, userId });
+  const ret = await updateNoteReviewFactors(note.id, note.days, note.repetitions, note.ease_factor, note.review_date);
+  if (!ret)
+    console.log('An error has occured while updating review date, check manageNotes/index.');
 
-    return { success: true, accessToken: accessToken, status: 201 };
-  } else if (retVal === STATUS.VALID_ACCESS) {
-    const ret = await UpdateRepetitionFactors(note.id, note.days, note.repetitions, note.ease_factor, note.review_date);
-    if (!ret)
-      console.log('An error has occured while updating review date, check manageNotes/index.');
-    return { success: true, status: 200 };
-  }
+  return { success: true };
 }
 
-export async function setAsLearned(noteId: number, status: boolean, accessToken: string) {
-  const retVal = await verifySession(accessToken);
-  if (retVal === STATUS.UNAUTHORIZED) { //unauthorized
+export async function setAsLearned(noteId: number, status: boolean) {
+  const user = await requireAuthenticatedUser();
+  if (!user) {
     await logOutUser();
     return { success: false };
   }
-  else if (retVal === STATUS.ACCESS_NEEDED) {
-    const cookieStore = await cookies();
-    const refreshToken = cookieStore.get('refreshToken')?.value;
-    const payload = await decryptRefresh(refreshToken || '');
-    const { email, userId } = payload as TokenPayload;
-    await SetNoteAsLearned(noteId, status);
-    const accessToken = await encryptAccess({ email, userId });
 
-    return { success: true, accessToken: accessToken, status: 201 };
-  } else if (retVal === STATUS.VALID_ACCESS) {
-    await SetNoteAsLearned(noteId, status);
-    return { success: true, status: 200 };
-  }
+  await updateNoteLearnedStatus(noteId, status);
+  return { success: true };
 }
 
-export async function editNote(userNotes: string, noteId: number, accessToken: string) {
-  const status = await verifySession(accessToken);
-  if (status === STATUS.UNAUTHORIZED) { //unauthorized
+export async function editNote(userNotes: string, noteId: number) {
+  const user = await requireAuthenticatedUser();
+  if (!user) {
     await logOutUser();
     return { success: false };
   }
-  else if (status === STATUS.ACCESS_NEEDED) {
-    const cookieStore = await cookies();
-    const refreshToken = cookieStore.get('refreshToken')?.value;
-    const payload = await decryptRefresh(refreshToken || '');
-    const { email, userId } = payload as TokenPayload;
-    const retVal = await EditNotes(userNotes, noteId);
-    if (!retVal)
-      throw new Error('Note with noteId is missing in database check manageNotes and edit/[noteId]'); const accessToken = await encryptAccess({ email, userId });
 
-    return { success: true, accessToken: accessToken, status: 201 };
-  } else if (status === STATUS.VALID_ACCESS) {
-    const retVal = await EditNotes(userNotes, noteId);
-    if (!retVal)
-      throw new Error('Note with noteId is missing in database check manageNotes and edit/[noteId]');
-    return { success: true, status: 200 };
-  }
+  const retVal = await updateNoteUserText(userNotes, noteId);
+  if (!retVal) throw new Error('Note with noteId is missing in database check manageNotes and edit/[noteId]');
+
+  return { success: true };
 }
 
 export async function getNoteById(noteId: number) {
-  const note = await GetNoteById(noteId);
+  const note = await findNoteById(noteId) as any;
 
-  return note;
+  return note ? toAppNote(note) : undefined;
 }
 
-
-export async function backToRecallSystem(noteId: number, accessToken: string) {
-  const retVal = await verifySession(accessToken);
-  if (retVal === STATUS.UNAUTHORIZED) { //unauthorized
+export async function backToRecallSystem(noteId: number) {
+  const user = await requireAuthenticatedUser();
+  if (!user) {
     await logOutUser();
     return { success: false };
   }
-  else if (retVal === STATUS.ACCESS_NEEDED) {
-    const cookieStore = await cookies();
-    const refreshToken = cookieStore.get('refreshToken')?.value;
-    const payload = await decryptRefresh(refreshToken || '');
-    const { email, userId } = payload as TokenPayload;
-    await ResetNoteRecallFactors(noteId, 1, 0, 2.5, addDays(new Date(), 1));
-    const accessToken = await encryptAccess({ email, userId });
+  await resetNoteReviewFactors(noteId, 1, 0, 2.5, addDays(new Date(), 1));
 
-    return { success: true, accessToken: accessToken, status: 201 };
-  } else if (retVal === STATUS.VALID_ACCESS) {
-    await ResetNoteRecallFactors(noteId, 1, 0, 2.5, addDays(new Date(), 1));
-    return { success: true, status: 200 };
-  }
+  return { success: true };
 }
 
-
-export async function deleteNote(noteId: number, accessToken: string) {
-  const retVal = await verifySession(accessToken);
-  if (retVal === STATUS.UNAUTHORIZED) { //unauthorized
+export async function deleteNote(noteId: number) {
+  const user = await requireAuthenticatedUser();
+  if (!user) {
     await logOutUser();
     return { success: false };
   }
-  else if (retVal === STATUS.ACCESS_NEEDED) {
-    const cookieStore = await cookies();
-    const refreshToken = cookieStore.get('refreshToken')?.value;
-    const payload = await decryptRefresh(refreshToken || '');
-    const { email, userId } = payload as TokenPayload;
-    await DeleteNote(noteId);
-    const accessToken = await encryptAccess({ email, userId });
 
-    return { success: true, accessToken: accessToken, status: 201 };
-  } else if (retVal === STATUS.VALID_ACCESS) {
-    await DeleteNote(noteId);
-    return { success: true, status: 200 };
-  }
+  await deleteNoteById(noteId);
+
+  return { success: true };
 }
-

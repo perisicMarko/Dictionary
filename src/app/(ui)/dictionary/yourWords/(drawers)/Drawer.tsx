@@ -6,7 +6,6 @@ import { useState, useContext } from "react";
 import DrawerMenu from "./DrawerMenu";
 import UpdateForm from "./UpdateForm";
 import AddNoteForm from "./AddNoteForm";
-import { TokenContext } from "@/components/TokenContextProvider";
 import { deleteDrawer } from "@/features/drawers/application";
 import Loader from "@/components/common/Loader";
 
@@ -28,7 +27,7 @@ export default function Drawer({
   const [addFormShow, setAddFormShow] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const tokenContext = useContext(TokenContext);
+
 
   const handleDelete = async () => {
     const res = await deleteDrawer(
