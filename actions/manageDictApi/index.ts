@@ -72,6 +72,3 @@ export async function fetchApiNotes(word : string){
 
   return undefined
 }
-
-
-type GDefinition = { definition: string; examples: string[]; synonyms: string[]; antonyms: string[] };
