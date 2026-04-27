@@ -1,20 +1,20 @@
 // @vitest-environment node
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { authenticateSignUp } from "@/actions/auth/user";
-import { GetUserInfoByEmail, InsertUserInfo } from "@/actions/manageUsers/db";
-import { GetSubscription } from "@/actions/manageSchools/db";
-import { generateVerificationMail } from "@/actions/auth/user/sendVerificationEmail";
+import { authenticateSignUp } from "@/features/auth/application/userAuth";
+import { GetUserInfoByEmail, InsertUserInfo } from "@/features/auth/infrastructure/usersRepository";
+import { GetSubscription } from "@/features/schools/infrastructure/repository";
+import { generateVerificationMail } from "@/features/auth/application/sendVerificationEmail";
 
-vi.mock("@/actions/manageUsers/db", () => ({
+vi.mock("@/features/auth/infrastructure/usersRepository", () => ({
   GetUserInfoByEmail: vi.fn(),
   InsertUserInfo: vi.fn(),
 }));
 
-vi.mock("@/actions/manageSchools/db", () => ({
+vi.mock("@/features/schools/infrastructure/repository", () => ({
   GetSubscription: vi.fn(),
 }));
 
-vi.mock("@/actions/auth/user/sendVerificationEmail", () => ({
+vi.mock("@/features/auth/application/sendVerificationEmail", () => ({
   __esModule: true,
   default: vi.fn(),
   generateVerificationMail: vi.fn(),

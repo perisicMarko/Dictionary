@@ -2,18 +2,18 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { POST } from "@/app/api/getAccessToken/route";
 import { cookies } from "next/headers";
-import { logOutUser } from "@/actions/auth/user";
-import { decryptRefresh, encryptAccess } from "@/actions/manageSession";
+import { logOutUser } from "@/features/auth/application/userAuth";
+import { decryptRefresh, encryptAccess } from "@/server/auth/session";
 
 vi.mock("next/headers", () => ({
   cookies: vi.fn(),
 }));
 
-vi.mock("@/actions/auth/user", () => ({
+vi.mock("@/features/auth/application/userAuth", () => ({
   logOutUser: vi.fn(),
 }));
 
-vi.mock("@/actions/manageSession", () => ({
+vi.mock("@/server/auth/session", () => ({
   decryptRefresh: vi.fn(),
   encryptAccess: vi.fn(),
 }));

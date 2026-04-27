@@ -1,16 +1,16 @@
 // @vitest-environment node
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import bcrypt from "bcrypt";
-import { authenticateLogIn } from "@/actions/auth/user";
-import { GetUserInfoByEmail } from "@/actions/manageUsers/db";
-import { encryptRefresh } from "@/actions/manageSession";
+import { authenticateLogIn } from "@/features/auth/application/userAuth";
+import { GetUserInfoByEmail } from "@/features/auth/infrastructure/usersRepository";
+import { encryptRefresh } from "@/server/auth/session";
 import { cookies } from "next/headers";
 
-vi.mock("@/actions/manageUsers/db", () => ({
+vi.mock("@/features/auth/infrastructure/usersRepository", () => ({
   GetUserInfoByEmail: vi.fn(),
 }));
 
-vi.mock("@/actions/manageSession", () => ({
+vi.mock("@/server/auth/session", () => ({
   encryptRefresh: vi.fn(),
 }));
 

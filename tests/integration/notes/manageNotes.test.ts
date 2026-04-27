@@ -1,34 +1,34 @@
 // @vitest-environment node
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { cookies } from "next/headers";
-import { logOutUser } from "@/actions/auth/user";
+import { logOutUser } from "@/features/auth/application/userAuth";
 import {
   saveNotes,
   getRecallNotes,
   updateReviewDate,
-} from "@/actions/manageNotes";
+} from "@/features/notes/application";
 import {
   ImportNotes,
   GetNoteById,
   GetNotes,
   UpdateRepetitionFactors,
-} from "@/actions/manageNotes/db";
+} from "@/features/notes/infrastructure/repository";
 import {
   verifySession,
   decryptRefresh,
   decryptAccess,
   encryptAccess,
-} from "@/actions/manageSession";
+} from "@/server/auth/session";
 
 vi.mock("next/headers", () => ({
   cookies: vi.fn(),
 }));
 
-vi.mock("@/actions/auth/user", () => ({
+vi.mock("@/features/auth/application/userAuth", () => ({
   logOutUser: vi.fn(),
 }));
 
-vi.mock("@/actions/manageNotes/db", () => ({
+vi.mock("@/features/notes/infrastructure/repository", () => ({
   ImportNotes: vi.fn(),
   GetNotes: vi.fn(),
   GetNoteById: vi.fn(),
@@ -46,7 +46,7 @@ const STATUS = {
   ACCESS_NEEDED: 2,
 };
 
-vi.mock("@/actions/manageSession", () => ({
+vi.mock("@/server/auth/session", () => ({
   verifySession: vi.fn(),
   decryptRefresh: vi.fn(),
   decryptAccess: vi.fn(),

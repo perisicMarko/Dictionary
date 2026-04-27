@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { decryptRefresh, decryptSession } from "./actions/manageSession";
+import { decryptRefresh, decryptSession } from "@/server/auth/session";
 
 const protectedRoutes = ['/dictionary/yourWords', '/dictionary/inputWord', '/dictionary/history', '/dictionary/recall'];
 const publicRoutes = ['/', '/signUp', '/logIn', '/about'];
