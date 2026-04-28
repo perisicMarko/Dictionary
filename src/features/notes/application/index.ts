@@ -7,8 +7,8 @@ import { requireAuthenticatedUser } from '@/server/auth/session';
 import { logOutUser } from '@/features/auth/application/userAuth';
 
 function toAppNote(note: any): TNoteApp {
-  const { status, ...rest } = note;
-  return { ...rest, isLearned: status };
+  const { is_learned, ...rest } = note;
+  return { ...rest, isLearned: is_learned };
 }
 
 export async function getUsersWords() {
@@ -50,7 +50,7 @@ export async function getUsersNotes() {
   return {
     success: true,
     data: notes.filter((w) => {
-      const res = w.isLearned == false;
+      const res = w.is_learned == false;
       return res;
     })};
 }
@@ -70,7 +70,7 @@ export async function getUsersHistory() {
   return {
     success: true,
     data: notes.filter((w) => {
-      const res = w.isLearned == true;
+      const res = w.is_learned == true;
       return res;
     })};
 }
@@ -90,7 +90,7 @@ export async function getRecallNotes() {
   return {
     success: true,
     data: notes.filter((n) => {
-      const res = n.isLearned === false && isBefore(n.review_date, currentDate);
+      const res = n.is_learned === false && isBefore(n.review_date, currentDate);
       return res;
     })};
 }

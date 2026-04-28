@@ -84,7 +84,7 @@ export async function createUserNote(userId: number, word: string, audio: string
       const newNotes = await prisma.notes.create({
         data: {
           user_id: userId,
-          status: false,
+          is_learned: false,
           language: 'english',
           user_notes: user_notes,
           repetitions: 0,
@@ -104,7 +104,7 @@ export async function createUserNote(userId: number, word: string, audio: string
     const newNotes = await prisma.notes.create({
       data: {
         user_id: userId,
-        status: false,
+        is_learned: false,
         language: 'english',
         user_notes: user_notes,
         repetitions: 0,
@@ -181,7 +181,7 @@ export async function deleteNotesById(ids: number[]) {
 export async function updateNoteLearnedStatus(noteId: number, status: boolean) {
 
   try {
-    const res = await prisma.notes.update({ where: { id: noteId }, data: { status: status } });
+    const res = await prisma.notes.update({ where: { id: noteId }, data: { is_learned: status } });
 
     return res;
   } catch (error) {
@@ -209,7 +209,7 @@ export async function resetNoteReviewFactors(noteId: number, days: number, repet
         repetitions: repetitions,
         ease_factor: easeFactor,
         review_date: reviewDate,
-        status: false,
+        is_learned: false,
       }
     });
 

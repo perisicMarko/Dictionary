@@ -16,7 +16,7 @@ CREATE TABLE "users" (
 CREATE TABLE "words" (
     "id" SERIAL NOT NULL,
     "word" TEXT NOT NULL,
-    "status" BOOLEAN NOT NULL,
+    "is_learned" BOOLEAN NOT NULL,
     "user_notes" TEXT NOT NULL,
     "generated_notes" TEXT NOT NULL,
     "audio" TEXT NOT NULL,

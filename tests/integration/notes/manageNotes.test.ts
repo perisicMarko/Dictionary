@@ -113,25 +113,25 @@ describe("manageNotes integration", () => {
       vi.mocked(findAllNotesByUserId).mockResolvedValue([
         {
           id: 1,
-          status: false,
+          is_learned: false,
           user_id: 10,
           review_date: new Date("2000-01-01T00:00:00.000Z"),
         },
         {
           id: 2,
-          status: false,
+          is_learned: false,
           user_id: 10,
           review_date: new Date("2999-01-01T00:00:00.000Z"),
         },
         {
           id: 3,
-          status: true,
+          is_learned: true,
           user_id: 10,
           review_date: new Date("2000-01-01T00:00:00.000Z"),
         },
         {
           id: 4,
-          status: false,
+          is_learned: false,
           user_id: 9,
           review_date: new Date("2000-01-01T00:00:00.000Z"),
         },

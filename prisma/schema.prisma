@@ -80,7 +80,7 @@ model dictionary_words {
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model notes {
   id                Int                 @id(map: "words_pkey") @unique(map: "words_id_key") @default(autoincrement())
-  status            Boolean
+  is_learned            Boolean
   user_notes        String
   repetitions       Int
   days              Int

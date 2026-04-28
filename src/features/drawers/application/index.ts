@@ -91,17 +91,15 @@ export async function getNotesOfDrawer(drawerId : number){
     return {
         success: true,
         data: notes?.map((entry) => {
-      const { status, ...rest } = entry.notes;
 
-      return {
-        ...rest,
-        isLearned: status,
+        return {
+        ...entry.notes,
         dictionary_words: {
             meanings: entry.notes.dictionary_words?.meanings,
             word: entry.notes.dictionary_words?.word,
             audio: entry.notes.dictionary_words?.audio
         }
-      };
+        };
     })}
 }
 
