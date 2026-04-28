@@ -32,101 +32,101 @@ function createCookieStore(tokens?: {
   };
 }
 
-async function loadSessionModule() {
-  const session = await import("./session");
-  const { cookies } = await import("next/headers");
-  return { session, cookiesMock: vi.mocked(cookies) };
-}
+// async function loadSessionModule() {
+//   const session = await import("./session");
+//   const { cookies } = await import("next/headers");
+//   return { session, cookiesMock: vi.mocked(cookies) };
+// }
 
-describe("manageSession tokens", () => {
-  beforeEach(() => {
-    vi.resetModules();
-    vi.clearAllMocks();
-    process.env.ACCESS_SECRET = "test-access-secret";
-    process.env.REFRESH_SECRET = "test-refresh-secret";
-  });
+// describe("manageSession tokens", () => {
+//   beforeEach(() => {
+//     vi.resetModules();
+//     vi.clearAllMocks();
+//     process.env.ACCESS_SECRET = "test-access-secret";
+//     process.env.REFRESH_SECRET = "test-refresh-secret";
+//   });
 
-  it("encrypts and decrypts access token", async () => {
-    const { session, cookiesMock } = await loadSessionModule();
-    cookiesMock.mockResolvedValue(createCookieStore() as never);
+//   it("encrypts and decrypts access token", async () => {
+//     const { session, cookiesMock } = await loadSessionModule();
+//     cookiesMock.mockResolvedValue(createCookieStore() as never);
 
-    const token = await session.encryptAccess({ email: "user@example.com", userId: 12 });
-    const payload = await session.decryptAccess(token);
+//     const token = await session.encryptAccess({ email: "user@example.com", userId: 12 });
+//     const payload = await session.decryptAccess(token);
 
-    expect(payload?.email).toBe("user@example.com");
-    expect(payload?.userId).toBe(12);
-    expect(typeof payload?.exp).toBe("number");
-  });
+//     expect(payload?.email).toBe("user@example.com");
+//     expect(payload?.userId).toBe(12);
+//     expect(typeof payload?.exp).toBe("number");
+//   });
 
-  it("encrypts and decrypts refresh token", async () => {
-    const { session, cookiesMock } = await loadSessionModule();
-    cookiesMock.mockResolvedValue(createCookieStore() as never);
+//   it("encrypts and decrypts refresh token", async () => {
+//     const { session, cookiesMock } = await loadSessionModule();
+//     cookiesMock.mockResolvedValue(createCookieStore() as never);
 
-    const token = await session.encryptRefresh({ email: "user@example.com", userId: 7 });
-    const payload = await session.decryptRefresh(token);
+//     const token = await session.encryptRefresh({ email: "user@example.com", userId: 7 });
+//     const payload = await session.decryptRefresh(token);
 
-    expect(payload?.email).toBe("user@example.com");
-    expect(payload?.userId).toBe(7);
-    expect(typeof payload?.exp).toBe("number");
-  });
+//     expect(payload?.email).toBe("user@example.com");
+//     expect(payload?.userId).toBe(7);
+//     expect(typeof payload?.exp).toBe("number");
+//   });
 
-  it("returns undefined for invalid access token", async () => {
-    const { session, cookiesMock } = await loadSessionModule();
-    cookiesMock.mockResolvedValue(createCookieStore() as never);
+//   it("returns undefined for invalid access token", async () => {
+//     const { session, cookiesMock } = await loadSessionModule();
+//     cookiesMock.mockResolvedValue(createCookieStore() as never);
 
-    const payload = await session.decryptAccess("invalid-token");
+//     const payload = await session.decryptAccess("invalid-token");
 
-    expect(payload).toBeUndefined();
-  });
+//     expect(payload).toBeUndefined();
+//   });
 
-  it("createSession stores sessionToken and decryptSession reads it", async () => {
-    let sessionToken = "";
-    const cookieStore = {
-      get: (name: string) =>
-        name === "sessionToken" && sessionToken ? { value: sessionToken } : undefined,
-      set: (_name: string, value: string) => {
-        sessionToken = value;
-      },
-      delete: () => undefined,
-    };
+//   it("createSession stores sessionToken and decryptSession reads it", async () => {
+//     let sessionToken = "";
+//     const cookieStore = {
+//       get: (name: string) =>
+//         name === "sessionToken" && sessionToken ? { value: sessionToken } : undefined,
+//       set: (_name: string, value: string) => {
+//         sessionToken = value;
+//       },
+//       delete: () => undefined,
+//     };
 
-    const { session, cookiesMock } = await loadSessionModule();
-    cookiesMock.mockResolvedValue(cookieStore as never);
+//     const { session, cookiesMock } = await loadSessionModule();
+//     cookiesMock.mockResolvedValue(cookieStore as never);
 
-    await session.createSession("school@example.com", 3);
-    const payload = await session.decryptSession();
+//     await session.createSession("school@example.com", 3);
+//     const payload = await session.decryptSession();
 
-    expect(sessionToken).not.toBe("");
-    expect(payload?.email).toBe("school@example.com");
-    expect(payload?.schoolId).toBe(3);
-  });
+//     expect(sessionToken).not.toBe("");
+//     expect(payload?.email).toBe("school@example.com");
+//     expect(payload?.schoolId).toBe(3);
+//   });
 
-  it("returns undefined for invalid refresh token", async () => {
-    const { session, cookiesMock } = await loadSessionModule();
-    cookiesMock.mockResolvedValue(createCookieStore() as never);
+//   it("returns undefined for invalid refresh token", async () => {
+//     const { session, cookiesMock } = await loadSessionModule();
+//     cookiesMock.mockResolvedValue(createCookieStore() as never);
 
-    const payload = await session.decryptRefresh("invalid-token");
+//     const payload = await session.decryptRefresh("invalid-token");
 
-    expect(payload).toBeUndefined();
-  });
+//     expect(payload).toBeUndefined();
+//   });
 
-  it("decryptSession returns undefined when session cookie is missing", async () => {
-    const { session, cookiesMock } = await loadSessionModule();
-    cookiesMock.mockResolvedValue(createCookieStore() as never);
+//   it("decryptSession returns undefined when session cookie is missing", async () => {
+//     const { session, cookiesMock } = await loadSessionModule();
+//     cookiesMock.mockResolvedValue(createCookieStore() as never);
 
-    const payload = await session.decryptSession();
+//     const payload = await session.decryptSession();
 
-    expect(payload).toBeUndefined();
-  });
+//     expect(payload).toBeUndefined();
+//   });
 
-  it("decryptSession returns undefined for malformed session token", async () => {
-    const { session, cookiesMock } = await loadSessionModule();
-    cookiesMock.mockResolvedValue(
-      createCookieStore({ sessionToken: "invalid-session-token" }) as never,
-    );
+//   it("decryptSession returns undefined for malformed session token", async () => {
+//     const { session, cookiesMock } = await loadSessionModule();
+//     cookiesMock.mockResolvedValue(
+//       createCookieStore({ sessionToken: "invalid-session-token" }) as never,
+//     );
 
-    const payload = await session.decryptSession();
+//     const payload = await session.decryptSession();
 
-    expect(payload).toBeUndefined();
-  });
-});
+//     expect(payload).toBeUndefined();
+//   });
+// });

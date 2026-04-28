@@ -2,7 +2,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import getThemeColors from "./getThemeColors";
 import { cookies } from "next/headers";
-import { decryptRefresh, decryptSession } from "@/server/auth/session";
+import { decryptRefresh } from "@/server/auth/userSession";
+import { decryptSession } from "@/server/auth/schoolSession";
 import { getThemeColors } from "./repository";
 import { findSchoolByEmail } from "@/features/schools/infrastructure/repository";
 
@@ -10,8 +11,11 @@ vi.mock("next/headers", () => ({
   cookies: vi.fn(),
 }));
 
-vi.mock("@/server/auth/session", () => ({
+vi.mock("@/server/auth/userSession", () => ({
   decryptRefresh: vi.fn(),
+}));
+
+vi.mock("@/server/auth/schoolSession", () => ({
   decryptSession: vi.fn(),
 }));
 

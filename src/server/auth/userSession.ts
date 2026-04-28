@@ -5,7 +5,6 @@ import { cookies } from 'next/headers';
 const REFRESH_SECRET = new TextEncoder().encode(process.env.REFRESH_SECRET);
 const ACCESS_SECRET = new TextEncoder().encode(process.env.ACCESS_SECRET);
 
-
 export async function encryptRefresh(payload: JWTPayload | undefined) {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
@@ -18,7 +17,7 @@ export async function encryptAccess(payload: JWTPayload | undefined) {
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime('15m')
-    .sign(ACCESS_SECRET)
+    .sign(ACCESS_SECRET);
 }
 
 export type TokenPayload = {
@@ -26,6 +25,12 @@ export type TokenPayload = {
   userId: number;
   exp: number;
 };
+
+export const STATUS = {
+  UNAUTHORIZED: 0,
+  VALID_ACCESS: 1,
+  ACCESS_NEEDED: 2,
+} as const;
 
 export async function decryptAccess(token: string) {
   try {
@@ -40,7 +45,6 @@ export async function decryptAccess(token: string) {
   }
 }
 
-
 export async function decryptRefresh(token: string) {
   try {
     const { payload } = await jwtVerify(token, REFRESH_SECRET, {
@@ -54,94 +58,71 @@ export async function decryptRefresh(token: string) {
   }
 }
 
-export async function requireAuthenticatedUser(){
+export async function requireAuthenticatedUser() {
   const cookieStore = await cookies();
 
   const refreshTokenCookie = cookieStore.get('refreshToken')?.value;
-  if(!refreshTokenCookie){
+  if (!refreshTokenCookie) {
     return undefined;
   }
+
   const refreshToken = await decryptRefresh(refreshTokenCookie);
-  if(!refreshToken){
+  if (!refreshToken) {
     return undefined;
   }
 
   const accessTokenCookie = cookieStore.get('accessToken')?.value;
-  if(!accessTokenCookie){
+  if (!accessTokenCookie) {
     await issueTokensForUser(refreshToken.email, refreshToken.userId);
-    return {email: refreshToken.email, userId: refreshToken.userId};
+    return { email: refreshToken.email, userId: refreshToken.userId };
   }
 
-  const newAccessToken = await encryptAccess({email: refreshToken.email, userId: refreshToken.userId});
+  const newAccessToken = await encryptAccess({
+    email: refreshToken.email,
+    userId: refreshToken.userId,
+  });
 
   (await cookies()).set('accessToken', newAccessToken, {
-      httpOnly: true,
-      secure: true,
-      path: '/',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 15 // 15 minutes
-  });
-
-  return {email: refreshToken.email, userId: refreshToken.userId};
-}
-
-
-export type SessionPayload = {
-  email: string;
-  schoolId: number;
-};
-
-
-export async function createSession(email: string, schoolId: number){
-  const cookieStore = await cookies();
-
-  const token = await new SignJWT({email, schoolId})
-  .setProtectedHeader({ alg: 'HS256' })
-  .setIssuedAt()
-  .sign(ACCESS_SECRET);
-
-  cookieStore.set('sessionToken', token, {
     httpOnly: true,
     secure: true,
-    sameSite: 'strict',
+    path: '/',
+    sameSite: 'lax',
+    maxAge: 60 * 60 * 15,
   });
+
+  return { email: refreshToken.email, userId: refreshToken.userId };
 }
 
-export async function decryptSession(){
-  const token = (await cookies()).get('sessionToken')?.value || '';
-  if(token == '')
-    return;
-  
-  try {
-    const { payload } = await jwtVerify(token, ACCESS_SECRET, {
-      algorithms: ['HS256'],
-    });
+export async function verifySession(accessToken: string | undefined) {
+  if (!accessToken) {
+    return STATUS.UNAUTHORIZED;
+  }
 
-    const t = payload as SessionPayload;
-    return t;
-  } catch (error) {
-    console.log('Failed session token decryption, error: ' + error);
-  } 
+  const payload = await decryptAccess(accessToken);
+  if (payload) {
+    return STATUS.VALID_ACCESS;
+  }
+
+  return STATUS.ACCESS_NEEDED;
 }
 
-export async function issueTokensForUser(email: string, userId: number){
+export async function issueTokensForUser(email: string, userId: number) {
   const refreshToken = await encryptRefresh({ email: email, userId: userId });
   const accessToken = await encryptAccess({ email: email, userId: userId });
 
-  //iz nekog razloga mi je trazio await ne znam zasto
   (await cookies()).set('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: true,
-      path: '/',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7 // 7 days
+    httpOnly: true,
+    secure: true,
+    path: '/',
+    sameSite: 'lax',
+    maxAge: 60 * 60 * 24 * 7,
   });
 
   (await cookies()).set('accessToken', accessToken, {
-      httpOnly: true,
-      secure: true,
-      path: '/',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 15 // 15 minutes
+    httpOnly: true,
+    secure: true,
+    path: '/',
+    sameSite: 'lax',
+    maxAge: 60 * 60 * 15,
   });
 }

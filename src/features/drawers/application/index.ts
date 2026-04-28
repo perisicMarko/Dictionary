@@ -1,5 +1,5 @@
 'use server'
-import { requireAuthenticatedUser } from "@/server/auth/session";
+import { requireAuthenticatedUser } from "@/server/auth/userSession";
 import { attachNoteToDrawer, deleteDrawerById, findAllNotesWithDictionaryWordOfDrawer, findDrawerById, findDrawersByUserId, insertDrawer, removeNoteFromDrawer, updateDrawerNameById } from "@/features/drawers/infrastructure/repository";
 import { logOutUser } from "@/features/auth/application/userAuth";
 

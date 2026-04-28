@@ -1,5 +1,5 @@
 'use server'
-import { decryptSession } from "@/server/auth/session";
+import { decryptSession } from "@/server/auth/schoolSession";
 import { findAllUsersBySchoolId, findUserByAccountActionToken } from "@/features/auth/infrastructure/usersRepository";
 
 export async function getUserByToken(token : Base64URLString){

@@ -1,6 +1,7 @@
 'use server';
 import { cookies } from 'next/headers';
-import { decryptRefresh, decryptSession, SessionPayload, TokenPayload } from '@/server/auth/session';
+import { decryptRefresh, TokenPayload } from '@/server/auth/userSession';
+import { decryptSession, SessionPayload } from '@/server/auth/schoolSession';
 import { getThemeColors as getThemeColorsByUserId } from '@/server/theme/repository';
 import { findSchoolByEmail } from '@/features/schools/infrastructure/repository';
 

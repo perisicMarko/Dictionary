@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { POST } from "@/app/api/getAccessToken/route";
 import { cookies } from "next/headers";
 import { logOutUser } from "@/features/auth/application/userAuth";
-import { decryptRefresh, encryptAccess } from "@/server/auth/session";
+import { decryptRefresh, encryptAccess } from "@/server/auth/userSession";
 
 vi.mock("next/headers", () => ({
   cookies: vi.fn(),
@@ -13,7 +13,7 @@ vi.mock("@/features/auth/application/userAuth", () => ({
   logOutUser: vi.fn(),
 }));
 
-vi.mock("@/server/auth/session", () => ({
+vi.mock("@/server/auth/userSession", () => ({
   decryptRefresh: vi.fn(),
   encryptAccess: vi.fn(),
 }));

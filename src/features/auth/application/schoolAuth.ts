@@ -3,7 +3,7 @@
 import { LoginSchema, SchoolSignupSchema } from '@/lib/rules';
 import bcrypt from 'bcrypt';
 import { findSchoolByEmail, findSchoolPartnershipByEmail, insertSchoolInfo } from '@/features/schools/infrastructure/repository';
-import { createSession } from '@/server/auth/session';
+import { createSession } from '@/server/auth/schoolSession';
 import { cookies } from 'next/headers';
 
 type loginResponseType = undefined

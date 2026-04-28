@@ -4,7 +4,7 @@ import { changeSchoolForUser, findUserByAccountActionToken, findUserByEmail, ins
 import bcrypt from 'bcrypt';
 import sendEmail, { generateVerificationMail } from './sendVerificationEmail';
 import { isBefore } from 'date-fns';
-import {issueTokensForUser } from '@/server/auth/session';
+import { issueTokensForUser } from '@/server/auth/userSession';
 import { cookies } from 'next/headers';
 import { findSubscriptionByEmail, insertActivationKey } from '@/features/schools/infrastructure/repository';
 import { LoginStatus } from '@/shared/auth/loginStatus';

@@ -3,7 +3,7 @@ import { createUserNote, findAllNotesByUserId, findNoteById, updateNoteReviewFac
 import { TDBNoteEntry, TMeaning, TNoteApp, TWordApp } from '@/lib/types';
 import { addDays, isBefore } from 'date-fns';
 import calc from '@/features/notes/domain/spacedRepetition';
-import { requireAuthenticatedUser } from '@/server/auth/session';
+import { requireAuthenticatedUser } from '@/server/auth/userSession';
 import { logOutUser } from '@/features/auth/application/userAuth';
 
 function toAppNote(note: any): TNoteApp {

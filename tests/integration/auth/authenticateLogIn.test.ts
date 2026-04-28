@@ -3,14 +3,14 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import bcrypt from "bcrypt";
 import { authenticateLogin } from "@/features/auth/application/userAuth";
 import { findUserByEmail } from "@/features/auth/infrastructure/usersRepository";
-import { encryptRefresh } from "@/server/auth/session";
+import { encryptRefresh } from "@/server/auth/userSession";
 import { cookies } from "next/headers";
 
 vi.mock("@/features/auth/infrastructure/usersRepository", () => ({
   findUserByEmail: vi.fn(),
 }));
 
-vi.mock("@/server/auth/session", () => ({
+vi.mock("@/server/auth/userSession", () => ({
   encryptRefresh: vi.fn(),
 }));
 

@@ -18,7 +18,7 @@ import {
   decryptRefresh,
   decryptAccess,
   encryptAccess,
-} from "@/server/auth/session";
+} from "@/server/auth/userSession";
 
 vi.mock("next/headers", () => ({
   cookies: vi.fn(),
@@ -46,7 +46,7 @@ const STATUS = {
   ACCESS_NEEDED: 2,
 };
 
-vi.mock("@/server/auth/session", () => ({
+vi.mock("@/server/auth/userSession", () => ({
   verifySession: vi.fn(),
   decryptRefresh: vi.fn(),
   decryptAccess: vi.fn(),

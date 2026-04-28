@@ -1,5 +1,5 @@
 'use server';
-import { decryptSession, SessionPayload } from "@/server/auth/session";
+import { decryptSession, SessionPayload } from "@/server/auth/schoolSession";
 import { findAllSubscriptionsBySchoolId, findSubscriptionByEmail, insertActivationKey, updateActivationKey, updateSubscriptionEmail as updateSubscriptionEmailByAddress } from "@/features/schools/infrastructure/repository";
 import { GenerateSchema } from "@/lib/rules";
 import { TSubscription } from "@/lib/types";

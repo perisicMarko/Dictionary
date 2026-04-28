@@ -1,5 +1,5 @@
 import { logOutUser } from "@/features/auth/application/userAuth";
-import { encryptAccess, decryptRefresh } from "@/server/auth/session";
+import { encryptAccess, decryptRefresh } from "@/server/auth/userSession";
 import { addMinutes, isBefore } from "date-fns";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
