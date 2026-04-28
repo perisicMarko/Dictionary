@@ -1,6 +1,6 @@
 "use server"
 import { SignupSchema, LoginSchema } from '@/shared/lib/rules';
-import { changeSchoolForUser, findUserByAccountActionToken, findUserByEmail, insertUser, verifyUserById } from '@/features/auth/infrastructure/usersRepository';
+import { changeSchoolForUser, findUserByAccountActionToken, findUserByEmail, insertUser, verifyUserById as verifyUserRecordById } from '@/features/auth/infrastructure/usersRepository';
 import bcrypt from 'bcrypt';
 import sendEmail, { generateVerificationMail } from './sendVerificationEmail';
 import { isBefore } from 'date-fns';
@@ -22,8 +22,8 @@ export type SignupActionState = {
     success: boolean;
 } | undefined;
 
-export async function isUserVerified(userId: number) {
-    const status = await verifyUserById(userId);
+export async function verifyUserById(userId: number) {
+    const status = await verifyUserRecordById(userId);
 
     if (status)
         return { success: true };

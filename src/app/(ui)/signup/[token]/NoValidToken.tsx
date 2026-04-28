@@ -1,18 +1,12 @@
-import { motion } from 'framer-motion';
-import { containerVariants } from '@/shared/lib/animationVariants';
-
 export default function NoValidToken(){
 
     return (
-        <motion.div
-        initial="hidden"
-        animate="show"
-        variants={containerVariants}
-        className="box-layout mt-15"
+        <div
+        className="box-layout mt-15 enter-fade"
       >
-        <motion.p className="text-text-main text-center">
+        <p className="text-text-main text-center enter-fade-up enter-delay-1">
           <b>Sorry, no valid token.</b>
-        </motion.p>
-      </motion.div>
+        </p>
+      </div>
     );
 }

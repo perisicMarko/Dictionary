@@ -58,6 +58,20 @@ export async function decryptRefresh(token: string) {
   }
 }
 
+export async function readAuthenticatedUser() {
+  const refreshTokenCookie = (await cookies()).get('refreshToken')?.value;
+  if (!refreshTokenCookie) {
+    return undefined;
+  }
+
+  const refreshToken = await decryptRefresh(refreshTokenCookie);
+  if (!refreshToken) {
+    return undefined;
+  }
+
+  return { email: refreshToken.email, userId: refreshToken.userId };
+}
+
 export async function requireAuthenticatedUser() {
   const cookieStore = await cookies();
 

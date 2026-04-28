@@ -1,75 +1,10 @@
-"use client";
-import SearchBar from "../../../../components/common/SearchBar";
 import { getUsersHistory } from "@/features/notes/application";
-import Words from "@/components/common/Words";
 import { TNoteApp } from "@/shared/types";
-import { useState, useContext, useEffect } from "react";
-import ZeroNotesMessage from "@/components/common/ZeroNotesMessage";
-import { itemVariants } from "@/shared/lib/animationVariants";
-import { motion } from "framer-motion";
-import Loading from "../../loading";
+import HistoryView from "./HistoryView";
 
-export default function History() {
-  const [search, setSearch] = useState("");
-  const [refresh, setRefresh] = useState(false);
-  const [words, setWords] = useState<TNoteApp[]>();
+export default async function History() {
+  const words = await getUsersHistory();
+  const initialWords = words?.success ? (words.data as TNoteApp[]) : [];
 
-  useEffect(() => {
-    const fetch = async () => {
-      const words = await getUsersHistory();
-      if(words){
-        setWords(words?.data as TNoteApp[]);
-      }
-    };
-    fetch();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refresh]);
-
-  const filteredWords =
-    words?.filter((w) => {
-      return w.dictionary_words.word.toLowerCase().trim().includes(search.toLowerCase().trim());
-    });
-
-  function updateSearch(word: string) {
-    setSearch(word);
-  }
-
-  return (
-    <>
-      <div className="mt-12 w-full center-vertically">
-        <SearchBar updateSearch={updateSearch} placeholder={'Search for notes here...'} sortBy={false} changeSortBy={() => {}}>
-          <motion.p variants={itemVariants} className="pt-3">
-            This page should help you review the words you have learned. So
-            basically this page just stores learned words, like personal history.
-            <br />
-            <br />
-            In the menu, there are a delete icon for permanent word deletion and
-            &quot;R&quot; for relearning the word.
-            <br />
-            From this page, and this page only you can delete a note permanently or
-            return word to the learning process.
-            <br /><br />
-            Bonus help: Press the F key to focus the search bar.
-          </motion.p>
-        </SearchBar>
-      </div>
-
-      {filteredWords?.length === 0 && search != "" && (
-        <ZeroNotesMessage
-          message={"There is no word like that within your words."}
-        />
-      )}
-      {!filteredWords && <Loading />}  {/* fetching words */}
-      {filteredWords?.length != 0 && (
-        <Words props={filteredWords} historyNote={true} rerenderParent={() => {setRefresh(!refresh)}} drawerId={-1} />
-      )}
-      {filteredWords?.length === 0 && search === "" && (
-        <ZeroNotesMessage
-          message={
-            "Hmm, it looks like you haven’t marked any words as learned yet."
-          }
-        />
-      )}
-    </>
-  );
+  return <HistoryView initialWords={initialWords} />;
 }

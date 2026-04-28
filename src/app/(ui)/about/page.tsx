@@ -1,22 +1,14 @@
-"use client";
-import { motion } from "framer-motion";
 import Link from "next/link";
-import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
 
 export default function Page() {
   return (
-    <motion.div
-      initial="hidden"
-      animate="show"
-      variants={containerVariants}
-      className="mt-10 m-5 box-layout overflow-auto relative"
-    >
+    <div className="mt-10 m-5 box-layout overflow-auto relative enter-fade">
       <div className="collapse-window">
         <Link className="x-btn mr-4 py-1 text-box" href="/">
           <b>x</b>
         </Link>
       </div>
-      <motion.div variants={itemVariants}>
+      <div className="enter-fade-up enter-delay-1">
         <h2 className="title text-text-main">What does this app do?</h2>
         <p className="text-text-main">
           This app helps you actively recall words you would like to learn by
@@ -29,7 +21,7 @@ export default function Page() {
           &quot;Learned Words&quot; page), as well as the words you still need
           to learn (on the &quot;Your Words&quot; page).
           <br />
-          Words you should recall will show up on page called 
+          Words you should recall will show up on page called
           &quot;Recall.&quot; <br />
           You will receive an email when it&apos;s time to recall certain words.{" "}
           <br />
@@ -46,7 +38,7 @@ export default function Page() {
           More information about the app can be found on each page&apos;s
           dedicated help button.
         </h3>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }

@@ -3,18 +3,14 @@ import { createUserNote, findAllNotesByUserId, findNoteById, updateNoteReviewFac
 import { TDBNoteEntry, TMeaning, TNoteApp, TWordApp } from '@/shared/types';
 import { addDays, isBefore } from 'date-fns';
 import calc from '@/features/notes/domain/spacedRepetition';
-import { requireAuthenticatedUser } from '@/server/auth/userSession';
+import { readAuthenticatedUser, requireAuthenticatedUser } from '@/server/auth/userSession';
 import { logOutUser } from '@/features/auth/application/userAuth';
+import { PassThrough } from 'stream';
 
-function toAppNote(note: any): TNoteApp {
-  const { is_learned, ...rest } = note;
-  return { ...rest, isLearned: is_learned };
-}
 
 export async function getUsersWords() {
-  const user = await requireAuthenticatedUser();
+  const user = await readAuthenticatedUser();
   if (!user) {
-    await logOutUser();
     return { success: false};
   }
 
@@ -31,8 +27,8 @@ export async function saveNotes(word: string, audio: string, user_notes: string,
     return { success: false };
   }
 
-  const { email, userId } = user;
-  const status = await createUserNote(userId, word, audio, user_notes, generated_notes, wordId);
+  const { userId } = user;
+  await createUserNote(userId, word, audio, user_notes, generated_notes, wordId);
 
   return { success: true };
 }
@@ -44,9 +40,9 @@ export async function getUsersNotes() {
     return { success: false };
   }
 
-  const { email, userId } = user;
-  const notes = (await findAllNotesByUserId(userId) as any[]).map(toAppNote);
-  
+  const { userId } = user;
+  const notes = (await findAllNotesByUserId(userId) as any[]);
+
   return {
     success: true,
     data: notes.filter((w) => {
@@ -56,22 +52,19 @@ export async function getUsersNotes() {
 }
 
 export async function getUsersHistory() {
-  const user = await requireAuthenticatedUser();
+  const user = await readAuthenticatedUser();
   if (!user) {
     await logOutUser();
     return { success: false };
   }
 
-  const { email, userId } = user;
-
-  const notes = (await findAllNotesByUserId(userId) as any[]).map(toAppNote);
-  let data = undefined;
+  const { userId } = user;  
+  const notes = (await findAllNotesByUserId(userId) as any[]);
 
   return {
     success: true,
     data: notes.filter((w) => {
-      const res = w.is_learned == true;
-      return res;
+      return w.is_learned == true;
     })};
 }
 
@@ -82,9 +75,8 @@ export async function getRecallNotes() {
     return { success: false };
   }
 
-  const { email, userId } = user;
-  const notes = (await findAllNotesByUserId(userId) as any[]).map(toAppNote);
-
+  const { userId } = user;
+  const notes = (await findAllNotesByUserId(userId) as any[]);
   const currentDate = new Date();
 
   return {
@@ -102,9 +94,8 @@ export async function updateReviewDate(quality: number, noteId: number) {
     return { success: false };
   }
 
-  const note = await findNoteById(noteId);
-  if (!note)
-    throw new Error('Note that should be graded does not exist in database.');
+  const note = await findNoteById(noteId) as any;
+
   const nextReviewValues = calc(quality, note.days, note.repetitions, note.ease_factor);
 
   note.days = nextReviewValues.days;
@@ -114,7 +105,7 @@ export async function updateReviewDate(quality: number, noteId: number) {
 
   const ret = await updateNoteReviewFactors(note.id, note.days, note.repetitions, note.ease_factor, note.review_date);
   if (!ret)
-    console.log('An error has occured while updating review date, check manageNotes/index.');
+    throw new Error('An error has occured while updating review date, check manageNotes/index.');
 
   return { success: true };
 }
@@ -127,6 +118,7 @@ export async function setAsLearned(noteId: number, status: boolean) {
   }
 
   await updateNoteLearnedStatus(noteId, status);
+
   return { success: true };
 }
 
@@ -137,16 +129,15 @@ export async function editNote(userNotes: string, noteId: number) {
     return { success: false };
   }
 
-  const retVal = await updateNoteUserText(userNotes, noteId);
-  if (!retVal) throw new Error('Note with noteId is missing in database check manageNotes and edit/[noteId]');
+  await updateNoteUserText(userNotes, noteId);
 
   return { success: true };
 }
 
 export async function getNoteById(noteId: number) {
-  const note = await findNoteById(noteId) as any;
+  const res = await findNoteById(noteId) as any;
 
-  return note ? toAppNote(note) : undefined;
+  return { success: true, data: res};
 }
 
 export async function backToRecallSystem(noteId: number) {
@@ -155,6 +146,7 @@ export async function backToRecallSystem(noteId: number) {
     await logOutUser();
     return { success: false };
   }
+
   await resetNoteReviewFactors(noteId, 1, 0, 2.5, addDays(new Date(), 1));
 
   return { success: true };

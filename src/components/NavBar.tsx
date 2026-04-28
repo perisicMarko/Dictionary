@@ -1,37 +1,46 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
 import { logOutUser } from "@/features/auth/application/userAuth";
 import { LogOut, Menu, X } from "lucide-react";
 
-export function NavBar({shouldCollapse, resetCollapseFromParent} : {shouldCollapse : boolean, resetCollapseFromParent: (a : boolean) => void}) {
+export function NavBar() {
   const path = usePathname();
   const router = useRouter();
-  const [isVisible, setIsVisible] = useState(true); // on scroll, should navbar appear or not
-
+  const [isVisible, setIsVisible] = useState(true);
   const [mobileMenuToggle, setMobileMenuToggle] = useState(false);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if(shouldCollapse && mobileMenuToggle){
-      setMobileMenuToggle(false);
-      resetCollapseFromParent(false);
-    }else if(shouldCollapse && !mobileMenuToggle)
-      resetCollapseFromParent(false);
+    if (!mobileMenuToggle) {
+      return;
+    }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mobileMenuToggle, shouldCollapse])
+    const handleOutsideClick = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (!mobileMenuRef.current?.contains(target)) {
+        setMobileMenuToggle(false);
+      }
+    };
+
+    document.addEventListener("click", handleOutsideClick, true);
+
+    return () => {
+      document.removeEventListener("click", handleOutsideClick, true);
+    };
+  }, [mobileMenuToggle]);
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
 
     const controlScroll = () => {
       const currentScrollY = window.scrollY;
-      if (currentScrollY > lastScrollY && currentScrollY > 100)
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
         setIsVisible(false);
-      else setIsVisible(true);
+      } else {
+        setIsVisible(true);
+      }
 
       lastScrollY = currentScrollY;
     };
@@ -60,7 +69,7 @@ export function NavBar({shouldCollapse, resetCollapseFromParent} : {shouldCollap
     },
   ];
 
-  const isNavigationRoute = navigationRoutes.map((e) => e.path).includes(path);
+  const isNavigationRoute = navigationRoutes.some((route) => route.path === path);
 
   const handleLogOut = async () => {
     await logOutUser();
@@ -69,15 +78,9 @@ export function NavBar({shouldCollapse, resetCollapseFromParent} : {shouldCollap
 
   return (
     <>
-      {/*Desktop nav menu */}
       {isVisible && isNavigationRoute && (
-        <motion.nav
-          initial="hidden"
-          animate="show"
-          variants={containerVariants}
-          className="hidden fixed top-0 z-50 bg-main w-full h-[50px] sm:grid grid-cols-[auto_1fr] items-center transition-all"
-        >
-          <div className="flex justify-start items-center ml-3 md:ml-7">
+        <nav className="hidden fixed top-0 z-50 bg-main w-full h-[50px] sm:grid grid-cols-[auto_1fr] items-center transition-all enter-fade">
+          <div className="flex justify-start items-center ml-3 md:ml-7 enter-fade-up enter-delay-1">
             <button
               type="submit"
               className="hover:scale-115 scale-105 duration-300 cursor-pointer text-text-main hover:text-text-second transition-all"
@@ -86,7 +89,7 @@ export function NavBar({shouldCollapse, resetCollapseFromParent} : {shouldCollap
               <LogOut width={20} height={20} />
             </button>
           </div>
-          <div className="flex justify-end items-center xl:space-x-5 mr-2 sm:mr-5">
+          <div className="flex justify-end items-center xl:space-x-5 mr-2 sm:mr-5 enter-fade-up enter-delay-1">
             {navigationRoutes.map((route) => {
               return (
                 <Link
@@ -101,27 +104,21 @@ export function NavBar({shouldCollapse, resetCollapseFromParent} : {shouldCollap
               );
             })}
           </div>
-        </motion.nav>
+        </nav>
       )}
 
-      {/* Mobile nav menu*/}
       {isNavigationRoute && isVisible && (
-        <motion.div
-          initial="hidden"
-          animate="show"
-          variants={containerVariants}
-          className="fixed top-0 z-50 bg-main w-full min-h-[50px] gap-2 transition-all sm:hidden py-2"
+        <div
+          ref={mobileMenuRef}
+          className="fixed top-0 z-50 bg-main w-full min-h-[50px] gap-2 transition-all sm:hidden py-2 enter-fade"
         >
-          <motion.div
-            initial="hidden"
-            animate="show"
-            variants={itemVariants}
-            className={"w-full flex justify-end items-center pr-3 py-2 " + (mobileMenuToggle && " mb-2")}
+          <div
+            className={
+              "w-full flex justify-end items-center pr-3 py-2 enter-fade-up enter-delay-1 " +
+              (mobileMenuToggle && " mb-2")
+            }
           >
-            <motion.span
-              initial="hidden"
-              animate="show"
-              variants={itemVariants}
+            <span
               onClick={() => setMobileMenuToggle(!mobileMenuToggle)}
               title="Menu"
             >
@@ -130,32 +127,19 @@ export function NavBar({shouldCollapse, resetCollapseFromParent} : {shouldCollap
               ) : (
                 <Menu color="white" className="btn" height={25} width={25} />
               )}
-            </motion.span>
-          </motion.div>
+            </span>
+          </div>
 
           {mobileMenuToggle && (
             <>
-              <motion.hr
-                initial="hidden"
-                animate="show"
-                variants={itemVariants}
-                className="border-1 border-second w-full"
-              />
+              <hr className="border-1 border-second w-full enter-fade-up enter-delay-1" />
 
-              <motion.div
-                initial="hidden"
-                animate="show"
-                variants={containerVariants}
-                className="w-full center-vertically items-start my-3"
-              >
+              <div className="w-full center-vertically items-start my-3 enter-fade">
                 {navigationRoutes.map((route) => {
                   return (
-                    <motion.span
+                    <span
                       key={route.path}
-                      initial="hidden"
-                      animate="show"
-                      variants={itemVariants}
-                      className="mt-4"
+                      className="mt-4 enter-fade-up enter-delay-1"
                       onClick={() => setMobileMenuToggle(false)}
                     >
                       <Link
@@ -168,11 +152,11 @@ export function NavBar({shouldCollapse, resetCollapseFromParent} : {shouldCollap
                       >
                         {route.label}
                       </Link>
-                    </motion.span>
+                    </span>
                   );
                 })}
 
-                <div className="mt-7">
+                <div className="mt-7 enter-fade-up enter-delay-1">
                   <button
                     type="submit"
                     className="scale-105 transition-all duration-300 cursor-pointer text-text-main hover:text-text-second px-3"
@@ -181,10 +165,10 @@ export function NavBar({shouldCollapse, resetCollapseFromParent} : {shouldCollap
                     <LogOut width={20} height={20} />
                   </button>
                 </div>
-              </motion.div>
+              </div>
             </>
           )}
-        </motion.div>
+        </div>
       )}
     </>
   );

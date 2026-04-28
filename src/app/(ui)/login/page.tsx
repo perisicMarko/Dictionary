@@ -1,8 +1,6 @@
 "use client";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { useState, useTransition } from "react";
-import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/common/Loader";
 import {
@@ -42,7 +40,10 @@ export default function Login() {
           await generateVerificationMail(loginEmail);
         }
 
-        setFormData({ email: "", password: "" });
+        setFormData((currentState) => ({
+          email: currentState.email,
+          password: "",
+        }));
       })();
     });
   }
@@ -51,14 +52,11 @@ export default function Login() {
 
   return (
     <>
-      {(state.status !== LoginStatus.INVALID_SUBSCRIPTION && state.status !== LoginStatus.UNVERIFIED)
-        && (
-          <motion.div
-            initial="hidden"
-            animate="show"
-            variants={containerVariants}
+      {state.status !== LoginStatus.INVALID_SUBSCRIPTION &&
+        state.status !== LoginStatus.UNVERIFIED && (
+          <div
             className={
-              "relative box-layout mt-15 " + (isPending && " opacity-50 ")
+              "relative box-layout mt-15 enter-fade " + (isPending && " opacity-50 ")
             }
           >
             <div className="collapse-window">
@@ -70,7 +68,7 @@ export default function Login() {
               className="form flex flex-col items-center justify-center mt-5"
               action={onSubmit}
             >
-              <motion.div variants={itemVariants} className="w-full">
+              <div className="w-full enter-fade-up enter-delay-1">
                 <label htmlFor="email" className="text-text-main">
                   Email:{" "}
                 </label>
@@ -83,8 +81,8 @@ export default function Login() {
                     setFormData({ ...formData, email: e.target.value });
                   }}
                 />
-              </motion.div>
-              <motion.div variants={itemVariants} className="w-full">
+              </div>
+              <div className="w-full enter-fade-up enter-delay-1">
                 <label htmlFor="password" className="text-text-main">
                   Password:{" "}
                 </label>
@@ -97,18 +95,18 @@ export default function Login() {
                     setFormData({ ...formData, password: e.target.value })
                   }
                 />
-              </motion.div>
-              {state.status === LoginStatus.WRONG_CREDENTIALS && !isPending && !formData.email && (
-                <motion.div variants={itemVariants} className="w-full">
+              </div>
+              {state.status === LoginStatus.WRONG_CREDENTIALS && !isPending && (
+                <div className="w-full enter-fade-up enter-delay-1">
                   <h2 className="error text-center">
                     <b>Wrong credentials</b>
                   </h2>
                   <p className="error text-center">
                     Invalid email or password.
                   </p>
-                </motion.div>
+                </div>
               )}
-              <motion.div variants={itemVariants} className="center mt-2 w-3/4">
+              <div className="center mt-2 w-3/4 enter-fade-up enter-delay-1">
                 <button
                   disabled={isPending || emptyCredentials}
                   className={
@@ -117,49 +115,35 @@ export default function Login() {
                 >
                   {isPending ? <Loader /> : "Log in"}
                 </button>
-              </motion.div>
-              <motion.div
-                variants={{
-                  hidden: { opacity: 0, y: 15 },
-                  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-                }}
-                className="center my-1"
-              >
+              </div>
+              <div className="center my-1 enter-fade-up enter-delay-1">
                 <Link
                   className="flex items-start justify-end text-text-main hover:scale-105 hover:underline text-[14px] sm:text-[18px] transition-all"
                   href="/forgotPassword"
                 >
-                  <u>Forgot password?</u>
+                  Forgot password?
                 </Link>
-              </motion.div>
+              </div>
             </form>
-          </motion.div>
+          </div>
         )}
 
       {state.status === LoginStatus.INVALID_SUBSCRIPTION && (
-        <motion.div
-          initial="hidden"
-          animate="show"
-          variants={containerVariants}
-          className="box-layout mt-10"
-        >
-          <motion.p variants={itemVariants} className="text-box">
+        <div className="box-layout mt-10 enter-fade">
+          <p className="text-box enter-fade-up enter-delay-1">
             <b>There is no subscription for this email addres.</b>
-          </motion.p>
-        </motion.div>
+          </p>
+        </div>
       )}
 
       {state.status === LoginStatus.UNVERIFIED && (
-        <motion.div
-          className="box-layout center-vertically mt-15"
-          variants={containerVariants}
-        >
-          <motion.h2 className="text-box" variants={itemVariants}>
+        <div className="box-layout center-vertically mt-15 enter-fade">
+          <h2 className="text-box enter-fade-up enter-delay-1">
             <b>Your account is not verified!</b>
-          </motion.h2>
-          <motion.span className="text-box" variants={itemVariants}>
+          </h2>
+          <span className="text-box enter-fade-up enter-delay-1">
             Verification email has been sent to you.
-          </motion.span>
+          </span>
           <br />
           <Link
             href="https://mail.google.com/"
@@ -167,7 +151,7 @@ export default function Login() {
           >
             <u className="text-text-second">Gmail link.</u>
           </Link>
-        </motion.div>
+        </div>
       )}
     </>
   );

@@ -1,24 +1,9 @@
-"use client";
-import { useState } from "react";
-import { Help } from "./Help";
-import SaveNoteForm from "./SaveNoteForm";
+import { getUsersWords } from "@/features/notes/application";
+import InputWordView from "./InputWordView";
 
-export default function UserInput() {
-  const [help, setHelp] = useState(false);
+export default async function UserInput() {
+  const wordsResult = await getUsersWords();
+  const initialWords = wordsResult.success ? (wordsResult.data as string[]) : [];
 
-  function toggleHelp() {
-    setHelp(!help);
-  }
-
-  return (
-    <>
-      {!help ? (
-        <SaveNoteForm
-          toggleHelp={toggleHelp}
-        />
-      ) : (
-        <Help toggleHelp={toggleHelp} help={help} />
-      )}
-    </>
-  );
+  return <InputWordView initialWords={initialWords} />;
 }
