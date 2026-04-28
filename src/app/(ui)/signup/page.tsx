@@ -2,14 +2,14 @@
 import VerificationEmailSent from "./VerificationEmailSent";
 import Link from "next/link";
 import { useActionState, useState } from "react";
-import { authenticateSignUp } from "@/features/auth/application/userAuth";
+import { authenticateSignup } from "@/features/auth/application/userAuth";
 import { motion } from "framer-motion";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import Loader from "@/components/common/Loader";
 
-export default function SignUp() {
+export default function Signup() {
   const [state, action, isPending] = useActionState(
-    authenticateSignUp,
+    authenticateSignup,
     undefined
   );
   const [email, setEmail] = useState("");
@@ -175,7 +175,7 @@ export default function SignUp() {
                   variants={itemVariants}
                   className="inline-block hover:scale-105 ml-3 transition-all"
                 >
-                  <Link href="logIn" className="text-text-main">
+                  <Link href="/login" className="text-text-main">
                     <i>
                       <u>Or log in here</u>
                     </i>

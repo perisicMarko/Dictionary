@@ -62,7 +62,7 @@ export default function SaveNoteForm({
 
     
       if(!res.success)
-        router.push("/logIn");
+        router.push("/login");
 
       setIsSaving(false);
     }

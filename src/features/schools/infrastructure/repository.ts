@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function InsertSchoolInfo(name: string, email: string, password: string) {
+export async function insertSchoolInfo(name: string, email: string, password: string) {
 
     try {
         const res = await prisma.schools.create({
@@ -17,13 +17,13 @@ export async function InsertSchoolInfo(name: string, email: string, password: st
     } catch (error) {
 
         if (error instanceof Error) {
-            console.log('InsertSchoolInfo: ERROR: API - ', error?.message);
+            console.log('insertSchoolInfo: ERROR: API - ', error?.message);
         }
 
     }
 }
 
-export async function GetSchoolByEmail(email: string) {
+export async function findSchoolByEmail(email: string) {
 
     try {
         const res = await prisma.schools.findFirst({
@@ -34,13 +34,13 @@ export async function GetSchoolByEmail(email: string) {
     } catch (error) {
 
         if (error instanceof Error) {
-            console.log('GetSchoolByEmail: ERROR: API - ', error?.message);
+            console.log('findSchoolByEmail: ERROR: API - ', error?.message);
         }
 
     }
 }
 
-export async function CheckPartnership(email: string) {
+export async function findSchoolPartnershipByEmail(email: string) {
 
     try {
         const res = await prisma.school_partners.findFirst({
@@ -51,13 +51,13 @@ export async function CheckPartnership(email: string) {
     } catch (error) {
 
         if (error instanceof Error) {
-            console.log('CheckPartnership: ERROR: API - ', error?.message);
+            console.log('findSchoolPartnershipByEmail: ERROR: API - ', error?.message);
         }
 
     }
 }
 
-export async function CreateActivationKey(email: string, activationKeyExpirationDate: Date, schoolId: number) {
+export async function insertActivationKey(email: string, activationKeyExpirationDate: Date, schoolId: number) {
 
     try {
         const res = await prisma.subscriptions.create({
@@ -73,14 +73,14 @@ export async function CreateActivationKey(email: string, activationKeyExpiration
     } catch (error) {
 
         if (error instanceof Error) {
-            console.log('CreateAcivationKey: ERROR: API - ', error?.message);
+            console.log('insertActivationKey: ERROR: API - ', error?.message);
         }
 
     }
 }
 
 
-export async function UpdateActivationKey(email: string, activationKeyExpirationDate: Date, schoolId: number) {
+export async function updateActivationKey(email: string, activationKeyExpirationDate: Date, schoolId: number) {
 
     try {
         const res = await prisma.subscriptions.update({
@@ -98,14 +98,14 @@ export async function UpdateActivationKey(email: string, activationKeyExpiration
     } catch (error) {
 
         if (error instanceof Error) {
-            console.log('UpdateActivationKey: ERROR: API - ', error?.message);
+            console.log('updateActivationKey: ERROR: API - ', error?.message);
         }
 
     }
 }
 
 
-export async function GetSubscription(email: string) {
+export async function findSubscriptionByEmail(email: string) {
 
     try {
         const res = await prisma.subscriptions.findUnique({
@@ -118,13 +118,13 @@ export async function GetSubscription(email: string) {
     } catch (error) {
 
         if (error instanceof Error) {
-            console.log('GetSubscription: ERROR: API - ', error?.message);
+            console.log('findSubscriptionByEmail: ERROR: API - ', error?.message);
         }
 
     }
 }
 
-export async function GetSubscriptionsBySchool(schoolId: number) {
+export async function findAllSubscriptionsBySchoolId(schoolId: number) {
 
     try {
         const res = await prisma.subscriptions.findMany({
@@ -137,13 +137,13 @@ export async function GetSubscriptionsBySchool(schoolId: number) {
     } catch (error) {
 
         if (error instanceof Error) {
-            console.log('GetSubscriptionsBySchool: ERROR: API - ', error?.message);
+            console.log('findAllSubscriptionsBySchoolId: ERROR: API - ', error?.message);
         }
 
     }
 }
 
-export async function UpdateSubscriptionEmail(email : string, newEmail : string) {
+export async function updateSubscriptionEmail(email : string, newEmail : string) {
 
     try {
         const res = await prisma.subscriptions.update({
@@ -159,7 +159,7 @@ export async function UpdateSubscriptionEmail(email : string, newEmail : string)
     } catch (error) {
 
         if (error instanceof Error) {
-            console.log('UpdateSubscriptionEmail: ERROR: API - ', error?.message);
+            console.log('updateSubscriptionEmail: ERROR: API - ', error?.message);
         }
 
     }

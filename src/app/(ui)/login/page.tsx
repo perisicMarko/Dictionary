@@ -6,19 +6,19 @@ import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/common/Loader";
 import {
-  authenticateLogIn,
-  type LogInActionState,
+  authenticateLogin,
+  type LoginActionState,
 } from "@/features/auth/application/userAuth";
-import { LogInStatus } from "@/shared/auth/loginStatus";
+import { LoginStatus } from "@/shared/auth/loginStatus";
 import { generateVerificationMail } from "@/features/auth/application/sendVerificationEmail";
 
-export default function LogIn() {
-  const initialState: LogInActionState = {
+export default function Login() {
+  const initialState: LoginActionState = {
     success: false,
     errorMessage: "",
-    status: LogInStatus.EMPTY,
+    status: LoginStatus.EMPTY,
   };
-  const [state, setState] = useState<LogInActionState>(initialState);
+  const [state, setState] = useState<LoginActionState>(initialState);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const [formData, setFormData] = useState<{ email: string; password: string }>(
@@ -30,7 +30,7 @@ export default function LogIn() {
     const loginEmail = (formData.get("email") as FormDataEntryValue).toString();
     startTransition(() => {
       void (async () => {
-        const result = await authenticateLogIn(state, formData);
+        const result = await authenticateLogin(state, formData);
         setState(result);
 
         if (result.success) {
@@ -38,7 +38,7 @@ export default function LogIn() {
           return;
         }
 
-        if (result.status === LogInStatus.UNVERIFIED) {
+        if (result.status === LoginStatus.UNVERIFIED) {
           await generateVerificationMail(loginEmail);
         }
 
@@ -51,7 +51,7 @@ export default function LogIn() {
 
   return (
     <>
-      {(state.status !== LogInStatus.INVALID_SUBSCRIPTION && state.status !== LogInStatus.UNVERIFIED)
+      {(state.status !== LoginStatus.INVALID_SUBSCRIPTION && state.status !== LoginStatus.UNVERIFIED)
         && (
           <motion.div
             initial="hidden"
@@ -98,7 +98,7 @@ export default function LogIn() {
                   }
                 />
               </motion.div>
-              {state.status === LogInStatus.WRONG_CREDENTIALS && !isPending && !formData.email && (
+              {state.status === LoginStatus.WRONG_CREDENTIALS && !isPending && !formData.email && (
                 <motion.div variants={itemVariants} className="w-full">
                   <h2 className="error text-center">
                     <b>Wrong credentials</b>
@@ -136,7 +136,7 @@ export default function LogIn() {
           </motion.div>
         )}
 
-      {state.status === LogInStatus.INVALID_SUBSCRIPTION && (
+      {state.status === LoginStatus.INVALID_SUBSCRIPTION && (
         <motion.div
           initial="hidden"
           animate="show"
@@ -149,7 +149,7 @@ export default function LogIn() {
         </motion.div>
       )}
 
-      {state.status === LogInStatus.UNVERIFIED && (
+      {state.status === LoginStatus.UNVERIFIED && (
         <motion.div
           className="box-layout center-vertically mt-15"
           variants={containerVariants}

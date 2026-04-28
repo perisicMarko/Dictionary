@@ -1,6 +1,6 @@
 'use server';
 import { decryptSession, SessionPayload } from "@/server/auth/session";
-import { CreateActivationKey, GetSubscription, GetSubscriptionsBySchool, UpdateActivationKey, UpdateSubscriptionEmail } from "@/features/schools/infrastructure/repository";
+import { findAllSubscriptionsBySchoolId, findSubscriptionByEmail, insertActivationKey, updateActivationKey, updateSubscriptionEmail as updateSubscriptionEmailByAddress } from "@/features/schools/infrastructure/repository";
 import { GenerateSchema } from "@/lib/rules";
 import { TSubscription } from "@/lib/types";
 import { validateActivationKeyExpirationDate } from "@/features/schools/domain/validation";
@@ -39,17 +39,17 @@ export async function generateActivationKey(state: {success: boolean, message: s
     if(dateValidationError)
         return {success: false, message: '', email: '', date: dateValidationError};
 
-    const subscription = await GetSubscription(inputEmail);
+    const subscription = await findSubscriptionByEmail(inputEmail);
 
     if(!subscription){
-        const retVal = await CreateActivationKey(inputEmail, activationKeyExpirationDate, schoolId);
+        const retVal = await insertActivationKey(inputEmail, activationKeyExpirationDate, schoolId);
         if(!retVal)
             throw new Error('Activation Key creation failed, check manageSchools.');
     }else{
         if(!subscription?.languages?.includes(formData.get('language')?.toString() as string)){
             subscription.languages += 'e';
         }
-        const retVal = await UpdateActivationKey(inputEmail, activationKeyExpirationDate, schoolId);
+        const retVal = await updateActivationKey(inputEmail, activationKeyExpirationDate, schoolId);
         if(!retVal)
             throw new Error('Activation Key update failed, check manageSchools.');
     }
@@ -63,7 +63,7 @@ export async function getSubscriptionsBySchool(){
         return [] as TSubscription[];
 
     const { schoolId } = session;
-    const subscriptions = await GetSubscriptionsBySchool(schoolId);
+    const subscriptions = await findAllSubscriptionsBySchoolId(schoolId);
 
     return subscriptions;
 }
@@ -74,7 +74,7 @@ export async function updateSubscriptionEmail(email : string, newEmail : string)
         return {success: false};
 
     console.log('hello');
-    const res = await UpdateSubscriptionEmail(email, newEmail);
+    const res = await updateSubscriptionEmailByAddress(email, newEmail);
     if(!res)
         return {success: false};
 

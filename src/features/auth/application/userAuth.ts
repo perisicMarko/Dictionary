@@ -1,20 +1,19 @@
 "use server"
-import { SignUpSchema, LogInSchema } from '@/lib/rules';
+import { SignupSchema, LoginSchema } from '@/lib/rules';
 import { changeSchoolForUser, findUserByEmail, findUserByToken, insertUser, isUserVerifiedById } from '@/features/auth/infrastructure/usersRepository';
 import bcrypt from 'bcrypt';
 import sendEmail, { generateVerificationMail } from './sendVerificationEmail';
 import { isBefore } from 'date-fns';
 import { encryptAccess, encryptRefresh, issueTokensForUser } from '@/server/auth/session';
 import { cookies } from 'next/headers';
-import { CreateActivationKey, GetSubscription } from '@/features/schools/infrastructure/repository';
-import { LogInStatus, LoginStatus } from '@/shared/auth/loginStatus';
-import { redirect } from 'next/dist/server/api-utils';
+import { findSubscriptionByEmail, insertActivationKey } from '@/features/schools/infrastructure/repository';
+import { LoginStatus } from '@/shared/auth/loginStatus';
 
-type SignUpFieldErrors = Partial<Record<'name' | 'lastName' | 'email' | 'password' | 'confirmPassword', string[]>>;
+type SignupFieldErrors = Partial<Record<'name' | 'lastName' | 'email' | 'password' | 'confirmPassword', string[]>>;
 
 
-export type SignUpActionState = {
-    errors: SignUpFieldErrors | null;
+export type SignupActionState = {
+    errors: SignupFieldErrors | null;
     name: string;
     lastName: string;
     email: string;
@@ -32,9 +31,9 @@ export async function isUserVerified(userId: number) {
     return { success: false };
 }
 
-export async function authenticateSignUp(state: SignUpActionState, formData: FormData) {
+export async function authenticateSignup(state: SignupActionState, formData: FormData) {
 
-    const validatedFields = SignUpSchema.safeParse({
+    const validatedFields = SignupSchema.safeParse({
         name: formData.get("name"),
         lastName: formData.get("lastName"),
         email: formData.get("email"),
@@ -88,7 +87,7 @@ export async function authenticateSignUp(state: SignUpActionState, formData: For
 
     // this is subscription logic, only someone with subscription can create account
     // while app is free to use, this segment should be commented out, in production it should be uncommented
-    // const subscription = await GetSubscription(email);
+    // const subscription = await findSubscriptionByEmail(email);
     // this segment should be commented while app is free to use
     // if (!subscription)
     //     return {
@@ -123,7 +122,7 @@ export async function authenticateSignUp(state: SignUpActionState, formData: For
     // subscription is mocked with next line
     const oneYear = 1000 * 60 * 60 * 24 * 365;
 
-    const mock_subscription = await CreateActivationKey(email, new Date(Date.now() + oneYear), 1);
+    const mock_subscription = await insertActivationKey(email, new Date(Date.now() + oneYear), 1);
     // hardcoded 1, in production with school program subscription.school_id should always be valid and not null
     const status = await insertUser(name, lastName, email, password, 1);
 
@@ -131,7 +130,7 @@ export async function authenticateSignUp(state: SignUpActionState, formData: For
     //const status = await insertUser(name, lastName, email, password, subscription.school_id); 
 
     if (!status)
-        throw new Error('Error: insertUser status in authenthicateSignUp');
+        throw new Error('Error: insertUser status in authenticateSignup');
 
     const emailGenerated = await generateVerificationMail(email);
     if (emailGenerated)
@@ -177,39 +176,39 @@ export async function getUserByToken(token: Base64URLString) {
     return { success: true, user };
 }
 
-export type LogInActionState = { success: boolean, errorMessage: string, status: number };
+export type LoginActionState = { success: boolean, errorMessage: string, status: number };
 
-export async function authenticateLogIn(state: LogInActionState, formData: FormData) {
+export async function authenticateLogin(state: LoginActionState, formData: FormData) {
 
     const inputEmail = (formData.get('email') as FormDataEntryValue).toString() as string;
     const inputPassword = (formData.get('password') as FormDataEntryValue).toString() as string;
 
-    const validatedFields = LogInSchema.safeParse({
+    const validatedFields = LoginSchema.safeParse({
         email: inputEmail,
         password: inputPassword,
     });
 
     if (!validatedFields.success) {
-        const status = LogInStatus.WRONG_CREDENTIALS;
-        return { success: false, errorMessage: "Invalid email or password.", status: LogInStatus.WRONG_CREDENTIALS };
+        const status = LoginStatus.WRONG_CREDENTIALS;
+        return { success: false, errorMessage: "Invalid email or password.", status: LoginStatus.WRONG_CREDENTIALS };
     } else {
         const { email, password } = validatedFields.data as { email: string, password: string };
         const user = await findUserByEmail(email);
 
-        if (!user) return { success: false, errorMessage: "Invalid email or password.", status: LogInStatus.WRONG_CREDENTIALS };
+        if (!user) return { success: false, errorMessage: "Invalid email or password.", status: LoginStatus.WRONG_CREDENTIALS };
 
         // UNCOMMENT IN PRODUCTION
-        //const subscription = await GetSubscription(email);
+        //const subscription = await findSubscriptionByEmail(email);
         // if (!subscription)
         //     return {
         //         errorMessage: undefined,
-        //         status: LogInStatus.INVALID_SUBSCRIPTION
+        //         status: LoginStatus.INVALID_SUBSCRIPTION
         //     };
 
         // if (isBefore(subscription.key_expiration_date as Date, new Date()))
         //     return {
         //         errorMessage: undefined,
-        //         status: LogInStatus.INVALID_SUBSCRIPTION
+        //         status: LoginStatus.INVALID_SUBSCRIPTION
         //     };
 
 
@@ -218,14 +217,14 @@ export async function authenticateLogIn(state: LogInActionState, formData: FormD
             return {
                 success: false,
                 errorMessage: "Invalid email or password.",
-                status: LogInStatus.WRONG_CREDENTIALS
+                status: LoginStatus.WRONG_CREDENTIALS
             };
 
         if (!user.email_verified)
             return {
                 success: false,
                 errorMessage: "Email not verified.",
-                status: LogInStatus.UNVERIFIED
+                status: LoginStatus.UNVERIFIED
             };
 
 
@@ -239,7 +238,7 @@ export async function authenticateLogIn(state: LogInActionState, formData: FormD
 
         await issueTokensForUser(user.email, user.id);
 
-        return { success: true, errorMessage: "All good.", status: LogInStatus.SUCCESS };
+        return { success: true, errorMessage: "All good.", status: LoginStatus.SUCCESS };
     }
 }
 

@@ -5,10 +5,10 @@ import { useActionState, useEffect, useState } from "react";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/common/Loader";
-import { SchoolLogIn } from "@/features/auth/application/schoolAuth";
+import { authenticateLogin } from "@/features/auth/application/schoolAuth";
 
-export default function LogIn() {
-  const [logInState, action, isPending] = useActionState(SchoolLogIn, undefined);
+export default function Login() {
+  const [loginState, action, isPending] = useActionState(authenticateLogin, undefined);
   const [formData, setFormData] = useState<{email: string, password: string}>({email: '', password: ''});
   const {email, password} = formData;
 
@@ -16,9 +16,9 @@ export default function LogIn() {
   const emptyCredentials = password === "" || email === "";
 
   useEffect(() => {
-    if(logInState?.success)
+    if(loginState?.success)
       router.push('/school/platform/students');
-  }, [router, logInState?.success]);
+  }, [router, loginState?.success]);
 
   return (
     <motion.div
@@ -47,8 +47,8 @@ export default function LogIn() {
               setFormData({...formData, email: e.target.value});
             }}
           />
-          {logInState?.errors?.email != "" && (
-            <p className="error ml-1">{logInState?.errors?.email}</p>
+          {loginState?.errors?.email != "" && (
+            <p className="error ml-1">{loginState?.errors?.email}</p>
           )}
         </motion.div>
         <motion.div variants={itemVariants} className="w-full">
@@ -62,8 +62,8 @@ export default function LogIn() {
             value={password}
             onChange={(e) => setFormData({...formData, password: e.target.value})}
           />
-          {logInState?.errors?.password && (
-            <p className="error ml-1">{logInState?.errors.password}</p>
+          {loginState?.errors?.password && (
+            <p className="error ml-1">{loginState?.errors.password}</p>
           )}
         </motion.div>
         <motion.div variants={itemVariants} className="center w-3/4 mt-2">
@@ -85,7 +85,7 @@ export default function LogIn() {
         >
           <Link
             className="flex items-start justify-end text-text-main hover:scale-105 hover:underline text-[14px] sm:text-[18px]"
-            href="/school/signUp"
+            href="/school/signup"
           >
             <u>Sign up here</u>
           </Link>

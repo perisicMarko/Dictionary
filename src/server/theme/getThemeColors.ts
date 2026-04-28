@@ -2,7 +2,7 @@
 import { cookies } from 'next/headers';
 import { decryptRefresh, decryptSession, SessionPayload, TokenPayload } from '@/server/auth/session';
 import { getThemeColors as getThemeColorsByUserId } from '@/server/theme/repository';
-import { GetSchoolByEmail } from '@/features/schools/infrastructure/repository';
+import { findSchoolByEmail } from '@/features/schools/infrastructure/repository';
 
 
 const DEFAULT_THEME_COLORS = {
@@ -23,7 +23,7 @@ export default async function getThemeColors(){
 
     if(sessionPayload){ //returns style if school is logged in, no need to test everything cause no user will ever has school token in his browser
         const {email} = sessionPayload as SessionPayload;
-        const school = await GetSchoolByEmail(email);
+        const school = await findSchoolByEmail(email);
 
         if(school)        
             return school.colors;

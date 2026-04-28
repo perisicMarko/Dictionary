@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import bcrypt from "bcrypt";
-import { authenticateLogIn } from "@/features/auth/application/userAuth";
+import { authenticateLogin } from "@/features/auth/application/userAuth";
 import { findUserByEmail } from "@/features/auth/infrastructure/usersRepository";
 import { encryptRefresh } from "@/server/auth/session";
 import { cookies } from "next/headers";
@@ -31,13 +31,13 @@ function loginForm(email: string, password: string) {
   return formData;
 }
 
-describe("authenticateLogIn integration", () => {
+describe("authenticateLogin integration", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it("returns WRONG_CREDENTIALS for invalid form data", async () => {
-    const result = await authenticateLogIn(undefined, loginForm("bad-email", "123"));
+    const result = await authenticateLogin(undefined, loginForm("bad-email", "123"));
 
     expect(result?.status).toBe(LOGIN_STATUS.WRONG_CREDENTIALS);
     expect(result?.error?.message).toBe("Wrong email or password.");
@@ -47,7 +47,7 @@ describe("authenticateLogIn integration", () => {
   it("returns WRONG_CREDENTIALS when user does not exist", async () => {
     vi.mocked(findUserByEmail).mockResolvedValue(undefined);
 
-    const result = await authenticateLogIn(
+    const result = await authenticateLogin(
       undefined,
       loginForm("user@example.com", "Passw0rd!"),
     );
@@ -65,7 +65,7 @@ describe("authenticateLogIn integration", () => {
       email_verified: true,
     } as never);
 
-    const result = await authenticateLogIn(
+    const result = await authenticateLogin(
       undefined,
       loginForm("user@example.com", "WrongPass1!"),
     );
@@ -83,7 +83,7 @@ describe("authenticateLogIn integration", () => {
       email_verified: false,
     } as never);
 
-    const result = await authenticateLogIn(
+    const result = await authenticateLogin(
       undefined,
       loginForm("user@example.com", "Passw0rd!"),
     );
@@ -107,7 +107,7 @@ describe("authenticateLogIn integration", () => {
       set: setCookie,
     } as never);
 
-    const result = await authenticateLogIn(
+    const result = await authenticateLogin(
       undefined,
       loginForm("user@example.com", "Passw0rd!"),
     );

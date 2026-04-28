@@ -1,15 +1,15 @@
 "use client";
 import Link from "next/link";
 import { useActionState, useEffect, useState } from "react";
-import { authenticateSignUp } from "@/features/auth/application/schoolAuth";
+import { authenticateSignup } from "@/features/auth/application/schoolAuth";
 import { motion } from "framer-motion";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import Loader from "@/components/common/Loader";
 import { useRouter } from "next/navigation";
 
-export default function SignUp() {
+export default function Signup() {
   const [state, action, isPending] = useActionState(
-    authenticateSignUp,
+    authenticateSignup,
     undefined
   );
 

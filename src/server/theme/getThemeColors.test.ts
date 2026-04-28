@@ -4,7 +4,7 @@ import getThemeColors from "./getThemeColors";
 import { cookies } from "next/headers";
 import { decryptRefresh, decryptSession } from "@/server/auth/session";
 import { getThemeColors } from "./repository";
-import { GetSchoolByEmail } from "@/features/schools/infrastructure/repository";
+import { findSchoolByEmail } from "@/features/schools/infrastructure/repository";
 
 vi.mock("next/headers", () => ({
   cookies: vi.fn(),
@@ -20,7 +20,7 @@ vi.mock("./repository", () => ({
 }));
 
 vi.mock("@/features/schools/infrastructure/repository", () => ({
-  GetSchoolByEmail: vi.fn(),
+  findSchoolByEmail: vi.fn(),
 }));
 
 const DEFAULT_THEME = {
@@ -43,7 +43,7 @@ describe("getThemeColors", () => {
     vi.mocked(cookies).mockResolvedValue(cookieStore() as never);
     vi.mocked(decryptSession).mockResolvedValue(undefined);
     vi.mocked(decryptRefresh).mockResolvedValue(undefined);
-    vi.mocked(GetSchoolByEmail).mockResolvedValue(undefined);
+    vi.mocked(findSchoolByEmail).mockResolvedValue(undefined);
     vi.mocked(getThemeColors).mockResolvedValue(undefined);
   });
 
@@ -62,7 +62,7 @@ describe("getThemeColors", () => {
     };
 
     vi.mocked(decryptSession).mockResolvedValue({ email: "school@example.com" } as never);
-    vi.mocked(GetSchoolByEmail).mockResolvedValue({ colors: schoolTheme } as never);
+    vi.mocked(findSchoolByEmail).mockResolvedValue({ colors: schoolTheme } as never);
 
     const theme = await getThemeColors();
 

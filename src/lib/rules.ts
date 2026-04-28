@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const SignUpSchema = z.object({
+export const SignupSchema = z.object({
     name: z.string().min(1, { message: "Must not be empty!" }).regex(/^[a-zA-Z]+$/, { message: "Contains only letters!" }),
     lastName: z.string().min(1, { message: "Not be empty!" }).regex(/^[a-zA-Z]+$/, { message: "Contains only letters!" }),
     email: z.string().trim().email('Please enter a valid email!'),
@@ -18,13 +18,13 @@ export const SignUpSchema = z.object({
     }
 });
 
-export const LogInSchema = z.object({
+export const LoginSchema = z.object({
     email: z.string().trim().email('Please enter a valid email!'),
     password: z.string().min(1, { message: "Password is required" }).trim()
 });
 
 
-export const SchoolSignUpSchema = z.object({
+export const SchoolSignupSchema = z.object({
     name: z.string().min(1, { message: "Must not be empty!" }).regex(/^[a-zA-Z]+$/, { message: "Contains only letters!" }),
     email: z.string().trim().email('Please enter a valid email!'),
     password: z.string().min(5, { message: "Must be at least five characters long!" })

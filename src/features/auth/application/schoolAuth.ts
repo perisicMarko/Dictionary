@@ -1,12 +1,12 @@
 
 "use server"
-import { LogInSchema, SchoolSignUpSchema } from '@/lib/rules';
+import { LoginSchema, SchoolSignupSchema } from '@/lib/rules';
 import bcrypt from 'bcrypt';
-import { CheckPartnership, GetSchoolByEmail, InsertSchoolInfo } from '@/features/schools/infrastructure/repository';
+import { findSchoolByEmail, findSchoolPartnershipByEmail, insertSchoolInfo } from '@/features/schools/infrastructure/repository';
 import { createSession } from '@/server/auth/session';
 import { cookies } from 'next/headers';
 
-type logInResponseType = undefined
+type loginResponseType = undefined
   | {
       success: boolean;
       errors: undefined;
@@ -22,11 +22,11 @@ type logInResponseType = undefined
     };
 
 
-export async function SchoolLogIn(state: logInResponseType, formData: FormData){
+export async function authenticateLogin(state: loginResponseType, formData: FormData){
     const inputEmail = formData.get('email') || '';
     const inputPassword = formData.get('password') || '';
 
-    const validatedFields = LogInSchema.safeParse({
+    const validatedFields = LoginSchema.safeParse({
         email: inputEmail,
         password: inputPassword,
     });
@@ -45,7 +45,7 @@ export async function SchoolLogIn(state: logInResponseType, formData: FormData){
     }
 
     const {email, password} : {email: string, password: string} = validatedFields.data;
-    const school = await GetSchoolByEmail(email);
+    const school = await findSchoolByEmail(email);
     
     if(!school) return {errors: {email: '-Wrong email.', password: ''}, email: '', success: false}; 
 
@@ -63,7 +63,7 @@ export async function SchoolLogIn(state: logInResponseType, formData: FormData){
 }
 
 
-type singUpReponseType = undefined
+type signupResponseType = undefined
   | {
       success: boolean;
       errors: undefined;
@@ -86,9 +86,9 @@ type singUpReponseType = undefined
       name: string;
     };
 
-export async function authenticateSignUp(state: singUpReponseType, formData: FormData){
+export async function authenticateSignup(state: signupResponseType, formData: FormData){
 
-    const validatedFields = SchoolSignUpSchema.safeParse({
+    const validatedFields = SchoolSignupSchema.safeParse({
         name: formData.get("name"),
         email: formData.get("email"),
         password: formData.get("password"),
@@ -117,7 +117,7 @@ export async function authenticateSignUp(state: singUpReponseType, formData: For
         return retObj;
     }else{
         const tmp = formData.get('email')?.toString();
-        const res = await GetSchoolByEmail(tmp || '');
+        const res = await findSchoolByEmail(tmp || '');
         const alreadyExist = res != null;
         if(alreadyExist && validatedFields.success){
             const retObj = {
@@ -134,7 +134,7 @@ export async function authenticateSignUp(state: singUpReponseType, formData: For
     }
     
     const {name, email} = validatedFields.data;
-    const partner = await CheckPartnership(email);
+    const partner = await findSchoolPartnershipByEmail(email);
     if(!partner || !partner.active_partnership)
         return {
             errors: undefined,
@@ -148,10 +148,10 @@ export async function authenticateSignUp(state: singUpReponseType, formData: For
     let {password} = validatedFields.data;
     password = await bcrypt.hash(password, 10);
 
-    const status = await InsertSchoolInfo(name.toLowerCase(), email, password);
+    const status = await insertSchoolInfo(name.toLowerCase(), email, password);
 
     if(!status)
-        throw new Error('Error: InsertSchoolInfo status in authenthicateSignUp');
+        throw new Error('Error: insertSchoolInfo status in authenticateSignup');
 
     
     return {

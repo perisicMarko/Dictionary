@@ -35,7 +35,7 @@ export async function findAllNotes() {
     return res;
   } catch (error) {
     if (error instanceof Error) {
-      console.log('findAllNotesByUserId: ERROR: API - ', error?.message);
+      console.log('findAllNotes: ERROR: API - ', error?.message);
     }
   }
 }
@@ -46,7 +46,7 @@ export async function findAllWords() {
     return res;
   } catch (error) {
     if (error instanceof Error) {
-      console.log('findAllNotesByUserId: ERROR: API - ', error?.message);
+      console.log('findAllWords: ERROR: API - ', error?.message);
     }
   }
 }

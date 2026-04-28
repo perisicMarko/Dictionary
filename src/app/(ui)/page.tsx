@@ -74,13 +74,13 @@ export default function Home() {
         >
           <u>About the app</u>
         </Link>
-        <Link className="primary-btn center" href="/logIn">
+        <Link className="primary-btn center" href="/login">
           <b>Log in</b>
         </Link>
         <div className="grid grid-cols-2 w-full mt-3">
           <Link
             className="flex items-start justify-start text-text-main hover:scale-105 hover:underline text-[14px] sm:text-[18px] tranistion-all"
-            href="/signUp"
+            href="/signup"
           >
             <u>Sign up</u>
           </Link>

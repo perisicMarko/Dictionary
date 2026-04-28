@@ -35,7 +35,7 @@ export default async function sendEmail(email : string, token : Base64URLString)
         from: process.env.EMAIL_USER,
         to: email,
         subject: 'Email verification',
-        text: 'Click on this link to verify your email: remindmedictionary.com/signUp/' + token,
+        text: 'Click on this link to verify your email: remindmedictionary.com/signup/' + token,
       };
     
     try {

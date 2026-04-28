@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest";
 import {
   GenerateSchema,
-  LogInSchema,
-  SchoolSignUpSchema,
-  SignUpSchema,
+  LoginSchema,
+  SchoolSignupSchema,
+  SignupSchema,
 } from "./rules";
 
-describe("SignUpSchema", () => {
+describe("SignupSchema", () => {
   it("accepts valid signup payload", () => {
-    const result = SignUpSchema.safeParse({
+    const result = SignupSchema.safeParse({
       name: "Marko",
       lastName: "Petrovic",
       email: "marko@example.com",
@@ -20,7 +20,7 @@ describe("SignUpSchema", () => {
   });
 
   it("rejects name with non-letter characters", () => {
-    const result = SignUpSchema.safeParse({
+    const result = SignupSchema.safeParse({
       name: "Marko1",
       lastName: "Petrovic",
       email: "marko@example.com",
@@ -32,7 +32,7 @@ describe("SignUpSchema", () => {
   });
 
   it("rejects password mismatch", () => {
-    const result = SignUpSchema.safeParse({
+    const result = SignupSchema.safeParse({
       name: "Marko",
       lastName: "Petrovic",
       email: "marko@example.com",
@@ -44,7 +44,7 @@ describe("SignUpSchema", () => {
   });
 
   it("accepts password with minimum length of 5 when all constraints are met", () => {
-    const result = SignUpSchema.safeParse({
+    const result = SignupSchema.safeParse({
       name: "Marko",
       lastName: "Petrovic",
       email: "marko@example.com",
@@ -56,7 +56,7 @@ describe("SignUpSchema", () => {
   });
 
   it("rejects password that has no number", () => {
-    const result = SignUpSchema.safeParse({
+    const result = SignupSchema.safeParse({
       name: "Marko",
       lastName: "Petrovic",
       email: "marko@example.com",
@@ -68,7 +68,7 @@ describe("SignUpSchema", () => {
   });
 
   it("rejects password that has no letter", () => {
-    const result = SignUpSchema.safeParse({
+    const result = SignupSchema.safeParse({
       name: "Marko",
       lastName: "Petrovic",
       email: "marko@example.com",
@@ -80,7 +80,7 @@ describe("SignUpSchema", () => {
   });
 
   it("rejects password that has no special character", () => {
-    const result = SignUpSchema.safeParse({
+    const result = SignupSchema.safeParse({
       name: "Marko",
       lastName: "Petrovic",
       email: "marko@example.com",
@@ -92,9 +92,9 @@ describe("SignUpSchema", () => {
   });
 });
 
-describe("LogInSchema", () => {
+describe("LoginSchema", () => {
   it("rejects invalid email", () => {
-    const result = LogInSchema.safeParse({
+    const result = LoginSchema.safeParse({
       email: "not-an-email",
       password: "abc",
     });
@@ -103,7 +103,7 @@ describe("LogInSchema", () => {
   });
 
   it("trims email and password before validation output", () => {
-    const result = LogInSchema.safeParse({
+    const result = LoginSchema.safeParse({
       email: "  user@example.com  ",
       password: "  abc123  ",
     });
@@ -116,9 +116,9 @@ describe("LogInSchema", () => {
   });
 });
 
-describe("SchoolSignUpSchema", () => {
+describe("SchoolSignupSchema", () => {
   it("rejects password without special character", () => {
-    const result = SchoolSignUpSchema.safeParse({
+    const result = SchoolSignupSchema.safeParse({
       name: "School",
       email: "school@example.com",
       password: "Passw0rd",

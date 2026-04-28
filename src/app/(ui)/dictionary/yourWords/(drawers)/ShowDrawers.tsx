@@ -36,7 +36,7 @@ export default function ShowDrawers() {
     const drawersRes = await getUsersDrawers();
     const notesRes = await getUsersNotes();
     if (!drawersRes.success || !notesRes.success) {
-      router.push("/logIn");
+      router.push("/login");
     }
 
     setDrawers(drawersRes.data as TDrawer[]);

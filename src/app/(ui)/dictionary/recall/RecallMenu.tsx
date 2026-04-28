@@ -29,7 +29,7 @@ export default function RecallNoteMenu({
       true,
     );
     if (!response.success) {
-      router.push("/logIn");
+      router.push("/login");
     }
     rerenderParent();
   }

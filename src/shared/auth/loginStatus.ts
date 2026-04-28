@@ -1,4 +1,4 @@
-export const LogInStatus = {
+export const LoginStatus = {
   EMPTY: -1,
   SUCCESS: 0,
   UNVERIFIED: 1,
@@ -6,4 +6,4 @@ export const LogInStatus = {
   INVALID_SUBSCRIPTION: 3,
 } as const;
 
-export type LoginStatus = (typeof LogInStatus)[keyof typeof LogInStatus];
+export type LoginStatusValue = (typeof LoginStatus)[keyof typeof LoginStatus];

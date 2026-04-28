@@ -27,7 +27,7 @@ export default function Edit({pathSrc}: {pathSrc: string}) {
   async function onSubmitEditHandle(formData: FormData) {
       const response = await editNote((formData.get('userNotes') as FormDataEntryValue).toString(), Number(noteId));
       if (!response.success)
-        router.push('/logIn');
+        router.push('/login');
       else 
         router.push(pathSrc);
     };

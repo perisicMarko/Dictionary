@@ -26,7 +26,7 @@ export default function HistoryNoteMenu({
       noteId
     );
     if (!res.success) {
-      router.push("/logIn");
+      router.push("/login");
     }
     rerenderParent(); 
   }
@@ -37,7 +37,7 @@ export default function HistoryNoteMenu({
       Number(formData.get("noteId"))
     );
     if (!res.success) {
-      router.push("/logIn");
+      router.push("/login");
     }
     rerenderParent(); 
   }

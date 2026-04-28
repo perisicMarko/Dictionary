@@ -1,8 +1,8 @@
 // @vitest-environment node
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { authenticateSignUp } from "@/features/auth/application/userAuth";
+import { authenticateSignup } from "@/features/auth/application/userAuth";
 import { findUserByEmail, insertUser } from "@/features/auth/infrastructure/usersRepository";
-import { GetSubscription } from "@/features/schools/infrastructure/repository";
+import { findSubscriptionByEmail } from "@/features/schools/infrastructure/repository";
 import { generateVerificationMail } from "@/features/auth/application/sendVerificationEmail";
 
 vi.mock("@/features/auth/infrastructure/usersRepository", () => ({
@@ -11,7 +11,7 @@ vi.mock("@/features/auth/infrastructure/usersRepository", () => ({
 }));
 
 vi.mock("@/features/schools/infrastructure/repository", () => ({
-  GetSubscription: vi.fn(),
+  findSubscriptionByEmail: vi.fn(),
 }));
 
 vi.mock("@/features/auth/application/sendVerificationEmail", () => ({
@@ -20,7 +20,7 @@ vi.mock("@/features/auth/application/sendVerificationEmail", () => ({
   generateVerificationMail: vi.fn(),
 }));
 
-function signUpForm(overrides?: Partial<Record<string, string>>) {
+function signupForm(overrides?: Partial<Record<string, string>>) {
   const defaults = {
     name: "Marko",
     lastName: "Petrovic",
@@ -35,15 +35,15 @@ function signUpForm(overrides?: Partial<Record<string, string>>) {
   return formData;
 }
 
-describe("authenticateSignUp integration", () => {
+describe("authenticateSignup integration", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it("returns validation errors for invalid payload", async () => {
-    const result = await authenticateSignUp(
+    const result = await authenticateSignup(
       undefined,
-      signUpForm({ email: "bad", password: "123", confirmPassword: "123" }),
+      signupForm({ email: "bad", password: "123", confirmPassword: "123" }),
     );
 
     expect(result?.success).toBe(false);
@@ -54,7 +54,7 @@ describe("authenticateSignUp integration", () => {
   it("returns email already used when user exists", async () => {
     vi.mocked(findUserByEmail).mockResolvedValue({ id: 1 } as never);
 
-    const result = await authenticateSignUp(undefined, signUpForm());
+    const result = await authenticateSignup(undefined, signupForm());
 
     expect(result?.success).toBe(false);
     expect(result?.error).toBe("Email already used.");
@@ -62,11 +62,11 @@ describe("authenticateSignUp integration", () => {
 
   it("creates user with school subscription id when subscription exists", async () => {
     vi.mocked(findUserByEmail).mockResolvedValue(undefined);
-    vi.mocked(GetSubscription).mockResolvedValue({ school_id: 5 } as never);
+    vi.mocked(findSubscriptionByEmail).mockResolvedValue({ school_id: 5 } as never);
     vi.mocked(insertUser).mockResolvedValue({ id: 10 } as never);
     vi.mocked(generateVerificationMail).mockResolvedValue(true);
 
-    const result = await authenticateSignUp(undefined, signUpForm());
+    const result = await authenticateSignup(undefined, signupForm());
 
     expect(result?.success).toBe(true);
     expect(insertUser).toHaveBeenCalledWith(
@@ -81,11 +81,11 @@ describe("authenticateSignUp integration", () => {
 
   it("falls back to school_id=1 when subscription is missing", async () => {
     vi.mocked(findUserByEmail).mockResolvedValue(undefined);
-    vi.mocked(GetSubscription).mockResolvedValue(undefined);
+    vi.mocked(findSubscriptionByEmail).mockResolvedValue(undefined);
     vi.mocked(insertUser).mockResolvedValue({ id: 10 } as never);
     vi.mocked(generateVerificationMail).mockResolvedValue(true);
 
-    const result = await authenticateSignUp(undefined, signUpForm());
+    const result = await authenticateSignup(undefined, signupForm());
 
     expect(result?.success).toBe(true);
     expect(insertUser).toHaveBeenCalledWith(

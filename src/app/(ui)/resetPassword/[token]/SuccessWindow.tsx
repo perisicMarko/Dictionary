@@ -17,7 +17,7 @@ export default function SuccessWindow(){
                 <b>Your password has been reset.</b>
               </motion.p>
               <Link
-                href="/logIn"
+                href="/login"
                 className="text-text-second mt-3 hover:underline hover:scale-115 transition-all"
               >
                 <u>
