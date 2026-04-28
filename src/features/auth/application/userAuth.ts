@@ -1,6 +1,6 @@
 "use server"
 import { SignUpSchema, LogInSchema } from '@/lib/rules';
-import { ChangeUsersSchool, findUserByToken, GetUserInfoByEmail, InsertUserInfo, isUserVerifiedById } from '@/features/auth/infrastructure/usersRepository';
+import { changeSchoolForUser, findUserByEmail, findUserByToken, insertUser, isUserVerifiedById } from '@/features/auth/infrastructure/usersRepository';
 import bcrypt from 'bcrypt';
 import sendEmail, { generateVerificationMail } from './sendVerificationEmail';
 import { isBefore } from 'date-fns';
@@ -68,7 +68,7 @@ export async function authenticateSignUp(state: SignUpActionState, formData: For
         return res;
     }
 
-    const user = await GetUserInfoByEmail((formData.get('email') as FormDataEntryValue).toString() as string);
+    const user = await findUserByEmail((formData.get('email') as FormDataEntryValue).toString() as string);
     const alreadyExist = user != null;
     if (alreadyExist && validatedFields.success) {
         const retObj = {
@@ -125,13 +125,13 @@ export async function authenticateSignUp(state: SignUpActionState, formData: For
 
     const mock_subscription = await CreateActivationKey(email, new Date(Date.now() + oneYear), 1);
     // hardcoded 1, in production with school program subscription.school_id should always be valid and not null
-    const status = await InsertUserInfo(name, lastName, email, password, 1);
+    const status = await insertUser(name, lastName, email, password, 1);
 
     // subscription commented logic, uncomment in school program production
-    //const status = await InsertUserInfo(name, lastName, email, password, subscription.school_id); 
+    //const status = await insertUser(name, lastName, email, password, subscription.school_id); 
 
     if (!status)
-        throw new Error('Error: InsertUserInfo status in authenthicateSignUp');
+        throw new Error('Error: insertUser status in authenthicateSignUp');
 
     const emailGenerated = await generateVerificationMail(email);
     if (emailGenerated)
@@ -153,7 +153,7 @@ export async function resendVerificationMail(state: ResendVerificationState, for
     if (!email)
         return { success: false };
 
-    const user = await GetUserInfoByEmail(email);
+    const user = await findUserByEmail(email);
 
     if (!user)
         return { success: false };
@@ -194,7 +194,7 @@ export async function authenticateLogIn(state: LogInActionState, formData: FormD
         return { success: false, errorMessage: "Invalid email or password.", status: LogInStatus.WRONG_CREDENTIALS };
     } else {
         const { email, password } = validatedFields.data as { email: string, password: string };
-        const user = await GetUserInfoByEmail(email);
+        const user = await findUserByEmail(email);
 
         if (!user) return { success: false, errorMessage: "Invalid email or password.", status: LogInStatus.WRONG_CREDENTIALS };
 
@@ -234,7 +234,7 @@ export async function authenticateLogIn(state: LogInActionState, formData: FormD
         //     throw new Error('School id is null in subsription retrieval.');
 
         // if (user.school_id != subscription.school_id) {
-        //     await ChangeUsersSchool(user.id, subscription.school_id);
+        //     await changeSchoolForUser(user.id, subscription.school_id);
         // }
 
         await issueTokensForUser(user.email, user.id);

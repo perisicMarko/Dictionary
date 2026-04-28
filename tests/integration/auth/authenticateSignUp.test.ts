@@ -1,13 +1,13 @@
 // @vitest-environment node
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { authenticateSignUp } from "@/features/auth/application/userAuth";
-import { GetUserInfoByEmail, InsertUserInfo } from "@/features/auth/infrastructure/usersRepository";
+import { findUserByEmail, insertUser } from "@/features/auth/infrastructure/usersRepository";
 import { GetSubscription } from "@/features/schools/infrastructure/repository";
 import { generateVerificationMail } from "@/features/auth/application/sendVerificationEmail";
 
 vi.mock("@/features/auth/infrastructure/usersRepository", () => ({
-  GetUserInfoByEmail: vi.fn(),
-  InsertUserInfo: vi.fn(),
+  findUserByEmail: vi.fn(),
+  insertUser: vi.fn(),
 }));
 
 vi.mock("@/features/schools/infrastructure/repository", () => ({
@@ -48,11 +48,11 @@ describe("authenticateSignUp integration", () => {
 
     expect(result?.success).toBe(false);
     expect(result?.errors).toBeTruthy();
-    expect(vi.mocked(GetUserInfoByEmail)).not.toHaveBeenCalled();
+    expect(vi.mocked(findUserByEmail)).not.toHaveBeenCalled();
   });
 
   it("returns email already used when user exists", async () => {
-    vi.mocked(GetUserInfoByEmail).mockResolvedValue({ id: 1 } as never);
+    vi.mocked(findUserByEmail).mockResolvedValue({ id: 1 } as never);
 
     const result = await authenticateSignUp(undefined, signUpForm());
 
@@ -61,15 +61,15 @@ describe("authenticateSignUp integration", () => {
   });
 
   it("creates user with school subscription id when subscription exists", async () => {
-    vi.mocked(GetUserInfoByEmail).mockResolvedValue(undefined);
+    vi.mocked(findUserByEmail).mockResolvedValue(undefined);
     vi.mocked(GetSubscription).mockResolvedValue({ school_id: 5 } as never);
-    vi.mocked(InsertUserInfo).mockResolvedValue({ id: 10 } as never);
+    vi.mocked(insertUser).mockResolvedValue({ id: 10 } as never);
     vi.mocked(generateVerificationMail).mockResolvedValue(true);
 
     const result = await authenticateSignUp(undefined, signUpForm());
 
     expect(result?.success).toBe(true);
-    expect(InsertUserInfo).toHaveBeenCalledWith(
+    expect(insertUser).toHaveBeenCalledWith(
       "Marko",
       "Petrovic",
       "marko@example.com",
@@ -80,15 +80,15 @@ describe("authenticateSignUp integration", () => {
   });
 
   it("falls back to school_id=1 when subscription is missing", async () => {
-    vi.mocked(GetUserInfoByEmail).mockResolvedValue(undefined);
+    vi.mocked(findUserByEmail).mockResolvedValue(undefined);
     vi.mocked(GetSubscription).mockResolvedValue(undefined);
-    vi.mocked(InsertUserInfo).mockResolvedValue({ id: 10 } as never);
+    vi.mocked(insertUser).mockResolvedValue({ id: 10 } as never);
     vi.mocked(generateVerificationMail).mockResolvedValue(true);
 
     const result = await authenticateSignUp(undefined, signUpForm());
 
     expect(result?.success).toBe(true);
-    expect(InsertUserInfo).toHaveBeenCalledWith(
+    expect(insertUser).toHaveBeenCalledWith(
       "Marko",
       "Petrovic",
       "marko@example.com",

@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 import { isBefore } from 'date-fns';
-import { GetUserInfoById } from '@/features/auth/infrastructure/usersRepository';
-import { findAllNotesWithDictionaryWord } from '@/features/notes/infrastructure/repository';
+import { findUserById } from '@/features/auth/infrastructure/usersRepository';
+import { findAllNotes } from '@/features/notes/infrastructure/repository';
 import nodemailer from 'nodemailer';
 
 
 export async function GET() {
 
-  const notes = await findAllNotesWithDictionaryWord();
+  const notes = await findAllNotes();
   const currentDate = new Date();
   const userIds = new Set<number>();
   if (notes) {
@@ -34,7 +34,7 @@ export async function GET() {
     text: 'Hey it\'s me again, it is time to recall some words.\nIt takes just a few minutes to recall your words and stay on the learning path, keep it up.\n Follow this link to the app: remindmedictionary.com/dictionary/recall.'
   };
   for (const u of userIds) {
-    const user = await GetUserInfoById(u);
+    const user = await findUserById(u);
     if(user && user.email_verified)
       mailOptions.to = user.email;
 

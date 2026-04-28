@@ -1,6 +1,6 @@
 'use server'
 import { decryptSession } from "@/server/auth/session";
-import { findUserByToken, GetUsersBySchoolId } from "@/features/auth/infrastructure/usersRepository";
+import { findAllUsersBySchoolId, findUserByToken } from "@/features/auth/infrastructure/usersRepository";
 
 export async function getUserByToken(token : Base64URLString){
     const user = await findUserByToken(token);
@@ -19,7 +19,7 @@ export async function getUsersBySchool(){
 
     const {schoolId} = payload;
 
-    const users = await GetUsersBySchoolId(schoolId);
+    const users = await findAllUsersBySchoolId(schoolId);
 
     return users?.map((u) => ({email: u.email, firstName: u.first_name, lastName: u.last_name, languages: u.languages, keyExpirationDate: u.subscriptions.key_expiration_date as Date}));
 }

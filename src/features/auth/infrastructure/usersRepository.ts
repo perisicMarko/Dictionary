@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export async function GetUserInfoById(id: number) {
+export async function findUserById(id: number) {
 
   try {
     const res = prisma.users.findUnique({ where: { id: id } });
@@ -12,13 +12,13 @@ export async function GetUserInfoById(id: number) {
   } catch (error) {
 
     if (error instanceof Error) {
-      console.log('GetUserInfoById: ERROR: API - ', error?.message);
+      console.log('findUserById: ERROR: API - ', error?.message);
     }
 
   }
 }
 
-export async function GetUserInfoByEmail(email : string) {
+export async function findUserByEmail(email : string) {
 
   try {
     const res = await prisma.users.findFirst({ where: { email: email } });
@@ -27,14 +27,14 @@ export async function GetUserInfoByEmail(email : string) {
   } catch (error) {
 
     if (error instanceof Error) {
-      console.log('GetUserInfoByEmail: ERROR: API - ', error?.message);
+      console.log('findUserByEmail: ERROR: API - ', error?.message);
     }
 
   }
 }
 
 
-export async function InsertUserInfo(name: string, lastName: string, email: string, password: string, schoolId: number) {
+export async function insertUser(name: string, lastName: string, email: string, password: string, schoolId: number) {
 
   try {
     const res = await prisma.users.create({
@@ -53,7 +53,7 @@ export async function InsertUserInfo(name: string, lastName: string, email: stri
   } catch (error) {
 
     if (error instanceof Error) {
-      console.log('InsertUserInfo: ERROR: API - ', error.message);
+      console.log('insertUser: ERROR: API - ', error.message);
     }
 
   }
@@ -61,7 +61,7 @@ export async function InsertUserInfo(name: string, lastName: string, email: stri
 
 
 
-export async function UpdateUsersRefreshToken(userId: number, refreshToken: Base64URLString | null, tokenExpirationDate: Date | null) {
+export async function updateUserRefreshTokenById(userId: number, refreshToken: Base64URLString | null, tokenExpirationDate: Date | null) {
 
   try {
     const res = await prisma.users.update({ where: { id: userId }, data: { refresh_token: refreshToken, refresh_token_expiration_date: tokenExpirationDate } });
@@ -70,7 +70,7 @@ export async function UpdateUsersRefreshToken(userId: number, refreshToken: Base
   } catch (error) {
 
     if (error instanceof Error) {
-      console.log('UpdateUsersToken: ERROR: API - ' + error.message);
+      console.log('updateUserRefreshTokenById: ERROR: API - ' + error.message);
     }
 
   }
@@ -92,7 +92,7 @@ export async function findUserByToken(refreshToken: Base64URLString) {
 }
 
 
-export async function UpdateUsersPassword(userId: number, password: string) {
+export async function updateUserPasswordById(userId: number, password: string) {
 
   try {
     const res = await prisma.users.update({ where: { id: userId }, data: { password: password } });
@@ -101,7 +101,7 @@ export async function UpdateUsersPassword(userId: number, password: string) {
   } catch (error) {
 
     if (error instanceof Error) {
-      console.log('UpdateUsersPassword: ERROR: API - ' + error.message);
+      console.log('updateUserPasswordById: ERROR: API - ' + error.message);
     }
 
   }
@@ -124,7 +124,7 @@ export async function isUserVerifiedById(userId: number) {
 }
 
 
-export async function GetUsers() {
+export async function findAllUsers() {
 
   try {
     const res = await prisma.users.findMany();
@@ -133,7 +133,7 @@ export async function GetUsers() {
   } catch (error) {
 
     if (error instanceof Error) {
-      console.log('GetUsers: ERROR: API - ' + error.message);
+      console.log('findAllUsers: ERROR: API - ' + error.message);
     }
 
   }
@@ -141,7 +141,7 @@ export async function GetUsers() {
 
 
 
-export async function DeleteUnverifiedUsers(ids: number[]) {
+export async function deleteUnverifiedUsers(ids: number[]) {
 
   try {
     let res;
@@ -152,14 +152,14 @@ export async function DeleteUnverifiedUsers(ids: number[]) {
   } catch (error) {
 
     if (error instanceof Error) {
-      console.log('DeleteUnverifiedUsers: ERROR: API - ' + error.message);
+      console.log('deleteUnverifiedUsers: ERROR: API - ' + error.message);
     }
 
   }
 }
 
 
-export async function ChangeUsersSchool(userId: number, schoolId: number) {
+export async function changeSchoolForUser(userId: number, schoolId: number) {
 
   try {
     const res = await prisma.users.update({
@@ -171,13 +171,13 @@ export async function ChangeUsersSchool(userId: number, schoolId: number) {
   } catch (error) {
 
     if (error instanceof Error) {
-      console.log('ChangeUsersSchool: ERROR: API - ' + error.message);
+      console.log('changeSchoolForUser: ERROR: API - ' + error.message);
     }
 
   }
 }
 
-export async function GetUsersBySchoolId(schoolId: number){
+export async function findAllUsersBySchoolId(schoolId: number){
 
   try {
     const res = await prisma.users.findMany({
@@ -191,7 +191,7 @@ export async function GetUsersBySchoolId(schoolId: number){
   } catch (error) {
 
     if (error instanceof Error) {
-      console.log('GetUserBySchoolId: ERROR: API - ' + error.message);
+      console.log('findAllUsersBySchoolId: ERROR: API - ' + error.message);
     }
 
   }

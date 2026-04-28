@@ -5,7 +5,7 @@ import { addDays } from 'date-fns';
 
 const prisma = new PrismaClient();
 
-export async function findAllNotesWithDictionaryWord(userId : number) {
+export async function findAllNotesByUserId(userId : number) {
   try {
     const res = await prisma.notes.findMany({
       include: {
@@ -21,14 +21,33 @@ export async function findAllNotesWithDictionaryWord(userId : number) {
         user_id: userId
       }
     });
-
     return res;
   } catch (error) {
-
     if (error instanceof Error) {
-      console.log('findAllNotesWithDictionaryWord: ERROR: API - ', error?.message);
+      console.log('findAllNotesByUserId: ERROR: API - ', error?.message);
     }
+  }
+}
 
+export async function findAllNotes() {
+  try {
+    const res = await prisma.notes.findMany({});
+    return res;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log('findAllNotesByUserId: ERROR: API - ', error?.message);
+    }
+  }
+}
+
+export async function findAllWords() {
+  try {
+    const res = await prisma.dictionary_words.findMany({});
+    return res;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log('findAllNotesByUserId: ERROR: API - ', error?.message);
+    }
   }
 }
 
@@ -173,7 +192,7 @@ export async function deleteNoteById(noteId: number) {
   }
 }
 
-export async function DeleteUnverifiedNotes(ids: number[]) {
+export async function deleteNotesById(ids: number[]) {
 
   try {
     let res;
@@ -184,7 +203,7 @@ export async function DeleteUnverifiedNotes(ids: number[]) {
   } catch (error) {
 
     if (error instanceof Error) {
-      console.log('DeleteUnverifiedNotes: ERROR: API - ' + error.message);
+      console.log('deleteNotesById: ERROR: API - ' + error.message);
     }
 
   }
@@ -241,8 +260,6 @@ export async function resetNoteReviewFactors(noteId: number, days: number, repet
 
   }
 }
-
-
 
 export async function restoreNotes(noteId: number, audio: string) {
 

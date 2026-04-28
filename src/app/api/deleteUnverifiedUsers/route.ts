@@ -1,5 +1,5 @@
-import { DeleteUnverifiedUsers, GetUsers } from '@/features/auth/infrastructure/usersRepository';
-import { DeleteUnverifiedNotes, findAllNotesWithDictionaryWord } from '@/features/notes/infrastructure/repository';
+import { deleteUnverifiedUsers, findAllUsers } from '@/features/auth/infrastructure/usersRepository';
+import { deleteNotesById, findAllNotes } from '@/features/notes/infrastructure/repository';
 import { TUser } from '@/lib/types';
 import { NextResponse } from 'next/server';
 import { isBefore } from 'date-fns';
@@ -8,7 +8,7 @@ export async function GET() {
 
     try {
         //retrieve db users
-        const users = await GetUsers();
+        const users = await findAllUsers();
 
         const now = new Date();
         //filter only unverified users
@@ -24,17 +24,17 @@ export async function GET() {
             unverifiedUserIds = users?.filter((u: TUser) => determineUserDeletion(u)).map((u: TUser) => { return u.id });
 
         //delete unverified users
-        await DeleteUnverifiedUsers(unverifiedUserIds);
+        await deleteUnverifiedUsers(unverifiedUserIds);
         
         //retrieve all db notes
-        const notes = await findAllNotesWithDictionaryWord();
+        const notes = await findAllNotes();
 
         //filter all notes of unverified users
         let unverifiedNoteIds: number[] = [];
         if (Array.isArray(notes))
             unverifiedNoteIds = notes?.filter(n => unverifiedUserIds.includes(n.user_id)).map(n => { return n.id });
         //delete unverified notes
-        await DeleteUnverifiedNotes(unverifiedNoteIds);
+        await deleteNotesById(unverifiedNoteIds);
 
         return NextResponse.json({ success: 'All done.', status: 200 });
     } catch (error) {

@@ -10,7 +10,7 @@ import {
 import {
   createUserNote,
   findNoteById,
-  findAllNotesWithDictionaryWord,
+  findAllNotesByUserId,
   updateNoteReviewFactors,
 } from "@/features/notes/infrastructure/repository";
 import {
@@ -30,7 +30,7 @@ vi.mock("@/features/auth/application/userAuth", () => ({
 
 vi.mock("@/features/notes/infrastructure/repository", () => ({
   createUserNote: vi.fn(),
-  findAllNotesWithDictionaryWord: vi.fn(),
+  findAllNotesByUserId: vi.fn(),
   findNoteById: vi.fn(),
   updateNoteReviewFactors: vi.fn(),
   updateNoteLearnedStatus: vi.fn(),
@@ -110,7 +110,7 @@ describe("manageNotes integration", () => {
   describe("getRecallNotes", () => {
     it("returns only due notes for current user", async () => {
       vi.mocked(decryptAccess).mockResolvedValue({ userId: 10 } as never);
-      vi.mocked(findAllNotesWithDictionaryWord).mockResolvedValue([
+      vi.mocked(findAllNotesByUserId).mockResolvedValue([
         {
           id: 1,
           status: false,

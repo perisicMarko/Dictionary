@@ -1,7 +1,7 @@
 'use server';
 import { cookies } from 'next/headers';
 import { decryptRefresh, decryptSession, SessionPayload, TokenPayload } from '@/server/auth/session';
-import { GetThemeColors } from '@/server/theme/repository';
+import { getThemeColors as getThemeColorsByUserId } from '@/server/theme/repository';
 import { GetSchoolByEmail } from '@/features/schools/infrastructure/repository';
 
 
@@ -39,7 +39,7 @@ export default async function getThemeColors(){
         return DEFAULT_THEME_COLORS;
      
 
-    const user = await GetThemeColors(userId);
+    const user = await getThemeColorsByUserId(userId);
 
     if(!user?.schools?.colors) // returns default style when user's school does not have custom theme colors
             return DEFAULT_THEME_COLORS;

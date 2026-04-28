@@ -9,6 +9,7 @@ import Drawer from "./Drawer";
 import { getUsersNotes } from "@/features/notes/application";
 import Loading from "@/app/(ui)/loading";
 import OpenedDrawer from "./OpenedDrawer";
+import { useRouter } from "next/navigation";
 import { AnimatePresence } from "framer-motion";
 
 export default function ShowDrawers() {
@@ -17,6 +18,7 @@ export default function ShowDrawers() {
   const [notes, setNotes] = useState<TNoteApp[]>();
   const [refresh, setRefresh] = useState(false);
   const [openedDrawerId, setOpenedDrawerId] = useState(-1);
+  const router = useRouter();
 
 
   useLayoutEffect(() => {
@@ -31,16 +33,14 @@ export default function ShowDrawers() {
   };
 
   const fetch = async () => {
-    const res = await getUsersDrawers(tokenContext?.accessToken || "");
-    const allNotes = await getUsersNotes(tokenContext?.accessToken || "");
-    if (res) {
-      tokenContext?.setAccessToken(res.accessToken);
-      setDrawers(res.data);
+    const drawersRes = await getUsersDrawers();
+    const notesRes = await getUsersNotes();
+    if (!drawersRes.success || !notesRes.success) {
+      router.push("/logIn");
     }
-    if (allNotes) {
-      tokenContext?.setAccessToken(allNotes.accessToken || "");
-      setNotes(allNotes.data as TNoteApp[]);
-    }
+
+    setDrawers(drawersRes.data as TDrawer[]);
+    setNotes(notesRes.data as TNoteApp[]);
   };
 
   useEffect(() => {

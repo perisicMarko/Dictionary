@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useActionState, useState } from "react";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
-import { updateUsersPassword } from "@/features/auth/application/resetPassword";
+import { completePasswordReset } from "@/features/auth/application/resetPassword";
 import { TUser } from "@/lib/types";
 import Loader from "@/components/common/Loader";
 import SuccessWindow from "./SuccessWindow";
@@ -12,7 +12,7 @@ export default function ChangePasswordForm({
   user: TUser | undefined;
 }) {
   const [state, action, isPending] = useActionState(
-    updateUsersPassword,
+    completePasswordReset,
     undefined
   );
 

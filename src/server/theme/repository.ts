@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function GetThemeColors(userId: number) {
+export async function getThemeColors(userId: number) {
     try {
         const res = await prisma.users.findUnique({
             where: {

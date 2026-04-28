@@ -1,5 +1,5 @@
 "use client";
-import { resetPassword } from "@/features/auth/application/resetPassword";
+import { requestPasswordReset } from "@/features/auth/application/resetPassword";
 import { motion } from "framer-motion";
 import { useActionState, useState } from "react";
 import Link from "next/link";
@@ -7,7 +7,7 @@ import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import Loader from "@/components/common/Loader";
 
 export default function ForgotPassword() {
-  const [state, action, isPending] = useActionState(resetPassword, null);
+  const [state, action, isPending] = useActionState(requestPasswordReset, undefined);
   const [email, setEmail] = useState('');
 
   return (
@@ -17,7 +17,7 @@ export default function ForgotPassword() {
       variants={containerVariants}
       className="box-layout mt-20 center-vertically md:mt-30 p-1 xl:mt-50 "
     >
-      {state?.status === 200 && (
+      {state?.success === true && (
         <motion.div
           variants={itemVariants}
           className="box-layout absolute top-auto left-auto h-[200px] sm:h-[250px] center-vertically z-20"
@@ -34,7 +34,7 @@ export default function ForgotPassword() {
           </Link>
         </motion.div>
       )}
-      {state?.status === 500 && (
+      {/* {state?.status === 500 && (
         <motion.div
           variants={itemVariants}
           className="absolute top-auto left-auto h-1/2 center box-layout"
@@ -43,7 +43,7 @@ export default function ForgotPassword() {
             Something is wrong, please try again later.
           </span>
         </motion.div>
-      )}
+      )} */}
       <motion.span className="my-2 hover:underline hover:scale-105 transition-all">
         <Link href="/" className="text-text-main">
           Back to home page
@@ -62,9 +62,9 @@ export default function ForgotPassword() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        {state?.status === 0 && (
+        {state?.success === false && (
           <motion.span className="error my-1 align-baseline">
-            {state.error}
+            {state.errorMessage}
           </motion.span>
         )}
         <button className={"primary-btn !mt-3 center " + (email === '' && " opacity-50")} disabled={email === ''} >

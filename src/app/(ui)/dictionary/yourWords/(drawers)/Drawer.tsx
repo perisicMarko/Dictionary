@@ -31,12 +31,8 @@ export default function Drawer({
 
   const handleDelete = async () => {
     const res = await deleteDrawer(
-      drawer?.id || -1,
-      tokenContext?.accessToken || ""
+      drawer.id,
     );
-    if (!res?.success) tokenContext?.setAccessToken("");
-    else if (res.success && res.accessToken)
-      tokenContext?.setAccessToken(res?.accessToken);
 
     rerender();
     setIsDeleting(false);

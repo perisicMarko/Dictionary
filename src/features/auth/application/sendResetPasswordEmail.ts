@@ -21,9 +21,9 @@ export default async function sendEmail(email : string, token : Base64URLString)
     try {
       // sending mail
       await transporter.sendMail(mailOptions);
-      return { message: 'Mejl je uspešno poslat.' , status: 200};
+      return { errorMessage: 'Mail is sent successfully.' , success: true};
     } catch (error) {
       const message =  (error instanceof Error && error.message);
-      return { error: 'Greska prilikom slanja mejla: ' + message, status: 500};
+      return { errorMessage: 'Error occurred while sending email: ' + message, success: false};
     }
 }

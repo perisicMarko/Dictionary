@@ -3,7 +3,7 @@ import Loader from "@/components/common/Loader";
 import { TDrawer } from "@/lib/types";
 import { Edit } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useActionState, useState, useContext, useEffect, useRef } from "react";
+import { useActionState, useState, useEffect, useRef } from "react";
 
 export default function UpdateForm({
   drawer, 
@@ -37,12 +37,10 @@ export default function UpdateForm({
   }, [updateFormShow]);
 
   useEffect(() => {
-    if (updateState?.success === false) {
+    if (!updateState?.success) {
       router.push("/");
-    } else if (updateState?.success === true) {
-      tokenContext?.setAccessToken(updateState.accessToken);
-      setUpdateFormShow(false);
     }
+    setUpdateFormShow(false);
     setRefreshUponUpdate(!refreshUponUpdate);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateState?.success, isUpdating]);
@@ -52,12 +50,6 @@ export default function UpdateForm({
 
   return (
     <form className="center-vertically gap-2 w-full" action={updateAction}>
-      <input
-        name="accessToken"
-        value={tokenContext?.accessToken}
-        readOnly
-        hidden
-      />
       <input name="drawerId" value={drawer?.id || -1} readOnly hidden />
       <div className="center py-1 px-2 border-1 border-white rounded-3xl w-full">
         <input

@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function CreateDrawer(title: string, userId: number) {
+export async function insertDrawer(title: string, userId: number) {
     try {
         const res = await prisma.drawers.create({
             data: {
@@ -19,7 +19,7 @@ export async function CreateDrawer(title: string, userId: number) {
     }
 }
 
-export async function GetUsersDrawers(userId: number) {
+export async function findDrawersByUserId(userId: number) {
     try {
         const drawers = await prisma.drawers.findMany({
             where: {
@@ -34,7 +34,7 @@ export async function GetUsersDrawers(userId: number) {
     }
 }
 
-export async function UpdateDrawerName(drawerName: string, drawerId: number) {
+export async function updateDrawerNameById(drawerName: string, drawerId: number) {
     try {
         const res = await prisma.drawers.update({
             where: {
@@ -52,7 +52,7 @@ export async function UpdateDrawerName(drawerName: string, drawerId: number) {
     }
 }
 
-export async function DeleteDrawer(drawerId: number) {
+export async function deleteDrawerById(drawerId: number) {
     try {
         const res = await prisma.drawers.delete({
             where: {
@@ -68,7 +68,7 @@ export async function DeleteDrawer(drawerId: number) {
 }
 
 
-export async function PutNoteInDrawer(drawerId: number, noteId: number) {
+export async function attachNoteToDrawer(drawerId: number, noteId: number) {
     try {
 
         const exist = await prisma.drawers_and_notes.findFirst({ where: { drawer_id: drawerId, note_id: noteId } });
@@ -113,7 +113,7 @@ export async function findAllNotesWithDictionaryWordOfDrawer(drawerId: number) {
 }
 
 
-export async function RemoveWordFromDrawer(noteId: number, drawerId: number) {
+export async function removeNoteFromDrawer(noteId: number, drawerId: number) {
     try {
         const res = await prisma.drawers_and_notes.deleteMany({
             where: {
@@ -130,7 +130,7 @@ export async function RemoveWordFromDrawer(noteId: number, drawerId: number) {
 }
 
 
-export async function GetDrawerById(drawerId: number) {
+export async function findDrawerById(drawerId: number) {
     try {
         const res = await prisma.drawers.findUnique({
             where: {

@@ -2,12 +2,12 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import bcrypt from "bcrypt";
 import { authenticateLogIn } from "@/features/auth/application/userAuth";
-import { GetUserInfoByEmail } from "@/features/auth/infrastructure/usersRepository";
+import { findUserByEmail } from "@/features/auth/infrastructure/usersRepository";
 import { encryptRefresh } from "@/server/auth/session";
 import { cookies } from "next/headers";
 
 vi.mock("@/features/auth/infrastructure/usersRepository", () => ({
-  GetUserInfoByEmail: vi.fn(),
+  findUserByEmail: vi.fn(),
 }));
 
 vi.mock("@/server/auth/session", () => ({
@@ -41,11 +41,11 @@ describe("authenticateLogIn integration", () => {
 
     expect(result?.status).toBe(LOGIN_STATUS.WRONG_CREDENTIALS);
     expect(result?.error?.message).toBe("Wrong email or password.");
-    expect(vi.mocked(GetUserInfoByEmail)).not.toHaveBeenCalled();
+    expect(vi.mocked(findUserByEmail)).not.toHaveBeenCalled();
   });
 
   it("returns WRONG_CREDENTIALS when user does not exist", async () => {
-    vi.mocked(GetUserInfoByEmail).mockResolvedValue(undefined);
+    vi.mocked(findUserByEmail).mockResolvedValue(undefined);
 
     const result = await authenticateLogIn(
       undefined,
@@ -58,7 +58,7 @@ describe("authenticateLogIn integration", () => {
 
   it("returns WRONG_CREDENTIALS when password is incorrect", async () => {
     const passwordHash = await bcrypt.hash("Passw0rd!", 10);
-    vi.mocked(GetUserInfoByEmail).mockResolvedValue({
+    vi.mocked(findUserByEmail).mockResolvedValue({
       id: 1,
       email: "user@example.com",
       password: passwordHash,
@@ -76,7 +76,7 @@ describe("authenticateLogIn integration", () => {
 
   it("returns UNVERIFIED for valid credentials when email is not verified", async () => {
     const passwordHash = await bcrypt.hash("Passw0rd!", 10);
-    vi.mocked(GetUserInfoByEmail).mockResolvedValue({
+    vi.mocked(findUserByEmail).mockResolvedValue({
       id: 1,
       email: "user@example.com",
       password: passwordHash,
@@ -96,7 +96,7 @@ describe("authenticateLogIn integration", () => {
     const passwordHash = await bcrypt.hash("Passw0rd!", 10);
     const setCookie = vi.fn();
 
-    vi.mocked(GetUserInfoByEmail).mockResolvedValue({
+    vi.mocked(findUserByEmail).mockResolvedValue({
       id: 7,
       email: "user@example.com",
       password: passwordHash,

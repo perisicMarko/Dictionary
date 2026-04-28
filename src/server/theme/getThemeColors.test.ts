@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import getThemeColors from "./getThemeColors";
 import { cookies } from "next/headers";
 import { decryptRefresh, decryptSession } from "@/server/auth/session";
-import { GetThemeColors } from "./repository";
+import { getThemeColors } from "./repository";
 import { GetSchoolByEmail } from "@/features/schools/infrastructure/repository";
 
 vi.mock("next/headers", () => ({
@@ -16,7 +16,7 @@ vi.mock("@/server/auth/session", () => ({
 }));
 
 vi.mock("./repository", () => ({
-  GetThemeColors: vi.fn(),
+  getThemeColors: vi.fn(),
 }));
 
 vi.mock("@/features/schools/infrastructure/repository", () => ({
@@ -44,7 +44,7 @@ describe("getThemeColors", () => {
     vi.mocked(decryptSession).mockResolvedValue(undefined);
     vi.mocked(decryptRefresh).mockResolvedValue(undefined);
     vi.mocked(GetSchoolByEmail).mockResolvedValue(undefined);
-    vi.mocked(GetThemeColors).mockResolvedValue(undefined);
+    vi.mocked(getThemeColors).mockResolvedValue(undefined);
   });
 
   it("returns default theme when no session and no refresh token", async () => {
@@ -81,7 +81,7 @@ describe("getThemeColors", () => {
   it("returns default theme when user has no school colors", async () => {
     vi.mocked(cookies).mockResolvedValue(cookieStore("refresh") as never);
     vi.mocked(decryptRefresh).mockResolvedValue({ userId: 1 } as never);
-    vi.mocked(GetThemeColors).mockResolvedValue({ schools: { colors: null } } as never);
+    vi.mocked(getThemeColors).mockResolvedValue({ schools: { colors: null } } as never);
 
     const theme = await getThemeColors();
 
@@ -98,7 +98,7 @@ describe("getThemeColors", () => {
 
     vi.mocked(cookies).mockResolvedValue(cookieStore("refresh") as never);
     vi.mocked(decryptRefresh).mockResolvedValue({ userId: 99 } as never);
-    vi.mocked(GetThemeColors).mockResolvedValue({ schools: { colors: userTheme } } as never);
+    vi.mocked(getThemeColors).mockResolvedValue({ schools: { colors: userTheme } } as never);
 
     const theme = await getThemeColors();
 

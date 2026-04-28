@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useState, useContext, useActionState, useEffect, useRef } from "react";
+import { useState, useActionState, useEffect, useRef } from "react";
 import { containerVariants, itemVariants } from "@/lib/animationVariants";
 import { Plus } from "lucide-react";
 import { createDrawer } from "@/features/drawers/application";
@@ -21,16 +21,14 @@ export default function AddDrawer({
   const router = useRouter();
 
   useEffect(() => {
-    if (!state.success === false) {
-      //unauthorized
-      router.push("/");
+    if(!state?.success){
+        router.push("/login");
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state?.success]);
 
   useEffect(() => {
-    if (state?.success && state?.accessToken) {
-      tokenContext?.setAccessToken(state.accessToken);
+    if (state?.success) {
       setAddDrawer(false);
     }
     rerender();
@@ -76,12 +74,6 @@ export default function AddDrawer({
             }}
             className="p-5 center-vertically gap-3"
           >
-            <input
-              name="accessToken"
-              value={tokenContext?.accessToken}
-              hidden
-              readOnly
-            />
             <input
               ref={drawerAddRef}
               placeholder="Name you drawer"

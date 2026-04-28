@@ -1,5 +1,5 @@
 'use server'
-import { createUserNote, findAllNotesWithDictionaryWord, findNoteById, updateNoteReviewFactors, updateNoteLearnedStatus, resetNoteReviewFactors, deleteNoteById, updateNoteUserText, findUserWordTexts } from '@/features/notes/infrastructure/repository';
+import { createUserNote, findAllNotesByUserId, findNoteById, updateNoteReviewFactors, updateNoteLearnedStatus, resetNoteReviewFactors, deleteNoteById, updateNoteUserText, findUserWordTexts } from '@/features/notes/infrastructure/repository';
 import { TMeaning, TNoteApp } from '@/lib/types';
 import { addDays, isBefore } from 'date-fns';
 import calc from '@/features/notes/domain/spacedRepetition';
@@ -20,7 +20,7 @@ export async function getUsersWords() {
   }
 
   const { userId } = user;  
-  const words = (await findAllNotesWithDictionaryWord(userId) as any[]).map(toAppNote);
+  const words = (await findAllNotesByUserId(userId) as any[]).map(toAppNote);
 
   return { success: true, data: words };
 }
@@ -38,7 +38,7 @@ export async function saveNotes(word: string, audio: string, user_notes: string,
   return { success: true };
 }
 
-export async function getUsersNote() {
+export async function getUsersNotes() {
   const user = await requireAuthenticatedUser();
   if (!user) {
     await logOutUser();
@@ -46,7 +46,7 @@ export async function getUsersNote() {
   }
 
   const { email, userId } = user;
-  const notes = (await findAllNotesWithDictionaryWord(userId) as any[]).map(toAppNote);
+  const notes = (await findAllNotesByUserId(userId) as any[]).map(toAppNote);
   
   return {
     success: true,
@@ -65,7 +65,7 @@ export async function getUsersHistory() {
 
   const { email, userId } = user;
 
-  const notes = (await findAllNotesWithDictionaryWord(userId) as any[]).map(toAppNote);
+  const notes = (await findAllNotesByUserId(userId) as any[]).map(toAppNote);
   let data = undefined;
 
   return {
@@ -84,7 +84,7 @@ export async function getRecallNotes() {
   }
 
   const { email, userId } = user;
-  const notes = (await findAllNotesWithDictionaryWord(userId) as any[]).map(toAppNote);
+  const notes = (await findAllNotesByUserId(userId) as any[]).map(toAppNote);
 
   const currentDate = new Date();
 
