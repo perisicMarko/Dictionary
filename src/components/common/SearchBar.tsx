@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { containerVariants, itemVariants } from "@/lib/animationVariants";
+import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
 import { ArrowUpDown, Search } from "lucide-react";
 
 export const SORT = {

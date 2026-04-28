@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { containerVariants, itemVariants } from "@/lib/animationVariants";
+import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
 import { useContext, useState } from "react";
 import { updateReviewDate } from "@/features/notes/application";
 import { useRouter } from "next/navigation";

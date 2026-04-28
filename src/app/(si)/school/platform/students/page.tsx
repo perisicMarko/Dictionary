@@ -1,10 +1,10 @@
 "use client";
 import { getUsersBySchool } from "@/features/auth/application/users";
-import { TStudent } from "@/lib/types";
+import { TStudent } from "@/shared/types";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowUpDown, UserSearchIcon } from "lucide-react";
-import { containerVariants } from "@/lib/animationVariants";
+import { containerVariants } from "@/shared/lib/animationVariants";
 import { isBefore } from "date-fns";
 import StudentComponent from "./StudentComponent";
 import Loading from "@/app/(ui)/loading";

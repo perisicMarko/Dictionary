@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { reformatApiNotes } from "./index";
-import { TGeneratedNote } from "@/lib/types";
+import { TGeneratedNote } from "@/shared/types";
 
 describe("reformatApiNotes", () => {
   it("maps word, meanings and first available audio", () => {

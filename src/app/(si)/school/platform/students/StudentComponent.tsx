@@ -1,5 +1,5 @@
-import { containerVariants } from "@/lib/animationVariants";
-import { TStudent } from "@/lib/types";
+import { containerVariants } from "@/shared/lib/animationVariants";
+import { TStudent } from "@/shared/types";
 import { motion } from "framer-motion";
 import { User, Languages } from "lucide-react";
 

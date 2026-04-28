@@ -1,11 +1,11 @@
 import { getUsersNotes } from "@/features/notes/application";
 import Words from "@/components/common/Words";
-import { TNoteApp } from "@/lib/types";
+import { TNoteApp } from "@/shared/types";
 import { useState, useContext, useEffect } from "react";
 import { motion } from "framer-motion";
 import ZeroNotesMessage from "@/components/common/ZeroNotesMessage";
 import SearchBar, { SORT } from "@/components/common/SearchBar";
-import { itemVariants } from "@/lib/animationVariants";
+import { itemVariants } from "@/shared/lib/animationVariants";
 import Loading from "../../loading";
 import { isBefore } from "date-fns";
 

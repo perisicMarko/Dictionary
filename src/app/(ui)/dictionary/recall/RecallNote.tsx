@@ -1,13 +1,13 @@
 "use client";
 import { GradeForm } from "./GradeForm";
 import RecallMenu from "./RecallMenu";
-import { TNoteApp } from "@/lib/types";
+import { TNoteApp } from "@/shared/types";
 import AudioPlayer from "../../../../components/common/AudioPlayer";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { motion } from "framer-motion";
 import DisplayNotes from "@/components/common/DisplayNotes";
-import { containerVariants } from "@/lib/animationVariants";
+import { containerVariants } from "@/shared/lib/animationVariants";
 
 export default function RecallNote({
   note,

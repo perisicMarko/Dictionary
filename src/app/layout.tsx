@@ -3,7 +3,7 @@ import { Roboto } from "next/font/google";
 import "@/app/globals.css";
 import React from "react";
 import getThemeColors from "@/server/theme/getThemeColors";
-import { TColorsTheme } from "@/lib/types";
+import { TColorsTheme } from "@/shared/types";
 
 const roboto = Roboto({
   variable: "--font-roboto",

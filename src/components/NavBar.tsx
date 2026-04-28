@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { containerVariants, itemVariants } from "@/lib/animationVariants";
+import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
 import { logOutUser } from "@/features/auth/application/userAuth";
 import { LogOut, Menu, X } from "lucide-react";
 

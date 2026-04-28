@@ -1,6 +1,6 @@
 import 'server-only';
 import { prisma } from "@/server/db/client";
-import { TMeaning } from '@/lib/types';
+import { TMeaning } from '@/shared/types';
 
 
 

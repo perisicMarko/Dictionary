@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import { containerVariants } from "@/lib/animationVariants";
+import { containerVariants } from "@/shared/lib/animationVariants";
 import { Menu, X } from "lucide-react";
 import { Trash2 } from "lucide-react";
-import { itemVariants } from "@/lib/animationVariants";
+import { itemVariants } from "@/shared/lib/animationVariants";
 
 export default function DrawerMenu({
   menu,

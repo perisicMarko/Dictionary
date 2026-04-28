@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useActionState, useEffect, useState } from "react";
-import { containerVariants, itemVariants } from "@/lib/animationVariants";
+import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/common/Loader";
 import { authenticateLogin } from "@/features/auth/application/schoolAuth";

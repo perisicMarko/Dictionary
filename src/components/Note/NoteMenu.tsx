@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { containerVariants } from "@/lib/animationVariants";
+import { containerVariants } from "@/shared/lib/animationVariants";
 import Link from "next/link";
 import { FolderMinus, NotebookPen } from "lucide-react";
 import { useState } from "react";

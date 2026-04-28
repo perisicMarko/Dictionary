@@ -1,5 +1,5 @@
 "use server"
-import { SignupSchema, LoginSchema } from '@/lib/rules';
+import { SignupSchema, LoginSchema } from '@/shared/lib/rules';
 import { changeSchoolForUser, findUserByAccountActionToken, findUserByEmail, insertUser, verifyUserById } from '@/features/auth/infrastructure/usersRepository';
 import bcrypt from 'bcrypt';
 import sendEmail, { generateVerificationMail } from './sendVerificationEmail';

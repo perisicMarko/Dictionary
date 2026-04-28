@@ -1,5 +1,5 @@
 import Note from "@/components/Note";
-import { TNoteApp } from "@/lib/types";
+import { TNoteApp } from "@/shared/types";
 import { AnimatePresence } from "framer-motion";
 
 export default function Words({

@@ -1,4 +1,4 @@
-import { TMeaning } from "@/lib/types";
+import { TMeaning } from "@/shared/types";
 
 export default function DisplayNotes({
   word,

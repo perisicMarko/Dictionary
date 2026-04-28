@@ -1,11 +1,11 @@
 "use client";
 import { editNote, getNoteById } from "@/features/notes/application";
-import { TNoteApp } from "@/lib/types";
+import { TNoteApp } from "@/shared/types";
 import { useEffect, useState, useContext } from "react";
 import { motion } from "framer-motion";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { containerVariants, itemVariants } from "@/lib/animationVariants";
+import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
 import Loader from "@/components/common/Loader";
 import Loading from "@/app/(ui)/loading";
 

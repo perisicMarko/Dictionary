@@ -2,7 +2,7 @@
 import RecallNoteHelp from "@/app/(ui)/dictionary/recall/Help";
 import { getRecallNotes } from "@/features/notes/application";
 import { useState, useContext, useEffect } from "react";
-import { TNoteApp } from "@/lib/types";
+import { TNoteApp } from "@/shared/types";
 import RecallNote from "@/app/(ui)/dictionary/recall/RecallNote";
 import ZeroNotesMessage from "@/components/common/ZeroNotesMessage";
 import Loading from "../../loading";

@@ -1,5 +1,5 @@
-import { containerVariants, itemVariants } from "@/lib/animationVariants";
-import { TDrawer, TNoteApp } from "@/lib/types";
+import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
+import { TDrawer, TNoteApp } from "@/shared/types";
 import { motion } from "framer-motion";
 import { ChevronDown, ChevronUp, Plus } from "lucide-react";
 import { useState, useContext } from "react";

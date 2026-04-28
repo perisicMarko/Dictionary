@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { containerVariants, itemVariants } from "@/lib/animationVariants";
+import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
 import Image from "next/image";
 
 export function Help({

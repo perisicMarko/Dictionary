@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { containerVariants, itemVariants } from '@/lib/animationVariants';
+import { containerVariants, itemVariants } from '@/shared/lib/animationVariants';
 import Link from 'next/link';
 import { useActionState } from 'react';
 import { resendVerificationMail } from '@/features/auth/application/userAuth';

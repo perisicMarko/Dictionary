@@ -1,12 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { TUser } from "@/lib/types";
+import { TUser } from "@/shared/types";
 import { getUserByToken, isUserVerified } from "@/features/auth/application/userAuth";
 import { motion } from "framer-motion";
 import { isBefore } from "date-fns";
 import Link from "next/link";
-import { containerVariants, itemVariants } from "@/lib/animationVariants";
+import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
 import Loading from "../../loading";
 import NoValidToken from "./NoValidToken";
 

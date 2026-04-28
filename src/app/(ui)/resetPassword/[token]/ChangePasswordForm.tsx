@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { useActionState, useState } from "react";
-import { containerVariants, itemVariants } from "@/lib/animationVariants";
+import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
 import { completePasswordReset } from "@/features/auth/application/resetPassword";
-import { TUser } from "@/lib/types";
+import { TUser } from "@/shared/types";
 import Loader from "@/components/common/Loader";
 import SuccessWindow from "./SuccessWindow";
 

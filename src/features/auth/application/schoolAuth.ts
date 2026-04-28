@@ -1,6 +1,6 @@
 
 "use server"
-import { LoginSchema, SchoolSignupSchema } from '@/lib/rules';
+import { LoginSchema, SchoolSignupSchema } from '@/shared/lib/rules';
 import bcrypt from 'bcrypt';
 import { findSchoolByEmail, findSchoolPartnershipByEmail, insertSchoolInfo } from '@/features/schools/infrastructure/repository';
 import { createSession } from '@/server/auth/schoolSession';

@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import { containerVariants } from "@/lib/animationVariants";
+import { containerVariants } from "@/shared/lib/animationVariants";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { logOut } from "@/features/auth/application/schoolAuth";

@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 
 
-// Endpoint for filling out missing audio links in notes. It is used when audio generation service is down and some notes are created without audio links.
+// Endpoint for filling out missing audio links in notes. For notes that are created without audio links.
 export async function GET() {
 
     try {

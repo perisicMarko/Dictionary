@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useActionState, useState } from "react";
 import { authenticateSignup } from "@/features/auth/application/userAuth";
 import { motion } from "framer-motion";
-import { containerVariants, itemVariants } from "@/lib/animationVariants";
+import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
 import Loader from "@/components/common/Loader";
 
 export default function Signup() {

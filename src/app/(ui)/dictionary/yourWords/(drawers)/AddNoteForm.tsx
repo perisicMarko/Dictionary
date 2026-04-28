@@ -1,4 +1,4 @@
-import { containerVariants } from "@/lib/animationVariants";
+import { containerVariants } from "@/shared/lib/animationVariants";
 import { useActionState, useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import Loader from "@/components/common/Loader";

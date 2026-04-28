@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useState, useActionState, useEffect, useRef } from "react";
-import { containerVariants, itemVariants } from "@/lib/animationVariants";
+import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
 import { Plus } from "lucide-react";
 import { createDrawer } from "@/features/drawers/application";
 import Loader from "@/components/common/Loader";

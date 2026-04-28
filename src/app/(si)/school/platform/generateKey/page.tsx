@@ -1,6 +1,6 @@
 "use client";
 import Loader from "@/components/common/Loader";
-import { containerVariants, itemVariants } from "@/lib/animationVariants";
+import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
 import { motion } from "framer-motion";
 import { useActionState, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";

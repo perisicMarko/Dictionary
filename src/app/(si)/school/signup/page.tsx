@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useActionState, useEffect, useState } from "react";
 import { authenticateSignup } from "@/features/auth/application/schoolAuth";
 import { motion } from "framer-motion";
-import { containerVariants, itemVariants } from "@/lib/animationVariants";
+import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
 import Loader from "@/components/common/Loader";
 import { useRouter } from "next/navigation";
 

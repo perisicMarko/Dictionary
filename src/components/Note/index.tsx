@@ -1,13 +1,13 @@
 "use client";
 import DisplayNotes from "../common/DisplayNotes";
 import HistoryNoteMenu from "./HistoryNoteMenu";
-import { TNoteApp } from "@/lib/types";
+import { TNoteApp } from "@/shared/types";
 import AudioPlayer from "../common/AudioPlayer";
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import NoteMenu from "./NoteMenu";
 import { ChevronDown, ChevronUp, Menu, X } from "lucide-react";
-import { containerVariants } from "@/lib/animationVariants";
+import { containerVariants } from "@/shared/lib/animationVariants";
 
 export default function Note({
   prop,

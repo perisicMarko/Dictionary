@@ -1,6 +1,6 @@
 import { deleteUnverifiedUsers, findAllUsers } from '@/features/auth/infrastructure/usersRepository';
 import { deleteNotesById, findAllNotes } from '@/features/notes/infrastructure/repository';
-import { TUser } from '@/lib/types';
+import { TUser } from '@/shared/types';
 import { NextResponse } from 'next/server';
 import { isBefore } from 'date-fns';
 

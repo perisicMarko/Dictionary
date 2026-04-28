@@ -1,6 +1,6 @@
 import { updateDrawerName } from "@/features/drawers/application";
 import Loader from "@/components/common/Loader";
-import { TDrawer } from "@/lib/types";
+import { TDrawer } from "@/shared/types";
 import { Edit } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useActionState, useState, useEffect, useRef } from "react";

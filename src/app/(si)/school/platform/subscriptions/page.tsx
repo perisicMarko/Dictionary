@@ -1,6 +1,6 @@
 "use client";
-import { containerVariants, itemVariants } from "@/lib/animationVariants";
-import { TSubscription } from "@/lib/types";
+import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
+import { TSubscription } from "@/shared/types";
 import { isBefore } from "date-fns";
 import { motion } from "framer-motion";
 import { ArrowUpDown, KeyIcon } from "lucide-react";

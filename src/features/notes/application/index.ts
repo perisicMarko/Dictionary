@@ -1,6 +1,6 @@
 'use server'
 import { createUserNote, findAllNotesByUserId, findNoteById, updateNoteReviewFactors, updateNoteLearnedStatus, resetNoteReviewFactors, deleteNoteById, updateNoteUserText, findUserWordTexts } from '@/features/notes/infrastructure/repository';
-import { TDBNoteEntry, TMeaning, TNoteApp, TWordApp } from '@/lib/types';
+import { TDBNoteEntry, TMeaning, TNoteApp, TWordApp } from '@/shared/types';
 import { addDays, isBefore } from 'date-fns';
 import calc from '@/features/notes/domain/spacedRepetition';
 import { requireAuthenticatedUser } from '@/server/auth/userSession';

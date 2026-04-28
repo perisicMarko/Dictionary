@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { itemVariants } from "@/lib/animationVariants";
+import { itemVariants } from "@/shared/lib/animationVariants";
 import Link from "next/link";
 import { useState } from 'react';
 

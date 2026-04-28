@@ -1,10 +1,10 @@
 import SearchBar from "@/components/common/SearchBar";
 import { motion } from "framer-motion";
-import { containerVariants, itemVariants } from "@/lib/animationVariants";
+import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
 import { useState, useEffect, useContext, useLayoutEffect } from "react";
 import AddDrawer from "./AddDrawer";
 import { getUsersDrawers } from "@/features/drawers/application";
-import { TDrawer, TNoteApp } from "@/lib/types";
+import { TDrawer, TNoteApp } from "@/shared/types";
 import Drawer from "./Drawer";
 import { getUsersNotes } from "@/features/notes/application";
 import Loading from "@/app/(ui)/loading";

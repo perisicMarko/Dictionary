@@ -3,7 +3,7 @@ import { requestPasswordReset } from "@/features/auth/application/resetPassword"
 import { motion } from "framer-motion";
 import { useActionState, useState } from "react";
 import Link from "next/link";
-import { containerVariants, itemVariants } from "@/lib/animationVariants";
+import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
 import Loader from "@/components/common/Loader";
 
 export default function ForgotPassword() {

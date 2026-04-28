@@ -1,11 +1,11 @@
 import { getNotesOfDrawer } from "@/features/drawers/application";
 import Loading from "@/app/(ui)/loading";
 import Words from "@/components/common/Words";
-import { TNoteApp, TDrawer } from "@/lib/types";
+import { TNoteApp, TDrawer } from "@/shared/types";
 import { useEffect, useState } from "react";
 import Drawer from "./Drawer";
 import { motion } from "framer-motion";
-import { containerVariants, itemVariants } from "@/lib/animationVariants";
+import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
 
 export default function OpenedDrawer({
   drawer,

@@ -1,8 +1,8 @@
 'use server';
 import { decryptSession, SessionPayload } from "@/server/auth/schoolSession";
 import { findAllSubscriptionsBySchoolId, findSubscriptionByEmail, insertActivationKey, updateActivationKey, updateSubscriptionEmail as updateSubscriptionEmailByAddress } from "@/features/schools/infrastructure/repository";
-import { GenerateSchema } from "@/lib/rules";
-import { TSubscription } from "@/lib/types";
+import { GenerateSchema } from "@/shared/lib/rules";
+import { TSubscription } from "@/shared/types";
 import { validateActivationKeyExpirationDate } from "@/features/schools/domain/validation";
 
 export async function generateActivationKey(state: {success: boolean, message: string, email: string, date: string} | undefined, formData: FormData){

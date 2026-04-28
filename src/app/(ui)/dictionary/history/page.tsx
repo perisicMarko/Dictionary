@@ -2,10 +2,10 @@
 import SearchBar from "../../../../components/common/SearchBar";
 import { getUsersHistory } from "@/features/notes/application";
 import Words from "@/components/common/Words";
-import { TNoteApp } from "@/lib/types";
+import { TNoteApp } from "@/shared/types";
 import { useState, useContext, useEffect } from "react";
 import ZeroNotesMessage from "@/components/common/ZeroNotesMessage";
-import { itemVariants } from "@/lib/animationVariants";
+import { itemVariants } from "@/shared/lib/animationVariants";
 import { motion } from "framer-motion";
 import Loading from "../../loading";
 

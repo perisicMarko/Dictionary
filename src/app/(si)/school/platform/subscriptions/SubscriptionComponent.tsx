@@ -1,6 +1,6 @@
 import { updateSubscriptionEmail } from "@/features/schools/application";
-import { containerVariants } from "@/lib/animationVariants";
-import { TSubscription } from "@/lib/types";
+import { containerVariants } from "@/shared/lib/animationVariants";
+import { TSubscription } from "@/shared/types";
 import { motion } from "framer-motion";
 import { Menu, X, Edit, KeyIcon } from "lucide-react";
 import { useState } from "react";

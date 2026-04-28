@@ -1,5 +1,5 @@
 'use server';
-import { TGPhonetic, TWordApp, TMeaning } from "@/lib/types";
+import { TGPhonetic, TWordApp, TMeaning } from "@/shared/types";
 import { findWord, saveWord } from "@/features/dictionary/infrastructure/wordsRepository";
 import OpenAi from "openai";
 

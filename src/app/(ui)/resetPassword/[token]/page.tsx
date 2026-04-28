@@ -2,7 +2,7 @@
 import { useParams } from "next/navigation";
 import { getUserByToken } from "@/features/auth/application/users";
 import { useEffect, useState } from "react";
-import { TUser } from "@/lib/types";
+import { TUser } from "@/shared/types";
 import { isBefore } from "date-fns";
 import NoValidToken from "./NoValidToken";
 import ChangePasswordForm from "./ChangePasswordForm";

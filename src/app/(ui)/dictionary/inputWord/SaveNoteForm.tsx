@@ -4,9 +4,9 @@ import {
   containerVariants,
   itemVariants,
   transition,
-} from "@/lib/animationVariants";
+} from "@/shared/lib/animationVariants";
 import { useRef, useContext, useState, useTransition, useEffect } from "react";
-import { TMeaning, TWordApp } from "@/lib/types";
+import { TMeaning, TWordApp } from "@/shared/types";
 import { getUsersWords, saveNotes } from "@/features/notes/application";
 import AudioPlayer from "@/components/common/AudioPlayer";
 import Loader from "@/components/common/Loader";
