@@ -1,9 +1,9 @@
 'use server'
 import { decryptSession } from "@/server/auth/session";
-import { findAllUsersBySchoolId, findUserByToken } from "@/features/auth/infrastructure/usersRepository";
+import { findAllUsersBySchoolId, findUserByAccountActionToken } from "@/features/auth/infrastructure/usersRepository";
 
 export async function getUserByToken(token : Base64URLString){
-    const user = await findUserByToken(token);
+    const user = await findUserByAccountActionToken(token);
 
     if(!user)
         return undefined;

@@ -47,25 +47,25 @@ export async function insertUser(name: string, lastName: string, email: string, 
 
 
 
-export async function updateUserRefreshTokenById(userId: number, refreshToken: Base64URLString | null, tokenExpirationDate: Date | null) {
+export async function updateAccountActionTokenByUserId(userId: number, accountActionToken: Base64URLString | null, accountActionTokenExpiresAt: Date | null) {
 
   try {
-    const res = await prisma.users.update({ where: { id: userId }, data: { refresh_token: refreshToken, refresh_token_expiration_date: tokenExpirationDate } });
+    const res = await prisma.users.update({ where: { id: userId }, data: { account_action_token: accountActionToken, account_action_token_expires_at: accountActionTokenExpiresAt } });
 
     return res;
   } catch (error) {
-    throw new Error(`updateUserRefreshTokenById failed: ${error instanceof Error ? error.message : String(error)}`);
+    throw new Error(`updateAccountActionTokenByUserId failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
-export async function findUserByToken(refreshToken: Base64URLString) {
+export async function findUserByAccountActionToken(accountActionToken: Base64URLString) {
 
   try {
-    const res = await prisma.users.findFirst({ where: { refresh_token: refreshToken } });
+    const res = await prisma.users.findFirst({ where: { account_action_token: accountActionToken } });
 
     return res;
   } catch (error) {
-    throw new Error(`findUserByToken failed: ${error instanceof Error ? error.message : String(error)}`);
+    throw new Error(`findUserByAccountActionToken failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -85,7 +85,7 @@ export async function updateUserPasswordById(userId: number, password: string) {
 export async function verifyUserById(userId: number) {
 
   try {
-    const res = await prisma.users.update({ where: { id: userId }, data: { refresh_token: null, refresh_token_expiration_date: null, email_verified: true } });
+    const res = await prisma.users.update({ where: { id: userId }, data: { account_action_token: null, account_action_token_expires_at: null, email_verified: true } });
 
     return res;
   } catch (error) {

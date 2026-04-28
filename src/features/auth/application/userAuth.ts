@@ -1,6 +1,6 @@
 "use server"
 import { SignupSchema, LoginSchema } from '@/lib/rules';
-import { changeSchoolForUser, findUserByEmail, findUserByToken, insertUser, verifyUserById } from '@/features/auth/infrastructure/usersRepository';
+import { changeSchoolForUser, findUserByAccountActionToken, findUserByEmail, insertUser, verifyUserById } from '@/features/auth/infrastructure/usersRepository';
 import bcrypt from 'bcrypt';
 import sendEmail, { generateVerificationMail } from './sendVerificationEmail';
 import { isBefore } from 'date-fns';
@@ -157,10 +157,10 @@ export async function resendVerificationMail(state: ResendVerificationState, for
     if (!user)
         return { success: false };
 
-    if (isBefore(user?.refresh_token_expiration_date || '', new Date()))
+    if (isBefore(user?.account_action_token_expires_at || '', new Date()))
         return { success: false };
 
-    const status = await sendEmail(email, user?.refresh_token || '');
+    const status = await sendEmail(email, user?.account_action_token || '');
 
     if (status)
         return { success: true };
@@ -168,7 +168,7 @@ export async function resendVerificationMail(state: ResendVerificationState, for
 
 export async function getUserByToken(token: Base64URLString) {
 
-    const user = await findUserByToken(token);
+    const user = await findUserByAccountActionToken(token);
 
     if (!user)
         return { success: false, user: undefined };

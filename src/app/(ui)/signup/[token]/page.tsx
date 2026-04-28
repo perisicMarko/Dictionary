@@ -41,8 +41,8 @@ export default function Page() {
 
   let isValid = false;
   const now = new Date();
-  const tokenExpirationDate = user?.refresh_token_expiration_date
-    ? user.refresh_token_expiration_date
+  const tokenExpirationDate = user?.account_action_token_expires_at
+    ? user.account_action_token_expires_at
     : false;
   const tokenDate = tokenExpirationDate
     ? new Date(tokenExpirationDate)
@@ -50,7 +50,7 @@ export default function Page() {
 
   if (!tokenExpirationDate) {
   } else if (
-    user?.refresh_token != undefined &&
+    user?.account_action_token != undefined &&
     tokenDate != undefined &&
     isBefore(now, tokenDate)
   )

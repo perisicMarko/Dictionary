@@ -56,8 +56,8 @@ model users {
   last_name                     String
   email                         String        @unique(map: "unique_email")
   password                      String
-  refresh_token                 String?
-  refresh_token_expiration_date DateTime?
+  account_action_token            String?
+  account_action_token_expires_at DateTime?
   email_verified                Boolean       @default(false)
   school_id                     Int
   languages                     String        @db.VarChar

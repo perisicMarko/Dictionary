@@ -5,8 +5,8 @@ CREATE TABLE "users" (
     "last_name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "refresh_token" TEXT,
-    "refresh_token_expiration_date" TIMESTAMP(3),
+    "account_action_token" TEXT,
+    "account_action_token_expires_at" TIMESTAMP(3),
     "email_verified" BOOLEAN DEFAULT false,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")

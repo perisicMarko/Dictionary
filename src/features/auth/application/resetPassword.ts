@@ -1,7 +1,7 @@
 'use server'
 import { randomBytes } from 'crypto';
 import sendEmail from './sendResetPasswordEmail';
-import { findUserByEmail, updateUserPasswordById, updateUserRefreshTokenById } from '@/features/auth/infrastructure/usersRepository';
+import { findUserByEmail, updateAccountActionTokenByUserId, updateUserPasswordById } from '@/features/auth/infrastructure/usersRepository';
 import { addMinutes } from 'date-fns';
 
 import bcrypt from 'bcrypt';
@@ -17,12 +17,12 @@ export async function requestPasswordReset(state: { success : boolean, errorMess
 
   const token = randomBytes(32).toString('base64url');
   const now = new Date();
-  const retValUpdateUserToken = await updateUserRefreshTokenById(user.id, token, addMinutes(now, 15));
+  const accountActionTokenUpdated = await updateAccountActionTokenByUserId(user.id, token, addMinutes(now, 15));
   const retValEmail = await sendEmail(email, token);
 
   if(!retValEmail.success){
     return { success: false, errorMessage: retValEmail.errorMessage };
-  } else if(!retValUpdateUserToken){
+  } else if(!accountActionTokenUpdated){
     return { success: false, errorMessage: 'Something went wrong, please try again later.' };
   }
 
@@ -64,7 +64,7 @@ export async function completePasswordReset(state : { errors: { password: string
   const password = await bcrypt.hash(pass, 10);
   const userId = Number(formData.get('userId'));
   await updateUserPasswordById(userId, password);
-  await updateUserRefreshTokenById(userId, null, null);
+  await updateAccountActionTokenByUserId(userId, null, null);
 
   return res
 }

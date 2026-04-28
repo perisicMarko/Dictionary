@@ -1,6 +1,6 @@
 'use server'
 import nodemailer from 'nodemailer';
-import { findUserByEmail, updateUserRefreshTokenById } from "@/features/auth/infrastructure/usersRepository";
+import { findUserByEmail, updateAccountActionTokenByUserId } from "@/features/auth/infrastructure/usersRepository";
 import { randomBytes } from "crypto";
 import { addMinutes } from "date-fns";
 
@@ -14,7 +14,7 @@ export async function generateVerificationMail(email : string){
 
     const token = randomBytes(32).toString('base64url');
     const expirationDate = addMinutes(new Date(), 15);
-    await updateUserRefreshTokenById(user.id, token, expirationDate);
+    await updateAccountActionTokenByUserId(user.id, token, expirationDate);
 
     await sendEmail(email, token);
 

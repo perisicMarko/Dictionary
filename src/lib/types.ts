@@ -4,8 +4,8 @@ export type TUser = {
   last_name: string;
   email: string;
   password: string;
-  refresh_token: string | null;
-  refresh_token_expiration_date: Date | null;
+  account_action_token: string | null;
+  account_action_token_expires_at: Date | null;
   email_verified: boolean | null;
   school_id: number | null;
   languages: string | null;

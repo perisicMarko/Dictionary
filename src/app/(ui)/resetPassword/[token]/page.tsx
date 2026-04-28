@@ -31,13 +31,13 @@ export default function ResetPassword() {
 
   let isValid = false;
   const now = new Date();
-  const tokenExpirationDate = user?.refresh_token_expiration_date || undefined;
+  const tokenExpirationDate = user?.account_action_token_expires_at || undefined;
   const tokenDate = new Date(tokenExpirationDate || "") || undefined;
 
   if (!tokenExpirationDate) {
     isValid = false;
   } else if (
-    user?.refresh_token != undefined &&
+    user?.account_action_token != undefined &&
     tokenDate != undefined &&
     isBefore(now, tokenDate)
   ) {
