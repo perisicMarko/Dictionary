@@ -12,8 +12,7 @@ export async function insertDrawer(title: string, userId: number) {
 
         return res;
     } catch (e) {
-        if (e instanceof Error)
-            console.log('Error while creating drawer, err message: ' + e.message);
+        throw new Error(`insertDrawer failed: ${e instanceof Error ? e.message : String(e)}`);
     }
 }
 
@@ -27,8 +26,7 @@ export async function findDrawersByUserId(userId: number) {
 
         return drawers;
     } catch (e) {
-        if (e instanceof Error)
-            console.log('Error while fetching drawers, err message: ' + e.message);
+        throw new Error(`findDrawersByUserId failed: ${e instanceof Error ? e.message : String(e)}`);
     }
 }
 
@@ -45,8 +43,7 @@ export async function updateDrawerNameById(drawerName: string, drawerId: number)
 
         return res;
     } catch (e) {
-        if (e instanceof Error)
-            console.log('Error updating drawer name, err message: ' + e.message);
+        throw new Error(`updateDrawerNameById failed: ${e instanceof Error ? e.message : String(e)}`);
     }
 }
 
@@ -60,8 +57,7 @@ export async function deleteDrawerById(drawerId: number) {
 
         return res;
     } catch (e) {
-        if (e instanceof Error)
-            console.log('Error deleting drawer, err message: ' + e.message);
+        throw new Error(`deleteDrawerById failed: ${e instanceof Error ? e.message : String(e)}`);
     }
 }
 
@@ -82,8 +78,7 @@ export async function attachNoteToDrawer(drawerId: number, noteId: number) {
 
         return res;
     } catch (e) {
-        if (e instanceof Error)
-            console.log('Error putting word in drawer, err message: ' + e.message);
+        throw new Error(`attachNoteToDrawer failed: ${e instanceof Error ? e.message : String(e)}`);
     }
 }
 
@@ -105,8 +100,7 @@ export async function findAllNotesWithDictionaryWordOfDrawer(drawerId: number) {
 
         return res;
     } catch (e) {
-        if (e instanceof Error)
-            console.log('Error fetching words in opened drawer, err message: ' + e.message);
+        throw new Error(`findAllNotesWithDictionaryWordOfDrawer failed: ${e instanceof Error ? e.message : String(e)}`);
     }
 }
 
@@ -122,8 +116,7 @@ export async function removeNoteFromDrawer(noteId: number, drawerId: number) {
 
         return res;
     } catch (e) {
-        if (e instanceof Error)
-            console.log('Error removing word from drawer, err message: ' + e.message);
+        throw new Error(`removeNoteFromDrawer failed: ${e instanceof Error ? e.message : String(e)}`);
     }
 }
 
@@ -138,7 +131,6 @@ export async function findDrawerById(drawerId: number) {
 
         return res;
     } catch (e) {
-        if (e instanceof Error)
-            console.log('Error removing word from drawer, err message: ' + e.message);
+        throw new Error(`findDrawerById failed: ${e instanceof Error ? e.message : String(e)}`);
     }
 }

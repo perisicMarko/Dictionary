@@ -8,11 +8,7 @@ export async function findUserById(id: number) {
 
     return res;
   } catch (error) {
-
-    if (error instanceof Error) {
-      console.log('findUserById: ERROR: API - ', error?.message);
-    }
-
+    throw new Error(`findUserById failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -23,11 +19,7 @@ export async function findUserByEmail(email : string) {
 
     return res;
   } catch (error) {
-
-    if (error instanceof Error) {
-      console.log('findUserByEmail: ERROR: API - ', error?.message);
-    }
-
+    throw new Error(`findUserByEmail failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -49,11 +41,7 @@ export async function insertUser(name: string, lastName: string, email: string, 
 
     return res;
   } catch (error) {
-
-    if (error instanceof Error) {
-      console.log('insertUser: ERROR: API - ', error.message);
-    }
-
+    throw new Error(`insertUser failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -66,11 +54,7 @@ export async function updateUserRefreshTokenById(userId: number, refreshToken: B
 
     return res;
   } catch (error) {
-
-    if (error instanceof Error) {
-      console.log('updateUserRefreshTokenById: ERROR: API - ' + error.message);
-    }
-
+    throw new Error(`updateUserRefreshTokenById failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -81,11 +65,7 @@ export async function findUserByToken(refreshToken: Base64URLString) {
 
     return res;
   } catch (error) {
-
-    if (error instanceof Error) {
-      console.log('findUserByToken: ERROR: API - ' + error.message);
-    }
-
+    throw new Error(`findUserByToken failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -97,11 +77,7 @@ export async function updateUserPasswordById(userId: number, password: string) {
 
     return res;
   } catch (error) {
-
-    if (error instanceof Error) {
-      console.log('updateUserPasswordById: ERROR: API - ' + error.message);
-    }
-
+    throw new Error(`updateUserPasswordById failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -113,11 +89,7 @@ export async function verifyUserById(userId: number) {
 
     return res;
   } catch (error) {
-
-    if (error instanceof Error) {
-      console.log('verifyUserById: ERROR: API - ' + error.message);
-    }
-
+    throw new Error(`verifyUserById failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -129,11 +101,7 @@ export async function findAllUsers() {
 
     return res;
   } catch (error) {
-
-    if (error instanceof Error) {
-      console.log('findAllUsers: ERROR: API - ' + error.message);
-    }
-
+    throw new Error(`findAllUsers failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -148,11 +116,7 @@ export async function deleteUnverifiedUsers(ids: number[]) {
 
     return res;
   } catch (error) {
-
-    if (error instanceof Error) {
-      console.log('deleteUnverifiedUsers: ERROR: API - ' + error.message);
-    }
-
+    throw new Error(`deleteUnverifiedUsers failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -167,11 +131,7 @@ export async function changeSchoolForUser(userId: number, schoolId: number) {
     
     return res;
   } catch (error) {
-
-    if (error instanceof Error) {
-      console.log('changeSchoolForUser: ERROR: API - ' + error.message);
-    }
-
+    throw new Error(`changeSchoolForUser failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -187,10 +147,6 @@ export async function findAllUsersBySchoolId(schoolId: number){
     
     return res;
   } catch (error) {
-
-    if (error instanceof Error) {
-      console.log('findAllUsersBySchoolId: ERROR: API - ' + error.message);
-    }
-
+    throw new Error(`findAllUsersBySchoolId failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }

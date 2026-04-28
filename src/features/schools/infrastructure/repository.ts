@@ -13,11 +13,7 @@ export async function insertSchoolInfo(name: string, email: string, password: st
 
         return res;
     } catch (error) {
-
-        if (error instanceof Error) {
-            console.log('insertSchoolInfo: ERROR: API - ', error?.message);
-        }
-
+        throw new Error(`insertSchoolInfo failed: ${error instanceof Error ? error.message : String(error)}`);
     }
 }
 
@@ -30,11 +26,7 @@ export async function findSchoolByEmail(email: string) {
 
         return res;
     } catch (error) {
-
-        if (error instanceof Error) {
-            console.log('findSchoolByEmail: ERROR: API - ', error?.message);
-        }
-
+        throw new Error(`findSchoolByEmail failed: ${error instanceof Error ? error.message : String(error)}`);
     }
 }
 
@@ -47,11 +39,7 @@ export async function findSchoolPartnershipByEmail(email: string) {
 
         return res;
     } catch (error) {
-
-        if (error instanceof Error) {
-            console.log('findSchoolPartnershipByEmail: ERROR: API - ', error?.message);
-        }
-
+        throw new Error(`findSchoolPartnershipByEmail failed: ${error instanceof Error ? error.message : String(error)}`);
     }
 }
 
@@ -69,11 +57,7 @@ export async function insertActivationKey(email: string, activationKeyExpiration
 
         return res;
     } catch (error) {
-
-        if (error instanceof Error) {
-            console.log('insertActivationKey: ERROR: API - ', error?.message);
-        }
-
+        throw new Error(`insertActivationKey failed: ${error instanceof Error ? error.message : String(error)}`);
     }
 }
 
@@ -94,11 +78,7 @@ export async function updateActivationKey(email: string, activationKeyExpiration
 
         return res;
     } catch (error) {
-
-        if (error instanceof Error) {
-            console.log('updateActivationKey: ERROR: API - ', error?.message);
-        }
-
+        throw new Error(`updateActivationKey failed: ${error instanceof Error ? error.message : String(error)}`);
     }
 }
 
@@ -114,11 +94,7 @@ export async function findSubscriptionByEmail(email: string) {
 
         return res;
     } catch (error) {
-
-        if (error instanceof Error) {
-            console.log('findSubscriptionByEmail: ERROR: API - ', error?.message);
-        }
-
+        throw new Error(`findSubscriptionByEmail failed: ${error instanceof Error ? error.message : String(error)}`);
     }
 }
 
@@ -133,11 +109,7 @@ export async function findAllSubscriptionsBySchoolId(schoolId: number) {
 
         return res;
     } catch (error) {
-
-        if (error instanceof Error) {
-            console.log('findAllSubscriptionsBySchoolId: ERROR: API - ', error?.message);
-        }
-
+        throw new Error(`findAllSubscriptionsBySchoolId failed: ${error instanceof Error ? error.message : String(error)}`);
     }
 }
 
@@ -155,10 +127,6 @@ export async function updateSubscriptionEmail(email : string, newEmail : string)
 
         return res;
     } catch (error) {
-
-        if (error instanceof Error) {
-            console.log('updateSubscriptionEmail: ERROR: API - ', error?.message);
-        }
-
+        throw new Error(`updateSubscriptionEmail failed: ${error instanceof Error ? error.message : String(error)}`);
     }
 }

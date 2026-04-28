@@ -15,11 +15,7 @@ export async function findWord(word : string) {
 
     return res;
   } catch (error) {
-
-    if (error instanceof Error) {
-      console.log('GetWords: ERROR: API - ' + error.message);
-    }
-
+    throw new Error(`findWord failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -35,9 +31,6 @@ export async function saveWord(word: string, audio: string | undefined, meanings
 
     return res;   
   } catch (error) {
-
-    if (error instanceof Error) {
-      console.log('saveWord: ERROR: API - ' + error.message);
-    }     
+    throw new Error(`saveWord failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }

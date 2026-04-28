@@ -21,9 +21,7 @@ export async function findAllNotesByUserId(userId : number) {
     });
     return res;
   } catch (error) {
-    if (error instanceof Error) {
-      console.log('findAllNotesByUserId: ERROR: API - ', error?.message);
-    }
+    throw new Error(`findAllNotesByUserId failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -32,9 +30,7 @@ export async function findAllNotes() {
     const res = await prisma.notes.findMany({});
     return res;
   } catch (error) {
-    if (error instanceof Error) {
-      console.log('findAllNotes: ERROR: API - ', error?.message);
-    }
+    throw new Error(`findAllNotes failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -43,9 +39,7 @@ export async function findAllWords() {
     const res = await prisma.dictionary_words.findMany({});
     return res;
   } catch (error) {
-    if (error instanceof Error) {
-      console.log('findAllWords: ERROR: API - ', error?.message);
-    }
+    throw new Error(`findAllWords failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -67,11 +61,7 @@ export async function findUserWordTexts(userId : number) {
     return res.map((n) => {return n.dictionary_words?.word});
 
   } catch (error) {
-
-    if (error instanceof Error) {
-      console.log('findAllNotesWithDictionaryWord: ERROR: API - ', error?.message);
-    }
-
+    throw new Error(`findUserWordTexts failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -130,11 +120,7 @@ export async function createUserNote(userId: number, word: string, audio: string
 
     return newNotes;
   } catch (error) {
-
-    if (error instanceof Error) {
-      console.log('createUserNote: ERROR: API - ' + error.message);
-    }
-
+    throw new Error(`createUserNote failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -145,11 +131,7 @@ export async function findNoteById(noteId : number) {
 
     return res;
   } catch (error) {
-
-    if (error instanceof Error) {
-      console.log('findNoteById: ERROR: API - ' + error.message);
-    }
-
+    throw new Error(`findNoteById failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -168,11 +150,7 @@ export async function updateNoteReviewFactors(noteId: number, days: number, repe
 
     return res;
   } catch (error) {
-
-    if (error instanceof Error) {
-      console.log('updateNoteReviewFactors: ERROR: API - ' + error.message);
-    }
-
+    throw new Error(`updateNoteReviewFactors failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -183,10 +161,7 @@ export async function deleteNoteById(noteId: number) {
 
     return res;
   } catch (error) {
-
-    if (error instanceof Error) {
-      console.log('DeleeteNote: ERROR: API - ' + error.message);
-    }
+    throw new Error(`deleteNoteById failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -199,11 +174,7 @@ export async function deleteNotesById(ids: number[]) {
 
     return res;
   } catch (error) {
-
-    if (error instanceof Error) {
-      console.log('deleteNotesById: ERROR: API - ' + error.message);
-    }
-
+    throw new Error(`deleteNotesById failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -214,10 +185,7 @@ export async function updateNoteLearnedStatus(noteId: number, status: boolean) {
 
     return res;
   } catch (error) {
-
-    if (error instanceof Error) {
-      console.log('SetNoteLearned: ERROR: API - ' + error.message);
-    }
+    throw new Error(`updateNoteLearnedStatus failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -228,11 +196,7 @@ export async function updateNoteUserText(userNotes: string, noteId: number) {
 
     return res;
   } catch (error) {
-
-    if (error instanceof Error) {
-      console.log('updateNoteUserText: ERROR: API - ' + error.message);
-    }
-
+    throw new Error(`updateNoteUserText failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -251,11 +215,7 @@ export async function resetNoteReviewFactors(noteId: number, days: number, repet
 
     return res;
   } catch (error) {
-
-    if (error instanceof Error) {
-      console.log('resetNoteReviewFactors: ERROR: API - ' + error.message);
-    }
-
+    throw new Error(`resetNoteReviewFactors failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -266,10 +226,6 @@ export async function restoreNotes(noteId: number, audio: string) {
 
     return res;
   } catch (error) {
-
-    if (error instanceof Error) {
-      console.log('updateNoteUserText: ERROR: API - ' + error.message);
-    }
-
+    throw new Error(`restoreNotes failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }

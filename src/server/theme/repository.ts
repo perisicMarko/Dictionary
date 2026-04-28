@@ -18,10 +18,6 @@ export async function getThemeColors(userId: number) {
 
         return res;
     } catch (error) {
-
-        if (error instanceof Error) {
-            console.log('findAllNotesWithDictionaryWord: ERROR: API - ', error?.message);
-        }
-
+        throw new Error(`getThemeColors failed: ${error instanceof Error ? error.message : String(error)}`);
     }
 }
