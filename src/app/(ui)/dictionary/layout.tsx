@@ -1,7 +1,6 @@
 "use client";
 import "@/app/globals.css";
 import { NavBar } from "./../../../components/NavBar";
-import { TokenContextProvider } from "@/components/TokenContextProvider";
 import { useEffect, useState } from "react";
 
 export default function RootLayout({

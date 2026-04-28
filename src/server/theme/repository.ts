@@ -1,7 +1,5 @@
 import 'server-only';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/server/db/client';
 
 export async function getThemeColors(userId: number) {
     try {

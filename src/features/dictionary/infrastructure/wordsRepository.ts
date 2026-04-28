@@ -1,8 +1,6 @@
 import 'server-only';
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/server/db/client";
 import { TMeaning } from '@/lib/types';
-
-const prisma = new PrismaClient();
 
 
 

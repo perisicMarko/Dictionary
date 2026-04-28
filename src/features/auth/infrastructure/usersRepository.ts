@@ -1,7 +1,5 @@
 import 'server-only';
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/server/db/client";
 
 export async function findUserById(id: number) {
 
@@ -108,7 +106,7 @@ export async function updateUserPasswordById(userId: number, password: string) {
 }
 
 
-export async function isUserVerifiedById(userId: number) {
+export async function verifyUserById(userId: number) {
 
   try {
     const res = await prisma.users.update({ where: { id: userId }, data: { refresh_token: null, refresh_token_expiration_date: null, email_verified: true } });
@@ -117,7 +115,7 @@ export async function isUserVerifiedById(userId: number) {
   } catch (error) {
 
     if (error instanceof Error) {
-      console.log('isUserVerifiedById: ERROR: API - ' + error.message);
+      console.log('verifyUserById: ERROR: API - ' + error.message);
     }
 
   }

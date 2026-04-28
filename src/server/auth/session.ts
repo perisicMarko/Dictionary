@@ -1,6 +1,5 @@
 'server-only';
 import { JWTPayload, SignJWT, jwtVerify } from 'jose';
-import { User } from 'lucide-react';
 import { cookies } from 'next/headers';
 
 const REFRESH_SECRET = new TextEncoder().encode(process.env.REFRESH_SECRET);
@@ -53,28 +52,6 @@ export async function decryptRefresh(token: string) {
   } catch (error) {
     console.log('Failed refresh token decryption, error: ' + error);
   }
-}
-
-export const STATUS = {
-  UNAUTHORIZED: 0,
-  VALID_ACCESS: 1,
-  ACCESS_NEEDED: 2,
-};
-
-export async function verifySession(accessString : string) {
-  const cookieStore = await cookies();
-  
-  const accessToken = await decryptAccess(accessString);
-  if (accessToken)
-    return STATUS.VALID_ACCESS;
-  
-  const retVal = await decryptRefresh(cookieStore.get('refreshToken')?.value || '');
-  if(retVal){
-    console.log('VERIFY SESSION: RETURNED ACCESS NEEDED');
-    return STATUS.ACCESS_NEEDED;
-  }
-
-  return STATUS.UNAUTHORIZED;
 }
 
 export async function requireAuthenticatedUser(){

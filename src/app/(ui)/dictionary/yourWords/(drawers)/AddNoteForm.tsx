@@ -1,5 +1,5 @@
 import { containerVariants } from "@/lib/animationVariants";
-import { useActionState, useContext, useState, useRef, useEffect } from "react";
+import { useActionState, useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import Loader from "@/components/common/Loader";
 import { putNoteInDrawer } from "@/features/drawers/application";
@@ -40,10 +40,8 @@ export default function StrictAutocomplete({
 
   
   useEffect(() => {
-    if(!importState.success){
-      tokenContext?.setAccessToken(importState.accessToken);
-    }else if(importState?.success === false)
-      router.push('/');
+    if(importState?.success === false)
+      router.push('/login');
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [importState?.success]);

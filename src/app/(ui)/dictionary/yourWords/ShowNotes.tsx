@@ -1,4 +1,4 @@
-import { getUsersWords } from "@/features/notes/application";
+import { getUsersNotes } from "@/features/notes/application";
 import Words from "@/components/common/Words";
 import { TNoteApp } from "@/lib/types";
 import { useState, useContext, useEffect } from "react";
@@ -16,9 +16,9 @@ export default function ShowNotes() {
 
   useEffect(() => {
     const fetch = async () => {
-      const words = await getUsersWords();
-      if (words) {
-        setWords(words.data);
+      const res = await getUsersNotes();
+      if (res.success) {
+        setWords(res.data as TNoteApp[]);
       }
     };
     fetch();

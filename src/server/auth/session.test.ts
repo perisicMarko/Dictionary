@@ -79,35 +79,6 @@ describe("manageSession tokens", () => {
     expect(payload).toBeUndefined();
   });
 
-  it("verifySession returns VALID_ACCESS for valid access token", async () => {
-    const { session, cookiesMock } = await loadSessionModule();
-    cookiesMock.mockResolvedValue(createCookieStore() as never);
-    const access = await session.encryptAccess({ email: "user@example.com", userId: 1 });
-
-    const status = await session.verifySession(access);
-
-    expect(status).toBe(session.STATUS.VALID_ACCESS);
-  });
-
-  it("verifySession returns ACCESS_NEEDED when access is invalid but refresh exists", async () => {
-    const { session, cookiesMock } = await loadSessionModule();
-    const refresh = await session.encryptRefresh({ email: "user@example.com", userId: 1 });
-    cookiesMock.mockResolvedValue(createCookieStore({ refreshToken: refresh }) as never);
-
-    const status = await session.verifySession("invalid-access-token");
-
-    expect(status).toBe(session.STATUS.ACCESS_NEEDED);
-  });
-
-  it("verifySession returns UNAUTHORIZED when neither token is valid", async () => {
-    const { session, cookiesMock } = await loadSessionModule();
-    cookiesMock.mockResolvedValue(createCookieStore() as never);
-
-    const status = await session.verifySession("invalid-access-token");
-
-    expect(status).toBe(session.STATUS.UNAUTHORIZED);
-  });
-
   it("createSession stores sessionToken and decryptSession reads it", async () => {
     let sessionToken = "";
     const cookieStore = {

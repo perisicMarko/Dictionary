@@ -21,8 +21,9 @@ export default function Page() {
     if (!token) return;
 
     const fetchUser = async () => {
-      const retVal = await getUserByToken(token);
-      setUser(retVal);
+      const res = await getUserByToken(token);
+      if(res.success)
+        setUser(res.user);
     };
 
     fetchUser();

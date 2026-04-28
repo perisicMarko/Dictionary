@@ -1,11 +1,10 @@
 'use server'
 import { createUserNote, findAllNotesByUserId, findNoteById, updateNoteReviewFactors, updateNoteLearnedStatus, resetNoteReviewFactors, deleteNoteById, updateNoteUserText, findUserWordTexts } from '@/features/notes/infrastructure/repository';
-import { TMeaning, TNoteApp } from '@/lib/types';
+import { TDBNoteEntry, TMeaning, TNoteApp, TWordApp } from '@/lib/types';
 import { addDays, isBefore } from 'date-fns';
 import calc from '@/features/notes/domain/spacedRepetition';
-import { decryptAccess, decryptRefresh, encryptAccess, TokenPayload, verifySession, STATUS, requireAuthenticatedUser } from '@/server/auth/session';
+import { requireAuthenticatedUser } from '@/server/auth/session';
 import { logOutUser } from '@/features/auth/application/userAuth';
-import { cookies } from 'next/headers';
 
 function toAppNote(note: any): TNoteApp {
   const { status, ...rest } = note;
@@ -20,7 +19,7 @@ export async function getUsersWords() {
   }
 
   const { userId } = user;  
-  const words = (await findAllNotesByUserId(userId) as any[]).map(toAppNote);
+  const words = (await findAllNotesByUserId(userId) as any[]).map((e) => e.dictionary_words.word.word) as string[];
 
   return { success: true, data: words };
 }
@@ -91,7 +90,7 @@ export async function getRecallNotes() {
   return {
     success: true,
     data: notes.filter((n) => {
-      const res = n.isLearned === false && n.user_id == userId && isBefore(n.review_date, currentDate);
+      const res = n.isLearned === false && isBefore(n.review_date, currentDate);
       return res;
     })};
 }

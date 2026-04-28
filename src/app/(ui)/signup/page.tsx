@@ -14,14 +14,14 @@ export default function Signup() {
   );
   const [email, setEmail] = useState("");
 
-  if (state?.error === "Email already used.") {
-    window.alert("This email is already used for another account.");
-    state.error = "";
+  if (state?.success === false) {
+    window.alert(state.errorMessage);
+    state.errorMessage = "";
   }
 
   return (
     <>
-      {state && state?.subscription != "" && (
+      {state && state?.subscriptionStatusMessage != "" && (
         <motion.div
           initial="hidden"
           animate="show"
@@ -29,7 +29,7 @@ export default function Signup() {
           className="box-layout mt-15 sm:mt-20"
         >
           <motion.p variants={itemVariants} className="text-text-main text-center">
-            <b>{state?.subscription}</b>
+            <b>{state?.subscriptionStatusMessage}</b>
           </motion.p>
         </motion.div>
       )}

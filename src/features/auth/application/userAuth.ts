@@ -1,10 +1,10 @@
 "use server"
 import { SignupSchema, LoginSchema } from '@/lib/rules';
-import { changeSchoolForUser, findUserByEmail, findUserByToken, insertUser, isUserVerifiedById } from '@/features/auth/infrastructure/usersRepository';
+import { changeSchoolForUser, findUserByEmail, findUserByToken, insertUser, verifyUserById } from '@/features/auth/infrastructure/usersRepository';
 import bcrypt from 'bcrypt';
 import sendEmail, { generateVerificationMail } from './sendVerificationEmail';
 import { isBefore } from 'date-fns';
-import { encryptAccess, encryptRefresh, issueTokensForUser } from '@/server/auth/session';
+import {issueTokensForUser } from '@/server/auth/session';
 import { cookies } from 'next/headers';
 import { findSubscriptionByEmail, insertActivationKey } from '@/features/schools/infrastructure/repository';
 import { LoginStatus } from '@/shared/auth/loginStatus';
@@ -20,10 +20,10 @@ export type SignupActionState = {
     errorMessage: string;
     subscriptionStatusMessage: string;
     success: boolean;
-};
+} | undefined;
 
 export async function isUserVerified(userId: number) {
-    const status = await isUserVerifiedById(userId);
+    const status = await verifyUserById(userId);
 
     if (status)
         return { success: true };
@@ -145,7 +145,7 @@ export async function authenticateSignup(state: SignupActionState, formData: For
         };
 }
 
-export type ResendVerificationState = { success: boolean };
+export type ResendVerificationState = { success: boolean } | undefined;
 
 export async function resendVerificationMail(state: ResendVerificationState, formData: FormData) {
     const email = (formData.get('email') as FormDataEntryValue).toString();

@@ -6,7 +6,6 @@ import nodemailer from 'nodemailer';
 
 
 export async function GET() {
-
   const notes = await findAllNotes();
   const currentDate = new Date();
   const userIds = new Set<number>();
@@ -39,14 +38,12 @@ export async function GET() {
       mailOptions.to = user.email;
 
     try {
-      // sending mail
       await transporter.sendMail(mailOptions);
-      return NextResponse.json({ message: 'Mail was successfully sent.', status: 200 });
-    } catch (error) {
+    } catch (error) { 
+      // Log the error but continue sending emails to other users
       const message = (error instanceof Error && error.message);
-      return NextResponse.json({ error: 'Error when sending mail: ' + message, status: 500 });
+      console.error('Error sending email to user ID ' + u + ': ' + message);
     }
   }
-
-
+  return NextResponse.json({ message: 'Mails was successfully sent.', status: 200 });
 }

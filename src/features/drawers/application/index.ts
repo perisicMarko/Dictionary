@@ -65,7 +65,7 @@ export async function deleteDrawer(drawerId : number){
     
     const res = await deleteDrawerById(drawerId);
 
-    return {success: false };
+    return {success: true };
 }
 
 
@@ -115,7 +115,7 @@ export async function removeWordFromDrawer(drawerId : number, wordId : number){
     
     const res = await removeNoteFromDrawer(wordId, drawerId);
 
-    return {success: false};
+    return {success: true };
 }
 
 

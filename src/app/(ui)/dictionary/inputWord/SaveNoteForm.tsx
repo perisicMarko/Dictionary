@@ -18,7 +18,7 @@ export default function SaveNoteForm({
 }: {
   toggleHelp: () => void;
 }) {
-  const [words, setWords] = useState<string[]>();
+  const [words, setWords] = useState<string[]>([]);
   const [word, setWord] = useState("");
   const [note, setNote] = useState<TWordApp | { error: string } | null>(); // for preview of api response
   const [generated, setGenerated] = useState(false); // for displaying textarea for generated notes
@@ -75,8 +75,8 @@ export default function SaveNoteForm({
 
   useEffect(() => {
     const fetchWords = async () => {
-      const words = await getUsersWords();
-      if (words) setWords(words.data as string[]);
+      const res = await getUsersWords();
+      if (res.success) setWords(res.data as string[]);
     };
     fetchWords();
     wordInputRef.current?.focus();

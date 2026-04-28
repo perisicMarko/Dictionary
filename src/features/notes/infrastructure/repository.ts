@@ -1,9 +1,7 @@
 import 'server-only';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/server/db/client';
 import { TMeaning, TWordApp } from '@/lib/types';
 import { addDays } from 'date-fns';
-
-const prisma = new PrismaClient();
 
 export async function findAllNotesByUserId(userId : number) {
   try {

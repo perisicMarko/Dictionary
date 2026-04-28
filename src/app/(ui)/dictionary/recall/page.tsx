@@ -14,8 +14,8 @@ export default function Page() {
 
   useEffect(() => {
     async function fetchNotes() {
-      const data = await getRecallNotes();
-      setWords(data as TNoteApp[]);
+      const res = await getRecallNotes();
+      if(res.success) setWords(res.data as TNoteApp[]);
     }
     fetchNotes();
   }, [refresh]);

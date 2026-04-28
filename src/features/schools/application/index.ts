@@ -73,7 +73,6 @@ export async function updateSubscriptionEmail(email : string, newEmail : string)
     if(!session)
         return {success: false};
 
-    console.log('hello');
     const res = await updateSubscriptionEmailByAddress(email, newEmail);
     if(!res)
         return {success: false};
