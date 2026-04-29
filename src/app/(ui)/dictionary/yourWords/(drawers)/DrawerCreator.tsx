@@ -7,20 +7,16 @@ import Loader from "@/components/common/Loader";
 import { useRouter } from "next/navigation";
 
 export default function DrawerCreator({
-  rerender,
   drawerNames,
 }: {
-  rerender: () => void;
   drawerNames: string[] | undefined;
 }) {
-  return <DrawerCreatorView rerender={rerender} drawerNames={drawerNames} />;
+  return <DrawerCreatorView drawerNames={drawerNames} />;
 }
 
 function DrawerCreatorView({
-  rerender,
   drawerNames,
 }: {
-  rerender: () => void;
   drawerNames: string[] | undefined;
 }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,8 +37,8 @@ function DrawerCreatorView({
 
     setIsOpen(false);
     setDrawerName("");
-    rerender();
-  }, [state, rerender, router]);
+    router.refresh()
+  }, [state, router]);
 
   useEffect(() => {
     if (isOpen && drawerAddRef.current) {

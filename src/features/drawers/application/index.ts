@@ -1,6 +1,6 @@
 'use server'
 import { readAuthenticatedUser, requireAuthenticatedUser } from "@/server/auth/userSession";
-import { attachNoteToDrawer, deleteDrawerById, findAllNotesWithDictionaryWordOfDrawer, findDrawerById, findDrawersByUserId, insertDrawer, removeNoteFromDrawer, updateDrawerNameById } from "@/features/drawers/infrastructure/repository";
+import { attachNoteToDrawer, deleteDrawerById, findAllNotesWithDictionaryWordOfDrawer, findDrawerById, findDrawersByUserId, insertDrawer, removeNoteFromDrawer, updateDrawerNameById, findNoteDrawerMappingByUserId} from "@/features/drawers/infrastructure/repository";
 import { logOutUser } from "@/features/auth/application/userAuth";
 
 type createState  = {
@@ -102,6 +102,23 @@ export async function getNotesOfDrawer(drawerId : number){
     })}
 }
 
+
+export async function getNoteDrawerMapping(){
+    const user = await readAuthenticatedUser();
+    if (!user) {
+        await logOutUser();
+        return { success: false };
+    }
+
+    const {userId} = user;
+
+    const mapping = await findNoteDrawerMappingByUserId(userId);
+
+    return {
+        success: true,
+        data: mapping
+    };
+}
 
 export async function removeWordFromDrawer(drawerId : number, wordId : number){
     const user = await requireAuthenticatedUser();

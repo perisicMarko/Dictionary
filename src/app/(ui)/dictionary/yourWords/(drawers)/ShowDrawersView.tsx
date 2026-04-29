@@ -3,101 +3,61 @@
 import SearchBar from "@/components/common/SearchBar";
 import { useEffect, useState } from "react";
 import DrawerCreator from "./DrawerCreator";
-import { getNotesOfDrawer } from "@/features/drawers/application";
 import { TDrawer, TNoteApp } from "@/shared/types";
 import Drawer from "./Drawer";
 import Loading from "@/app/(ui)/loading";
 import OpenedDrawer from "./OpenedDrawer";
-import { useRouter } from "next/navigation";
 import { AnimatePresence } from "framer-motion";
 
 export default function ShowDrawersView({
   initialDrawers,
   initialNotes,
-  isAuthenticated,
+  drawerNoteMapping,
 }: {
   initialDrawers: TDrawer[];
   initialNotes: TNoteApp[];
-  isAuthenticated: boolean;
+  drawerNoteMapping: { note_id: number, drawer_id: number }[];
 }) {
   const [search, setSearch] = useState("");
-  const [drawers, setDrawers] = useState<TDrawer[] | null>(initialDrawers);
-  const [notes, setNotes] = useState<TNoteApp[] | null>(initialNotes);
-  const [openedDrawerNotes, setOpenedDrawerNotes] = useState<TNoteApp[] | null>(null);
   const [openedDrawerId, setOpenedDrawerId] = useState(-1);
-  const router = useRouter();
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      router.push("/login");
-      return;
-    }
-
     const drawerId = sessionStorage.getItem("openedDrawerId");
     if (drawerId != null && !isNaN(Number(drawerId))) {
       setOpenedDrawerId(Number(drawerId));
     }
-  }, [isAuthenticated, router]);
+  }, []);
 
-  const openDrawer = (id: number) => {
+  const openDrawerById = (id: number) => {
     sessionStorage.setItem("openedDrawerId", id.toString());
     setOpenedDrawerId(id);
   };
 
-  const loadOpenedDrawerNotes = async (drawerId: number) => {
-    if (drawerId === -1) {
-      setOpenedDrawerNotes(null);
-      return true;
-    }
-
-    const notesRes = await getNotesOfDrawer(drawerId);
-    if (!notesRes.success) {
-      router.push("/login");
-      return false;
-    }
-
-    setOpenedDrawerNotes(notesRes.data as TNoteApp[]);
-    return true;
-  };
-
-  useEffect(() => {
-    void loadOpenedDrawerNotes(openedDrawerId);
-  }, [openedDrawerId]);
-
-  function updateSearch(word: string) {
-    setSearch(word);
-  }
-
-  async function rerender() {
-    router.refresh();
-    if (openedDrawerId === -1) {
-      return;
-    }
-
-    await loadOpenedDrawerNotes(openedDrawerId);
-  }
-
-  let searchedDrawers = drawers;
-
+  let searchedDrawers = initialDrawers;
   if (openedDrawerId === -1) {
-    searchedDrawers = drawers?.filter((d: TDrawer) =>
+    searchedDrawers = initialDrawers.filter((d: TDrawer) =>
       d.name.toLowerCase().includes(search.toLowerCase())
     ) ?? [];
   }
 
-  const openedDrawer = drawers?.find((d) => d.id === openedDrawerId);
+  let notesOfOpenedDrawer = initialNotes;
+  if (openedDrawerId !== -1) {
+    notesOfOpenedDrawer = initialNotes.filter((n) => drawerNoteMapping.includes({ note_id: n.id, drawer_id: openedDrawerId }));
+  }
+
+  const openedDrawer = initialDrawers.find((d) => d.id === openedDrawerId);
 
   return (
     <>
       <SearchBar
-        updateSearch={updateSearch}
+        updateSearch={(e) => setSearch(e)}
         placeholder={
           openedDrawerId === -1
             ? "Search for drawers here..."
             : "Search for notes..."
         }
-        sortBy={false}
-        changeSortBy={() => {}}
+        sortBy={false} // hardcoded
+        changeSortBy={() => { }} // needs updater function
       >
         <p className="pt-3 enter-fade-up enter-delay-1">
           {openedDrawerId === -1 ? (
@@ -134,12 +94,11 @@ export default function ShowDrawersView({
 
       {openedDrawerId === -1 ? (
         <DrawerCreator
-          rerender={rerender}
-          drawerNames={drawers?.map((d) => d.name)}
+          drawerNames={initialDrawers.map((d) => d.name)}
         />
       ) : null}
 
-      {drawers?.length === 0 ? (
+      {initialDrawers.length === 0 ? (
         <div className="box-layout mt-5 center enter-fade">
           <span className="text-box enter-fade-up enter-delay-1">
             No drawers created.
@@ -155,32 +114,31 @@ export default function ShowDrawersView({
                 <Drawer
                   key={d.id}
                   drawer={d}
-                  notes={(notes ?? []) as TNoteApp[]}
-                  rerender={rerender}
-                  openDrawer={(id: number) => openDrawer(id)}
+                  notes={notesOfOpenedDrawer}
+                  openDrawerById={(id: number) => openDrawerById(id)}
                   openedDrawerId={openedDrawerId}
                 />
               ))}
             </AnimatePresence>
-          ) : drawers && drawers.length !== 0 ? (
+          ) : initialDrawers.length !== 0 ? (
             <div className="box-layout text-box mt-5 enter-fade">No drawers found.</div>
           ) : null
         ) : (
           <Loading />
         )
       ) : (
+        // search is passed because when drawer is open search then searches for notes, not drawers
         <OpenedDrawer
           drawer={openedDrawer}
-          drawerNotes={openedDrawerNotes}
+          drawerNotes={notesOfOpenedDrawer}
           search={search}
-          openDrawer={(id: number) => openDrawer(id)}
+          openDrawerById={(id: number) => openDrawerById(id)}
           openedDrawerId={openedDrawerId}
-          allNotes={(notes ?? []) as TNoteApp[]}
-          rerender={rerender}
+          allNotes={initialNotes}
         />
       )}
 
-      {drawers === null || notes === null ? <Loading /> : null}
+      {initialDrawers === null || initialNotes === null ? <Loading /> : null}
     </>
   );
 }

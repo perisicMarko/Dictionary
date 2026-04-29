@@ -415,3 +415,8 @@ forgotpassword
 dictionary/recall
 components
 
+
+# refactoring yourwords
+- one ssr that fetches both notes and drawers
+- then renders the toggle 
+- and renders client component which conditionally redners notes or drawers

@@ -46,25 +46,31 @@ export async function fetchApiNotes(word : string){
       const dsJson = await JSON.parse(deepSeekResponse.choices[0].message.content || "");
       note.generated_notes = dsJson[0].entries as TMeaning[];
 
-      // if word is not found in database, find it through on of the api
-      const freeDictApiResponse = await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + word);
-      if (freeDictApiResponse.ok) {
+
+      try{
+        // if word is not found in database, find it through on of the api
+        const freeDictApiResponse = await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + word);
+        if (freeDictApiResponse.ok) {
           const rawApiData = (await freeDictApiResponse.json())[0]; // the data that api returns is one object in an array, hence [0]
           
           const audio = rawApiData.phonetics.filter((p: TGPhonetic) => p.audio != undefined && p.audio != '')[0]?.audio || undefined;
           if(audio){
             const API_KEY = process.env.API_KEY; 
-
+            
             const pom = await fetch(`https://api.voicerss.org/?key=${API_KEY}&hl=en-gb&v=Alice&src=${word.trim().toLowerCase()}`);
-
+            
             note.audio = pom.url;
           }
+        }
+      } catch(e){
+        if(e instanceof Error)
+          throw new Error('Failed fetching api voice, message: ' + e.message); 
       }
-
-      await saveWord(note.word, note.audio, note.generated_notes);
+        
+        await saveWord(note.word, note.audio, note.generated_notes);
       return note;
     } catch(e){
       if(e instanceof Error)
-          throw new Error('Failed fetching notes api, message: ' + e.message); 
+          throw new Error('Failed generating api notes, message: ' + e.message); 
     }
 }

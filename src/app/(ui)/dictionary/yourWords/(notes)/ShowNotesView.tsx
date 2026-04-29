@@ -1,27 +1,27 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Words from "@/components/common/Words";
 import { TNoteApp } from "@/shared/types";
 import ZeroNotesMessage from "@/components/common/ZeroNotesMessage";
 import SearchBar, { SORT } from "@/components/common/SearchBar";
 import Loading from "../../../loading";
 import { isBefore } from "date-fns";
+import Notes from "@/components/common/Notes";
 
-export default function ShowNotes({
-  initialWords,
+export default function ShowNotesView({
+  initialNotes,
 }: {
-  initialWords: TNoteApp[] | null;
+  initialNotes: TNoteApp[];
 }) {
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState(-1);
 
-  const sortedWords = useMemo(() => {
-    if (!initialWords) {
+  const sortednotes = useMemo(() => {
+    if (!initialNotes) {
       return undefined;
     }
 
-    const searchedWords = initialWords.filter((w) => {
+    const searchednotes = initialNotes.filter((w) => {
       return w.dictionary_words.word
         .toLowerCase()
         .trim()
@@ -29,10 +29,10 @@ export default function ShowNotes({
     });
 
     if (sortBy === -1) {
-      return searchedWords;
+      return searchednotes;
     }
 
-    const sorted = [...searchedWords];
+    const sorted = [...searchednotes];
 
     switch (sortBy) {
       case SORT.BY_DATE_ASC:
@@ -54,49 +54,48 @@ export default function ShowNotes({
     }
 
     return sorted;
-  }, [initialWords, search, sortBy]);
+  }, [initialNotes, search, sortBy]);
 
-  function updateSearch(word: string) {
-    setSearch(word);
+  function updateSearch(note: string) {
+    setSearch(note);
   }
 
   return (
     <>
       <SearchBar
         updateSearch={updateSearch}
-        placeholder={"Search for words here..."}
+        placeholder={"Search for notes here..."}
         sortBy={true}
         changeSortBy={(arg: number) => setSortBy(arg)}
       >
         <p className="mt-5 enter-fade-up enter-delay-1">
-          This page is where all the words you have not learned yet are stored.
+          This page is where all the notes you have not learned yet are stored.
           Hence, if you have more spare time in the day you can review all the
-          words here. <br /> <br />
+          notes here. <br /> <br />
           Bonus help: Press the F key to focus the search bar.
         </p>
       </SearchBar>
 
-      {sortedWords?.length === 0 && search !== "" ? (
+      {sortednotes?.length === 0 && search !== "" ? (
         <ZeroNotesMessage
-          message={"There is no word like that within your words."}
+          message={"There is no note like that within your notes."}
         />
       ) : null}
 
-      {sortedWords === undefined ? <Loading /> : null}
+      {sortednotes === undefined ? <Loading /> : null}
 
-      {sortedWords && sortedWords.length !== 0 ? (
-        <Words
-          props={sortedWords}
+      {sortednotes && sortednotes.length !== 0 ? (
+        <Notes
+          props={sortednotes}
           historyNote={false}
-          rerenderParent={() => {}}
           drawerId={-1}
         />
       ) : null}
 
-      {sortedWords?.length === 0 && search === "" ? (
+      {sortednotes?.length === 0 && search === "" ? (
         <ZeroNotesMessage
           message={
-            "Hmm, seems like you're not learning any words yet. Time to get started!"
+            "Hmm, seems like you're not learning any notes yet. Time to get started!"
           }
         />
       ) : null}

@@ -1,5 +1,5 @@
 import Loading from "@/app/(ui)/loading";
-import Words from "@/components/common/Words";
+import Notes from "@/components/common/Notes";
 import { TNoteApp, TDrawer } from "@/shared/types";
 import Drawer from "./Drawer";
 
@@ -7,18 +7,16 @@ export default function OpenedDrawer({
   drawer,
   drawerNotes,
   search,
-  openDrawer,
+  openDrawerById,
   openedDrawerId,
   allNotes,
-  rerender,
 }: {
   drawer: TDrawer | undefined;
   drawerNotes: TNoteApp[] | null;
   search: string;
-  openDrawer: (id: number) => void;
+  openDrawerById: (id: number) => void;
   openedDrawerId: number;
   allNotes: TNoteApp[];
-  rerender: () => void;
 }) {
   const searchedWords =
     drawerNotes?.filter((w) =>
@@ -34,8 +32,7 @@ export default function OpenedDrawer({
       <Drawer
         key={drawer.id}
         drawer={drawer}
-        openDrawer={openDrawer}
-        rerender={rerender}
+        openDrawerById={openDrawerById}
         notes={allNotes}
         openedDrawerId={openedDrawerId}
       />
@@ -48,10 +45,9 @@ export default function OpenedDrawer({
       ) : searchedWords.length === 0 ? (
         <div className="box-layout mt-5 text-box enter-fade">No words found.</div>
       ) : (
-        <Words
+        <Notes
           props={searchedWords}
           historyNote={false}
-          rerenderParent={rerender}
           drawerId={drawer.id}
         />
       )}

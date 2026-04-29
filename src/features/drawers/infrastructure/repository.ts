@@ -105,6 +105,39 @@ export async function findAllNotesWithDictionaryWordOfDrawer(drawerId: number) {
 }
 
 
+// bad database design, but i need this for the mapping of drawers and notes in the frontend
+// mapping is stored with drawer_id and note_id, but i need to find all drawers and their notes for a specific user
+export async function findNoteDrawerMappingByUserId(userId: number) {
+    try {
+        const resDrawersIds = await prisma.drawers.findMany({
+            where: {
+                user_id: userId
+            }, 
+            select: {
+                id: true,
+            }
+        });
+
+        try {
+
+            const resDrawerIdNoteIdMapping = await prisma.drawers_and_notes.findMany({
+                where: {
+                    drawer_id: {
+                        in: resDrawersIds.map((d) => d.id)
+                    }
+                }});
+
+            return resDrawerIdNoteIdMapping;
+        } catch (e) {
+            throw new Error(`findNoteDrawerMappingByUserId failed at drawers_and_notes query: ${e instanceof Error ? e.message : String(e)}`);
+        }
+    } catch (e) {
+        throw new Error(`findAllNotesWithDictionaryWordOfDrawer failed: ${e instanceof Error ? e.message : String(e)}`);
+    }
+}
+
+
+
 export async function removeNoteFromDrawer(noteId: number, drawerId: number) {
     try {
         const res = await prisma.drawers_and_notes.deleteMany({

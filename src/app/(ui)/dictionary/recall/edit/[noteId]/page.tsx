@@ -1,7 +1,7 @@
 import EditNotePage from "@/components/EditNotePage";
 import { getNoteById } from "@/features/notes/application";
 import { TNoteApp } from "@/shared/types";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 
 type PageProps = {
   params: Promise<{
@@ -14,14 +14,13 @@ export default async function Page({ params }: PageProps) {
   const response = await getNoteById(Number(noteId));
 
   if (!response.success || !response.data) {
-    notFound();
+    redirect('/login');
   }
 
   return (
     <EditNotePage
       pathSrc="/dictionary/recall"
       note={response.data as TNoteApp}
-      noteId={Number(noteId)}
     />
   );
 }

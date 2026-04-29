@@ -13,12 +13,10 @@ export default function Note({
   prop,
   historyNote,
   drawerId,
-  rerenderParent,
 }: {
   prop: TNoteApp;
   historyNote: boolean;
   drawerId: number;
-  rerenderParent: () => void;
 }) {
   const [drop, setDrop] = useState(false);
   const [menu, setMenu] = useState(false);
@@ -76,7 +74,6 @@ export default function Note({
         {menu &&
           (historyNote ? (
             <HistoryNoteMenu
-              rerenderParent={rerenderParent}
               toggleMenu={toggleMenu}
               noteId={note.id}
             />
@@ -84,7 +81,6 @@ export default function Note({
             <NoteMenu
               noteId={note.id}
               drawerId={drawerId}
-              rerenderParent={rerenderParent}
             />
           ))}
       </div>

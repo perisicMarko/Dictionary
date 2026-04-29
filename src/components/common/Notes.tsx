@@ -2,16 +2,14 @@ import Note from "@/components/Note";
 import { TNoteApp } from "@/shared/types";
 import { AnimatePresence } from "framer-motion";
 
-export default function Words({
+export default function Notes({
   props,
   historyNote,
   drawerId,
-  rerenderParent,
 }: {
   props: TNoteApp[] | undefined;
   historyNote: boolean;
   drawerId: number;
-  rerenderParent: () => void;
 }) {
   return (
     <AnimatePresence mode="popLayout">
@@ -22,7 +20,6 @@ export default function Words({
             prop={w}
             historyNote={historyNote}
             drawerId={drawerId}
-            rerenderParent={rerenderParent}
           ></Note>
         );
       })}

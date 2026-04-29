@@ -6,11 +6,9 @@ import { Trash2 } from "lucide-react";
 import { useState } from "react";
 
 export default function HistoryNoteMenu({
-  rerenderParent,
   toggleMenu,
   noteId,
 }: {
-  rerenderParent: () => void;
   toggleMenu: () => void;
   noteId: number;
 }) {
@@ -25,10 +23,15 @@ export default function HistoryNoteMenu({
     const res = await backToRecallSystem(
       noteId
     );
+
+    if(!res){
+      return;
+    }
+
     if (!res.success) {
       router.push("/login");
     }
-    rerenderParent(); 
+    router.refresh();
   }
 
   async function onSubmitDeleteHandle(formData: FormData) {
@@ -36,10 +39,14 @@ export default function HistoryNoteMenu({
     const res = await deleteNote(
       Number(formData.get("noteId"))
     );
+    if(!res){
+      return;
+    }
+
     if (!res.success) {
       router.push("/login");
     }
-    rerenderParent(); 
+    router.refresh();
   }
 
   return (

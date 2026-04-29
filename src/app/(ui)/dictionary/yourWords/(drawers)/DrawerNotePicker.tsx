@@ -8,11 +8,9 @@ import { useRouter } from "next/navigation";
 export default function DrawerNotePicker({
   notes,
   drawerId,
-  rerender,
 }: {
   notes: { word: string; noteId: number }[] | undefined;
   drawerId: number;
-  rerender: () => void;
 }) {
   const addWordInput = useRef<HTMLInputElement>(null);
   const [value, setValue] = useState("");
@@ -48,8 +46,8 @@ export default function DrawerNotePicker({
     }
 
     setValue("");
-    rerender();
-  }, [importState, rerender, router]);
+    router.refresh()
+  }, [importState, router]);
 
   return (
     <form

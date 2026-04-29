@@ -1,7 +1,7 @@
 "use client";
 
 import { TDrawer, TNoteApp } from "@/shared/types";
-import { ChevronDown, ChevronUp, Plus } from "lucide-react";
+import { ChevronDown, ChevronUp, Plus, Router } from "lucide-react";
 import { useState } from "react";
 import DrawerMenu from "./DrawerMenu";
 import UpdateForm from "./UpdateForm";
@@ -12,17 +12,15 @@ import Loader from "@/components/common/Loader";
 export default function Drawer({
   drawer,
   notes,
-  rerender,
-  openDrawer,
+  openDrawerById,
   openedDrawerId,
 }: {
   drawer: TDrawer;
   notes: TNoteApp[];
-  rerender: () => void;
-  openDrawer: (id: number) => void;
+  openDrawerById: (id: number) => void;
   openedDrawerId: number;
 }) {
-  const [menu, setMenu] = useState(false);
+  const [isMenuOpened, setIsMenuOpened] = useState(false);
   const [updateFormShow, setUpdateFormShow] = useState(false);
   const [addFormShow, setAddFormShow] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -30,7 +28,7 @@ export default function Drawer({
 
   const handleDelete = async () => {
     await deleteDrawer(drawer.id);
-    rerender();
+    // some refreshing is needed
     setIsDeleting(false);
   };
 
@@ -42,7 +40,7 @@ export default function Drawer({
     <div
       className="box-layout mt-3 relative center-vertically enter-fade"
       onClick={() => {
-        setMenu(false);
+        setIsMenuOpened(false);
         setAddFormShow(false);
       }}
     >
@@ -81,13 +79,12 @@ export default function Drawer({
       ) : null}
 
       <DrawerMenu
-        menu={menu}
+        isOpened={isMenuOpened}
         toggleMenu={() => {
-          setMenu(!menu);
+          setIsMenuOpened(!isMenuOpened);
         }}
         drawerId={drawer?.id || -1}
         confirmDelete={deleteConfirmation}
-        rerender={rerender}
       />
 
       <div className="center-vertically w-2/3 sm:w-1/2">
@@ -96,7 +93,6 @@ export default function Drawer({
           updateFormShow={updateFormShow}
           setUpdateFormShow={(v: boolean) => setUpdateFormShow(v)}
           setAddFormShow={(v: boolean) => setAddFormShow(v)}
-          rerender={rerender}
         />
         {updateFormShow === false ? (
           <>
@@ -122,7 +118,6 @@ export default function Drawer({
                   noteId: w.id,
                 }))}
                 drawerId={drawer.id}
-                rerender={rerender}
               />
             )}
           </>
@@ -138,14 +133,14 @@ export default function Drawer({
             width={25}
             height={25}
             className="mt-3 cursor-pointer"
-            onClick={() => openDrawer(drawer?.id || -1)}
+            onClick={() => openDrawerById(drawer?.id || -1)}
           />
         ) : (
           <ChevronUp
             height={25}
             width={25}
             className="mt-3 cursor-pointer"
-            onClick={() => openDrawer(-1)}
+            onClick={() => openDrawerById(-1)}
           />
         )}
       </span>

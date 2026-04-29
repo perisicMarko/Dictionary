@@ -10,13 +10,11 @@ export default function UpdateForm({
   updateFormShow,
   setUpdateFormShow,
   setAddFormShow,
-  rerender,
 }: {
   drawer: TDrawer;
   updateFormShow: boolean;
   setUpdateFormShow: (v: boolean) => void;
   setAddFormShow: (v: boolean) => void;
-  rerender: () => void;
 }) {
   const nameRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
@@ -51,8 +49,8 @@ export default function UpdateForm({
     }
 
     setUpdateFormShow(false);
-    rerender();
-  }, [updateState, rerender, router, setUpdateFormShow]);
+    router.refresh();
+  }, [updateState, router, setUpdateFormShow]);
 
   const drawerNameValue = updateFormShow ? stateDrawerName : drawer?.name;
   const isInvalidDrawerName =

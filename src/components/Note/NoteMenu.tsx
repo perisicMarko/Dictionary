@@ -4,18 +4,18 @@ import Link from "next/link";
 import { FolderMinus, NotebookPen } from "lucide-react";
 import { useState } from "react";
 import { removeWordFromDrawer } from "@/features/drawers/application";
+import { useRouter } from "next/navigation";
 
 export default function NoteMenu({
   noteId,
   drawerId,
-  rerenderParent,
 }: {
   noteId: number;
   drawerId: number;
-  rerenderParent: () => void;
 }) {
   const [isRemoving, setIsRemoving] = useState(false);
-
+  const router = useRouter();
+  
   return (
     <motion.div
       initial="hidden"
@@ -42,7 +42,7 @@ export default function NoteMenu({
               drawerId,
               noteId
             );
-            rerenderParent();
+            router.refresh();
           }}
         >
           <FolderMinus

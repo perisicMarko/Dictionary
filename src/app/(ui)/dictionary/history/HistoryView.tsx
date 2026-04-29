@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import SearchBar from "../../../../components/common/SearchBar";
-import Words from "@/components/common/Words";
+import Notes from "@/components/common/Notes";
 import { TNoteApp } from "@/shared/types";
 import ZeroNotesMessage from "@/components/common/ZeroNotesMessage";
 
@@ -61,10 +61,9 @@ export default function HistoryView({
       ) : null}
 
       {filteredWords.length !== 0 ? (
-        <Words
+        <Notes
           props={filteredWords}
           historyNote={true}
-          rerenderParent={() => router.refresh()}
           drawerId={-1}
         />
       ) : null}
