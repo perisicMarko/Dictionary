@@ -1,20 +1,9 @@
-import { motion } from 'framer-motion';
-import { containerVariants, itemVariants } from '@/shared/lib/animationVariants';
-
-export default function NoValidToken(){
-    return (
-        <motion.div
-        initial="hidden"
-        animate="show"
-        variants={containerVariants}
-        className="center mt-20 box-layout"
-      >
-        <motion.p
-          variants={itemVariants}
-          className="text-box"
-        >
-          Sorry, no valid token.
-        </motion.p>
-      </motion.div>
-    );
+export default function NoValidToken() {
+  return (
+    <div className="center mt-20 box-layout enter-fade">
+      <p className="text-box enter-fade-up enter-delay-1">
+        Sorry, no valid token.
+      </p>
+    </div>
+  );
 }

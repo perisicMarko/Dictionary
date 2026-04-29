@@ -13,8 +13,9 @@ export default async function Page({ params }: PageProps) {
   const { noteId } = await params;
   const response = await getNoteById(Number(noteId));
 
-  if (!response.success || !response.data) {
+  if (!response.success) {
     redirect('/login');
+    return;
   }
 
   return (

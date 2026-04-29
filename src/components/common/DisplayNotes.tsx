@@ -9,7 +9,7 @@ export default function DisplayNotes({
   meanings: TMeaning[];
   includeWord: boolean; //used to determin should word be displayed with generated notes, in Note component it should not but for SaveNoteForm should
 }) {
-  
+
   return (
     <div className="h-50 md:h-75 xl:h-100 w-full scrollbar-track-transparent mt-1">
       {includeWord && (

@@ -1,58 +1,31 @@
-"use client";
-import { useParams } from "next/navigation";
-import { getUserByToken } from "@/features/auth/application/users";
-import { useEffect, useState } from "react";
-import { TUser } from "@/shared/types";
 import { isBefore } from "date-fns";
+import { getUserByToken } from "@/features/auth/application/users";
 import NoValidToken from "./NoValidToken";
 import ChangePasswordForm from "./ChangePasswordForm";
-import Loading from "@/app/(ui)/loading";
 
-export default function ResetPassword() {
-  const params = useParams();
-  let token = params.token;
-  if (typeof token === "object") token = token[0];
-  const [user, setUser] = useState<TUser | undefined>();
-  const [isFetching, setIsFetching] = useState(true);
+export default async function ResetPassword({
+  params,
+}: {
+  params: Promise<{ token: string }>;
+}) {
+  const { token } = await params;
+  const userRes = await getUserByToken(token);
 
-  useEffect(() => {
-    if (!token) {
-      return;
-    }
-
-    const fetchUser = async () => {
-      const retVal = await getUserByToken(token);
-      setUser(retVal);
-    };
-
-    fetchUser();
-    setIsFetching(false);
-  }, [token]);
-
-  let isValid = false;
-  const now = new Date();
-  const tokenExpirationDate = user?.account_action_token_expires_at || undefined;
-  const tokenDate = new Date(tokenExpirationDate || "") || undefined;
-
-  if (!tokenExpirationDate) {
-    isValid = false;
-  } else if (
-    user?.account_action_token != undefined &&
-    tokenDate != undefined &&
-    isBefore(now, tokenDate)
-  ) {
-    isValid = true;
+  if (!userRes.success || !userRes.data) {
+    return <NoValidToken />;
   }
 
-  return (
-    <>
-      {isFetching ? (
-        <Loading />
-      ) : !isValid ? (
-        <NoValidToken />
-      ) : (
-        <ChangePasswordForm user={user} />
-      )}
-    </>
+  const user = userRes.data;
+  const tokenExpirationDate = user.account_action_token_expires_at;
+
+  const isTokenValid =
+    !!user.account_action_token &&
+    !!tokenExpirationDate &&
+    isBefore(new Date(), new Date(tokenExpirationDate));
+
+  return isTokenValid ? (
+    <ChangePasswordForm user={user} />
+  ) : (
+    <NoValidToken />
   );
 }

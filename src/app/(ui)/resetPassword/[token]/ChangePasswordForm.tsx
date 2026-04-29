@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
+"use client";
+
 import { useActionState, useState } from "react";
-import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
 import { completePasswordReset } from "@/features/auth/application/resetPassword";
 import { TUser } from "@/shared/types";
 import Loader from "@/components/common/Loader";
@@ -9,7 +9,7 @@ import SuccessWindow from "./SuccessWindow";
 export default function ChangePasswordForm({
   user,
 }: {
-  user: TUser | undefined;
+  user: TUser;
 }) {
   const [state, action, isPending] = useActionState(
     completePasswordReset,
@@ -28,18 +28,9 @@ export default function ChangePasswordForm({
       {state?.success ? (
         <SuccessWindow />
       ) : (
-        <motion.div
-          initial="hidden"
-          animate="show"
-          variants={containerVariants}
-          className="box-layout mt-20 sm:mt-25 md:mt-30 xl:mt-50"
-        >
-          <motion.form
-            variants={itemVariants}
-            className="form w-full h-full"
-            action={action}
-          >
-            <input name="userId" defaultValue={user?.id} hidden />
+        <div className="box-layout mt-20 sm:mt-25 md:mt-30 xl:mt-50 enter-fade">
+          <form className="form w-full h-full enter-fade-up enter-delay-1" action={action}>
+            <input name="userId" defaultValue={user.id} hidden />
             <div>
               <label htmlFor="password" className="text-text-main">
                 Enter new password:
@@ -70,24 +61,24 @@ export default function ChangePasswordForm({
                 }
               />
               {state?.errors?.confirmPassword === false && (
-                <motion.span variants={itemVariants} className="error">
+                <span className="error">
                   Passwords do not match.
-                </motion.span>
+                </span>
               )}
             </div>
             <div className="center mt-5">
               <button
                 type="submit"
                 className={`primary-btn z-0 center ${
-                  (!newPassword || !confirmPassword) && " opacity-50"
+                  !newPassword || !confirmPassword ? "opacity-50" : ""
                 }`}
                 disabled={!newPassword || !confirmPassword}
               >
                 {isPending ? <Loader /> : "Reset password"}
               </button>
             </div>
-          </motion.form>
-        </motion.div>
+          </form>
+        </div>
       )}
     </>
   );

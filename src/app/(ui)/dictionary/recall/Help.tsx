@@ -1,56 +1,43 @@
-import { motion } from "framer-motion";
-import { itemVariants } from "@/shared/lib/animationVariants";
+"use client";
+
 import Link from "next/link";
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function RecallNoteHelp() {
   const [help, setHelp] = useState<boolean>(false);
 
   return (
     <>
-      <motion.div
-        initial="hidden"
-        animate="show"
-        variants={{
-          hidden: {
-            opacity: 0,
-            y: 10,
-          },
-          show: {
-            opacity: 1,
-            y: 0,
-          },
-        }}
-        className="center box-layout mt-17 !py-0 !px-3"
-        onClick={() => {
-          setHelp(!help);
-        }}
-      >
-        <span className="block hover:scale-105 py-2 hover:underline cursor-pointer text-box transition-all">
+      <div className="center box-layout mt-17 !py-0 !px-3">
+        <button
+          type="button"
+          aria-label="Toggle recall help"
+          className="block hover:scale-105 py-2 hover:underline cursor-pointer text-box transition-all enter-fade-up"
+          onClick={() => {
+            setHelp((prev) => !prev);
+          }}
+        >
           <u>Need help?</u>
-        </span>
-      </motion.div>
-      {help && 
-      <motion.div
-        initial="hidden"
-        animate="show"
-        variants={itemVariants}
-        className="box-layout mt-5 relative"
-      >
+        </button>
+      </div>
+      {help && (
+      <div className="box-layout mt-5 relative enter-fade">
         <div className="collapse-window">
-          <span
+          <button
+            type="button"
+            aria-label="Close recall help"
             className="x-btn"
             onClick={() => {
-              setHelp(!help);
+              setHelp((prev) => !prev);
             }}
           >
             <b>x</b>
-          </span>
+          </button>
         </div>
         <h2 className="text-box mt-3 px-1">
           <b>Here is where you recall your words</b>
         </h2>
-        <motion.p variants={itemVariants} className="mt-3 text-text-main">
+        <p className="mt-3 text-text-main enter-fade-up enter-delay-1">
           Click on the menu icon to open the menu. In menu, there are edit and
           delete icons(for deleting note from learning system, not from whole dictionary), also &quot;N&quot; for showing word notes and
           &quot;G&quot; for grading UI, the grading UI is initially selected.
@@ -97,7 +84,8 @@ export default function RecallNoteHelp() {
             <Link
               href="https://mail.google.com/mail"
               className="text-text-second hover:underline"
-              target="blank"
+              target="_blank"
+              rel="noreferrer"
             >
               mail
             </Link>{" "}
@@ -112,9 +100,9 @@ export default function RecallNoteHelp() {
           If you have followed sign up instructions properly, you should have
           done this upon sign up.
           <br />
-        </motion.p>
-      </motion.div>
-    }   
+        </p>
+      </div>
+    )}
     </>
   );
 }

@@ -200,7 +200,7 @@ export async function updateNoteUserText(userNotes: string, noteId: number) {
   }
 }
 
-export async function resetNoteReviewFactors(noteId: number, days: number, repetitions: number, easeFactor: number, reviewDate: Date) {
+export async function resetNoteReviewFactorsById(noteId: number, days: number, repetitions: number, easeFactor: number, reviewDate: Date) {
   try {
     const res = await prisma.notes.update({
       where: { id: noteId },

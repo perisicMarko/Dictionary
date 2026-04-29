@@ -15,6 +15,7 @@ export default async function Page() {
 
   if(!isAuthenticated){
     redirect('/login');
+    return;
   }
 
   const drawers = drawersRes.data as TDrawer[];

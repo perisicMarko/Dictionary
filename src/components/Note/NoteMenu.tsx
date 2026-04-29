@@ -1,8 +1,8 @@
-import { motion } from "framer-motion";
-import { containerVariants } from "@/shared/lib/animationVariants";
+"use client";
+
 import Link from "next/link";
 import { FolderMinus, NotebookPen } from "lucide-react";
-import { useState } from "react";
+import { useTransition } from "react";
 import { removeWordFromDrawer } from "@/features/drawers/application";
 import { useRouter } from "next/navigation";
 
@@ -13,16 +13,11 @@ export default function NoteMenu({
   noteId: number;
   drawerId: number;
 }) {
-  const [isRemoving, setIsRemoving] = useState(false);
+  const [isRemoving, startRemoving] = useTransition();
   const router = useRouter();
-  
+
   return (
-    <motion.div
-      initial="hidden"
-      animate="show"
-      variants={containerVariants}
-      className="bg-white/80 z-10 rounded-2xl p-1.5"
-    >
+    <div className="bg-white/80 z-10 rounded-2xl p-1.5 enter-fade-up">
       <Link
         href={"/dictionary/yourWords/edit/" + noteId}
         onClick={(e) => e.stopPropagation()}
@@ -32,18 +27,24 @@ export default function NoteMenu({
         <NotebookPen width={25} height={25} />
       </Link>
       {drawerId != -1 && (
-        <span
+        <button
+          type="button"
           className="text-text-second cursor-pointer w-full text-center"
           title="Remove from drawer"
+          aria-label="Remove note from drawer"
           onClick={(e) => {
             e.stopPropagation();
-            setIsRemoving(true);
-            removeWordFromDrawer(
-              drawerId,
-              noteId
-            );
-            router.refresh();
+            startRemoving(async () => {
+              const res = await removeWordFromDrawer(drawerId, noteId);
+
+              if(!res.success){
+                router.push('/login');
+              }
+
+              router.refresh();
+            });
           }}
+          disabled={isRemoving}
         >
           <FolderMinus
             className={
@@ -51,8 +52,8 @@ export default function NoteMenu({
               (isRemoving ? " animate-spin" : "")
             }
           />
-        </span>
+        </button>
       )}
-    </motion.div>
+    </div>
   );
 }

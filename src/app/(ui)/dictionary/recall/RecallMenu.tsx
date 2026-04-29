@@ -1,61 +1,50 @@
+"use client";
+
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
 import { useRouter } from "next/navigation";
 import { setAsLearned } from "@/features/notes/application";
-import { useContext } from "react";
 import { NotebookPen, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useTransition } from "react";
 
-export default function RecallNoteMenu({
+export default function RecallMenu({
   toggleMenu,
-  changeQuality,
+  toggleShowNotes,
   showNotes,
   noteId,
-  rerenderParent,
 }: {
   toggleMenu: () => void;
-  changeQuality: (e: number) => void;
+  toggleShowNotes: () => void;
   showNotes: boolean;
   noteId: number;
-  rerenderParent: () => void;
 }) {
   const router = useRouter();
-  const [isRemoving, setIsRemoving] = useState(false);
+  const [isRemoving, startRemoving] = useTransition();
 
   async function onSubmitDeleteHandle() {
-    const response = await setAsLearned(
-      noteId,
-      true,
-    );
+    const response = await setAsLearned(noteId, true);
+
     if (!response.success) {
       router.push("/login");
+      return;
     }
-    rerenderParent();
+
+    router.refresh();
   }
+
   return (
-    <motion.div
-      initial="hidden"
-      animate="show"
-      variants={containerVariants}
-      className="bg-white/80 center-vertically pointer-events-auto z-10 left-2 gap-1 rounded-2xl"
-    >
-      <motion.form
-        variants={itemVariants}
-        className="center w-full px-2 pt-1 mb-1"
-        action={() => {
-          onSubmitDeleteHandle();
-        }}
-      >
-        <input type="text" name="noteId" defaultValue={Number(noteId)} hidden />
+    <div className="bg-white/80 center-vertically pointer-events-auto z-10 left-2 gap-1 rounded-2xl enter-fade-up">
+      <div className="center w-full px-2 pt-1 mb-1">
         <button
-          type="submit"
+          type="button"
           className="text-text-second"
           onClick={(e) => {
             e.stopPropagation();
-            setIsRemoving(true);
+            startRemoving(async () => {
+              await onSubmitDeleteHandle();
+            });
           }}
           title="Mark note as learned"
+          disabled={isRemoving}
         >
           <Trash2
             className={
@@ -64,42 +53,49 @@ export default function RecallNoteMenu({
             }
           />
         </button>
-      </motion.form>
-      <motion.span variants={itemVariants} className="w-full px-2">
+      </div>
+      <div className="w-full px-2">
         <Link
           href={"/dictionary/recall/edit/" + noteId}
-          onClick={() => toggleMenu()}
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleMenu();
+          }}
           className="text-text-second"
           title="Edit note"
         >
           <NotebookPen className="hover:text-text-main cursor-pointer transition-all" />
         </Link>
-      </motion.span>
+      </div>
       {!showNotes ? ( // if notes are not displayed, put N in menu, otherwise put G in menu, good for ux
-        <motion.span
-          variants={itemVariants}
-          className="block text-text-second hover:text-text-main cursor-pointer text-center transition-color w-full pb-1"
-          onClick={() => {
-            changeQuality(6);
+        <button
+          type="button"
+          className="block text-text-second hover:text-text-main cursor-pointer text-center transition-colors w-full pb-1"
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleShowNotes();
             toggleMenu();
           }}
           title="Show notes"
+          aria-label="Show notes"
         >
           <b>N</b>
-        </motion.span>
+        </button>
       ) : (
-        <motion.span
-          variants={itemVariants}
-          className="block hover:text-text-main text-text-second cursor-pointer text-center transition-color w-full pb-1"
-          onClick={() => {
-            changeQuality(-1);
+        <button
+          type="button"
+          className="block hover:text-text-main text-text-second cursor-pointer text-center transition-colors w-full pb-1"
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleShowNotes();
             toggleMenu();
           }}
           title="Grade recall"
+          aria-label="Show grading"
         >
           <b>G</b>
-        </motion.span>
+        </button>
       )}
-    </motion.div>
+    </div>
   );
 }

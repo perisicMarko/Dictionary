@@ -1,3 +1,5 @@
+"use client"
+
 import Note from "@/components/Note";
 import { TNoteApp } from "@/shared/types";
 import { AnimatePresence } from "framer-motion";
@@ -17,8 +19,8 @@ export default function Notes({
         return (
           <Note
             key={w.id}
-            prop={w}
-            historyNote={historyNote}
+            note={w}
+            isHistoryNote={historyNote}
             drawerId={drawerId}
           ></Note>
         );

@@ -1,41 +1,39 @@
+"use client";
+
 import { useRef } from "react";
 import { Volume2 } from "lucide-react";
 
 export default function AudioPlayer({ src }: { src: string }) {
   const audioRef = useRef<HTMLAudioElement>(null);
-
-  function handleClick(e: React.MouseEvent<HTMLDivElement>) {
-    e.stopPropagation();
-    if (audioRef.current) {
-      audioRef.current.play();
-    }
-  }
-
-  let isDisabled = false;
-  if (!src)
-    isDisabled = true;
-
+  const isDisabled = src.trim() === "";
   const title = isDisabled
     ? "Sorry, no sound for this one."
     : "Click to hear it";
-  const srcAtt = src === "" ? undefined : src;
+
+  function handleClick(e: React.MouseEvent<HTMLButtonElement>) {
+    e.stopPropagation();
+    if (isDisabled || !audioRef.current) {
+      return;
+    }
+
+    audioRef.current.currentTime = 0;
+    void audioRef.current.play();
+  }
 
   return (
-    <div
-      className={`primary-btn center ${!isDisabled ? ' bg-second' : 'bg-second'}`}
+    <button
+      type="button"
+      className="primary-btn center bg-second disabled:opacity-50 disabled:cursor-not-allowed"
       title={title}
-      onClick={(e) => {
-        e.stopPropagation();
-        if (!isDisabled) handleClick(e);
-        else window.alert("Sorry, no sound for this word.");
-      }}
+      onClick={handleClick}
+      disabled={isDisabled}
     >
-      <audio src={srcAtt} ref={audioRef} className="inline-block"></audio>
-      <Volume2 
-       color='white'
-       className='inline-block'
+      {!isDisabled ? <audio src={src} ref={audioRef} className="inline-block" /> : null}
+      <Volume2
+       color="white"
+       className="inline-block"
       />
       <p className="ml-2 text-text-main inline-block select-none">Pronunciation</p>
-    </div>
+    </button>
   );
 }

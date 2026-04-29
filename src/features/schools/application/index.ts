@@ -4,6 +4,7 @@ import { findAllSubscriptionsBySchoolId, findSubscriptionByEmail, insertActivati
 import { GenerateSchema } from "@/shared/lib/rules";
 import { TSubscription } from "@/shared/types";
 import { validateActivationKeyExpirationDate } from "@/features/schools/domain/validation";
+import { logOut } from "@/features/auth/application/schoolAuth";
 
 export async function generateActivationKey(state: {success: boolean, message: string, email: string, date: string} | undefined, formData: FormData){
     const inputEmail = formData.get('email')?.toString() as string;
@@ -21,12 +22,12 @@ export async function generateActivationKey(state: {success: boolean, message: s
         };
     }
 
-    const payload = await decryptSession();
-    if(!payload){ //401
+    const sessionRes = await decryptSession();
+    if(!sessionRes.success){ //401
         return {success: false, message: 'Unauthorized', email: '', date: ''};
     }
 
-    const {schoolId} = payload as SessionPayload;
+    const {schoolId} = sessionRes.data as SessionPayload;
     // ovde jedno lako resenje moze da bude da za svaku skolu cuvam duzinu najduzeg kursa kako ne bi mogli da unesu nista sto je duze od toga, jer onda manje mogu da kradu
     // ako uspeju da iskombinuju sa kracim kursevima nesto ali to moram da opipam sa njima kolike su ralizke izmedju kurseva, 
     // jer ako je na pola kursa nece moci da prodaju nekome 2 a meni da uplate jednom pare a i korisnik bi imao pristup aplikaciji a to i njima ne odgovara da ne uzmu pare
@@ -59,13 +60,15 @@ export async function generateActivationKey(state: {success: boolean, message: s
 
 export async function getSubscriptionsBySchool(){
     const session = await decryptSession();
-    if(!session)
-        return [] as TSubscription[];
+    if(!session.success && !session?.data){
+        await logOut();
+        return { success: false }
+    }
 
-    const { schoolId } = session;
+    const { schoolId } = session.data as SessionPayload;
     const subscriptions = await findAllSubscriptionsBySchoolId(schoolId);
 
-    return subscriptions;
+    return { success: false, data: subscriptions };
 }
 
 export async function updateSubscriptionEmail(email : string, newEmail : string){

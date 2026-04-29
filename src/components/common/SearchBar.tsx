@@ -1,6 +1,7 @@
-import { motion } from "framer-motion";
+"use client";
+
+import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
-import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
 import { ArrowUpDown, Search } from "lucide-react";
 
 export const SORT = {
@@ -21,7 +22,7 @@ export default function SearchBar({
   placeholder: string;
   sortBy: boolean;
   changeSortBy: (arg: number) => void;
-  children: React.ReactElement;
+  children: ReactNode;
 }) {
   const searchBarRef = useRef<HTMLInputElement>(null);
   const [help, setHelp] = useState(false);
@@ -31,11 +32,12 @@ export default function SearchBar({
       const activeElement = document.activeElement;
       if (
         activeElement?.tagName.toLowerCase() === "input" ||
-        activeElement?.tagName.toLowerCase() === "textarea"
+        activeElement?.tagName.toLowerCase() === "textarea" ||
+        activeElement?.getAttribute("contenteditable") === "true"
       )
         return;
 
-      if (event.key.toLowerCase() === "f") {
+      if (!event.ctrlKey && !event.metaKey && !event.altKey && event.key.toLowerCase() === "f") {
         event.preventDefault();
         searchBarRef.current?.focus();
       }
@@ -47,32 +49,26 @@ export default function SearchBar({
 
   return (
     <>
-      <motion.div
-        initial="hidden"
-        animate="show"
-        variants={containerVariants}
-        className="box-layout !p-0 mt-5"
-      >
-        <motion.div
-          initial="hidden"
-          animate="show"
-          variants={itemVariants}
+      <div className="box-layout !p-0 mt-5 enter-fade">
+        <div
           className={`!py-2 !px-1 grid grid-cols-[auto_auto_1fr] items-center ${
             sortBy ? "!rounded-b-none" : ""
-          }`}
+          } enter-fade-up`}
         >
-          <span
+          <button
+            type="button"
             className="text-text-main md:ml-4 ml-2 cursor-pointer hover:scale-115 rounded-full text-2xl transition-all"
             title="Click for help"
+            aria-label="Open search help"
             onClick={() => setHelp(!help)}
           >
             ?
-          </span>
+          </button>
           <Search
             color="white"
             className="inline-block md:mx-2 mx-1 scale-90"
             onClick={() => {
-              searchBarRef?.current?.focus();
+              searchBarRef.current?.focus();
             }}
           />
           <input
@@ -85,14 +81,9 @@ export default function SearchBar({
               updateSearch(e.target.value);
             }}
           />
-        </motion.div>
+        </div>
         {sortBy && (
-          <motion.div
-            initial="hidden"
-            animate="show"
-            variants={containerVariants}
-            className="py-0 !px-4 !rounded-t-none text-text-main center justify-between"
-          >
+          <div className="py-0 !px-4 !rounded-t-none text-text-main center justify-between enter-fade-up enter-delay-1">
             <select
               className="w-full appearance-none sm:hover:text-text-second cursor-pointer text-text-main !py-2 !px-1 rounded-3xl h-full"
               defaultValue={-1}
@@ -116,23 +107,23 @@ export default function SearchBar({
               width={20}
               className="right-3 pointer-events-none"
             />
-          </motion.div>
+          </div>
         )}
-      </motion.div>
+      </div>
       {help && (
-        <motion.div
-          initial="hidden"
-          animate="show"
-          variants={containerVariants}
-          className="box-layout mt-5 text-text-main relative"
-        >
+        <div className="box-layout mt-5 text-text-main relative enter-fade">
           <div className="collapse-window">
-            <span className="x-btn mr-4 py-1" onClick={() => setHelp(!help)}>
+            <button
+              type="button"
+              className="x-btn mr-4 py-1"
+              aria-label="Close search help"
+              onClick={() => setHelp(!help)}
+            >
               <b>x</b>
-            </span>
+            </button>
           </div>
           {children}
-        </motion.div>
+        </div>
       )}
     </>
   );

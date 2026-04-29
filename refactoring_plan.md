@@ -420,3 +420,6 @@ components
 - one ssr that fetches both notes and drawers
 - then renders the toggle 
 - and renders client component which conditionally redners notes or drawers
+
+# react todo
+- check for migrations from useActinoState to useTransition

@@ -1,19 +1,9 @@
-"use client";
-import React from "react";
-import { motion } from "framer-motion";
-import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
-
 export default function ZeroNotesMessage({ message }: { message: string }) {
   return (
-    <motion.div
-      initial="hidden"
-      animate="show"
-      variants={containerVariants}
-      className="center mt-10 box-layout"
-    >
-      <motion.h2 variants={itemVariants} className="text-box">
+    <div className="center mt-10 box-layout enter-fade">
+      <h2 className="text-box enter-fade-up enter-delay-1">
         <b>{message}</b>
-      </motion.h2>
-    </motion.div>
+      </h2>
+    </div>
   );
 }

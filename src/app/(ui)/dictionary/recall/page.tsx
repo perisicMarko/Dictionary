@@ -1,46 +1,33 @@
-"use client";
 import RecallNoteHelp from "@/app/(ui)/dictionary/recall/Help";
 import { getRecallNotes } from "@/features/notes/application";
-import { useState, useContext, useEffect } from "react";
+import { redirect } from "next/navigation";
 import { TNoteApp } from "@/shared/types";
 import RecallNote from "@/app/(ui)/dictionary/recall/RecallNote";
 import ZeroNotesMessage from "@/components/common/ZeroNotesMessage";
-import Loading from "../../loading";
 import { AnimatePresence } from "framer-motion";
 
-export default function Page() {
-  const [words, setWords] = useState<TNoteApp[]>();
-  const [refresh, setRefresh] = useState(false);
+export default async function Page() {
+  const recallNotesRes = await getRecallNotes();
 
-  useEffect(() => {
-    async function fetchNotes() {
-      const res = await getRecallNotes();
-      if(res.success) setWords(res.data as TNoteApp[]);
-    }
-    fetchNotes();
-  }, [refresh]);
-
-  function onGradeSubmit() {
-    setRefresh(!refresh);
+  if (!recallNotesRes.success) {
+    redirect('/login');
+    return;
   }
+
+  const recallNotes = recallNotesRes.data as TNoteApp[];
 
   return (
     <>
       <RecallNoteHelp />
-      {!words ? (
-        <Loading />
-      ) : words.length > 0 ? (
-        <AnimatePresence mode="popLayout">
-          {words?.map((w: TNoteApp) => {
-            return (
-              <RecallNote
-                key={w.id}
-                note={w}
-                rerenderParent={onGradeSubmit}
-              ></RecallNote>
-            );
-          })}
-        </AnimatePresence>
+      {recallNotes.length > 0 ? (
+        recallNotes.map((w: TNoteApp) => {
+          return (
+            <RecallNote
+              key={w.id}
+              note={w}
+            />
+          );
+        })
       ) : (
         <ZeroNotesMessage
           message={

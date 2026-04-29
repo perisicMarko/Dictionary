@@ -1,57 +1,50 @@
-import { motion } from "framer-motion";
-import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
-import { useContext, useState } from "react";
-import { updateReviewDate } from "@/features/notes/application";
+"use client";
+
+import { useState, useTransition } from "react";
+import { updateReviewDateByNoteId } from "@/features/notes/application";
 import { useRouter } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 import Loader from "../../../../components/common/Loader";
 
 export function GradeForm({
   toggleMenu,
-  changeQuality,
   noteId,
-  quality,
-  rerenderParent,
 }: {
   toggleMenu: () => void;
-  changeQuality: (e: number) => void;
   noteId: number;
-  quality: number;
-  rerenderParent: () => void;
 }) {
-  const [isPending, setIsPending] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const [recallQuality, setRecallQuality] = useState(-1);
   const router = useRouter();
 
-  async function onSubmitGradeHandle(formData: FormData) {
-    changeQuality(-1);
-    const response = await updateReviewDate(
-      Number(formData.get("quality")),
-      noteId
-    );
-    if (!response?.success) {
-      router.push("/sessionExpired");
+  async function onSubmitGradeHandle() {
+    const response = await updateReviewDateByNoteId(recallQuality, noteId);
+
+    if (!response.success) {
+      router.push("/login");
+      return;
     }
-    rerenderParent();
+
+    setRecallQuality(-1);
+    router.refresh();
   }
 
   return (
-    <motion.div
-      initial="hidden"
-      animate="show"
-      variants={containerVariants}
-      className="center w-full"
-    >
-      <motion.form
-        variants={itemVariants}
+    <div className="center w-full enter-fade-up">
+      <form
         className="rounded-2xl w-full py-2"
-        action={(e) => onSubmitGradeHandle(e)}
+        onSubmit={(e) => {
+          e.preventDefault();
+          startTransition(async () => {
+            await onSubmitGradeHandle();
+          });
+        }}
       >
-        <input type="text" name="noteId" defaultValue={Number(noteId)} hidden />
         <label htmlFor="recall" className="text-text-main text-[16px] sm:text-xl">
           Remember this word?
         </label>
         <div className="center relative w-full">
-          {quality === -1 && (
+          {recallQuality === -1 && (
             <ChevronDown
               color="white"
               width={25}
@@ -61,10 +54,9 @@ export function GradeForm({
           )}
           <select
             id="recall"
-            defaultValue={-1}
-            name="quality"
+            value={recallQuality}
             onClick={() => toggleMenu()}
-            onChange={(e) => changeQuality(Number(e.target.value))}
+            onChange={(e) => setRecallQuality(Number(e.target.value))}
             className="primary-btn appearance-none py-2 focus:outline-none px-3 text-xs sm:text-xl"
           >
             <option value="-1" disabled>
@@ -80,17 +72,16 @@ export function GradeForm({
             <option value="5">5 – perfect, immediate recall</option>
           </select>
         </div>
-        {quality != -1 && (
-          <motion.button
+        {recallQuality !== -1 && (
+          <button
             type="submit"
-            variants={itemVariants}
-            className="primary-btn center"
-            onClick={() => setIsPending(true)}
+            className="primary-btn center enter-fade-up enter-delay-1"
+            disabled={isPending}
           >
             {isPending ? <Loader /> : <b>Grade</b>}
-          </motion.button>
+          </button>
         )}
-      </motion.form>
-    </motion.div>
+      </form>
+    </div>
   );
 }

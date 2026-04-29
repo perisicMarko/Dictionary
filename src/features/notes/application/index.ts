@@ -1,11 +1,10 @@
 'use server'
-import { createUserNote, findAllNotesByUserId, findNoteById, updateNoteReviewFactors, updateNoteLearnedStatus, resetNoteReviewFactors, deleteNoteById, updateNoteUserText, findUserWordTexts } from '@/features/notes/infrastructure/repository';
-import { TDBNoteEntry, TMeaning, TNoteApp, TWordApp } from '@/shared/types';
+import { createUserNote, findAllNotesByUserId, findNoteById, updateNoteReviewFactors, updateNoteLearnedStatus, resetNoteReviewFactorsById, deleteNoteById, updateNoteUserText } from '@/features/notes/infrastructure/repository';
+import { TMeaning } from '@/shared/types';
 import { addDays, isBefore } from 'date-fns';
 import calc from '@/features/notes/domain/spacedRepetition';
 import { readAuthenticatedUser, requireAuthenticatedUser } from '@/server/auth/userSession';
 import { logOutUser } from '@/features/auth/application/userAuth';
-import { PassThrough } from 'stream';
 
 
 export async function getUsersWords() {
@@ -86,7 +85,7 @@ export async function getRecallNotes() {
     })};
 }
 
-export async function updateReviewDate(quality: number, noteId: number) {
+export async function updateReviewDateByNoteId(quality: number, noteId: number) {
   const user = await requireAuthenticatedUser();
   if (!user) {
     await logOutUser();
@@ -139,14 +138,14 @@ export async function getNoteById(noteId: number) {
   return { success: true, data: res};
 }
 
-export async function backToRecallSystem(noteId: number) {
+export async function restoreNoteToRecallSystemById(noteId: number) {
   const user = await requireAuthenticatedUser();
   if (!user) {
     await logOutUser();
     return { success: false };
   }
 
-  await resetNoteReviewFactors(noteId, 1, 0, 2.5, addDays(new Date(), 1));
+  await resetNoteReviewFactorsById(noteId, 1, 0, 2.5, addDays(new Date(), 1));
 
   return { success: true };
 }
