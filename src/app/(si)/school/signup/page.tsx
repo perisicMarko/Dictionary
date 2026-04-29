@@ -1,54 +1,87 @@
 "use client";
+
 import Link from "next/link";
-import { useActionState, useEffect, useState } from "react";
-import { authenticateSignup } from "@/features/auth/application/schoolAuth";
-import { motion } from "framer-motion";
-import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
-import Loader from "@/components/common/Loader";
 import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
+import Loader from "@/components/common/Loader";
+import { authenticateSignup } from "@/features/auth/application/schoolAuth";
+
+type SchoolSignupState = 
+  undefined |
+  {
+    success: boolean;
+    errors: {
+      name?: string[] | undefined;
+      email?: string[] | undefined;
+      password?: string[] | undefined;
+      confirmPassword?: string[] | undefined;
+    } | undefined;
+    error: string;
+    partner: boolean;
+    email: string;
+    name: string;
+  };
 
 export default function Signup() {
-  const [state, action, isPending] = useActionState(
-    authenticateSignup,
-    undefined
-  );
-
-  const [email, setEmail] = useState("");
   const router = useRouter();
-
-  if (state?.error === "Email already used.") {
-    window.alert("This email is already used for another account.");
-    state.error = "";
-  }
-
-  useEffect(() => {
-    if (state?.success) router.push("/school");
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state?.success]);
+  const [state, setState] = useState<SchoolSignupState>(undefined);
+  const [isPending, startTransition] = useTransition();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const { name, email, password, confirmPassword } = formData;
+  const isSubmitDisabled =
+    name.trim() === "" ||
+    email.trim() === "" ||
+    password === "" ||
+    confirmPassword === "";
 
   return (
     <>
       {state?.partner === false && (
-        <motion.div
-          initial="hidden"
-          animate="show"
-          variants={containerVariants}
-          className="mt-10 box-layout"
-        >
-          <motion.p variants={itemVariants} className="text-text-main p-1">
+        <div className="mt-10 box-layout enter-fade">
+          <p className="text-text-main p-1 enter-fade-up enter-delay-1">
             Sorry, we are not partner with you at the momment. Please contact
             us!
-          </motion.p>
-        </motion.div>
+          </p>
+        </div>
       )}
-      <motion.div
-        initial="hidden"
-        animate="show"
-        variants={containerVariants}
-        className="mt-10 box-layout"
-      >
-        <form className="form" action={action}>
-          <motion.div variants={itemVariants} className="mt-3">
+      <div className="mt-10 box-layout enter-fade">
+        <form
+          className="form"
+          onSubmit={(e) => {
+            e.preventDefault();
+
+            const submittedFormData = new FormData(e.currentTarget);
+
+            startTransition(async () => {
+              const nextState = await authenticateSignup(undefined, submittedFormData);
+              setState(nextState);
+
+              if (nextState?.success) {
+                router.replace("/school");
+                return;
+              }
+
+              setFormData((prev) => ({
+                name:
+                  typeof nextState?.name === "string" && nextState.name !== ""
+                    ? nextState.name
+                    : prev.name,
+                email:
+                  typeof nextState?.email === "string" && nextState.email !== ""
+                    ? nextState.email
+                    : prev.email,
+                password: "",
+                confirmPassword: "",
+              }));
+            });
+          }}
+        >
+          <div className="mt-3 enter-fade-up">
             <label htmlFor="name" className="text-text-main">
               School name:
             </label>
@@ -56,7 +89,10 @@ export default function Signup() {
               className="form-input"
               type="text"
               name="name"
-              defaultValue={state?.name}
+              value={name}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
             />
             {state?.errors?.name && (
               <p className="error" key="name">
@@ -65,14 +101,14 @@ export default function Signup() {
             )}
             <ul className="list-disc">
               {state?.errors?.name &&
-                state?.errors?.name.map((e) => (
-                  <li key={e} className="error ml-6">
-                    {e}
+                state.errors.name.map((error) => (
+                  <li key={error} className="error ml-6">
+                    {error}
                   </li>
                 ))}
             </ul>
-          </motion.div>
-          <motion.div variants={itemVariants} className="mt-3">
+          </div>
+          <div className="mt-3 enter-fade-up">
             <label htmlFor="email" className="text-text-main">
               Email:{" "}
             </label>
@@ -80,8 +116,10 @@ export default function Signup() {
               className="form-input"
               type="text"
               name="email"
-              defaultValue={state?.email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
             />
             {state?.errors?.email && (
               <p className="error" key="email">
@@ -90,18 +128,31 @@ export default function Signup() {
             )}
             <ul className="list-disc">
               {state?.errors?.email &&
-                state?.errors?.email.map((e) => (
-                  <li key={e} className="error ml-6">
-                    {e}
+                state.errors.email.map((error) => (
+                  <li key={error} className="error ml-6">
+                    {error}
                   </li>
                 ))}
             </ul>
-          </motion.div>
-          <motion.div variants={itemVariants} className="mt-3">
+            {state?.error === "Email already used." ? (
+              <p className="error mt-1">
+                This email is already used for another account.
+              </p>
+            ) : null}
+          </div>
+          <div className="mt-3 enter-fade-up">
             <label htmlFor="password" className="text-text-main">
               Password:{" "}
             </label>
-            <input className="form-input" type="password" name="password" />
+            <input
+              className="form-input"
+              type="password"
+              name="password"
+              value={password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
+            />
             {state?.errors?.password && (
               <p className="error" key="password">
                 Password:
@@ -109,14 +160,14 @@ export default function Signup() {
             )}
             <ul className="list-disc">
               {state?.errors?.password &&
-                state.errors.password.map((e) => (
-                  <li key={e} className="error ml-6">
-                    {e}
+                state.errors.password.map((error) => (
+                  <li key={error} className="error ml-6">
+                    {error}
                   </li>
                 ))}
             </ul>
-          </motion.div>
-          <motion.div variants={itemVariants} className="mt-3">
+          </div>
+          <div className="mt-3 enter-fade-up">
             <label htmlFor="confirmPassword" className="text-text-main">
               Confirm password:{" "}
             </label>
@@ -124,38 +175,33 @@ export default function Signup() {
               className="form-input"
               type="password"
               name="confirmPassword"
+              value={confirmPassword}
+              onChange={(e) =>
+                setFormData({ ...formData, confirmPassword: e.target.value })
+              }
             />
             {state?.errors?.confirmPassword && (
               <p className="error">{state.errors.confirmPassword}</p>
             )}
-          </motion.div>
-          <motion.div
-            variants={{
-              hidden: { opacity: 0, y: 15 },
-              show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-            }}
-            className="center mt-3"
-          >
+          </div>
+          <div className="center mt-3 enter-fade-up enter-delay-1">
             <button
-              disabled={isPending || email === ""}
-              className={`primary-btn !w-1/2 center " +
-                ${email === "" ? " opacity-50" : ""}`}
+              disabled={isPending || isSubmitDisabled}
+              className={`primary-btn !w-1/2 center ${isSubmitDisabled ? "opacity-50" : ""
+                }`}
             >
               {isPending ? <Loader /> : "Sign up"}
             </button>
-            <motion.div
-              variants={itemVariants}
-              className="inline-block hover:scale-105 ml-3"
-            >
+            <div className="inline-block hover:scale-105 ml-3">
               <Link href="/school" className="text-box">
                 <i>
                   <u>Or log in here</u>
                 </i>
               </Link>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </form>
-      </motion.div>
+      </div>
     </>
   );
 }

@@ -1,5 +1,5 @@
 'use server'
-import { decryptSession } from "@/server/auth/schoolSession";
+import { decryptSession, SessionPayload } from "@/server/auth/schoolSession";
 import { findAllUsersBySchoolId, findUserByAccountActionToken } from "@/features/auth/infrastructure/usersRepository";
 
 export async function getUserByToken(token : Base64URLString){
@@ -12,13 +12,13 @@ export async function getUserByToken(token : Base64URLString){
 }
 
 export async function getUsersBySchool(){
-    const payload = await decryptSession();
+    const payloadRes = await decryptSession();
 
-    if(!payload){
+    if(!payloadRes.success){
         return {success: false}
     }
 
-    const {schoolId} = payload;
+    const {schoolId} = payloadRes.data as SessionPayload;
 
     const users = await findAllUsersBySchoolId(schoolId);
 

@@ -24,7 +24,9 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   // fetch custom colors for school from users school
-  const theme = (await getThemeColors()) as TColorsTheme;
+  const themeRes = (await getThemeColors());
+
+  const theme = themeRes.data as TColorsTheme;
 
   return (
     <html

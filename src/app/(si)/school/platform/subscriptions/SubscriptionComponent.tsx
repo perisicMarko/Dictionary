@@ -1,7 +1,5 @@
 import { updateSubscriptionEmail } from "@/features/schools/application";
-import { containerVariants } from "@/shared/lib/animationVariants";
 import { TSubscription } from "@/shared/types";
-import { motion } from "framer-motion";
 import { Menu, X, Edit, KeyIcon } from "lucide-react";
 import { useState } from "react";
 
@@ -19,12 +17,9 @@ export default function SubscriptionComponent({
   );
 
   return (
-    <motion.div
+    <div
       key={subscription.email}
-      initial="hidden"
-      animate="show"
-      variants={containerVariants}
-      className="box-layout relative"
+      className="box-layout relative enter-fade"
       onClick={() => setDropMenu(false)}
     >
       <div
@@ -105,6 +100,6 @@ export default function SubscriptionComponent({
           </>
         )}
       </div>
-    </motion.div>
+    </div>
   );
 }

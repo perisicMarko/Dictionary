@@ -1,12 +1,9 @@
 "use client";
 import Loader from "@/components/common/Loader";
-import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
-import { motion } from "framer-motion";
-import { useActionState, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useActionState, useState } from "react";
 import { generateActivationKey } from "@/features/schools/application";
 
-export default function Dashboard() {
+export default function GenerateKeyPage() {
   const [state, action, isPending] = useActionState(generateActivationKey, {
     success: false,
     message: "",
@@ -20,29 +17,16 @@ export default function Dashboard() {
     language: string;
   }>({ email: "", date: "", language: "" });
   const { email, date, language } = formData;
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!state) router.push("/school");
-  }, [router, state]);
+  const isSubmitDisabled = email === "" || date === "" || language === "";
 
   return (
     <>
-      <motion.div
-        initial="hidden"
-        animate="show"
-        variants={containerVariants}
-        className="box-layout mt-50"
-      >
-        <motion.form
-          variants={itemVariants}
+      <div className="box-layout mt-50 enter-fade">
+        <form
           action={action}
-          className="space-y-2"
+          className="space-y-2 enter-fade-up"
         >
-          <motion.div
-            className="flex flex-col justify-center items-start gap-1"
-            variants={itemVariants}
-          >
+          <div className="flex flex-col justify-center items-start gap-1">
             <label htmlFor="email">Email of the course atendee:</label>
             <input
               name="email"
@@ -53,13 +37,10 @@ export default function Dashboard() {
               }
             />
             {state?.email != "" && (
-              <motion.span className="error">{state?.email}</motion.span>
+              <span className="error">{state?.email}</span>
             )}
-          </motion.div>
-          <motion.div
-            className="flex flex-col justify-center items-start gap-1"
-            variants={itemVariants}
-          >
+          </div>
+          <div className="flex flex-col justify-center items-start gap-1">
             <label htmlFor="courseEnd">End of the course:</label>
             <input
               name="courseEnd"
@@ -69,14 +50,11 @@ export default function Dashboard() {
                 setFormData({ ...formData, date: e.target.value })
               }
             />
-          </motion.div>
+          </div>
           {state?.date != "" && (
-            <motion.span className="error mb-5">{state?.date}</motion.span>
+            <span className="error mb-5">{state?.date}</span>
           )}
-          <motion.div
-            className="flex flex-col items-start justify-center gap-1"
-            variants={itemVariants}
-          >
+          <div className="flex flex-col items-start justify-center gap-1">
             <label htmlFor="language">Key for:</label>
             <select
               name="language"
@@ -91,33 +69,25 @@ export default function Dashboard() {
               </option>
               <option value="e">English</option>
             </select>
-          </motion.div>
+          </div>
           <div className="mt-5">
-            <motion.button
-              className={`center primary-btn " +
-                ${
-                  email === "" || date === "" || language === ""
-                    ? " opacity-50"
-                    : ""
-                }`}
-              disabled={email === "" || date === "" || language === ""}
+            <button
+              className={`center primary-btn ${
+                isSubmitDisabled ? "opacity-50" : ""
+              }`}
+              disabled={isSubmitDisabled || isPending}
             >
               {isPending ? <Loader /> : "Generate key"}
-            </motion.button>
+            </button>
           </div>
-        </motion.form>
-      </motion.div>
+        </form>
+      </div>
       {state?.success && (
-        <motion.div
-          initial="hidden"
-          animate="show"
-          variants={containerVariants}
-          className="box-layout mt-5"
-        >
-          <motion.p variants={itemVariants} className="text-box">
+        <div className="box-layout mt-5 enter-fade">
+          <p className="text-box enter-fade-up enter-delay-1">
             <b>{state?.message}</b>
-          </motion.p>
-        </motion.div>
+          </p>
+        </div>
       )}
     </>
   );

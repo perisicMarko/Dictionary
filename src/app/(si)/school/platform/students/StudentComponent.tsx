@@ -1,6 +1,4 @@
-import { containerVariants } from "@/shared/lib/animationVariants";
 import { TStudent } from "@/shared/types";
-import { motion } from "framer-motion";
 import { User, Languages } from "lucide-react";
 
 export default function StudentComponent({ student }: { student: TStudent }) {
@@ -25,12 +23,9 @@ export default function StudentComponent({ student }: { student: TStudent }) {
   }
 
   return (
-    <motion.div
+    <div
       key={student.email}
-      initial="hidden"
-      animate="show"
-      variants={containerVariants}
-      className="box-layout relative"
+      className="box-layout relative enter-fade"
     >
       {/* <div
         className="absolute right-0 top-5 flex flex-col items-center rounded-2xl w-[100px]"
@@ -91,6 +86,6 @@ export default function StudentComponent({ student }: { student: TStudent }) {
           {printUsersLanguages(student.languages || "")}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

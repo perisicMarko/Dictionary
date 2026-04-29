@@ -27,16 +27,15 @@ export async function createSession(email: string, schoolId: number) {
 export async function decryptSession() {
   const token = (await cookies()).get('sessionToken')?.value || '';
   if (token == '')
-    return;
+    return { success: false };
 
   try {
     const { payload } = await jwtVerify(token, ACCESS_SECRET, {
       algorithms: ['HS256'],
     });
 
-    const t = payload as SessionPayload;
-    return t;
+    return {success: true, data: payload as SessionPayload};
   } catch (error) {
-    console.log('Failed session token decryption, error: ' + error);
+    throw new Error('Failed session token decryption, error: ' + error);
   }
 }
