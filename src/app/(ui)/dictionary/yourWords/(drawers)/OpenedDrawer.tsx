@@ -1,85 +1,59 @@
-import { getNotesOfDrawer } from "@/features/drawers/application";
 import Loading from "@/app/(ui)/loading";
 import Words from "@/components/common/Words";
 import { TNoteApp, TDrawer } from "@/shared/types";
-import { useEffect, useState } from "react";
 import Drawer from "./Drawer";
-import { motion } from "framer-motion";
-import { containerVariants, itemVariants } from "@/shared/lib/animationVariants";
 
 export default function OpenedDrawer({
   drawer,
+  drawerNotes,
   search,
   openDrawer,
   openedDrawerId,
   allNotes,
+  rerender,
 }: {
   drawer: TDrawer | undefined;
+  drawerNotes: TNoteApp[] | null;
   search: string;
   openDrawer: (id: number) => void;
   openedDrawerId: number;
   allNotes: TNoteApp[];
+  rerender: () => void;
 }) {
-  const [drawerNotes, setDrawerNotes] = useState<TNoteApp[]>();
-  const [refresh, setRefresh] = useState(false);
-  const [isFetchingContent, setIsFetchingContent] = useState(true);
+  const searchedWords =
+    drawerNotes?.filter((w) =>
+      w.dictionary_words.word.toLowerCase().includes(search.toLowerCase().trim())
+    ) ?? [];
 
-  useEffect(() => {
-    const fetchWords = async () => {
-      const res = await getNotesOfDrawer(drawer?.id || -1);
-      if (res.success) {
-        setDrawerNotes(res.data as TNoteApp[]);
-      }
-    };
-
-    fetchWords();
-    setIsFetchingContent(false);
-  }, [drawer?.id, refresh]);
-
-  const searchedWords = drawerNotes?.filter((w) =>
-    w.dictionary_words.word.toLowerCase().includes(search.toLowerCase().trim())
-  );
+  if (!drawer || drawerNotes === null) {
+    return <Loading />;
+  }
 
   return (
     <>
-      {!drawer ? (
-        <Loading />
-      ) : isFetchingContent ? (
-        <Loading />
+      <Drawer
+        key={drawer.id}
+        drawer={drawer}
+        openDrawer={openDrawer}
+        rerender={rerender}
+        notes={allNotes}
+        openedDrawerId={openedDrawerId}
+      />
+      {drawerNotes.length === 0 ? (
+        <div className="mt-5 box-layout enter-fade">
+          <p className="text-box enter-fade-up enter-delay-1">
+            This drawer is empty.
+          </p>
+        </div>
+      ) : searchedWords.length === 0 ? (
+        <div className="box-layout mt-5 text-box enter-fade">No words found.</div>
       ) : (
-        <>
-          <Drawer
-            key={drawer?.id}
-            drawer={drawer as TDrawer}
-            openDrawer={openDrawer}
-            rerender={() => setRefresh(!refresh)}
-            notes={allNotes}
-            openedDrawerId={openedDrawerId}
-          />
-          {drawerNotes?.length === 0 ? (
-            <motion.div
-              className="mt-5 box-layout"
-              variants={containerVariants}
-            >
-              <motion.p className="text-box" variants={itemVariants}>
-                This drawer is empty.
-              </motion.p>
-            </motion.div>
-          ) : searchedWords?.length === 0 ? (
-            <motion.div className="box-layout mt-5 text-box">
-              No words found.
-            </motion.div>
-          ) : (
-            <Words
-              props={searchedWords}
-              historyNote={false}
-              rerenderParent={() => {
-                setRefresh(!refresh);
-              }}
-              drawerId={drawer?.id || -1}
-            />
-          )}
-        </>
+        <Words
+          props={searchedWords}
+          historyNote={false}
+          rerenderParent={rerender}
+          drawerId={drawer.id}
+        />
       )}
     </>
   );

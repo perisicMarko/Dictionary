@@ -1,8 +1,6 @@
-import { motion } from "framer-motion";
-import { containerVariants } from "@/shared/lib/animationVariants";
-import { Menu, X } from "lucide-react";
-import { Trash2 } from "lucide-react";
-import { itemVariants } from "@/shared/lib/animationVariants";
+"use client";
+
+import { Menu, X, Trash2 } from "lucide-react";
 
 export default function DrawerMenu({
   menu,
@@ -16,8 +14,8 @@ export default function DrawerMenu({
   rerender: () => void;
 }) {
   return (
-    <motion.div className="absolute center-vertically mr-3 sm:mr-8 top-0 right-0 mt-3 w-[30px]">
-      <motion.span
+    <div className="absolute center-vertically mr-3 sm:mr-8 top-0 right-0 mt-3 w-[30px]">
+      <span
         onClick={(e) => {
           e.stopPropagation();
           toggleMenu(!menu);
@@ -25,30 +23,15 @@ export default function DrawerMenu({
         title="Menu"
       >
         {menu ? (
-          <X
-            color="white"
-            width={25}
-            height={25}
-            className="btn"
-          />
+          <X color="white" width={25} height={25} className="btn" />
         ) : (
-          <Menu
-            color="white"
-            width={25}
-            height={25}
-            className="btn"
-          />
+          <Menu color="white" width={25} height={25} className="btn" />
         )}
-      </motion.span>
-      {menu && (
-        <motion.div
-          className="bg-white/80 text-text-second rounded-2xl p-2"
-          initial="hidden"
-          animate="show"
-          variants={containerVariants}
-        >
-          <motion.span
-            variants={itemVariants}
+      </span>
+      {menu ? (
+        <div className="bg-white/80 text-text-second rounded-2xl p-2 enter-fade">
+          <span
+            className="enter-fade-up enter-delay-1 inline-block"
             title="Delete drawer"
             onClick={(e) => {
               e.stopPropagation();
@@ -56,9 +39,9 @@ export default function DrawerMenu({
             }}
           >
             <Trash2 className="hover:text-text-main cursor-pointer transition-all" />
-          </motion.span>
-        </motion.div>
-      )}
-    </motion.div>
+          </span>
+        </div>
+      ) : null}
+    </div>
   );
 }

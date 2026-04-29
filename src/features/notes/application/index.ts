@@ -34,9 +34,8 @@ export async function saveNotes(word: string, audio: string, user_notes: string,
 }
 
 export async function getUsersNotes() {
-  const user = await requireAuthenticatedUser();
+  const user = await readAuthenticatedUser();
   if (!user) {
-    await logOutUser();
     return { success: false };
   }
 

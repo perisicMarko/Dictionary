@@ -3,28 +3,32 @@ import Loader from "@/components/common/Loader";
 import { TDrawer } from "@/shared/types";
 import { Edit } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useActionState, useState, useEffect, useRef } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 
 export default function UpdateForm({
   drawer, 
   updateFormShow,
   setUpdateFormShow,
   setAddFormShow,
+  rerender,
 }: {
   drawer: TDrawer;
   updateFormShow: boolean;
   setUpdateFormShow: (v: boolean) => void;
   setAddFormShow: (v: boolean) => void;
+  rerender: () => void;
 }) {
   const nameRef = useRef<HTMLInputElement>(null);
-
   const router = useRouter();
-  const [refreshUponUpdate, setRefreshUponUpdate] = useState(false);
   const [stateDrawerName, setStateDrawerName] = useState(drawer?.name);
   const [updateState, updateAction, isUpdating] = useActionState(
     updateDrawerName,
     undefined
   );
+
+  useEffect(() => {
+    setStateDrawerName(drawer.name);
+  }, [drawer.name]);
 
   useEffect(() => {
     const length = drawer?.name.length;
@@ -37,16 +41,22 @@ export default function UpdateForm({
   }, [updateFormShow]);
 
   useEffect(() => {
-    if (!updateState?.success) {
-      router.push("/");
+    if (!updateState) {
+      return;
     }
-    setUpdateFormShow(false);
-    setRefreshUponUpdate(!refreshUponUpdate);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updateState?.success, isUpdating]);
 
+    if (!updateState.success) {
+      router.push("/login");
+      return;
+    }
+
+    setUpdateFormShow(false);
+    rerender();
+  }, [updateState, rerender, router, setUpdateFormShow]);
 
   const drawerNameValue = updateFormShow ? stateDrawerName : drawer?.name;
+  const isInvalidDrawerName =
+    stateDrawerName.trim() === "" || stateDrawerName === drawer?.name;
 
   return (
     <form className="center-vertically gap-2 w-full" action={updateAction}>
@@ -80,9 +90,8 @@ export default function UpdateForm({
         <button
           type='submit'
           className={`w-full bg-second text-text-main rounded-3xl block p-2 cursor-pointer center xl:hover:scale-105 xl:active:scale-95 transition-all
-            ${(stateDrawerName === "" || stateDrawerName === drawer?.name) ? " opacity-50" : ""}`}
-          disabled={stateDrawerName === "" || stateDrawerName === drawer?.name}
-          onClick={() => drawer.name = stateDrawerName}
+            ${(isInvalidDrawerName ? " opacity-50" : "")}`}
+          disabled={isInvalidDrawerName || isUpdating}
         >
           <span className="h-[20px] center">
             {isUpdating ? <Loader /> : "Update name"}

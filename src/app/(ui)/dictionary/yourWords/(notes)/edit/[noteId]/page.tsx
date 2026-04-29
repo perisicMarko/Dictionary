@@ -19,9 +19,8 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <EditNotePage
-      pathSrc="/dictionary/recall"
+      pathSrc="/dictionary/yourWords"
       note={response.data as TNoteApp}
-      noteId={Number(noteId)}
     />
   );
 }

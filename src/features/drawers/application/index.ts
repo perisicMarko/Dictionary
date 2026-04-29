@@ -1,5 +1,5 @@
 'use server'
-import { requireAuthenticatedUser } from "@/server/auth/userSession";
+import { readAuthenticatedUser, requireAuthenticatedUser } from "@/server/auth/userSession";
 import { attachNoteToDrawer, deleteDrawerById, findAllNotesWithDictionaryWordOfDrawer, findDrawerById, findDrawersByUserId, insertDrawer, removeNoteFromDrawer, updateDrawerNameById } from "@/features/drawers/infrastructure/repository";
 import { logOutUser } from "@/features/auth/application/userAuth";
 
@@ -25,9 +25,8 @@ export async function createDrawer(state : createState | undefined, formData : F
 
 
 export async function getUsersDrawers(){
-    const user = await requireAuthenticatedUser();
+    const user = await readAuthenticatedUser();
     if (!user) {
-        await logOutUser();
         return { success: false };
     }
     

@@ -405,9 +405,13 @@ signup
 loading
 root page
 root layout
-
+dictionary/history
+dictionary/inputWord
+dictionary/yourWords
 
 # todo
 resetPassword
 forgotpassword
+dictionary/recall
+components
 
