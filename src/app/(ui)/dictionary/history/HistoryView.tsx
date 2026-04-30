@@ -37,14 +37,13 @@ export default function HistoryView({
           sortBy={false}
           changeSortBy={() => {}}
         >
-          <p className="mt-6 enter-fade-up enter-delay-1">
+          <p className="mt-6 enter-fade-up enter-delay-1 text-justify">
             This page should help you review the words you have learned. So
             basically this page just stores learned words, like personal history.
             <br />
             <br />
             In the menu, there are a delete icon for permanent word deletion and
             &quot;R&quot; for relearning the word.
-            <br />
             From this page, and this page only you can delete a note permanently or
             return word to the learning process.
             <br />

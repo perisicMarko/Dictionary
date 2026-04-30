@@ -129,15 +129,16 @@ export default function ShowDrawersView({
       {openedDrawerId === -1 ? (
         searchedDrawers ? (
           searchedDrawers.length !== 0 ? (
-            <AnimatePresence mode="popLayout">
+            <AnimatePresence mode="sync" initial={false}>
               {searchedDrawers.map((d) => (
                 <motion.div
                   key={d.id}
-                  layout
+                  layout="position"
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.98, filter: "blur(2px)" }}
                   transition={{ duration: 0.22, ease: "easeOut" }}
+                  className="w-full flex justify-center"
                 >
                   <Drawer
                     drawer={d}

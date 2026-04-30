@@ -38,7 +38,7 @@
 }
 
 .box-layout{
-  @apply  rounded-3xl w-3/4 sm:w-[600px] sm:p-2 md:p-5 bg-main;
+  @apply  rounded-3xl w-3/4 sm:w-[600px] p-3 md:p-5 bg-main;
 }
 
 .text-box{
@@ -78,7 +78,7 @@ input{
 }
 
 .x-btn {
-  @apply scale-125 cursor-pointer mr-3 py-1 text-text-main transition-all duration-100;
+  @apply cursor-pointer mr-3 py-1 text-text-main hover:text-text-second transition-all;
 }
 .x-btn:hover {
   @apply xl:scale-150;

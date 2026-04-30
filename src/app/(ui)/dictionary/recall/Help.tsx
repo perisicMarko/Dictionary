@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { X } from "lucide-react";
 
 export default function RecallNoteHelp() {
   const [help, setHelp] = useState<boolean>(false);
@@ -31,13 +32,13 @@ export default function RecallNoteHelp() {
                 setHelp((prev) => !prev);
               }}
             >
-              <b>x</b>
+              <X />
             </button>
           </div>
-          <h2 className="text-box mt-3 px-1">
+          <h2 className="text-box mt-5 px-1">
             <b>Here is where you recall your words</b>
           </h2>
-          <p className="mt-3 text-text-main enter-fade-up enter-delay-1 text-justify">
+          <div className="mt-3 text-text-main enter-fade-up enter-delay-1 text-justify">
             Click on the menu icon to open the menu. In menu, there are edit and
             delete icons(for deleting note from learning system, not from whole dictionary), also &quot;N&quot; for showing word notes and
             &quot;G&quot; for grading UI, the grading UI is initially selected.
@@ -101,7 +102,7 @@ export default function RecallNoteHelp() {
             If you have followed sign up instructions properly, you should have
             done this upon sign up.
             <br />
-          </p>
+          </div>
         </div>
       )}
     </>

@@ -68,7 +68,7 @@ export default function ShowNotesView({
         sortBy={true}
         changeSortBy={(arg: number) => setSortBy(arg)}
       >
-        <p className="mt-5 enter-fade-up enter-delay-1">
+        <p className="mt-5 enter-fade-up enter-delay-1 text-justify text-text-main">
           This page is where all the notes you have not learned yet are stored.
           Hence, if you have more spare time in the day you can review all the
           notes here. <br /> <br />

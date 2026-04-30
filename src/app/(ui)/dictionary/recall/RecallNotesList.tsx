@@ -39,6 +39,7 @@ export default function RecallNotesList({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.98, filter: "blur(2px)" }}
           transition={{ duration: 0.22, ease: "easeOut" }}
+          className="center"
         >
           <RecallNote note={note} onGraded={() => handleNoteCompleted(note.id)} />
         </motion.div>

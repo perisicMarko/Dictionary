@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FolderMinus, NotebookPen } from "lucide-react";
+import { FolderMinus, Edit } from "lucide-react";
 import { useTransition } from "react";
 import { removeWordFromDrawer } from "@/features/drawers/application";
 import { useRouter } from "next/navigation";
@@ -19,14 +19,14 @@ export default function NoteMenu({
   const router = useRouter();
 
   return (
-    <div className="bg-white/80 z-10 rounded-2xl p-1.5 enter-fade-up">
+    <div className="bg-white/80 z-10 rounded-2xl p-2 enter-fade-up">
       <Link
         href={"/dictionary/yourWords/edit/" + noteId}
         onClick={(e) => e.stopPropagation()}
         title="Edit notes"
         className="text-center w-full hover:text-text-main cursor-pointer transition-all text-text-second"
       >
-        <NotebookPen width={25} height={25} />
+        <Edit width={25} height={25} />
       </Link>
       {drawerId != -1 && (
         <button
@@ -39,7 +39,7 @@ export default function NoteMenu({
             startRemoving(async () => {
               const res = await removeWordFromDrawer(drawerId, noteId);
 
-              if(!res.success){
+              if (!res.success) {
                 router.push('/login');
                 return;
               }
