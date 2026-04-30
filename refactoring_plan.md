@@ -403,3 +403,10 @@ This should give the clearest improvement in both:
 
 # api's 
 - curr tts api gives not to good pronuciation but good enough
+
+# test
+- test menu action on history page
+- delete on recall page doesn't work
+- test token expiration 
+
+- test school platform

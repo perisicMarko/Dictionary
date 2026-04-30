@@ -11,11 +11,13 @@ export default function RecallMenu({
   toggleShowNotes,
   showNotes,
   noteId,
+  onCompleted,
 }: {
   toggleMenu: () => void;
   toggleShowNotes: () => void;
   showNotes: boolean;
   noteId: number;
+  onCompleted?: () => void;
 }) {
   const router = useRouter();
   const [isRemoving, startRemoving] = useTransition();
@@ -25,6 +27,11 @@ export default function RecallMenu({
 
     if (!response.success) {
       router.push("/login");
+      return;
+    }
+
+    if (onCompleted) {
+      onCompleted();
       return;
     }
 

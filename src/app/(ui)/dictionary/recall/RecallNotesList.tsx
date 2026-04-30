@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { TNoteApp } from "@/shared/types";
 import RecallNote from "@/app/(ui)/dictionary/recall/RecallNote";
@@ -16,7 +16,11 @@ export default function RecallNotesList({
   const [notes, setNotes] = useState(initialNotes);
   const router = useRouter();
 
-  function handleGraded(noteId: number) {
+  useEffect(() => {
+    setNotes(initialNotes);
+  }, [initialNotes]);
+
+  function handleNoteCompleted(noteId: number) {
     setNotes((prev) => prev.filter((n) => n.id !== noteId));
 
     // Refresh after exit animation so updated server data stays in sync.
@@ -36,7 +40,7 @@ export default function RecallNotesList({
           exit={{ opacity: 0, scale: 0.98, filter: "blur(2px)" }}
           transition={{ duration: 0.22, ease: "easeOut" }}
         >
-          <RecallNote note={note} onGraded={() => handleGraded(note.id)} />
+          <RecallNote note={note} onGraded={() => handleNoteCompleted(note.id)} />
         </motion.div>
       ))}
     </AnimatePresence>

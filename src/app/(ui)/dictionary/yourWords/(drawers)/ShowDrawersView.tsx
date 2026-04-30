@@ -2,12 +2,15 @@
 
 import SearchBar from "@/components/common/SearchBar";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import DrawerCreator from "./DrawerCreator";
 import { TDrawer, TNoteApp } from "@/shared/types";
 import Drawer from "./Drawer";
 import Loading from "@/app/(ui)/loading";
 import OpenedDrawer from "./OpenedDrawer";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+
+const EXIT_DURATION_MS = 220;
 
 export default function ShowDrawersView({
   initialDrawers,
@@ -20,6 +23,12 @@ export default function ShowDrawersView({
 }) {
   const [search, setSearch] = useState("");
   const [openedDrawerId, setOpenedDrawerId] = useState(-1);
+  const [drawers, setDrawers] = useState(initialDrawers);
+  const router = useRouter();
+
+  useEffect(() => {
+    setDrawers(initialDrawers);
+  }, [initialDrawers]);
 
   useEffect(() => {
     const drawerId = sessionStorage.getItem("openedDrawerId");
@@ -33,9 +42,9 @@ export default function ShowDrawersView({
     setOpenedDrawerId(id);
   };
 
-  let searchedDrawers = initialDrawers;
+  let searchedDrawers = drawers;
   if (openedDrawerId === -1) {
-    searchedDrawers = initialDrawers.filter((d: TDrawer) =>
+    searchedDrawers = drawers.filter((d: TDrawer) =>
       d.name.toLowerCase().includes(search.toLowerCase())
     ) ?? [];
   }
@@ -45,7 +54,17 @@ export default function ShowDrawersView({
     notesOfOpenedDrawer = initialNotes.filter((n) => drawerNoteMapping.some((m) => m.note_id === n.id && m.drawer_id === openedDrawerId));
   }
 
-  const openedDrawer = initialDrawers.find((d) => d.id === openedDrawerId);
+  const openedDrawer = drawers.find((d) => d.id === openedDrawerId);
+
+  function handleDrawerDeleted(drawerId: number) {
+    setDrawers((prev) => prev.filter((d) => d.id !== drawerId));
+    if (openedDrawerId === drawerId) {
+      openDrawerById(-1);
+    }
+    setTimeout(() => {
+      router.refresh();
+    }, EXIT_DURATION_MS);
+  }
 
   return (
     <>
@@ -95,11 +114,11 @@ export default function ShowDrawersView({
 
       {openedDrawerId === -1 ? (
         <DrawerCreator
-          drawerNames={initialDrawers.map((d) => d.name)}
+          drawerNames={drawers.map((d) => d.name)}
         />
       ) : null}
 
-      {initialDrawers.length === 0 ? (
+      {drawers.length === 0 ? (
         <div className="box-layout mt-5 center enter-fade">
           <span className="text-box enter-fade-up enter-delay-1">
             No drawers created.
@@ -112,17 +131,26 @@ export default function ShowDrawersView({
           searchedDrawers.length !== 0 ? (
             <AnimatePresence mode="popLayout">
               {searchedDrawers.map((d) => (
-                <Drawer
+                <motion.div
                   key={d.id}
-                  drawer={d}
-                  drawerNotes={[] as TNoteApp[]}
-                  allNotes={initialNotes}
-                  openDrawerById={(id: number) => openDrawerById(id)}
-                  isDrawerOpened={false}
-                />
+                  layout
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.98, filter: "blur(2px)" }}
+                  transition={{ duration: 0.22, ease: "easeOut" }}
+                >
+                  <Drawer
+                    drawer={d}
+                    drawerNotes={[] as TNoteApp[]}
+                    allNotes={initialNotes}
+                    onDeleted={handleDrawerDeleted}
+                    openDrawerById={(id: number) => openDrawerById(id)}
+                    isDrawerOpened={false}
+                  />
+                </motion.div>
               ))}
             </AnimatePresence>
-          ) : initialDrawers.length !== 0 ? (
+          ) : drawers.length !== 0 ? (
             <div className="box-layout text-box mt-5 enter-fade">No drawers found.</div>
           ) : null
         ) : (
@@ -136,6 +164,7 @@ export default function ShowDrawersView({
           search={search}
           openDrawerById={(id: number) => openDrawerById(id)}
           allNotes={initialNotes}
+          onDeleteDrawer={handleDrawerDeleted}
         />
       )}
 

@@ -9,9 +9,11 @@ import { useRouter } from "next/navigation";
 export default function NoteMenu({
   noteId,
   drawerId,
+  onRemoved,
 }: {
   noteId: number;
   drawerId: number;
+  onRemoved?: () => void;
 }) {
   const [isRemoving, startRemoving] = useTransition();
   const router = useRouter();
@@ -39,6 +41,12 @@ export default function NoteMenu({
 
               if(!res.success){
                 router.push('/login');
+                return;
+              }
+
+              if (onRemoved) {
+                onRemoved();
+                return;
               }
 
               router.refresh();

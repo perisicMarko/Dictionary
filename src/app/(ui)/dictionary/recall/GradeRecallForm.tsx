@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 import Loader from "../../../../components/common/Loader";
 
-export function GradeForm({
+export function GradeRecallForm({
   toggleMenu,
   noteId,
   onGraded,

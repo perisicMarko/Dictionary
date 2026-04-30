@@ -1,5 +1,5 @@
 "use client";
-import { GradeForm } from "./GradeForm";
+import { GradeRecallForm } from "./GradeRecallForm";
 import RecallMenu from "./RecallMenu";
 import { TNoteApp } from "@/shared/types";
 import AudioPlayer from "../../../../components/common/AudioPlayer";
@@ -53,6 +53,7 @@ export default function RecallNote({
             showNotes={isShowNotes}
             toggleShowNotes={toggleShowNotes}
             noteId={note.id}
+            onCompleted={onGraded}
           />
         )}
       </div>
@@ -86,7 +87,7 @@ export default function RecallNote({
           </div>
         </>
       ) : (
-        <GradeForm
+        <GradeRecallForm
           toggleMenu={toggleMenu}
           noteId={note.id}
           onGraded={onGraded}

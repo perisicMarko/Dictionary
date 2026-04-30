@@ -1,7 +1,7 @@
 "use client";
 
 import { TDrawer, TNoteApp } from "@/shared/types";
-import { ChevronDown, ChevronUp, Plus, Router } from "lucide-react";
+import { ChevronDown, ChevronUp, Plus } from "lucide-react";
 import { useState } from "react";
 import DrawerMenu from "./DrawerMenu";
 import UpdateDrawerNameForm from "./UpdateDrawerNameForm";
@@ -16,12 +16,14 @@ export default function Drawer({
   openDrawerById,
   isDrawerOpened,
   drawerNotes,
+  onDeleted,
 }: {
   drawer: TDrawer;
   allNotes: TNoteApp[];
   openDrawerById: (id: number) => void;
   isDrawerOpened: boolean;
   drawerNotes: TNoteApp[];
+  onDeleted?: (drawerId: number) => void;
 }) {
   const [isMenuOpened, setIsMenuOpened] = useState(false);
   const [updateFormShow, setUpdateFormShow] = useState(false);
@@ -32,6 +34,13 @@ export default function Drawer({
 
   const handleDelete = async () => {
     await deleteDrawer(drawer.id);
+
+    if (onDeleted) {
+      onDeleted(drawer.id);
+      setIsDeleting(false);
+      return;
+    }
+
     router.refresh();
     setIsDeleting(false);
   };

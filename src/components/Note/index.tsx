@@ -11,10 +11,12 @@ export default function Note({
   note,
   isHistoryNote,
   drawerId,
+  onRemoved,
 }: {
   note: TNoteApp;
   isHistoryNote: boolean;
   drawerId: number;
+  onRemoved?: () => void;
 }) {
   const [drop, setDrop] = useState(false);
   const [menu, setMenu] = useState(false);
@@ -57,6 +59,7 @@ export default function Note({
             <NoteMenu
               noteId={note.id}
               drawerId={drawerId}
+              onRemoved={onRemoved}
             />
           ))}
       </div>
