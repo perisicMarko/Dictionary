@@ -5,7 +5,7 @@ import { Edit } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useRef, useState } from "react";
 
-export default function UpdateForm({
+export default function UpdateDrawerNameForm({
   drawer, 
   updateFormShow,
   setUpdateFormShow,
@@ -49,7 +49,6 @@ export default function UpdateForm({
     }
 
     setUpdateFormShow(false);
-    router.refresh();
   }, [updateState, router, setUpdateFormShow]);
 
   const drawerNameValue = updateFormShow ? stateDrawerName : drawer?.name;

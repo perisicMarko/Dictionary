@@ -4,31 +4,33 @@ import { TDrawer, TNoteApp } from "@/shared/types";
 import { ChevronDown, ChevronUp, Plus, Router } from "lucide-react";
 import { useState } from "react";
 import DrawerMenu from "./DrawerMenu";
-import UpdateForm from "./UpdateForm";
+import UpdateDrawerNameForm from "./UpdateDrawerNameForm";
 import DrawerNotePicker from "./DrawerNotePicker";
 import { deleteDrawer } from "@/features/drawers/application";
 import Loader from "@/components/common/Loader";
+import { useRouter } from "next/navigation";
 
 export default function Drawer({
   drawer,
   notes,
   openDrawerById,
-  openedDrawerId,
+  isDrawerOpened,
 }: {
   drawer: TDrawer;
   notes: TNoteApp[];
   openDrawerById: (id: number) => void;
-  openedDrawerId: number;
+  isDrawerOpened: boolean;
 }) {
   const [isMenuOpened, setIsMenuOpened] = useState(false);
   const [updateFormShow, setUpdateFormShow] = useState(false);
   const [addFormShow, setAddFormShow] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const router = useRouter();
 
   const handleDelete = async () => {
     await deleteDrawer(drawer.id);
-    // some refreshing is needed
+    router.refresh();
     setIsDeleting(false);
   };
 
@@ -88,7 +90,7 @@ export default function Drawer({
       />
 
       <div className="center-vertically w-2/3 sm:w-1/2">
-        <UpdateForm
+        <UpdateDrawerNameForm
           drawer={drawer}
           updateFormShow={updateFormShow}
           setUpdateFormShow={(v: boolean) => setUpdateFormShow(v)}
@@ -125,15 +127,15 @@ export default function Drawer({
       </div>
 
       <span
-        title={openedDrawerId === -1 ? "Open drawer" : "Close drawer"}
+        title={!isDrawerOpened ? "Open drawer" : "Close drawer"}
         className="text-text-main hover:text-text-second transition-all duration-200"
       >
-        {openedDrawerId === -1 ? (
+        {!isDrawerOpened ? (
           <ChevronDown
             width={25}
             height={25}
             className="mt-3 cursor-pointer"
-            onClick={() => openDrawerById(drawer?.id || -1)}
+            onClick={() => openDrawerById(drawer.id)}
           />
         ) : (
           <ChevronUp

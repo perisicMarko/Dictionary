@@ -46,7 +46,6 @@ export default function DrawerNotePicker({
     }
 
     setValue("");
-    router.refresh()
   }, [importState, router]);
 
   return (

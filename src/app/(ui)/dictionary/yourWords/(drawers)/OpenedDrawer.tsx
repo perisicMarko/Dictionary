@@ -8,20 +8,18 @@ export default function OpenedDrawer({
   drawerNotes,
   search,
   openDrawerById,
-  openedDrawerId,
   allNotes,
 }: {
-  drawer: TDrawer | undefined;
-  drawerNotes: TNoteApp[] | null;
+  drawer: TDrawer;
+  drawerNotes: TNoteApp[];
   search: string;
   openDrawerById: (id: number) => void;
-  openedDrawerId: number;
-  allNotes: TNoteApp[];
+  allNotes: TNoteApp[]; // todo: remove this when notes start to show in openedDrawer
 }) {
   const searchedWords =
-    drawerNotes?.filter((w) =>
+    drawerNotes.filter((w) =>
       w.dictionary_words.word.toLowerCase().includes(search.toLowerCase().trim())
-    ) ?? [];
+    ) ?? []; 
 
   if (!drawer || drawerNotes === null) {
     return <Loading />;
@@ -32,9 +30,9 @@ export default function OpenedDrawer({
       <Drawer
         key={drawer.id}
         drawer={drawer}
-        openDrawerById={openDrawerById}
         notes={allNotes}
-        openedDrawerId={openedDrawerId}
+        openDrawerById={(id : number) => openDrawerById(id)}
+        isDrawerOpened={true}
       />
       {drawerNotes.length === 0 ? (
         <div className="mt-5 box-layout enter-fade">
@@ -46,8 +44,8 @@ export default function OpenedDrawer({
         <div className="box-layout mt-5 text-box enter-fade">No words found.</div>
       ) : (
         <Notes
-          props={searchedWords}
-          historyNote={false}
+          notes={searchedWords}
+          isHistoryNote={false}
           drawerId={drawer.id}
         />
       )}

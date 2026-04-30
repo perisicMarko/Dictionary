@@ -86,8 +86,8 @@ export default function ShowNotesView({
 
       {sortednotes && sortednotes.length !== 0 ? (
         <Notes
-          props={sortednotes}
-          historyNote={false}
+          notes={sortednotes}
+          isHistoryNote={false}
           drawerId={-1}
         />
       ) : null}

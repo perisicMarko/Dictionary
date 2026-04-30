@@ -2,7 +2,7 @@
 import { decryptSession, SessionPayload } from '@/server/auth/schoolSession';
 import { getThemeColors as getThemeColorsByUserId } from '@/server/theme/repository';
 import { findSchoolByEmail } from '@/features/schools/infrastructure/repository';
-import { requireAuthenticatedUser } from '@/server/auth/userSession';
+import { readAuthenticatedUser } from '@/server/auth/userSession';
 
 
 const DEFAULT_THEME_COLORS = {
@@ -13,7 +13,7 @@ const DEFAULT_THEME_COLORS = {
 };
 
 export default async function getThemeColors() {
-    const requireRes = await requireAuthenticatedUser();
+    const requireRes = await readAuthenticatedUser();
     if (!requireRes) {
         return { success: false, data: DEFAULT_THEME_COLORS };
     }

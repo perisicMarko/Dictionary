@@ -5,22 +5,22 @@ import { TNoteApp } from "@/shared/types";
 import { AnimatePresence } from "framer-motion";
 
 export default function Notes({
-  props,
-  historyNote,
+  notes,
+  isHistoryNote,
   drawerId,
 }: {
-  props: TNoteApp[] | undefined;
-  historyNote: boolean;
+  notes: TNoteApp[];
+  isHistoryNote: boolean;
   drawerId: number;
 }) {
   return (
     <AnimatePresence mode="popLayout">
-      {props?.map((w: TNoteApp) => {
+      {notes.map((w: TNoteApp) => {
         return (
           <Note
             key={w.id}
             note={w}
-            isHistoryNote={historyNote}
+            isHistoryNote={isHistoryNote}
             drawerId={drawerId}
           ></Note>
         );

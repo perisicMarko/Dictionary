@@ -24,7 +24,7 @@ export default async function ResetPassword({
     isBefore(new Date(), new Date(tokenExpirationDate));
 
   return isTokenValid ? (
-    <ChangePasswordForm user={user} />
+    <ChangePasswordForm userId={user.id} />
   ) : (
     <NoValidToken />
   );

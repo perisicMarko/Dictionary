@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useRef, useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { createDrawer } from "@/features/drawers/application";
 import Loader from "@/components/common/Loader";
 import { useRouter } from "next/navigation";
@@ -37,7 +37,6 @@ function DrawerCreatorView({
 
     setIsOpen(false);
     setDrawerName("");
-    router.refresh()
   }, [state, router]);
 
   useEffect(() => {
@@ -60,10 +59,10 @@ function DrawerCreatorView({
           <button
             type="button"
             aria-label="Close drawer creator"
-            className="absolute text-text-main top-0 right-3 mr-4 mt-2 scale-105 hover:scale-115 cursor-pointer transition-all enter-fade-up enter-delay-1"
+            className="absolute text-text-main top-2 right-3 mr-4 mt-2 scale-90 hover:text-text-second cursor-pointer transition-all enter-fade-up enter-delay-1"
             onClick={() => setIsOpen(false)}
           >
-            <b>x</b>
+            <X />
           </button>
 
           <form
@@ -76,11 +75,11 @@ function DrawerCreatorView({
               name="title"
               className="text-text-main p-1 outline-none selection:outline-0 text-center"
               value={drawerName}
-              onChange={(e) => setDrawerName(e.target.value)}
+              onChange={(e) => {setDrawerName(e.target.value); router.refresh();}}
             />
             <button
               type="submit"
-              className={`primary-btn !h-[30px] !xl:h-[38px] center ${!isValidDrawerName ? "opacity-50" : ""
+              className={`primary-btn !h-[30px] !xl:h-[38px] center p-2 ${!isValidDrawerName ? "opacity-50" : ""
                 }`}
               disabled={!isValidDrawerName || isPending}
             >

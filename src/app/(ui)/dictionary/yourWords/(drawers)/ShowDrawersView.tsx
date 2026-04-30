@@ -40,9 +40,9 @@ export default function ShowDrawersView({
     ) ?? [];
   }
 
-  let notesOfOpenedDrawer = initialNotes;
+  let notesOfOpenedDrawer = [] as TNoteApp[];
   if (openedDrawerId !== -1) {
-    notesOfOpenedDrawer = initialNotes.filter((n) => drawerNoteMapping.includes({ note_id: n.id, drawer_id: openedDrawerId }));
+    notesOfOpenedDrawer = initialNotes.filter((n) => drawerNoteMapping.some((m) => m.note_id === n.id && m.drawer_id === openedDrawerId));
   }
 
   const openedDrawer = initialDrawers.find((d) => d.id === openedDrawerId);
@@ -56,8 +56,9 @@ export default function ShowDrawersView({
             ? "Search for drawers here..."
             : "Search for notes..."
         }
-        sortBy={false} // hardcoded
-        changeSortBy={() => { }} // needs updater function
+        // next two props are not needed for this component
+        sortBy={false}
+        changeSortBy={() => { }}
       >
         <p className="pt-3 enter-fade-up enter-delay-1">
           {openedDrawerId === -1 ? (
@@ -116,7 +117,7 @@ export default function ShowDrawersView({
                   drawer={d}
                   notes={notesOfOpenedDrawer}
                   openDrawerById={(id: number) => openDrawerById(id)}
-                  openedDrawerId={openedDrawerId}
+                  isDrawerOpened={false}
                 />
               ))}
             </AnimatePresence>
@@ -129,11 +130,10 @@ export default function ShowDrawersView({
       ) : (
         // search is passed because when drawer is open search then searches for notes, not drawers
         <OpenedDrawer
-          drawer={openedDrawer}
+          drawer={openedDrawer as TDrawer}
           drawerNotes={notesOfOpenedDrawer}
           search={search}
           openDrawerById={(id: number) => openDrawerById(id)}
-          openedDrawerId={openedDrawerId}
           allNotes={initialNotes}
         />
       )}

@@ -5,19 +5,20 @@ import { TNoteApp, TDrawer } from "@/shared/types";
 import { ChevronUp } from "lucide-react";
 import ShowNotesView from "./(notes)/ShowNotesView";
 import ShowDrawersView from "./(drawers)/ShowDrawersView";
+import ToggleViewButton from "./ToggleViewButton";
 
 export default function YourWordsView({ notes, drawers, drawerNoteMapping }: { notes: TNoteApp[], drawers: TDrawer[], drawerNoteMapping: { note_id: number, drawer_id: number }[] }) {
     const [scrollToTop, setScrollToTop] = useState(false);
     const [showDrawers, setShowDrawers] = useState(false);
 
     useEffect(() => {
-        const sotredValue = sessionStorage.getItem("toggleDrawers");
-        if (sotredValue === null) {
+        const storedValue = sessionStorage.getItem("toggleDrawers");
+        if (storedValue === null) {
             sessionStorage.setItem("toggleDrawers", "false");
             return;
         }
 
-        setShowDrawers(sotredValue === "true");
+        setShowDrawers(storedValue === "true");
     }, []);
 
     useEffect(() => {
@@ -36,6 +37,13 @@ export default function YourWordsView({ notes, drawers, drawerNoteMapping }: { n
 
     return (
         <>
+            <ToggleViewButton
+                isToggled={showDrawers}
+                toggle={(e) => {
+                    sessionStorage.setItem("toggleDrawers", showDrawers.toString());
+                    setShowDrawers(e);
+                }} 
+            />
             {scrollToTop ? (
                 <div
                     title="Back to top"

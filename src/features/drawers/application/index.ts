@@ -2,6 +2,7 @@
 import { readAuthenticatedUser, requireAuthenticatedUser } from "@/server/auth/userSession";
 import { attachNoteToDrawer, deleteDrawerById, findAllNotesWithDictionaryWordOfDrawer, findDrawerById, findDrawersByUserId, insertDrawer, removeNoteFromDrawer, updateDrawerNameById, findNoteDrawerMappingByUserId} from "@/features/drawers/infrastructure/repository";
 import { logOutUser } from "@/features/auth/application/userAuth";
+import { revalidatePath } from "next/cache";
 
 type createState  = {
     success: boolean;
@@ -51,6 +52,8 @@ export async function updateDrawerName(state : {success : boolean } | undefined,
 
     const res = await updateDrawerNameById(drawerName, drawerId);
 
+    revalidatePath("/dictionary/yourWords");
+
     return { success: true };
 }
 
@@ -73,6 +76,8 @@ export async function putNoteInDrawer(state : {success : boolean} | undefined, f
     const drawerId = Number(formData.get('drawerId'));
     
     const res = await attachNoteToDrawer(drawerId, wordId);
+
+    revalidatePath("/dictionary/yourWords");
 
     return {success: true};
 }

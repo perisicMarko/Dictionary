@@ -2,14 +2,13 @@
 
 import { useActionState, useState } from "react";
 import { completePasswordReset } from "@/features/auth/application/resetPassword";
-import { TUser } from "@/shared/types";
 import Loader from "@/components/common/Loader";
 import SuccessWindow from "./SuccessWindow";
 
 export default function ChangePasswordForm({
-  user,
+  userId,
 }: {
-  user: TUser;
+  userId : number
 }) {
   const [state, action, isPending] = useActionState(
     completePasswordReset,
@@ -30,7 +29,7 @@ export default function ChangePasswordForm({
       ) : (
         <div className="box-layout mt-20 sm:mt-25 md:mt-30 xl:mt-50 enter-fade">
           <form className="form w-full h-full enter-fade-up enter-delay-1" action={action}>
-            <input name="userId" defaultValue={user.id} hidden />
+            <input name="userId" defaultValue={userId} hidden />
             <div>
               <label htmlFor="password" className="text-text-main">
                 Enter new password:

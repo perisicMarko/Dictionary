@@ -64,10 +64,10 @@ export default function SaveNoteForm({
         }
 
         setIsWordAdded(false);
-        const generatedNote = await fetchApiNotes(normalizedWord);
+        const generatedNoteRes = await fetchApiNotes(normalizedWord);
 
-        if (generatedNote && !("error" in generatedNote)) {
-          setNote(generatedNote);
+        if (generatedNoteRes && generatedNoteRes.success) {
+          setNote(generatedNoteRes.data as TWordApp);
           setGenerated(true);
           setError("");
           return;

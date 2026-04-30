@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
-import { ArrowUpDown, Search } from "lucide-react";
+import { ArrowUpDown, Search, CircleHelp, X } from "lucide-react";
 
 export const SORT = {
   BY_DATE_DESC: 0,
@@ -49,20 +49,20 @@ export default function SearchBar({
 
   return (
     <>
-      <div className="box-layout !p-0 mt-5 enter-fade">
+      <div className="box-layout !p-2 mt-5 enter-fade">
         <div
-          className={`!py-2 !px-1 grid grid-cols-[auto_auto_1fr] items-center ${
+          className={`!py-2 !px-2 !md:px-5 grid grid-cols-[auto_auto_1fr] items-center  ${
             sortBy ? "!rounded-b-none" : ""
           } enter-fade-up`}
         >
           <button
             type="button"
-            className="text-text-main md:ml-4 ml-2 cursor-pointer hover:scale-115 rounded-full text-2xl transition-all"
+            className="text-text-main md:ml-4 pl-0 ml-0 md:pl-2 cursor-pointer hover:text-text-second rounded-full transition-all"
             title="Click for help"
             aria-label="Open search help"
             onClick={() => setHelp(!help)}
           >
-            ?
+            <CircleHelp />
           </button>
           <Search
             color="white"
@@ -72,7 +72,7 @@ export default function SearchBar({
             }}
           />
           <input
-            className="text-text-main inline-block outline-0 focus:outline-none rounded-r-4xl"
+            className="text-text-main inline-block outline-0 focus:outline-none rounded-r-4xl !text-sm"
             ref={searchBarRef}
             type="text"
             name="search"
@@ -83,7 +83,7 @@ export default function SearchBar({
           />
         </div>
         {sortBy && (
-          <div className="py-0 !px-4 !rounded-t-none text-text-main center justify-between enter-fade-up enter-delay-1">
+          <div className="py-2 !px-3 !md:px-5 !rounded-t-none text-text-main center justify-between enter-fade-up enter-delay-1">
             <select
               className="w-full appearance-none sm:hover:text-text-second cursor-pointer text-text-main !py-2 !px-1 rounded-3xl h-full"
               defaultValue={-1}
@@ -105,7 +105,7 @@ export default function SearchBar({
               color="white"
               height={20}
               width={20}
-              className="right-3 pointer-events-none"
+              className="pointer-events-none"
             />
           </div>
         )}
@@ -119,7 +119,7 @@ export default function SearchBar({
               aria-label="Close search help"
               onClick={() => setHelp(!help)}
             >
-              <b>x</b>
+              <X/>
             </button>
           </div>
           {children}

@@ -4,14 +4,12 @@ import { redirect } from "next/navigation";
 import { TNoteApp } from "@/shared/types";
 import RecallNote from "@/app/(ui)/dictionary/recall/RecallNote";
 import ZeroNotesMessage from "@/components/common/ZeroNotesMessage";
-import { AnimatePresence } from "framer-motion";
 
 export default async function Page() {
   const recallNotesRes = await getRecallNotes();
 
   if (!recallNotesRes.success) {
     redirect('/login');
-    return;
   }
 
   const recallNotes = recallNotesRes.data as TNoteApp[];

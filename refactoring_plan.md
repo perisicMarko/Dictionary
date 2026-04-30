@@ -398,28 +398,8 @@ This should give the clearest improvement in both:
 - reduction of effect-driven client logic
 
 
-# done
-about
-login
-signup
-loading
-root page
-root layout
-dictionary/history
-dictionary/inputWord
-dictionary/yourWords
-
-# todo
-resetPassword
-forgotpassword
-dictionary/recall
-components
-
-
-# refactoring yourwords
-- one ssr that fetches both notes and drawers
-- then renders the toggle 
-- and renders client component which conditionally redners notes or drawers
-
-# react todo
+# front todo
 - check for migrations from useActinoState to useTransition
+
+# api's 
+- curr tts api gives not to good pronuciation but good enough

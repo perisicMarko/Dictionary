@@ -41,7 +41,7 @@ export async function decryptAccess(token: string) {
     const t = payload as TokenPayload;
     return t;
   } catch (error) {
-    console.log('Failed access token decryption, error: ' + error);
+    throw new Error('Failed access token decryption, error: ' + error);
   }
 }
 
@@ -54,7 +54,7 @@ export async function decryptRefresh(token: string) {
     const t = payload as TokenPayload;
     return t;
   } catch (error) {
-    console.log('Failed refresh token decryption, error: ' + error);
+    throw new Error('Failed refresh token decryption, error: ' + error);
   }
 }
 

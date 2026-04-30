@@ -40,7 +40,6 @@ export async function getUsersNotes() {
 
   const { userId } = user;
   const notes = (await findAllNotesByUserId(userId) as any[]);
-
   return {
     success: true,
     data: notes.filter((w) => {
