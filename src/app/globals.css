@@ -53,6 +53,10 @@ body{
   font-family: var(--font-roboto), sans-serif;
 }
 
+html, body {
+  min-height: 100%;
+}
+
 select {
   @apply outline-0;
 }
@@ -110,23 +114,26 @@ input{
 
 .background {
   position: relative;
-  min-height: 100vh; /* Ensure it has height */
+  min-height: 100%;
   background-color: hsl(var(--second-color));
+  isolation: isolate;
 }
 
 .background::before {
   content: "";
-  position: fixed; /* Keeps background visible even while scrolling */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%; /* Covers full viewport */
+  position: fixed;
+  inset: 0;
+  height: 100lvh;
   background-image: url("/app_bg.svg");
-  background-size: cover; /* Adjust to fit */
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  opacity: 0.3; /* Controls transparency */
+  opacity: 0.3;
   z-index: -1;
+  pointer-events: none;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .white-spaces {
