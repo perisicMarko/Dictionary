@@ -14,17 +14,13 @@ export default function OpenedDrawer({
   drawerNotes: TNoteApp[];
   search: string;
   openDrawerById: (id: number) => void;
-  allNotes: TNoteApp[]; // todo: remove this when notes start to show in openedDrawer
+  allNotes: TNoteApp[]; // needed because Drawer component has DrawerPicker which implements autocomplete for users notes
 }) {
   const searchedWords =
     drawerNotes.filter((w) =>
       w.dictionary_words.word.toLowerCase().includes(search.toLowerCase().trim())
     ) ?? []; 
-
-  if (!drawer || drawerNotes === null) {
-    return <Loading />;
-  }
-
+    
   return (
     <>
       <Drawer

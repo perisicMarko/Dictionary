@@ -9,8 +9,10 @@ import DisplayNotes from "@/components/common/DisplayNotes";
 
 export default function RecallNote({
   note,
+  onGraded,
 }: {
   note: TNoteApp;
+  onGraded?: () => void;
 }) {
   const [isMenuOpened, setIsMenuOpened] = useState(false);
   const [isShowNotes, setIsShowNotes] = useState(false);
@@ -61,7 +63,7 @@ export default function RecallNote({
       {isShowNotes ? (
         <>
           <AudioPlayer src={note.dictionary_words.audio}></AudioPlayer>
-          <div className="p-1 h-[300px] xl:h-[400px] overflow-auto enter-fade-up enter-delay-1">
+          <div className="p-1 h-[300px] xl:h-[400px] overflow-auto enter-fade-up enter-delay-1 w-full">
             <h2 className="my-2 text-text-main">
               <b>Your notes:</b>
             </h2>
@@ -87,6 +89,7 @@ export default function RecallNote({
         <GradeForm
           toggleMenu={toggleMenu}
           noteId={note.id}
+          onGraded={onGraded}
         />
       )}
     </div>

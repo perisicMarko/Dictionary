@@ -2,7 +2,7 @@ import RecallNoteHelp from "@/app/(ui)/dictionary/recall/Help";
 import { getRecallNotes } from "@/features/notes/application";
 import { redirect } from "next/navigation";
 import { TNoteApp } from "@/shared/types";
-import RecallNote from "@/app/(ui)/dictionary/recall/RecallNote";
+import RecallNotesList from "@/app/(ui)/dictionary/recall/RecallNotesList";
 import ZeroNotesMessage from "@/components/common/ZeroNotesMessage";
 
 export default async function Page() {
@@ -18,14 +18,7 @@ export default async function Page() {
     <>
       <RecallNoteHelp />
       {recallNotes.length > 0 ? (
-        recallNotes.map((w: TNoteApp) => {
-          return (
-            <RecallNote
-              key={w.id}
-              note={w}
-            />
-          );
-        })
+        <RecallNotesList initialNotes={recallNotes} />
       ) : (
         <ZeroNotesMessage
           message={

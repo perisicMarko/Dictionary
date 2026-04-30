@@ -192,10 +192,10 @@ export default function Signup() {
             >
               {isPending ? <Loader /> : "Sign up"}
             </button>
-            <div className="inline-block hover:scale-105 ml-3">
-              <Link href="/school" className="text-box">
+            <div className="inline-block ml-3">
+              <Link href="/school" className="text-box hover:text-text-second">
                 <i>
-                  <u>Or log in here</u>
+                  <b>Or log in here</b>
                 </i>
               </Link>
             </div>

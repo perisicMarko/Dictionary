@@ -42,7 +42,7 @@ export default function YourWordsView({ notes, drawers, drawerNoteMapping }: { n
                 toggle={(e) => {
                     sessionStorage.setItem("toggleDrawers", showDrawers.toString());
                     setShowDrawers(e);
-                }} 
+                }}
             />
             {scrollToTop ? (
                 <div

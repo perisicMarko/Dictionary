@@ -37,7 +37,7 @@ export default function HistoryView({
           sortBy={false}
           changeSortBy={() => {}}
         >
-          <p className="pt-3 enter-fade-up enter-delay-1">
+          <p className="mt-6 enter-fade-up enter-delay-1">
             This page should help you review the words you have learned. So
             basically this page just stores learned words, like personal history.
             <br />
@@ -62,8 +62,8 @@ export default function HistoryView({
 
       {filteredWords.length !== 0 ? (
         <Notes
-          props={filteredWords}
-          historyNote={true}
+          notes={filteredWords}
+          isHistoryNote={true}
           drawerId={-1}
         />
       ) : null}

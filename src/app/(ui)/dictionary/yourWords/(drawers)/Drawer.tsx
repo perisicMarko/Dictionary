@@ -12,14 +12,16 @@ import { useRouter } from "next/navigation";
 
 export default function Drawer({
   drawer,
-  notes,
+  allNotes,
   openDrawerById,
   isDrawerOpened,
+  drawerNotes,
 }: {
   drawer: TDrawer;
-  notes: TNoteApp[];
+  allNotes: TNoteApp[];
   openDrawerById: (id: number) => void;
   isDrawerOpened: boolean;
+  drawerNotes: TNoteApp[];
 }) {
   const [isMenuOpened, setIsMenuOpened] = useState(false);
   const [updateFormShow, setUpdateFormShow] = useState(false);
@@ -49,7 +51,7 @@ export default function Drawer({
       {confirmDelete ? (
         <div className="absolute z-20 bg-main rounded-3xl top-0 right-0 w-full h-full center-vertically enter-fade">
           <h2 className="text-box mb-3 enter-fade-up enter-delay-1">
-            Delete this drawer?
+            {`Delete ${drawer.name} drawer?`}
           </h2>
           <div className="center gap-5">
             {isDeleting ? (
@@ -57,7 +59,7 @@ export default function Drawer({
             ) : (
               <>
                 <span
-                  className="text-text-main cursor-pointer hover:bg-second rounded-2xl py-1 px-2 enter-fade-up enter-delay-1"
+                  className="text-text-main cursor-pointer hover:bg-second rounded-2xl py-2 px-5 enter-fade-up enter-delay-1"
                   onClick={async () => {
                     setIsDeleting(true);
                     await handleDelete();
@@ -67,7 +69,7 @@ export default function Drawer({
                   Yes
                 </span>
                 <span
-                  className="text-text-main cursor-pointer hover:bg-second rounded-2xl py-1 px-2 enter-fade-up enter-delay-1"
+                  className="text-text-main cursor-pointer hover:bg-second rounded-2xl py-2 px-5 enter-fade-up enter-delay-1"
                   onClick={() => {
                     setConfirmDelete(false);
                   }}
@@ -103,7 +105,7 @@ export default function Drawer({
             </span>
             {addFormShow === false ? (
               <span
-                className="text-text-main xl:hover:text-text-second cursor-pointer transition-all duration-200 enter-fade-up enter-delay-1"
+                className="text-text-main hover:text-text-second cursor-pointer transition-all duration-200 enter-fade-up enter-delay-1"
                 title="Add word to drawer"
               >
                 <Plus
@@ -115,7 +117,7 @@ export default function Drawer({
               </span>
             ) : (
               <DrawerNotePicker
-                notes={notes?.map((w: TNoteApp) => ({
+                notes={allNotes?.map((w: TNoteApp) => ({
                   word: w.dictionary_words.word,
                   noteId: w.id,
                 }))}
@@ -128,7 +130,7 @@ export default function Drawer({
 
       <span
         title={!isDrawerOpened ? "Open drawer" : "Close drawer"}
-        className="text-text-main hover:text-text-second transition-all duration-200"
+        className="text-text-main hover:text-text-second transition-colors"
       >
         {!isDrawerOpened ? (
           <ChevronDown

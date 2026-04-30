@@ -17,10 +17,8 @@ function isErrorNote(
 }
 
 export default function SaveNoteForm({
-  toggleHelp,
   initialWords,
 }: {
-  toggleHelp: () => void;
   initialWords: string[];
 }) {
   const [savedWords, setSavedWords] = useState(initialWords);
@@ -207,12 +205,6 @@ export default function SaveNoteForm({
               </button>
             ) : null}
           </div>
-          <span
-            className="hover:underline hover:scale-105 cursor-pointer text-text-main mt-3 transition-all"
-            onClick={() => toggleHelp()}
-          >
-            Need any help?
-          </span>
         </div>
       </form>
     </div>

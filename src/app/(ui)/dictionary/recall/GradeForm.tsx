@@ -9,9 +9,11 @@ import Loader from "../../../../components/common/Loader";
 export function GradeForm({
   toggleMenu,
   noteId,
+  onGraded,
 }: {
   toggleMenu: () => void;
   noteId: number;
+  onGraded?: () => void;
 }) {
   const [isPending, startTransition] = useTransition();
   const [recallQuality, setRecallQuality] = useState(-1);
@@ -26,6 +28,12 @@ export function GradeForm({
     }
 
     setRecallQuality(-1);
+
+    if (onGraded) {
+      onGraded();
+      return;
+    }
+
     router.refresh();
   }
 

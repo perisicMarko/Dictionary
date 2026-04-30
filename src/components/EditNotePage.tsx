@@ -38,20 +38,17 @@ export default function EditNotePage({
       >
         <h2 className="text-box enter-fade-up enter-delay-1">
           Edit your notes for:{" "}
-          <b title="Word" className="hover:underline">
+          <b title="Word" className="text-text-second">
             {note.dictionary_words.word}
           </b>
         </h2>
 
         <div className="enter-fade-up enter-delay-1">
-          <label htmlFor="userNotes" className="inline-block text-text-main my-3">
-            Your notes:
-          </label>
           <textarea
             name="userNotes"
             id="userNotes"
             defaultValue={note.user_notes}
-            className="bg-white rounded-3xl h-[350px] sm-h-[500px] resize-none block w-full p-5 text-text-second"
+            className="bg-white/5 rounded-3xl h-[350px] sm-h-[500px] resize-none block w-full p-5 text-text-second"
           ></textarea>
         </div>
 

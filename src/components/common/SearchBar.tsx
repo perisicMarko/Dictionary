@@ -72,7 +72,7 @@ export default function SearchBar({
             }}
           />
           <input
-            className="text-text-main inline-block outline-0 focus:outline-none rounded-r-4xl !text-sm"
+            className="text-text-main inline-block outline-0 focus:outline-none rounded-r-4xl text-sm"
             ref={searchBarRef}
             type="text"
             name="search"
@@ -111,8 +111,8 @@ export default function SearchBar({
         )}
       </div>
       {help && (
-        <div className="box-layout mt-5 text-text-main relative enter-fade">
-          <div className="collapse-window">
+        <div className="box-layout mt-3 text-text-main relative enter-fade">
+          <div className="collapse-window mb-">
             <button
               type="button"
               className="x-btn mr-4 py-1"

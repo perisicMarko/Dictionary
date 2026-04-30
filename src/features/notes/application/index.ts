@@ -66,7 +66,7 @@ export async function getUsersHistory() {
 }
 
 export async function getRecallNotes() {
-  const user = await requireAuthenticatedUser();
+  const user = await readAuthenticatedUser();
   if (!user) {
     await logOutUser();
     return { success: false };

@@ -73,7 +73,7 @@ export default function StudentComponent({ student }: { student: TStudent }) {
           <ul className="pl-10 list-disc space-y-1">
             <li>
               <span className="text-text-main inline-block">
-                <u>{student.email}</u>
+                <b>{student.email}</b>
               </span>
             </li>
             <li>{student.firstName + " " + student.lastName}</li>

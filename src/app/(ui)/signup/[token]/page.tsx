@@ -44,7 +44,7 @@ export default async function Page({ params }: PageProps) {
         </b>
         <Link
           href="/login"
-          className="hover:scale-115 hover:underline text-text-second transition-all"
+          className="hover:scale-115 hover:text-text-main text-text-second transition-all"
         >
           log in page link
         </Link>

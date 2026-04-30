@@ -8,7 +8,7 @@ export default function SuccessWindow() {
       </p>
       <Link
         href="/login"
-        className="text-text-second mt-3 hover:underline hover:scale-115 transition-all enter-fade-up enter-delay-1"
+        className="text-text-second mt-3 hover:text-text-main hover:scale-115 transition-all enter-fade-up enter-delay-1"
       >
         <u>
           <i>Click to log in.</i>

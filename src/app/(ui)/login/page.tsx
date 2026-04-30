@@ -118,7 +118,7 @@ export default function Login() {
               </div>
               <div className="center my-1 enter-fade-up enter-delay-1">
                 <Link
-                  className="flex items-start justify-end text-text-main hover:scale-105 hover:underline text-[14px] sm:text-[18px] transition-all"
+                  className="flex items-start justify-end text-text-main hover:scale-105 hover:text-text-second text-[14px] sm:text-[18px] transition-colors"
                   href="/forgotPassword"
                 >
                   Forgot password?

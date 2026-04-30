@@ -18,7 +18,7 @@ export default function ForgotPassword() {
           </span>
           <Link
             href="https://mail.google.com/"
-            className="hover:scale-115 mt-3 hover:underline text-text-second transition-all"
+            className="hover:text-text-main mt-3 text-text-second transition-colors"
             target="_blank"
             rel="noreferrer"
           >
@@ -26,8 +26,8 @@ export default function ForgotPassword() {
           </Link>
         </div>
       )}
-      <span className="my-2 hover:underline hover:scale-105 transition-all enter-fade-up">
-        <Link href="/" className="text-text-main">
+      <span className="my-2 transition-colors enter-fade-up">
+        <Link href="/" className="text-text-main hover:text-text-second">
           Back to home page
         </Link>
       </span>

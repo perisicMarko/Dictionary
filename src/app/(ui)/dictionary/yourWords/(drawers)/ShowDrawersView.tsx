@@ -115,7 +115,8 @@ export default function ShowDrawersView({
                 <Drawer
                   key={d.id}
                   drawer={d}
-                  notes={notesOfOpenedDrawer}
+                  drawerNotes={[] as TNoteApp[]}
+                  allNotes={initialNotes}
                   openDrawerById={(id: number) => openDrawerById(id)}
                   isDrawerOpened={false}
                 />
