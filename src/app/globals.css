@@ -114,7 +114,8 @@ input{
 
 .background {
   position: relative;
-  min-height: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
   background-color: hsl(var(--second-color));
   isolation: isolate;
 }
@@ -123,7 +124,9 @@ input{
   content: "";
   position: fixed;
   inset: 0;
-  height: 100lvh;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
   background-image: url("/app_bg.svg");
   background-size: cover;
   background-repeat: no-repeat;

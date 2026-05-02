@@ -9,7 +9,7 @@ export default function Home() {
         </video>
       </div>
 
-      <div className="relative mt-15 center-vertically box-layout overflow-hidden enter-fade">
+      <div className="relative mt-15 center-vertically box-layout !p-5 !py-7 overflow-hidden enter-fade">
         <svg
           viewBox="0 0 600 260"
           preserveAspectRatio="none"

@@ -1,33 +1,33 @@
 import Link from "next/link";
+import { X } from "lucide-react";
 
 export default function Page() {
   return (
     <div className="mt-10 m-5 box-layout overflow-auto relative enter-fade">
       <div className="collapse-window">
-        <Link className="x-btn mr-4 py-1 text-box" href="/">
-          <b>x</b>
+        <Link className="x-btn mr-4 py-1 text-box transition-colors hover:text-text-second" href="/">
+          <X />
         </Link>
       </div>
-      <div className="enter-fade-up enter-delay-1">
+      <div className="enter-fade-up enter-delay-1 py-3">
         <h2 className="title text-text-main">What does this app do?</h2>
-        <p className="text-text-main">
+        <p className="text-text-main text-justify">
           This app helps you actively recall words you would like to learn by
           calculating the optimal time for you to recall them.
           <br />
         </p>
         <h2 className="title text-text-main">How to use this app?</h2>
-        <p className="text-text-main">
+        <p className="text-text-main text-justify">
           This app allows you to review all the words you have learned (on the
           &quot;Learned Words&quot; page), as well as the words you still need
           to learn (on the &quot;Your Words&quot; page).
-          <br />
           Words you should recall will show up on page called
-          &quot;Recall.&quot; <br />
+          &quot;Recall.&quot;
           You will receive an email when it&apos;s time to recall certain words.{" "}
           <br />
         </p>
         <h2 className="title text-text-main">How recall works?</h2>
-        <p className="text-text-main">
+        <p className="text-text-main text-justify">
           There are five rounds of repetition, and each time you will grade how
           well you have remembered a word. Repetitions will reset if you mark a
           word as not recalled well enough, using a rating scale from 0 to 5.
