@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import { TNoteApp } from "@/shared/types";
 import ZeroNotesMessage from "@/components/common/ZeroNotesMessage";
 import SearchBar, { SORT } from "@/components/common/SearchBar";
-import Loading from "../../../loading";
 import { isBefore } from "date-fns";
 import Notes from "@/components/common/Notes";
 
@@ -68,7 +67,7 @@ export default function ShowNotesView({
         sortBy={true}
         changeSortBy={(arg: number) => setSortBy(arg)}
       >
-        <p className="mt-5 enter-fade-up enter-delay-1 text-justify text-text-main">
+        <p className="enter-fade-up enter-delay-1 text-justify text-text-main mt-7">
           This page is where all the notes you have not learned yet are stored.
           Hence, if you have more spare time in the day you can review all the
           notes here. <br /> <br />
@@ -81,8 +80,6 @@ export default function ShowNotesView({
           message={"There is no note like that within your notes."}
         />
       ) : null}
-
-      {sortednotes === undefined ? <Loading /> : null}
 
       {sortednotes && sortednotes.length !== 0 ? (
         <Notes

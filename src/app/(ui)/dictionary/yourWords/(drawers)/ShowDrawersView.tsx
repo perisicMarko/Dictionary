@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import DrawerCreator from "./DrawerCreator";
 import { TDrawer, TNoteApp } from "@/shared/types";
 import Drawer from "./Drawer";
-import Loading from "@/app/(ui)/loading";
 import OpenedDrawer from "./OpenedDrawer";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -79,7 +78,7 @@ export default function ShowDrawersView({
         sortBy={false}
         changeSortBy={() => { }}
       >
-        <p className="pt-3 enter-fade-up enter-delay-1">
+        <p className="mt-7 enter-fade-up text-justify enter-delay-1">
           {openedDrawerId === -1 ? (
             <>
               <b>
@@ -127,36 +126,32 @@ export default function ShowDrawersView({
       ) : null}
 
       {openedDrawerId === -1 ? (
-        searchedDrawers ? (
-          searchedDrawers.length !== 0 ? (
-            <AnimatePresence mode="sync" initial={false}>
-              {searchedDrawers.map((d) => (
-                <motion.div
-                  key={d.id}
-                  layout="position"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.98, filter: "blur(2px)" }}
-                  transition={{ duration: 0.22, ease: "easeOut" }}
-                  className="w-full flex justify-center"
-                >
-                  <Drawer
-                    drawer={d}
-                    drawerNotes={[] as TNoteApp[]}
-                    allNotes={initialNotes}
-                    onDeleted={handleDrawerDeleted}
-                    openDrawerById={(id: number) => openDrawerById(id)}
-                    isDrawerOpened={false}
-                  />
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          ) : drawers.length !== 0 ? (
-            <div className="box-layout text-box mt-5 enter-fade">No drawers found.</div>
-          ) : null
-        ) : (
-          <Loading />
-        )
+        searchedDrawers.length !== 0 ? (
+          <AnimatePresence mode="sync" initial={false}>
+            {searchedDrawers.map((d) => (
+              <motion.div
+                key={d.id}
+                layout="position"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.98, filter: "blur(2px)" }}
+                transition={{ duration: 0.22, ease: "easeOut" }}
+                className="w-full flex justify-center"
+              >
+                <Drawer
+                  drawer={d}
+                  drawerNotes={[] as TNoteApp[]}
+                  allNotes={initialNotes}
+                  onDeleted={handleDrawerDeleted}
+                  openDrawerById={(id: number) => openDrawerById(id)}
+                  isDrawerOpened={false}
+                />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        ) : drawers.length !== 0 ? (
+          <div className="box-layout text-box mt-5 enter-fade">No drawers found.</div>
+        ) : null
       ) : (
         // search is passed because when drawer is open search then searches for notes, not drawers
         <OpenedDrawer
@@ -168,8 +163,6 @@ export default function ShowDrawersView({
           onDeleteDrawer={handleDrawerDeleted}
         />
       )}
-
-      {initialDrawers === null || initialNotes === null ? <Loading /> : null}
     </>
   );
 }
