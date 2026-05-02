@@ -37,7 +37,7 @@ export default function HistoryView({
           sortBy={false}
           changeSortBy={() => {}}
         >
-          <p className="mt-6 enter-fade-up enter-delay-1 text-justify">
+          <p className="mt-7 enter-fade-up enter-delay-1 text-justify">
             This page should help you review the words you have learned. So
             basically this page just stores learned words, like personal history.
             <br />

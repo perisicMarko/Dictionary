@@ -35,7 +35,7 @@ export default function RecallNoteHelp() {
               <X />
             </button>
           </div>
-          <h2 className="text-box mt-5 px-1">
+          <h2 className="text-box mt-7 px-1">
             <b>Here is where you recall your words</b>
           </h2>
           <div className="mt-3 text-text-main enter-fade-up enter-delay-1 text-justify">

@@ -112,7 +112,7 @@ export default function SearchBar({
       </div>
       {help && (
         <div className="box-layout mt-3 text-text-main relative enter-fade">
-          <div className="collapse-window mb-">
+          <div className="collapse-window mb-5">
             <button
               type="button"
               className="x-btn mr-4 py-1"
