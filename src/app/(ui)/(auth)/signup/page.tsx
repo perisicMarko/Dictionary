@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useActionState, useState } from "react";
 import { authenticateSignup } from "@/features/auth/application/userAuth";
 import Loader from "@/components/common/Loader";
+import { X } from "lucide-react";
 
 export default function Signup() {
   const [state, action, isPending] = useActionState(
@@ -29,7 +30,7 @@ export default function Signup() {
         <div className="mt-5 h-1/2 box-layout !p-0 relative enter-fade">
           <div className="collapse-window">
             <Link className="x-btn" href="/">
-              <b>x</b>
+              <X />
             </Link>
           </div>
 

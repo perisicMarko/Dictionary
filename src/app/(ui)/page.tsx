@@ -1,6 +1,14 @@
 import Link from "next/link";
+import { readAuthenticatedUser } from "@/server/auth/userSession";
+import { redirect } from "next/navigation";
 
-export default function Home() {
+export default async function Home() {
+  const user = await readAuthenticatedUser();
+
+  if (user) {
+    redirect("/dictionary/inputWord");
+  }
+
   return (
     <>
       <div className="box-width mt-15 enter-fade">
@@ -38,7 +46,7 @@ export default function Home() {
 
         <div className="relative z-10 w-full center-vertically enter-fade-up enter-delay-1">
           <Link
-            className="flex justify-end text-box hover:scale-105 hover:text-text-second text-[14px] mb-2 sm:text-[18px] transition-all"
+            className="flex justify-end text-text-main hover:text-text-second text-[14px] mb-2 sm:text-[18px] transition-all"
             href="/about"
           >
             About the app
@@ -48,13 +56,13 @@ export default function Home() {
           </Link>
           <div className="grid grid-cols-2 w-full mt-3">
             <Link
-              className="flex items-start justify-start text-text-main hover:scale-105 hover:text-text-second text-[14px] sm:text-[18px] tranistion-all"
+              className="flex items-start justify-start text-text-main hover:text-text-second text-[14px] sm:text-[18px] transition-all"
               href="/signup"
             >
               Sign up
             </Link>
             <Link
-              className="flex items-start justify-end text-text-main hover:scale-105 hover:text-text-second text-[14px] sm:text-[18px] transition-all"
+              className="flex items-start justify-end text-text-main hover:text-text-second text-[14px] sm:text-[18px] transition-all"
               href="/forgotPassword"
             >
               Forgot password?

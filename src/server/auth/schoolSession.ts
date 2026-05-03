@@ -35,7 +35,7 @@ export async function decryptSession() {
     });
 
     return {success: true, data: payload as SessionPayload};
-  } catch (error) {
-    throw new Error('Failed session token decryption, error: ' + error);
+  } catch {
+    return { success: false };
   }
 }

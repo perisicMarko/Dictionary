@@ -1,23 +1,16 @@
-import "@/app/globals.css";
-import { NavBar } from "@/components/NavBar";
 import { readAuthenticatedUser } from "@/server/auth/userSession";
 import { redirect } from "next/navigation";
 
-export default async function RootLayout({
+export default async function SignupLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   const user = await readAuthenticatedUser();
 
-  if (!user) {
-    redirect("/login");
+  if (user) {
+    redirect("/dictionary/inputWord");
   }
 
-  return (
-    <>
-      <NavBar />
-      {children}
-    </>
-  );
+  return children;
 }

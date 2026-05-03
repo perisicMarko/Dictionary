@@ -40,8 +40,8 @@ export async function decryptAccess(token: string) {
 
     const t = payload as TokenPayload;
     return t;
-  } catch (error) {
-    throw new Error('Failed access token decryption, error: ' + error);
+  } catch {
+    return undefined;
   }
 }
 
@@ -53,8 +53,8 @@ export async function decryptRefresh(token: string) {
 
     const t = payload as TokenPayload;
     return t;
-  } catch (error) {
-    throw new Error('Failed refresh token decryption, error: ' + error);
+  } catch {
+    return undefined;
   }
 }
 

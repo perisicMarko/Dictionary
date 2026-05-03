@@ -9,6 +9,7 @@ import {
 } from "@/features/auth/application/userAuth";
 import { LoginStatus } from "@/shared/auth/loginStatus";
 import { generateVerificationMail } from "@/features/auth/application/sendVerificationEmail";
+import { X } from "lucide-react";
 
 export default function Login() {
   const initialState: LoginActionState = {
@@ -61,7 +62,7 @@ export default function Login() {
           >
             <div className="collapse-window">
               <Link className="x-btn" href="/">
-                <b>x</b>
+                <X />
               </Link>
             </div>
             <form
