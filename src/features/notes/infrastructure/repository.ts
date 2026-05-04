@@ -3,7 +3,7 @@ import { prisma } from '@/server/db/client';
 import { TMeaning, TWordApp } from '@/shared/types';
 import { addDays } from 'date-fns';
 
-export async function findAllNotesByUserId(userId : number) {
+export async function findAllNotesByUserId(userId: number) {
   try {
     const res = await prisma.notes.findMany({
       include: {
@@ -43,7 +43,7 @@ export async function findAllWords() {
   }
 }
 
-export async function findUserWordTexts(userId : number) {
+export async function findUserWordTexts(userId: number) {
   try {
     const res = await prisma.notes.findMany({
       include: {
@@ -58,7 +58,7 @@ export async function findUserWordTexts(userId : number) {
       }
     });
 
-    return res.map((n) => {return n.dictionary_words?.word});
+    return res.map((n) => { return n.dictionary_words?.word });
 
   } catch (error) {
     throw new Error(`findUserWordTexts failed: ${error instanceof Error ? error.message : String(error)}`);
@@ -66,41 +66,7 @@ export async function findUserWordTexts(userId : number) {
 }
 
 export async function createUserNote(userId: number, word: string, audio: string, user_notes: string, generated_notes: TMeaning[], wordId: number) {
-  const stored_locally = wordId != -1;
   try {
-    if (!stored_locally) {
-      // save word to table in my database but do not wait it for performance, because users note is already imported, here i just scrape what user searched
-      const newWord = await prisma.dictionary_words.create({
-        data: {
-          word: word,
-          meanings: generated_notes,
-          audio: audio
-        }
-      });
-      if (!newWord)
-        throw new Error("Failed to import word locally.");
-
-
-      const newNotes = await prisma.notes.create({
-        data: {
-          user_id: userId,
-          is_learned: false,
-          language: 'english',
-          user_notes: user_notes,
-          repetitions: 0,
-          days: 1,
-          ease_factor: 2.5,
-          review_date: addDays(new Date(), 1),
-          word_id: newWord.id
-        }
-      });
-
-      if (!newNotes)
-        throw new Error("Failed to import users note.");
-
-      return newNotes;
-    }
-
     const newNotes = await prisma.notes.create({
       data: {
         user_id: userId,
@@ -119,12 +85,13 @@ export async function createUserNote(userId: number, word: string, audio: string
       throw new Error("Failed to import users note.");
 
     return newNotes;
+    
   } catch (error) {
     throw new Error(`createUserNote failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
-export async function findNoteById(noteId : number) {
+export async function findNoteById(noteId: number) {
 
   try {
     const res = await prisma.notes.findUnique({ where: { id: noteId }, include: { dictionary_words: { select: { word: true, meanings: true, audio: true } } } });

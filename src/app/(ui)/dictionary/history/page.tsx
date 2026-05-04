@@ -1,10 +1,10 @@
-import { getUsersHistory } from "@/features/notes/application";
+import { getUsersHistoryNotes } from "@/features/notes/application";
 import { TNoteApp } from "@/shared/types";
 import HistoryView from "./HistoryView";
 import { redirect } from "next/navigation";
 
 export default async function History() {
-  const words = await getUsersHistory();
+  const words = await getUsersHistoryNotes();
   if(!words.success){
     redirect("/login");
   }

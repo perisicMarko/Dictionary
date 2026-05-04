@@ -10,11 +10,11 @@ import { logOutUser } from '@/features/auth/application/userAuth';
 export async function getUsersWords() {
   const user = await readAuthenticatedUser();
   if (!user) {
-    return { success: false};
+    return { success: false };
   }
 
-  const { userId } = user;  
-  const words = (await findAllNotesByUserId(userId) as any[]).map((e) => e.dictionary_words.word.word) as string[];
+  const { userId } = user;
+  const words = (await findAllNotesByUserId(userId) as any[]).map((e) => e.dictionary_words.word) as string[];
 
   return { success: true, data: words };
 }
@@ -42,27 +42,43 @@ export async function getUsersNotes() {
   const notes = (await findAllNotesByUserId(userId) as any[]);
   return {
     success: true,
+    data: notes
+  }
+}
+
+export async function getUsersLearningNotes() {
+  const user = await readAuthenticatedUser();
+  if (!user) {
+    return { success: false };
+  }
+
+  const { userId } = user;
+  const notes = (await findAllNotesByUserId(userId) as any[]);
+  return {
+    success: true,
     data: notes.filter((w) => {
       const res = w.is_learned == false;
       return res;
-    })};
+    })
+  };
 }
 
-export async function getUsersHistory() {
+export async function getUsersHistoryNotes() {
   const user = await readAuthenticatedUser();
   if (!user) {
     await logOutUser();
     return { success: false };
   }
 
-  const { userId } = user;  
+  const { userId } = user;
   const notes = (await findAllNotesByUserId(userId) as any[]);
 
   return {
     success: true,
     data: notes.filter((w) => {
       return w.is_learned == true;
-    })};
+    })
+  };
 }
 
 export async function getRecallNotes() {
@@ -81,7 +97,8 @@ export async function getRecallNotes() {
     data: notes.filter((n) => {
       const res = n.is_learned === false && isBefore(n.review_date, currentDate);
       return res;
-    })};
+    })
+  };
 }
 
 export async function updateReviewDateByNoteId(quality: number, noteId: number) {
@@ -134,7 +151,7 @@ export async function editNote(userNotes: string, noteId: number) {
 export async function getNoteById(noteId: number) {
   const res = await findNoteById(noteId) as any;
 
-  return { success: true, data: res};
+  return { success: true, data: res };
 }
 
 export async function restoreNoteToRecallSystemById(noteId: number) {

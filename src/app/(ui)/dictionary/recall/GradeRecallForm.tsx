@@ -76,7 +76,7 @@ export function GradeRecallForm({
             </option>
             <option value="2">2 – wrong, but felt easy to recall</option>
             <option value="3">3 – correct, but with great effort</option>
-            <option value="4">4 – correct, some hestitation</option>
+            <option value="4">4 – correct, some hesitation</option>
             <option value="5">5 – perfect, immediate recall</option>
           </select>
         </div>

@@ -57,7 +57,7 @@ export default function SaveNoteForm({
 
         if (duplicateWord) {
           setIsWordAdded(true);
-          resetPreview("Word is already added.");
+          resetPreview("Word is already added. Check it in your notes.");
           return;
         }
 

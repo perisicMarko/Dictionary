@@ -1,13 +1,13 @@
 // import { useEffect, useState } from "react";
 import { TDrawer, TNoteApp } from "@/shared/types";
-import { getUsersNotes } from "@/features/notes";
+import { getUsersLearningNotes } from "@/features/notes";
 import { getUsersDrawers, getNoteDrawerMapping} from "@/features/drawers";
 import ItemsView from "./ItemsView";
 import { redirect } from "next/navigation";
 
 export default async function Page() {
   const drawersRes = await getUsersDrawers();
-  const notesRes = await getUsersNotes();
+  const notesRes = await getUsersLearningNotes();
   const resDrawerNoteMapping = await getNoteDrawerMapping();
 
   const isAuthenticated = drawersRes.success && notesRes.success && resDrawerNoteMapping.success;

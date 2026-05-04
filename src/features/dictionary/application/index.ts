@@ -95,7 +95,7 @@ Word:`;
 
 
       try{
-        // if word is not found in database, find it through on of the api
+        // if word is not found in database, find pronunciation through on of the api
         const freeDictApiResponse = await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + word);
         if (freeDictApiResponse.ok) {
           const rawApiData = (await freeDictApiResponse.json())[0]; // the data that api returns is one object in an array, hence [0]
@@ -114,8 +114,9 @@ Word:`;
           throw new Error('Failed fetching api voice, message: ' + e.message); 
       }
         
-      await saveWord(note.word, note.audio, note.generated_notes);
-
+      const savedWord = await saveWord(note.word, note.audio, note.generated_notes);
+      note.word_id = savedWord.id;
+      
       return { success: true, data: note };
     } catch(e){
       if(e instanceof Error)
