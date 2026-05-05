@@ -126,7 +126,7 @@ export async function issueTokensForUser(email: string, userId: number) {
 
   (await cookies()).set('refreshToken', refreshToken, {
     httpOnly: true,
-    secure: true,
+    secure: (process.env.NODE_ENV !== "development" ? true : false),
     path: '/',
     sameSite: 'lax',
     maxAge: 60 * 60 * 24 * 7,
@@ -134,7 +134,7 @@ export async function issueTokensForUser(email: string, userId: number) {
 
   (await cookies()).set('accessToken', accessToken, {
     httpOnly: true,
-    secure: true,
+    secure: (process.env.NODE_ENV !== "development" ? true : false),
     path: '/',
     sameSite: 'lax',
     maxAge: 60 * 60 * 15,

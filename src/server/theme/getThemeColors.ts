@@ -19,15 +19,19 @@ export default async function getThemeColors() {
     }
 
     const {email, userId} = requireRes;
-    const user = await getThemeColorsByUserId(userId);
+    const userRes = await getThemeColorsByUserId(userId);
+    
+    if(!userRes){
+        return {success: false, data: DEFAULT_THEME_COLORS};
+    } 
     
     // if some school does not specify their colors, therefore this field might be null in database
-    if(!user || user?.schools.colors){
+    if(!userRes.schools.colors){
         return {success: false, data: DEFAULT_THEME_COLORS};
     }
 
 
-    return {success : true, data: user.schools.colors};
+    return {success : true, data: userRes.schools.colors};
 }
 
 

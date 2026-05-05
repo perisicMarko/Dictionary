@@ -122,7 +122,8 @@ export async function authenticateSignup(state: SignupActionState, formData: For
     // subscription is mocked with next line
     const oneYear = 1000 * 60 * 60 * 24 * 365;
 
-    const mock_subscription = await insertActivationKey(email, new Date(Date.now() + oneYear), 1);
+    // mock subscription
+    await insertActivationKey(email, new Date(Date.now() + oneYear), 1);
     // hardcoded 1, in production with school program subscription.school_id should always be valid and not null
     const status = await insertUser(name, lastName, email, password, 1);
 
@@ -179,7 +180,6 @@ export async function getUserByToken(token: Base64URLString) {
 export type LoginActionState = { success: boolean, errorMessage: string, status: number };
 
 export async function authenticateLogin(state: LoginActionState, formData: FormData) {
-
     const inputEmail = (formData.get('email') as FormDataEntryValue).toString() as string;
     const inputPassword = (formData.get('password') as FormDataEntryValue).toString() as string;
 
