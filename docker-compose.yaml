@@ -1,0 +1,31 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file: .env.container
+    volumes:
+      - .:/dictionary
+      - app_node_modules:/dictionary/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: dictionary
+      POSTGRES_PASSWORD: containerizedapp
+      POSTGRES_DB: dictionary_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U dictionary -d dictionary_db"]
+        interval: 5s
+        timeout: 3s
+        retries: 20
+
+volumes:
+  app_node_modules:
+  postgres_data:
