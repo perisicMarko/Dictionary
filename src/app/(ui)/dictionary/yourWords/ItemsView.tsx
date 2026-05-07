@@ -47,7 +47,7 @@ export default function YourWordsView({ notes, drawers, drawerNoteMapping }: { n
             {scrollToTop ? (
                 <div
                     title="Back to top"
-                    className="cursor-pointer fixed z-100 bottom-5 sm:right-4 right-0.5 rounded-2xl bg-main/80 p-3 text-text-main transition-all duration-200 hover:text-text-second enter-fade"
+                    className="cursor-pointer fixed z-100 bottom-5 sm:right-4 right-0.5 rounded-2xl bg-main/80 p-3 text-text-main hover:bg-main transition-all duration-200 hover:text-text-second enter-fade"
                     onClick={() => {
                         window.scrollTo({ top: 0, behavior: "smooth" });
                     }}

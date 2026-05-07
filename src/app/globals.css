@@ -14,6 +14,7 @@
 } */
 
 @layer utilities {
+
   /* WebKit scrollbar stil za sve elemente */
   ::-webkit-scrollbar {
     @apply w-2 h-2;
@@ -37,35 +38,38 @@
   @apply w-3/4 md:w-[600px];
 }
 
-.box-layout{
-  @apply  rounded-3xl w-3/4 sm:w-[600px] p-3 md:p-5 bg-main;
+.box-layout {
+  @apply rounded-3xl w-3/4 sm:w-[600px] p-3 md:p-5 bg-main;
 }
 
-.text-box{
+.text-box {
   @apply text-text-main text-center;
 }
 
-.collapse-window{
-  @apply absolute flex justify-end bg-second/80 top-0 w-full right-0 rounded-t-3xl pr-2; 
+.collapse-window {
+  @apply absolute flex justify-end bg-second/80 top-0 w-full right-0 rounded-t-3xl pr-2;
 }
 
-body{
+body {
   font-family: var(--font-roboto), sans-serif;
 }
 
-html, body {
+html,
+body {
   min-height: 100%;
+  scrollbar-gutter: stable;
 }
 
 select {
   @apply outline-0;
 }
 
-textarea, button {
+textarea,
+button {
   @apply active:outline-2 outline-second;
 }
 
-input{
+input {
   @apply active:outline-2 outline-second;
 }
 
@@ -84,6 +88,7 @@ input{
 .x-btn {
   @apply cursor-pointer mr-3 py-1 text-text-main hover:text-text-second transition-all;
 }
+
 .x-btn:hover {
   @apply xl:scale-150;
 }
@@ -113,31 +118,34 @@ input{
 }
 
 .background {
-  position: relative;
-  min-height: 100vh;
-  min-height: 100dvh;
+  width: 100%;
+  min-height: 100%;
   background-color: hsl(var(--second-color));
-  isolation: isolate;
 }
 
 .background::before {
   content: "";
   position: fixed;
   inset: 0;
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
   background-image: url("/app_bg.svg");
-  background-size: cover;
-  background-repeat: no-repeat;
+  background-repeat: repeat;
   background-position: center;
-  opacity: 0.3;
+  opacity: 0.2;
   z-index: -1;
-  pointer-events: none;
-  transform: translateZ(0);
-  will-change: transform;
-  backface-visibility: hidden;
 }
+
+@media screen and (max-width: 600px) {
+  .background::before {
+    background-size: contain;
+  }
+}
+
+@media screen and (min-width: 601px) {
+  .background::before {
+    background-size: 50%;
+  }
+}
+
 
 .white-spaces {
   white-space: pre-line;
@@ -146,6 +154,7 @@ input{
 .title {
   @apply text-center font-bold mt-3;
 }
+
 .title:hover {
   @apply underline;
 }
@@ -163,6 +172,7 @@ input{
     opacity: 0;
     transform: scale(0.95);
   }
+
   100% {
     opacity: 1;
     transform: scale(1);
@@ -178,6 +188,7 @@ input{
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
@@ -188,6 +199,7 @@ input{
     opacity: 0;
     transform: translateY(-15px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -211,6 +223,7 @@ input{
   0% {
     stroke-dashoffset: 0;
   }
+
   100% {
     stroke-dashoffset: -960;
   }
@@ -227,14 +240,17 @@ input{
     transform: scale(1) rotate(0deg);
     border-radius: 10%;
   }
+
   50% {
     transform: scale(2) rotate(90deg);
     border-radius: 10%;
   }
+
   75% {
     transform: scale(2) rotate(90deg);
     border-radius: 50%;
   }
+
   100% {
     transform: scale(1) rotate(0deg);
     border-radius: 10%;
@@ -245,11 +261,11 @@ input{
   animation: morph-loader 2s ease-in-out infinite;
 }
 
-.btn:hover{
+.btn:hover {
   @apply sm:scale-105;
 }
 
-.btn:active{
+.btn:active {
   @apply scale-95;
 }
 
