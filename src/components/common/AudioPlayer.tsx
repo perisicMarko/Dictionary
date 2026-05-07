@@ -3,9 +3,9 @@
 import { useRef } from "react";
 import { Volume2 } from "lucide-react";
 
-export default function AudioPlayer({ src }: { src: string }) {
+export default function AudioPlayer({ src }: { src: string | null}) {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const isDisabled = src.trim() === "";
+  const isDisabled = !src || src.trim() === "";
   const title = isDisabled
     ? "Sorry, no sound for this one."
     : "Click to hear it";
@@ -23,7 +23,7 @@ export default function AudioPlayer({ src }: { src: string }) {
   return (
     <button
       type="button"
-      className="primary-btn center bg-second disabled:opacity-50 disabled:cursor-not-allowed"
+      className="primary-btn center bg-second disabled:opacity-40 disabled:hover:!scale-100 disabled:cursor-not-allowed"
       title={title}
       onClick={handleClick}
       disabled={isDisabled}
