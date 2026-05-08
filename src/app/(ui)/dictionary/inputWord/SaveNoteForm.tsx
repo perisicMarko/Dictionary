@@ -5,7 +5,7 @@ import { TMeaning, TWordApp } from "@/shared/types";
 import { saveNotes } from "@/features/notes/application";
 import AudioPlayer from "@/components/common/AudioPlayer";
 import Loader from "@/components/common/Loader";
-import { fetchApiNotes } from "@/features/dictionary/application";
+import { generateWordNotes } from "@/features/dictionary/application";
 import DisplayNotes from "@/components/common/DisplayNotes";
 
 type ErrorNote = { error: string };
@@ -62,7 +62,7 @@ export default function SaveNoteForm({
         }
 
         setIsWordAdded(false);
-        const generatedNoteRes = await fetchApiNotes(normalizedWord);
+        const generatedNoteRes = await generateWordNotes(normalizedWord);
 
         if (generatedNoteRes && generatedNoteRes.success) {
           setNote(generatedNoteRes.data as TWordApp);
@@ -108,7 +108,7 @@ export default function SaveNoteForm({
   };
 
   return (
-    <div className="box-width mt-25 h-3/4 md:py-5 md-py-10 xl:py-16 sm:max-h-[400px] enter-fade">
+    <div className="box-width mt-25 h-3/4 md:py-5 md-py-10 xl:py-16 sm:max-h-100 enter-fade">
       <form
         action={handleSubmit}
         className="space-y-2 h-full bg-main rounded-3xl w-full p-6 enter-fade-up enter-delay-1"
@@ -116,7 +116,7 @@ export default function SaveNoteForm({
         <input
           value={word}
           ref={wordInputRef}
-          className="rounded-3xl text-center text-text-main w-full h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] p-2 mt-5"
+          className="rounded-3xl text-center text-text-main w-full h-8.75 sm:h-10 xl:h-12 p-2 mt-5"
           type="text"
           name="word"
           onChange={(e) => {
@@ -177,7 +177,7 @@ export default function SaveNoteForm({
             <button
               type="button"
               className={
-                "center bg-second text-text-main sm:hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block transition-all " +
+                "center bg-second text-text-main sm:hover:scale-105 active:scale-95 rounded-3xl m-1 h-8.75 sm:h-10 xl:h-12 cursor-pointer inline-block transition-all " +
                 (canSave ? "col-span-1" : "col-span-2") +
                 (!canGenerate ? " opacity-50" : "")
               }
@@ -191,7 +191,7 @@ export default function SaveNoteForm({
               <button
                 type="submit"
                 className={
-                  "bg-second center text-text-main sm:hover:scale-105 active:scale-95 rounded-3xl m-1 h-[35px] sm:h-[40px] md:h-[40px] xl:h-[48px] cursor-pointer inline-block col-span-1 transition-all " +
+                  "bg-second center text-text-main sm:hover:scale-105 active:scale-95 rounded-3xl m-1 h-8.75 sm:h-10 xl:h-12 cursor-pointer inline-block col-span-1 transition-all " +
                   (!canSave ? "opacity-50" : "")
                 }
                 hidden={!generatedMatchesCurrentWord}

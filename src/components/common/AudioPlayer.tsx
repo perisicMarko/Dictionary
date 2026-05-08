@@ -10,6 +10,9 @@ export default function AudioPlayer({ src }: { src: string | null}) {
     ? "Sorry, no sound for this one."
     : "Click to hear it";
 
+  // temp hack, all audios stored in the db should migrate to tts generated ones, but for the sake of not breaking audio for already stored words this is easy temporary solution
+  const srcUrl = src?.includes('http') ? src : `data:audio/mp3;base64,${src}`;
+
   function handleClick(e: React.MouseEvent<HTMLButtonElement>) {
     e.stopPropagation();
     if (isDisabled || !audioRef.current) {
@@ -23,12 +26,12 @@ export default function AudioPlayer({ src }: { src: string | null}) {
   return (
     <button
       type="button"
-      className="primary-btn center bg-second disabled:opacity-40 disabled:hover:!scale-100 disabled:cursor-not-allowed"
+      className="primary-btn center bg-second disabled:opacity-40 disabled:hover:scale-100! disabled:cursor-not-allowed"
       title={title}
       onClick={handleClick}
       disabled={isDisabled}
     >
-      {!isDisabled ? <audio src={src} ref={audioRef} className="inline-block" /> : null}
+      {!isDisabled ? <audio src={srcUrl} ref={audioRef} className="inline-block" /> : null}
       <Volume2
        color="white"
        className="inline-block"

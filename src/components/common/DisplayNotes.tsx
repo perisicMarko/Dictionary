@@ -28,7 +28,7 @@ export default function DisplayNotes({
               return (
                 <div
                   key={j}
-                  className="mt-2 border-second w-full border-1 p-2 sm:p-3 rounded-2xl"
+                  className="mt-2 border-second w-full border p-2 sm:p-3 rounded-2xl"
                 >
                   <div className="text-text-second w-full resize-none overflow-hidden mb-2">
                     <i><b>Definition:</b></i>{" "}

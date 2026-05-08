@@ -34,3 +34,20 @@ export async function saveWord(word: string, audio: string | undefined, meanings
     throw new Error(`saveWord failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
+
+export async function updateWordAudioById(wordId: number, audio: string){
+  try{
+    const res = await prisma.dictionary_words.update({
+      where: {
+        id: wordId
+      },
+      data: {
+        audio: audio,
+      }
+    });
+
+    return res;   
+  } catch (error) {
+    throw new Error(`updateWordAudioById failed: ${error instanceof Error ? error.message : String(error)}`);
+  }
+}

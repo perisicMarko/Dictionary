@@ -1,10 +1,48 @@
 'use server';
 import { TGPhonetic, TWordApp, TMeaning } from "@/shared/types";
-import { findWord, saveWord } from "@/features/dictionary/infrastructure/wordsRepository";
+import { findWord, saveWord, updateWordAudioById } from "@/features/dictionary/infrastructure/wordsRepository";
 import OpenAi from "openai";
+import { PollyClient, SynthesizeSpeechCommand } from "@aws-sdk/client-polly";
 
+async function fetchTTSforWord(word: string) {
+  const polly = new PollyClient({
+    region: "eu-central-1", // Europe (Frankfurt)
+    credentials: {
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+    }
+  });
 
-export async function fetchApiNotes(word : string){
+  const command = new SynthesizeSpeechCommand({
+    Text: word,
+    OutputFormat: "mp3",
+    VoiceId: "Emma",
+    Engine: "neural",
+  });
+
+  try {
+    const response = await polly.send(command);
+    if (!response.AudioStream) {
+      return { success: false, audio: null };
+    }
+
+    const audioBytes = await response.AudioStream.transformToByteArray();
+    return {
+      success: true,
+      audio: Buffer.from(audioBytes).toString('base64')
+    };
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(`TTS synthesis failed: ${error.message}`);
+    }
+  }
+}
+
+// this function is resposible for fetching word meanings and audio, but also it stores them in the database
+// but name of the function implies just the fetching part - maybe it should be split into two functions, one for fetching and one for saving, but on the other hand it is more efficient to do it in one function
+// because that saving call would be initiated on on the client side after fetching which is not something that should concern the client and also introduce unnecessary delay between until users see generated notes
+// also let's do not inform the client about the database part at all for the security reasons
+async function fetchApiWordMeanings(word: string) {
   const generateNotePrompt = `Return ONLY valid JSON.
 
 Input: one English word.
@@ -45,81 +83,112 @@ Rules:
 
 Word:`;
 
-  try{
-      const dbQueryRes = await findWord(word);
-      if(dbQueryRes){ // for sake of implementing guard for adding duplicate words on client side
-        const val : TWordApp = {
-          word: dbQueryRes.word,
-          audio: dbQueryRes.audio || '',
-          generated_notes: dbQueryRes.meanings as TMeaning[],
-          word_id: dbQueryRes.id
+  const deepSeekUrl = 'https://api.deepseek.com';
+  const openai = new OpenAi({
+    baseURL: deepSeekUrl,
+    apiKey: process.env.DEEPSEEK_API_KEY,
+  });
+
+
+  try {
+    const deepSeekResponse = await openai.chat.completions.create({
+      model: 'deepseek-v4-flash',
+      messages: [
+        {
+          role: 'user',
+          content: generateNotePrompt + " " + word
+
         }
+      ],
+      stream: false,
+      reasoning_effort: 'medium',
+      response_format: { type: "json_object" }
+    });
 
-        return { success: true, data: val};
+    try {
+      const dsJson = await JSON.parse(deepSeekResponse.choices[0].message.content || "");
+      if (!dsJson.success) {
+        return { success: false }; // when word is not valid english word
       }
-
-      const note : TWordApp = {
-        word: word,
-        audio: '',
-        generated_notes: [],
-        word_id: -1, // mock, when word is saved it would be updated with real id from database
-      };
-
-      const deepSeekUrl = 'https://api.deepseek.com';
-      const openai = new OpenAi({
-        baseURL: deepSeekUrl,
-        apiKey: process.env.DEEPSEEK_API_KEY,
-      });
-      const deepSeekResponse = await openai.chat.completions.create({
-        model: 'deepseek-v4-flash',
-        messages: [
-          {
-            role: 'user',
-            content: generateNotePrompt + " " + word
-          }
-        ],
-        stream: false,
-        reasoning_effort: 'medium',
-      });
-
-
-      try{
-        const dsJson = await JSON.parse(deepSeekResponse.choices[0].message.content || "");
-        if(!dsJson.success){
-          return { success: false };
-        }
-        note.generated_notes = dsJson.data[0].entries;
-      } catch(e){
-        throw new Error("Deep seek returned invalid json response.")
-      }
-
-
-      try{
-        // if word is not found in database, find pronunciation through on of the api
-        const freeDictApiResponse = await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + word);
-        if (freeDictApiResponse.ok) {
-          const rawApiData = (await freeDictApiResponse.json())[0]; // the data that api returns is one object in an array, hence [0]
-          
-          const audio = rawApiData.phonetics.filter((p: TGPhonetic) => p.audio != undefined && p.audio != '')[0]?.audio || undefined;
-          if(audio){
-            const API_KEY = process.env.API_KEY; 
-            
-            const pom = await fetch(`https://api.voicerss.org/?key=${API_KEY}&hl=en-gb&v=Alice&src=${word.trim().toLowerCase()}`);
-            
-            note.audio = pom.url;
-          }
-        }
-      } catch(e){
-        if(e instanceof Error)
-          throw new Error('Failed fetching api voice, message: ' + e.message); 
-      }
-        
-      const savedWord = await saveWord(note.word, note.audio, note.generated_notes);
-      note.word_id = savedWord.id;
-      
-      return { success: true, data: note };
-    } catch(e){
-      if(e instanceof Error)
-          throw new Error('Failed generating api notes, message: ' + e.message); 
+      return { success: true, data: dsJson.data[0].entries };
+    } catch (e) {
+      throw new Error("Deep seek returned invalid json response.")
     }
+  } catch (e) {
+    throw new Error(`Failed fetching notes from DeepSeek, message: ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+
+export async function generateWordNotes(word: string) {
+  try {
+    const dbQueryRes = await findWord(word);
+    if (dbQueryRes) { // for sake of implementing guard for adding duplicate words on client side
+      const val: TWordApp = {
+        word: dbQueryRes.word,
+        audio: dbQueryRes.audio || '',
+        generated_notes: dbQueryRes.meanings as TMeaning[],
+        word_id: dbQueryRes.id
+      }
+
+      if (!dbQueryRes.audio) {
+        const audioBase64 = await fetchTTSforWord(word);
+        if (audioBase64?.success) {
+          await updateWordAudioById(dbQueryRes.id, audioBase64.audio as string);
+        }
+        // if it fails to fetch audio, it should not break the flow of returning word meanings
+        // think about some fallback audio in case fetching fails
+        // e.g chron in the backgournd populating the database with tts generated audios for then already existing words
+      }
+      return { success: true, data: val };
+    }
+
+    const note: TWordApp = {
+      word: word,
+      audio: '',
+      generated_notes: [],
+      word_id: -1, // mock, when word is saved it would be updated with real id from database
+    };
+
+    // try{
+    //   // if word is not found in database, find pronunciation through on of the api
+    //   const freeDictApiResponse = await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + word);
+    //   if (freeDictApiResponse.ok) {
+    //     const rawApiData = (await freeDictApiResponse.json())[0]; // the data that api returns is one object in an array, hence [0]
+
+    //     const audio = rawApiData.phonetics.filter((p: TGPhonetic) => p.audio != undefined && p.audio != '')[0]?.audio || undefined;
+    //     if(audio){
+    //       const API_KEY = process.env.API_KEY; 
+
+    //       const pom = await fetch(`https://api.voicerss.org/?key=${API_KEY}&hl=en-gb&v=Alice&src=${word.trim().toLowerCase()}`);
+
+    //       note.audio = pom.url;
+    //     }
+    //   }
+    // } catch(e){
+    //   if(e instanceof Error)
+    //     throw new Error('Failed fetching api voice, message: ' + e.message); 
+    // }
+
+    const apiNotesRes = await fetchApiWordMeanings(word);
+    if (!apiNotesRes.success) {
+      return { success: false };
+    }
+    note.generated_notes = apiNotesRes.data as TMeaning[];
+
+
+    const audioBase64 = await fetchTTSforWord(word);
+    if (audioBase64?.success) {
+      note.audio = audioBase64.audio as string;
+    }
+
+    const savedWord = await saveWord(note.word, note.audio, note.generated_notes);
+    note.word_id = savedWord.id;
+
+    return { success: true, data: note };
+
+  } catch (e) {
+    if (e instanceof Error)
+      throw new Error('Failed generating api notes, message: ' + e.message);
+  }
 }
