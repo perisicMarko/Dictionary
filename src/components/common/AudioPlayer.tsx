@@ -5,12 +5,14 @@ import { Volume2 } from "lucide-react";
 
 export default function AudioPlayer({ src }: { src: string | null}) {
   const audioRef = useRef<HTMLAudioElement>(null);
+  // todo: this check if src is null should be removed, when schema changes to audio storing bytes, server will serve encoded bytes as base64 string
+  // and when there is not audio in the database src will be empty string, so this check will return to its previous stat: src.empty() or src.trim() === ""
   const isDisabled = !src || src.trim() === "";
   const title = isDisabled
     ? "Sorry, no sound for this one."
     : "Click to hear it";
 
-  // temp hack, all audios stored in the db should migrate to tts generated ones, but for the sake of not breaking audio for already stored words this is easy temporary solution
+  // todo: temp hack, all audios stored in the db should migrate to tts generated ones, but for the sake of not breaking audio for already stored words this is easy temporary solution
   const srcUrl = src?.includes('http') ? src : `data:audio/mp3;base64,${src}`;
 
   function handleClick(e: React.MouseEvent<HTMLButtonElement>) {

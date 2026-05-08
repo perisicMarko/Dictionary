@@ -38,10 +38,12 @@ async function fetchTTSforWord(word: string) {
   }
 }
 
-// this function is resposible for fetching word meanings and audio, but also it stores them in the database
-// but name of the function implies just the fetching part - maybe it should be split into two functions, one for fetching and one for saving, but on the other hand it is more efficient to do it in one function
-// because that saving call would be initiated on on the client side after fetching which is not something that should concern the client and also introduce unnecessary delay between until users see generated notes
-// also let's do not inform the client about the database part at all for the security reasons
+/*
+ this function is resposible for fetching word meanings and audio, but also it stores them in the database
+ but name of the function implies just the fetching part - maybe it should be split into two functions, one for fetching and one for saving, but on the other hand it is more efficient to do it in one function
+ because that saving call would be initiated on on the client side after fetching which is not something that should concern the client and also introduce unnecessary delay between until users see generated notes
+ also let's do not inform the client about the database part at all for the security reasons
+*/
 async function fetchApiWordMeanings(word: string) {
   const generateNotePrompt = `Return ONLY valid JSON.
 
@@ -149,26 +151,6 @@ export async function generateWordNotes(word: string) {
       generated_notes: [],
       word_id: -1, // mock, when word is saved it would be updated with real id from database
     };
-
-    // try{
-    //   // if word is not found in database, find pronunciation through on of the api
-    //   const freeDictApiResponse = await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + word);
-    //   if (freeDictApiResponse.ok) {
-    //     const rawApiData = (await freeDictApiResponse.json())[0]; // the data that api returns is one object in an array, hence [0]
-
-    //     const audio = rawApiData.phonetics.filter((p: TGPhonetic) => p.audio != undefined && p.audio != '')[0]?.audio || undefined;
-    //     if(audio){
-    //       const API_KEY = process.env.API_KEY; 
-
-    //       const pom = await fetch(`https://api.voicerss.org/?key=${API_KEY}&hl=en-gb&v=Alice&src=${word.trim().toLowerCase()}`);
-
-    //       note.audio = pom.url;
-    //     }
-    //   }
-    // } catch(e){
-    //   if(e instanceof Error)
-    //     throw new Error('Failed fetching api voice, message: ' + e.message); 
-    // }
 
     const apiNotesRes = await fetchApiWordMeanings(word);
     if (!apiNotesRes.success) {
