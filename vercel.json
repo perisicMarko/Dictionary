@@ -5,8 +5,12 @@
         "schedule": "0 11 * * *"
       },
       {
-        "path" : "/api/deleteUnverifiedUsers",
-        "schedule": "0 0 * * *"
+        "path": "/api/deleteUnverifiedUsers",
+        "schedule": "0 0 * * 4"
+      },
+      {
+        "path": "/api/dictionary/populateDictionaryNulls",
+        "schedule": "0 0 * * 5"
       }
     ]
 }
