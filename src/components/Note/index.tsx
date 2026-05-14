@@ -28,14 +28,14 @@ export default function Note({
 
   return (
     <div
-      className="relative box-layout !p-4 max-h-[720px] sm:max-h-[800px] mt-8 enter-fade"
+      className="relative box-layout p-4! max-h-180 sm:max-h-200 mt-8 enter-fade"
       title={containerTitle}
       onClick={() => {
         setMenu(false);
       }}
     >
       <div
-        className="absolute flex flex-col items-center top-3.5 right-0 rounded-2xl w-[100px]"
+        className="absolute flex flex-col items-center top-3.5 right-0 rounded-2xl w-25"
         title="Menu"
       >
         <button

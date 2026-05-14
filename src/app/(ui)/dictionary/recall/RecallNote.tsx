@@ -27,13 +27,13 @@ export default function RecallNote({
 
   return (
     <div
-      className="relative max-h-[800px] mt-8 box-layout !p-7 center-vertically"
+      className="relative max-h-200 mt-8 box-layout p-7! center-vertically"
       onClick={() => {
         setIsMenuOpened(false);
       }}
     >
       <div
-        className="absolute right-0 top-5 flex flex-col items-center rounded-2xl w-[100px]"
+        className="absolute right-0 top-5 flex flex-col items-center rounded-2xl w-25"
         title="Menu"
       >
         <button
@@ -64,7 +64,7 @@ export default function RecallNote({
       {isShowNotes ? (
         <>
           <AudioPlayer src={note.dictionary_words.audio}></AudioPlayer>
-          <div className="p-1 h-[300px] xl:h-[400px] overflow-auto enter-fade-up enter-delay-1 w-full">
+          <div className="p-1 h-75 xl:h-100 overflow-auto enter-fade-up enter-delay-1 w-full">
             <h2 className="my-2 text-text-main">
               <b>Your notes:</b>
             </h2>
