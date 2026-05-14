@@ -19,7 +19,7 @@ export async function findWord(word : string) {
   }
 }
 
-export async function saveWord(word: string, audio: string | undefined, meanings: TMeaning[]) {
+export async function saveWord(word: string, audio: Uint8Array<ArrayBuffer> | null, meanings: TMeaning[]) {
   try{
     const res = await prisma.dictionary_words.create({
       data: {
@@ -35,7 +35,7 @@ export async function saveWord(word: string, audio: string | undefined, meanings
   }
 }
 
-export async function updateWordAudioById(wordId: number, audio: string){
+export async function updateWordAudioById(wordId: number, audio: Uint8Array<ArrayBuffer>){
   try{
     const res = await prisma.dictionary_words.update({
       where: {

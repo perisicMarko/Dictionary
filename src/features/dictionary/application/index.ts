@@ -1,5 +1,5 @@
 'use server';
-import { TGPhonetic, TWordApp, TMeaning } from "@/shared/types";
+import { TWordApp, TMeaning } from "@/shared/types";
 import { findWord, saveWord, updateWordAudioById } from "@/features/dictionary/infrastructure/wordsRepository";
 import OpenAi from "openai";
 import { PollyClient, SynthesizeSpeechCommand } from "@aws-sdk/client-polly";
@@ -23,19 +23,21 @@ async function fetchTTSforWord(word: string) {
   try {
     const response = await polly.send(command);
     if (!response.AudioStream) {
-      return { success: false, audio: null };
+      return { success: false, data: null };
     }
 
     const audioBytes = await response.AudioStream.transformToByteArray();
     return {
       success: true,
-      audio: Buffer.from(audioBytes).toString('base64')
+      data: new Uint8Array(audioBytes)
     };
   } catch (error) {
     if (error instanceof Error) {
-      throw new Error(`TTS synthesis failed: ${error.message}`);
+      console.info(`TTS synthesis failed: ${error.message}`);
     }
   }
+
+  return { success: false, data: null };
 }
 
 /*
@@ -121,47 +123,48 @@ Word:`;
   }
 }
 
-
 export async function generateWordNotes(word: string) {
   try {
     const dbQueryRes = await findWord(word);
     if (dbQueryRes) { // for sake of implementing guard for adding duplicate words on client side
-      const val: TWordApp = {
+      const dbWord: TWordApp = {
         word: dbQueryRes.word,
-        audio: dbQueryRes.audio || '',
+        audio: dbQueryRes.audio, // todo change the schema in database to store bytes
         generated_notes: dbQueryRes.meanings as TMeaning[],
         word_id: dbQueryRes.id
       }
 
       if (!dbQueryRes.audio) {
-        const audioBase64 = await fetchTTSforWord(word);
-        if (audioBase64?.success) {
-          await updateWordAudioById(dbQueryRes.id, audioBase64.audio as string);
+        const ttsRes = await fetchTTSforWord(word);
+        if (ttsRes.success) {
+          dbWord.audio = ttsRes.data;
+          await updateWordAudioById(dbQueryRes.id, Buffer.from(ttsRes.data as Uint8Array));
         }
+        // todo
         // if it fails to fetch audio, it should not break the flow of returning word meanings
         // think about some fallback audio in case fetching fails
-        // e.g chron in the backgournd populating the database with tts generated audios for then already existing words
+        // e.g cron in the backgournd populating the database with tts generated audios for then already existing words
       }
-      return { success: true, data: val };
+      return { success: true, data: dbWord };
     }
 
     const note: TWordApp = {
       word: word,
-      audio: '',
+      audio: null,
       generated_notes: [],
       word_id: -1, // mock, when word is saved it would be updated with real id from database
     };
 
     const apiNotesRes = await fetchApiWordMeanings(word);
     if (!apiNotesRes.success) {
-      return { success: false };
+      return { success: false, data: null };
     }
     note.generated_notes = apiNotesRes.data as TMeaning[];
 
 
-    const audioBase64 = await fetchTTSforWord(word);
-    if (audioBase64?.success) {
-      note.audio = audioBase64.audio as string;
+    const ttsRes = await fetchTTSforWord(word);
+    if (ttsRes.success) {
+      note.audio = ttsRes.data;
     }
 
     const savedWord = await saveWord(note.word, note.audio, note.generated_notes);
@@ -173,4 +176,6 @@ export async function generateWordNotes(word: string) {
     if (e instanceof Error)
       throw new Error('Failed generating api notes, message: ' + e.message);
   }
+
+  return { success: false, data: null };
 }

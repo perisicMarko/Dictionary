@@ -19,36 +19,6 @@ export type TStudent = {
   keyExpirationDate: Date;
 }
 
-export type TGPhonetic = {
-  text?: string;
-  audio?: string;
-  sourceUrl?: string;
-  license?: {
-    name: string;
-    url: string;
-  };
-};
-
-export type TGMeaning = {
-  partOfSpeech: string;
-  definitions: {
-    definition: string;
-    examples: string[];
-    synonyms: string[];
-    antonyms: string[];
-  }[];
-};
-
-export type TGeneratedNote = {
-  word: string;
-  phonetics: TGPhonetic[];
-  meanings: TMeaning[];
-  license: {
-    name: string;
-    url: string;
-  };
-  sourceUrls: string[];
-};
 
 export type TDefinition = {
   definition: string;
@@ -64,7 +34,7 @@ export type TMeaning = {
 
 export type TWordApp = {
   word: string;
-  audio: string;
+  audio: Uint8Array<ArrayBuffer> | null; // todo_note: it can be null in the database, in future cron job will fill audios that are missing
   generated_notes: TMeaning[];
   word_id: number;
 };

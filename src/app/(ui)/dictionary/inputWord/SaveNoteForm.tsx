@@ -82,8 +82,10 @@ export default function SaveNoteForm({
     }
 
     const res = await saveNotes(
-      formData.get("word")?.toString().toLowerCase() as string,
-      formData.get("audio")?.toString() as string,
+      note.word,
+      note.audio,
+      // formData.get("word")?.toString().toLowerCase() as string,
+      // formData.get("audio")?.toString() as string,
       formData.get("userNotes")?.toString() as string,
       note.generated_notes as TMeaning[],
       note.word_id as number
@@ -130,13 +132,14 @@ export default function SaveNoteForm({
         {error ? <p className="error mt-1 text-center">{error}</p> : null}
 
         <div className="flex justify-start w-full mt-2">
-          <input
+          {/* should be deleted maybe */}
+          {/* <input
             type="text"
             hidden
             name="audio"
-            value={isErrorNote(note) || note === null ? "" : note.audio}
+            value={!isErrorNote(note) && note ? note.audio : null}
             readOnly
-          />
+          /> */}
           {note && !isErrorNote(note) && note.generated_notes ? (
             <div className="w-full">
               <AudioPlayer src={note.audio} />

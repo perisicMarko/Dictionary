@@ -19,7 +19,7 @@ export async function getUsersWords() {
   return { success: true, data: words };
 }
 
-export async function saveNotes(word: string, audio: string, user_notes: string, generated_notes: TMeaning[], wordId: number) {
+export async function saveNotes(word: string, audio: Uint8Array<ArrayBuffer> | null, user_notes: string, generated_notes: TMeaning[], wordId: number) {
   const user = await requireAuthenticatedUser();
   if (!user) {
     await logOutUser();

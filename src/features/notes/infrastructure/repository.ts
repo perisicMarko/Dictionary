@@ -65,7 +65,7 @@ export async function findUserWordTexts(userId: number) {
   }
 }
 
-export async function createUserNote(userId: number, word: string, audio: string, user_notes: string, generated_notes: TMeaning[], wordId: number) {
+export async function createUserNote(userId: number, word: string, audio: Uint8Array<ArrayBuffer> | null, user_notes: string, generated_notes: TMeaning[], wordId: number) {
   try {
     const newNotes = await prisma.notes.create({
       data: {
@@ -186,7 +186,7 @@ export async function resetNoteReviewFactorsById(noteId: number, days: number, r
   }
 }
 
-export async function restoreNotes(noteId: number, audio: string) {
+export async function restoreNotes(noteId: number, audio: Uint8Array<ArrayBuffer> | null) {
 
   try {
     const res = await prisma.dictionary_words.updateMany({ where: { id: noteId }, data: { audio: audio } });
