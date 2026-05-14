@@ -1,10 +1,11 @@
 'use server';
 import { TWordApp, TMeaning } from "@/shared/types";
-import { findWord, saveWord, updateWordAudioById } from "@/features/dictionary/infrastructure/wordsRepository";
+import { findWord, saveWord, updateWordAudioByWordId } from "@/features/dictionary/infrastructure/wordsRepository";
 import OpenAi from "openai";
 import { PollyClient, SynthesizeSpeechCommand } from "@aws-sdk/client-polly";
 
-async function fetchTTSforWord(word: string) {
+// exported because cron job for filling out missing audios is using this function
+export async function fetchTTSforWord(word: string) {
   const polly = new PollyClient({
     region: "eu-central-1", // Europe (Frankfurt)
     credentials: {
@@ -138,7 +139,7 @@ export async function generateWordNotes(word: string) {
         const ttsRes = await fetchTTSforWord(word);
         if (ttsRes.success) {
           dbWord.audio = ttsRes.data;
-          await updateWordAudioById(dbQueryRes.id, Buffer.from(ttsRes.data as Uint8Array));
+          await updateWordAudioByWordId(dbQueryRes.id, Buffer.from(ttsRes.data as Uint8Array));
         }
         // todo
         // if it fails to fetch audio, it should not break the flow of returning word meanings

@@ -34,15 +34,6 @@ export async function findAllNotes() {
   }
 }
 
-export async function findAllWords() {
-  try {
-    const res = await prisma.dictionary_words.findMany({});
-    return res;
-  } catch (error) {
-    throw new Error(`findAllWords failed: ${error instanceof Error ? error.message : String(error)}`);
-  }
-}
-
 export async function findUserWordTexts(userId: number) {
   try {
     const res = await prisma.notes.findMany({
@@ -85,7 +76,7 @@ export async function createUserNote(userId: number, word: string, audio: Uint8A
       throw new Error("Failed to import users note.");
 
     return newNotes;
-    
+
   } catch (error) {
     throw new Error(`createUserNote failed: ${error instanceof Error ? error.message : String(error)}`);
   }
@@ -183,16 +174,5 @@ export async function resetNoteReviewFactorsById(noteId: number, days: number, r
     return res;
   } catch (error) {
     throw new Error(`resetNoteReviewFactors failed: ${error instanceof Error ? error.message : String(error)}`);
-  }
-}
-
-export async function restoreNotes(noteId: number, audio: Uint8Array<ArrayBuffer> | null) {
-
-  try {
-    const res = await prisma.dictionary_words.updateMany({ where: { id: noteId }, data: { audio: audio } });
-
-    return res;
-  } catch (error) {
-    throw new Error(`restoreNotes failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }

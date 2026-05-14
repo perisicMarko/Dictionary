@@ -66,7 +66,7 @@ export type TNoteApp = {
   dictionary_words: {
     word: string;
     meanings: TMeaning[];
-    audio: string;
+    audio: Uint8Array<ArrayBuffer>;
   };
 };
 

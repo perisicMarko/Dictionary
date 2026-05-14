@@ -35,7 +35,7 @@ export async function saveWord(word: string, audio: Uint8Array<ArrayBuffer> | nu
   }
 }
 
-export async function updateWordAudioById(wordId: number, audio: Uint8Array<ArrayBuffer>){
+export async function updateWordAudioByWordId(wordId: number, audio: Uint8Array<ArrayBuffer> | null){
   try{
     const res = await prisma.dictionary_words.update({
       where: {
@@ -48,6 +48,16 @@ export async function updateWordAudioById(wordId: number, audio: Uint8Array<Arra
 
     return res;   
   } catch (error) {
-    throw new Error(`updateWordAudioById failed: ${error instanceof Error ? error.message : String(error)}`);
+    throw new Error(`updateWordAudioByWordId failed: ${error instanceof Error ? error.message : String(error)}`);
+  }
+}
+
+
+export async function findAllWords() {
+  try {
+    const res = await prisma.dictionary_words.findMany({});
+    return res;
+  } catch (error) {
+    throw new Error(`findAllWords failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
