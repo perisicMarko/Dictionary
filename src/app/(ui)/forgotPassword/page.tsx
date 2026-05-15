@@ -11,7 +11,7 @@ export default function ForgotPassword() {
   return (
     <div className="box-layout mt-20 center-vertically md:mt-30 p-1 xl:mt-50 enter-fade">
       {state?.success === true && (
-        <div className="box-layout absolute top-auto left-auto h-[200px] sm:h-[250px] center-vertically z-20 enter-fade-up enter-delay-1">
+        <div className="box-layout absolute top-auto left-auto h-50 sm:h-62.5 center-vertically z-20 enter-fade-up enter-delay-1">
           <span className="text-center text-text-main">
             Email with instructions has been sent, please check your email<br/>
             <b className="text-text-second">(it may ends up in spam).</b>

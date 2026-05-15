@@ -27,7 +27,7 @@ export default function RecallNote({
 
   return (
     <div
-      className="relative max-h-200 mt-8 box-layout p-7! center-vertically"
+      className="relative max-h-200 mt-8 box-layout p-6! center-vertically"
       onClick={() => {
         setIsMenuOpened(false);
       }}

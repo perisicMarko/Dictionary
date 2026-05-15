@@ -8,6 +8,12 @@
   acessible, but also from my experience i do not need the pronunciation feature that much so statistically it could be a good trade-off between size overhead of all the notes that are fetched, but this is something to think about it
   
 
+# background
+- it is obvious that the bg is just repeated, shuffle it a bit
+  
+# ui 
+- notes on the recall for desktop and phones have slightly bigger padding than the notes in your words and history page
+
 # unit testing
 - legacy tests are erased
 - files are just left as a placeholders, so unit test should be written for the whole app

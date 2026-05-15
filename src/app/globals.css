@@ -160,7 +160,7 @@ input {
 }
 
 .navigation-btn {
-  @apply text-[14px] xl:text-[16px] cursor-pointer transition-all duration-200;
+  @apply text-sm xl:text-base cursor-pointer transition-all duration-200;
 }
 
 .navigation-btn:hover {

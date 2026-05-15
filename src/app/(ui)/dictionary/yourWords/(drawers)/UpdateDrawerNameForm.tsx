@@ -90,7 +90,7 @@ export default function UpdateDrawerNameForm({
             ${(isInvalidDrawerName ? " opacity-50" : "")}`}
           disabled={isInvalidDrawerName || isUpdating}
         >
-          <span className="h-[20px] center">
+          <span className="h-5 center">
             {isUpdating ? <Loader /> : "Update name"}
           </span>
         </button>

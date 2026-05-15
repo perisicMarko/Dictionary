@@ -48,7 +48,7 @@ export default function EditNotePage({
             name="userNotes"
             id="userNotes"
             defaultValue={note.user_notes}
-            className="bg-white/5 rounded-3xl h-[350px] sm-h-[500px] resize-none block w-full p-5 text-text-second"
+            className="bg-white/5 rounded-3xl h-87.5 sm:h-125 resize-none block w-full p-5 text-text-second"
           ></textarea>
         </div>
 

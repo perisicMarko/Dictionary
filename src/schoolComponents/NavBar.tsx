@@ -34,7 +34,7 @@ export default function NavBar() {
 
   return (
     <nav
-      className={`fixed top-0 z-20 bg-main w-full h-[50px] grid grid-cols-[auto_1fr] items-center transition-transform transition-opacity duration-300 ${
+      className={`fixed top-0 z-20 bg-main w-full h-12.5 grid grid-cols-[auto_1fr] items-center transition-transform transition-opacity duration-300 ${
         isVisible ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
       }`}
     >

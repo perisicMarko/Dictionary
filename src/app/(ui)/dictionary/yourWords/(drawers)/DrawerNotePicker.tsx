@@ -77,7 +77,7 @@ export default function DrawerNotePicker({
         }`}
         disabled={!isValidWord || normalizedValue === "" || isImporting}
       >
-        <span className="h-[20px] center">
+        <span className="h-5 center">
           {isImporting ? <Loader /> : "Put in drawer"}
         </span>
       </button>

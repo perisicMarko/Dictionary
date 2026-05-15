@@ -69,12 +69,12 @@ export default function SubscriptionComponent({
           <>
             <h2 className="text-text-main mt-3">Edit key email address:</h2>
             <input
-              className="w-full text-text-main rounded-3xl border-2 py-1 px-2 !my-2 border-white h-[38px]"
+              className="w-full text-text-main rounded-3xl border-2 py-1 px-2 my-2! border-white h-9.5"
               value={newSubscriptionEmail}
               onChange={(e) => setNewSubscriptionEmail(e.target.value)}
             ></input>
             <button
-              className={`primary-btn !h-[38px] ${
+              className={`primary-btn h-9.5! ${
                 newSubscriptionEmail.trim() === subscription.email
                   ? " opacity-50"
                   : ""

@@ -79,7 +79,7 @@ export function NavBar() {
   return (
     <>
       {isVisible && isNavigationRoute && (
-        <nav className="hidden fixed top-0 z-50 bg-main w-full h-[50px] sm:grid grid-cols-[auto_1fr] items-center transition-all enter-fade">
+        <nav className="hidden fixed top-0 z-50 bg-main w-full h-12.5 sm:grid grid-cols-[auto_1fr] items-center transition-all enter-fade">
           <div className="flex justify-start items-center ml-3 md:ml-7 enter-fade-up enter-delay-1">
             <button
               type="submit"
@@ -110,7 +110,7 @@ export function NavBar() {
       {isNavigationRoute && isVisible && (
         <div
           ref={mobileMenuRef}
-          className="fixed top-0 z-50 bg-main w-full min-h-[50px] gap-2 transition-all sm:hidden py-2 enter-fade"
+          className="fixed top-0 z-50 bg-main w-full min-h-12.5 gap-2 transition-all sm:hidden py-2 enter-fade"
         >
           <div
             className={

@@ -98,7 +98,7 @@ export default function SchoolLoginView() {
         </div>
         <div className="center my-1 enter-fade-up enter-delay-1">
           <Link
-            className="flex items-start justify-end text-text-main hover:text-text-second text-[14px] sm:text-[18px]"
+            className="flex items-start justify-end text-text-main hover:text-text-second text-sm sm:text-lg"
             href="/school/signup"
           >
             <b>Sign up here</b>

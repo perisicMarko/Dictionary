@@ -48,7 +48,7 @@ export function GradeRecallForm({
           });
         }}
       >
-        <label htmlFor="recall" className="text-text-main text-[16px] sm:text-xl">
+        <label htmlFor="recall" className="text-text-main text-base sm:text-xl">
           Remember this word?
         </label>
         <div className="center relative w-full">

@@ -28,7 +28,7 @@ export default function StudentComponent({ student }: { student: TStudent }) {
       className="box-layout relative enter-fade"
     >
       {/* <div
-        className="absolute right-0 top-5 flex flex-col items-center rounded-2xl w-[100px]"
+        className="absolute right-0 top-5 flex flex-col items-center rounded-2xl w-25"
         title="Menu"
       >
         {dropMenu ? (

@@ -53,7 +53,7 @@ function DrawerCreatorView({
     normalizedDrawerName !== "" && !isDuplicateDrawerName;
 
   return (
-    <div className="box-layout mt-5 h-[100px] center-vertically gap-2 relative enter-fade">
+    <div className="box-layout mt-5 h-25 center-vertically gap-2 relative enter-fade">
       {isOpen ? (
         <>
           <button
@@ -79,7 +79,7 @@ function DrawerCreatorView({
             />
             <button
               type="submit"
-              className={`primary-btn !h-[30px] !xl:h-[38px] center p-2 ${!isValidDrawerName ? "opacity-50" : ""
+              className={`primary-btn !h-7.5 !xl:h-9.5 center p-2 ${!isValidDrawerName ? "opacity-50" : ""
                 }`}
               disabled={!isValidDrawerName || isPending}
             >

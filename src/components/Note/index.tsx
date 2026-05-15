@@ -28,14 +28,14 @@ export default function Note({
 
   return (
     <div
-      className="relative box-layout p-4! max-h-180 sm:max-h-200 mt-8 enter-fade"
+      className="relative box-layout p-6! max-h-180 sm:max-h-200 mt-8 enter-fade"
       title={containerTitle}
       onClick={() => {
         setMenu(false);
       }}
     >
       <div
-        className="absolute flex flex-col items-center top-3.5 right-0 rounded-2xl w-25"
+        className="absolute flex flex-col items-center top-6 right-0 rounded-2xl w-25"
         title="Menu"
       >
         <button
@@ -64,7 +64,7 @@ export default function Note({
           ))}
       </div>
 
-      <h2 className="text-text-main mb-3 select-none ml-2 mt-1" title="word">
+      <h2 className="text-text-main mb-1 select-none ml-2 mt-1" title="word">
         <b>{note.dictionary_words.word}</b>
       </h2>
       <div className="center-vertically space-y-2 ">
@@ -97,7 +97,7 @@ export default function Note({
         </button>
       </div>
       {drop && (
-        <div className="space-y-2 mt-2 justify-center overflow-auto items-center h-[200px] md:h-[250px] xl:h-[400px] p-1 enter-fade-up enter-delay-1">
+        <div className="space-y-2 mt-2 justify-center overflow-auto items-center h-50 md:h-62.5 xl:h-100 p-1 enter-fade-up enter-delay-1">
           <h2 className="mt-2 text-text-second">
             <b>Your notes:</b>
           </h2>

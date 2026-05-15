@@ -46,7 +46,7 @@ export default async function Home() {
 
         <div className="relative z-10 w-full center-vertically enter-fade-up enter-delay-1">
           <Link
-            className="flex justify-end text-text-main hover:text-text-second text-[14px] mb-2 sm:text-[18px] transition-all"
+            className="flex justify-end text-text-main hover:text-text-second text-sm mb-2 sm:text-lg transition-all"
             href="/about"
           >
             About the app
@@ -56,13 +56,13 @@ export default async function Home() {
           </Link>
           <div className="grid grid-cols-2 w-full mt-3">
             <Link
-              className="flex items-start justify-start text-text-main hover:text-text-second text-[14px] sm:text-[18px] transition-all"
+              className="flex items-start justify-start text-text-main hover:text-text-second text-sm sm:text-lg transition-all"
               href="/signup"
             >
               Sign up
             </Link>
             <Link
-              className="flex items-start justify-end text-text-main hover:text-text-second text-[14px] sm:text-[18px] transition-all"
+              className="flex items-start justify-end text-text-main hover:text-text-second text-sm sm:text-lg transition-all"
               href="/forgotPassword"
             >
               Forgot password?
