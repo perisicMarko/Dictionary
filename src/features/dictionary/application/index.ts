@@ -47,7 +47,10 @@ export async function fetchTTSforWord(word: string) {
  because that saving call would be initiated on on the client side after fetching which is not something that should concern the client and also introduce unnecessary delay between until users see generated notes
  also let's do not inform the client about the database part at all for the security reasons
 */
-async function fetchApiWordMeanings(word: string) {
+// returns { success: boolean, data: null | TWordApp } | null
+// null if api fails
+// success: false if the word is not valid english word
+async function fetchApiMeaningsforWord(word: string) {
   const generateNotePrompt = `Return ONLY valid JSON.
 
 Input: one English word.
@@ -94,89 +97,80 @@ Word:`;
     apiKey: process.env.DEEPSEEK_API_KEY,
   });
 
+  const maxAttempts = 2; // initial request + 1 retry
 
-  try {
-    const deepSeekResponse = await openai.chat.completions.create({
-      model: 'deepseek-v4-flash',
-      messages: [
-        {
-          role: 'user',
-          content: generateNotePrompt + " " + word
-
-        }
-      ],
-      stream: false,
-      reasoning_effort: 'medium',
-      response_format: { type: "json_object" }
-    });
-
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
-      const dsJson = await JSON.parse(deepSeekResponse.choices[0].message.content || "");
+      const deepSeekResponse = await openai.chat.completions.create({
+        model: 'deepseek-v4-flash',
+        messages: [
+          {
+            role: 'user',
+            content: generateNotePrompt + " " + word
+          }
+        ],
+        stream: false,
+        reasoning_effort: 'medium',
+        response_format: { type: "json_object" }
+      });
+
+      const dsJson = JSON.parse(deepSeekResponse.choices[0].message.content || "");
       if (!dsJson.success) {
-        return { success: false }; // when word is not valid english word
+        return { success: false, data: null, message: "This word is not supported. Please check your spelling." };
       }
-      return { success: true, data: dsJson.data[0].entries };
+
+      // this should be validated at the runtime, because ts cannot vouch that this would be TMeaning[]
+      const entries = dsJson?.data?.[0]?.entries as TMeaning[];
+      return { success: true, data: entries };
     } catch (e) {
-      throw new Error("Deep seek returned invalid json response.")
+      if (attempt < maxAttempts) {
+        await new Promise((resolve) => setTimeout(resolve, 350));
+      }
     }
-  } catch (e) {
-    throw new Error(`Failed fetching notes from DeepSeek, message: ${e instanceof Error ? e.message : String(e)}`);
   }
+
+  return { success: false, data: null, message: "Notes can not be generated right now. Please try again later."};
 }
 
 export async function generateWordNotes(word: string) {
-  try {
-    const dbQueryRes = await findWord(word);
-    if (dbQueryRes) { // for sake of implementing guard for adding duplicate words on client side
-      const dbWord: TWordApp = {
-        word: dbQueryRes.word,
-        audio: dbQueryRes.audio, // todo change the schema in database to store bytes
-        generated_notes: dbQueryRes.meanings as TMeaning[],
-        word_id: dbQueryRes.id
-      }
-
-      if (!dbQueryRes.audio) {
-        const ttsRes = await fetchTTSforWord(word);
-        if (ttsRes.success) {
-          dbWord.audio = ttsRes.data;
-          await updateWordAudioByWordId(dbQueryRes.id, Buffer.from(ttsRes.data as Uint8Array));
-        }
-        // todo
-        // if it fails to fetch audio, it should not break the flow of returning word meanings
-        // think about some fallback audio in case fetching fails
-        // e.g cron in the backgournd populating the database with tts generated audios for then already existing words
-      }
-      return { success: true, data: dbWord };
+  const dbQueryRes = await findWord(word);
+  if (dbQueryRes) {
+    const dbWord: TWordApp = {
+      word: dbQueryRes.word,
+      audio: dbQueryRes.audio,
+      generated_notes: dbQueryRes.meanings as TMeaning[],
+      word_id: dbQueryRes.id
     }
 
-    const note: TWordApp = {
-      word: word,
-      audio: null,
-      generated_notes: [],
-      word_id: -1, // mock, when word is saved it would be updated with real id from database
-    };
-
-    const apiNotesRes = await fetchApiWordMeanings(word);
-    if (!apiNotesRes.success) {
-      return { success: false, data: null };
+    if (!dbQueryRes.audio) {
+      const ttsRes = await fetchTTSforWord(word);
+      if (ttsRes.success) {
+        dbWord.audio = ttsRes.data;
+        await updateWordAudioByWordId(dbQueryRes.id, Buffer.from(ttsRes.data as Uint8Array));
+      }
     }
+    return { success: true, data: dbWord };
+  }
+
+  const note: TWordApp = {
+    word: word,
+    audio: null,
+    generated_notes: [],
+    word_id: -1, // app type placeholder, when word is saved in the database it would a real id from the database
+  };
+
+  const apiNotesRes = await fetchApiMeaningsforWord(word);
+  
+  if (!apiNotesRes.success) {
+    return { success: false, data: null, message: apiNotesRes.message };
+  } else {
     note.generated_notes = apiNotesRes.data as TMeaning[];
-
-
     const ttsRes = await fetchTTSforWord(word);
     if (ttsRes.success) {
       note.audio = ttsRes.data;
     }
-
     const savedWord = await saveWord(note.word, note.audio, note.generated_notes);
     note.word_id = savedWord.id;
-
     return { success: true, data: note };
-
-  } catch (e) {
-    if (e instanceof Error)
-      throw new Error('Failed generating api notes, message: ' + e.message);
   }
-
-  return { success: false, data: null };
 }

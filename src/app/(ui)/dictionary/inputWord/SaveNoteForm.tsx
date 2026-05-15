@@ -53,25 +53,24 @@ export default function SaveNoteForm({
 
     startGenerating(() => {
       void (async () => {
-        const duplicateWord = savedWords.includes(normalizedWord);
+        const isWordDuplicate = savedWords.includes(normalizedWord);
 
-        if (duplicateWord) {
+        if (isWordDuplicate) {
           setIsWordAdded(true);
           resetPreview("Word is already added. Check it in your notes.");
           return;
         }
 
         setIsWordAdded(false);
-        const generatedNoteRes = await generateWordNotes(normalizedWord);
 
-        if (generatedNoteRes && generatedNoteRes.success) {
+        const generatedNoteRes = await generateWordNotes(normalizedWord);
+        if (generatedNoteRes.success) {
           setNote(generatedNoteRes.data as TWordApp);
           setGenerated(true);
           setError("");
           return;
         }
-
-        resetPreview("This word is not supported. Please check your spelling.");
+        resetPreview(generatedNoteRes.message);        
       })();
     });
   };
