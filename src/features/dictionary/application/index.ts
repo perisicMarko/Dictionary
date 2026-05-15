@@ -125,6 +125,8 @@ Word:`;
     } catch (e) {
       if (attempt < maxAttempts) {
         await new Promise((resolve) => setTimeout(resolve, 350));
+      }else{
+        console.info('Deepseek call failed, retrying.');
       }
     }
   }
