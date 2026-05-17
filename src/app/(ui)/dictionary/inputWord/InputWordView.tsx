@@ -1,8 +1,8 @@
-import SaveNoteForm from "./SaveNoteForm";
+import GenerateNoteForm from "./GenerateNoteForm";
 
 export default function InputWordView({ initialWords }: { initialWords: string[] }) {
 
   return (
-        <SaveNoteForm initialWords={initialWords} />
+        <GenerateNoteForm initialWords={initialWords} />
   );
 }
