@@ -8,7 +8,7 @@ export default async function History() {
   if(!words.success){
     redirect("/login");
   }
-  const initialWords = words.data as TNoteApp[];
+  const learnedWords = words.data as TNoteApp[];
 
-  return <HistoryView initialWords={initialWords} />;
+  return <HistoryView learnedWords={learnedWords} />;
 }

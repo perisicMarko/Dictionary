@@ -8,21 +8,21 @@ import { TNoteApp } from "@/shared/types";
 import ZeroNotesMessage from "@/components/common/ZeroNotesMessage";
 
 export default function HistoryView({
-  initialWords,
+  learnedWords,
 }: {
-  initialWords: TNoteApp[];
+  learnedWords: TNoteApp[];
 }) {
   const [search, setSearch] = useState("");
   const router = useRouter();
 
   const filteredWords = useMemo(() => {
-    return initialWords.filter((w) => {
+    return learnedWords.filter((w) => {
       return w.dictionary_words.word
         .toLowerCase()
         .trim()
         .includes(search.toLowerCase().trim());
     });
-  }, [initialWords, search]);
+  }, [learnedWords, search]);
 
   function updateSearch(word: string) {
     setSearch(word);

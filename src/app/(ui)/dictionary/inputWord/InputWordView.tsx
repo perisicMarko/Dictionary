@@ -1,8 +1,8 @@
 import GenerateNoteForm from "./GenerateNoteForm";
 
-export default function InputWordView({ initialWords }: { initialWords: string[] }) {
+export default function InputWordView({ savedWords }: { savedWords: string[] }) {
 
   return (
-        <GenerateNoteForm initialWords={initialWords} />
+        <GenerateNoteForm savedWords={savedWords} />
   );
 }
