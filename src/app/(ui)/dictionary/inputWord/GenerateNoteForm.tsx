@@ -28,8 +28,8 @@ export default function GenerateNoteForm({
   const normalizedWord = word.trim().toLowerCase();
   const isAlreadyInDictionary = savedWords.includes(normalizedWord);
   const allowSaveAction = generatedNote !== null && normalizedWord === generatedNote.word.toLowerCase() && !isAlreadyInDictionary;
-  const allowGenerateAction = (!generatedNote && errorMessage.length === 0) || // managing the button avaliability when form does not have notes
-                              (normalizedWord.length !== 0 && !isAlreadyInDictionary); // managing the button avaliability when form has notes
+  const allowGenerateAction = (normalizedWord.length !== 0 && !generatedNote && errorMessage.length === 0) || 
+    (normalizedWord.length !== 0 && !isAlreadyInDictionary); // it should allow if the error is not related to the duplicate words
 
   const resetPreview = (nextError = "") => {
     setGeneratedNote(null);
@@ -39,7 +39,7 @@ export default function GenerateNoteForm({
   useEffect(() => {
     if (savedWords.includes(word.trim().toLowerCase())) {
       setErrorMessage("Word is already added. Check it in your notes.");
-    }else{
+    } else {
       setErrorMessage("");
     }
   }, [word]);
@@ -54,7 +54,7 @@ export default function GenerateNoteForm({
           setGeneratedNote(generatedNoteRes.data as TWordApp);
           setErrorMessage("");
           return;
-        }else{
+        } else {
           resetPreview(generatedNoteRes.message);
         }
       })();
@@ -87,7 +87,6 @@ export default function GenerateNoteForm({
 
     setWord("");
     setIsSaving(false);
-    // ((currentWords) => [...currentWords, normalizedWord]);
     resetPreview();
   };
 
@@ -141,41 +140,41 @@ export default function GenerateNoteForm({
             </div>
             <div className="w-full overflow-auto">
               <DisplayNotes
-              word={(generatedNote as TWordApp).word}
-              meanings={(generatedNote as TWordApp).generated_notes}
-              includeWord={true}
+                word={(generatedNote as TWordApp).word}
+                meanings={(generatedNote as TWordApp).generated_notes}
+                includeWord={true}
               />
             </div>
           </>
         ) : null}
 
-        <div className={`w-full center-vertically`}>
-          <div className="w-full">
-            <button
-              type="button"
-              className={`w-full center bg-second text-text-main sm:hover:scale-105 active:scale-95 rounded-3xl m-1 h-8.75 sm:h-10 xl:h-12 cursor-pointer inline-block transition-all 
-                ${!allowGenerateAction ? " opacity-50" : ""}
-                ${allowGenerateAction && !generatedNote ? "mt-0!" : "mt-7"}`}
-              onClick={handleGenerate}
-              hidden={allowSaveAction}
-              disabled={!allowGenerateAction}
-            >
-              {isGenerating ? <Loader /> : <b>Generate</b>}
-            </button>
+        <div className={
+          `w-full center-vertically
+          ${(allowSaveAction ? "mt-7" : "")}
+          ${(!generatedNote) ? "mt-0" : "mt-7"}`
+        }>
+          <button
+            type="button"
+            className={`w-full center bg-second text-text-main sm:hover:scale-105 active:scale-95 rounded-3xl mx-1 h-8.75 sm:h-10 xl:h-12 cursor-pointer inline-block transition-all
+                ${!allowGenerateAction ? " opacity-50" : ""}`}
+            onClick={handleGenerate}
+            hidden={allowSaveAction}
+            disabled={!allowGenerateAction}
+          >
+            {isGenerating ? <Loader /> : <b>Generate</b>}
+          </button>
 
-            <button
-              type="submit"
-              className={`w-full bg-second center text-text-main sm:hover:scale-105 active:scale-95 rounded-3xl m-1 h-8.75 sm:h-10 xl:h-12 cursor-pointer inline-block col-span-1 transition-all mt-7
-                ${allowSaveAction ? "mt-0" : ""}`}
-              hidden={!allowSaveAction}
-              onClick={() => {
-                wordInputRef.current?.focus();
-                setIsSaving(true);
-              }}
-            >
-              {isSaving ? <Loader /> : <b>Save</b>}
-            </button>
-          </div>
+          <button
+            type="submit"
+            className="w-full bg-second center text-text-main sm:hover:scale-105 active:scale-95 rounded-3xl h-8.75 sm:h-10 xl:h-12 cursor-pointer inline-block transition-all"
+            hidden={!allowSaveAction}
+            onClick={() => {
+              wordInputRef.current?.focus();
+              setIsSaving(true);
+            }}
+          >
+            {isSaving ? <Loader /> : <b>Save</b>}
+          </button>
         </div>
       </form>
     </div>
