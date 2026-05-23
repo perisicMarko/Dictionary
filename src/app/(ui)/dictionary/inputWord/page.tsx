@@ -1,9 +1,9 @@
-import { getUsersWords } from "@/features/notes/application";
-import InputWordView from "./InputWordView";
+import { getUsersWords } from "@/features/notes/inputWord/application";
+import GenerateNoteForm from "./GenerateNoteForm";
 
 export default async function UserInput() {
   const wordsResult = await getUsersWords();
   const savedWords = wordsResult.success ? (wordsResult.data as string[]) : [];
 
-  return <InputWordView savedWords={savedWords} />;
+  return <GenerateNoteForm savedWords={savedWords} />;
 }

@@ -16,7 +16,7 @@ export async function getThemeColors(userId: number) {
             }
         });
 
-        return res;
+        return res?.schools.colors;
     } catch (error) {
         throw new Error(`getThemeColors failed: ${error instanceof Error ? error.message : String(error)}`);
     }

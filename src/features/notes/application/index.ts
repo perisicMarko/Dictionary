@@ -1,68 +1,11 @@
 'use server'
-import { createUserNote, findAllNotesByUserId, findNoteById, updateNoteReviewFactors, updateNoteLearnedStatus, resetNoteReviewFactorsById, deleteNoteById, updateNoteUserText } from '@/features/notes/infrastructure/repository';
-import { TMeaning } from '@/shared/types';
+import { findAllNotesByUserId, findNoteById, updateNoteReviewFactors, updateNoteLearnedStatus, resetNoteReviewFactorsById, deleteNoteById, updateNoteUserText } from '@/features/notes/infrastructure/repository';
 import { addDays, isBefore } from 'date-fns';
 import calc from '@/features/notes/domain/spacedRepetition';
 import { readAuthenticatedUser, requireAuthenticatedUser } from '@/server/auth/userSession';
 import { logOutUser } from '@/features/auth/application/userAuth';
 
-
-export async function getUsersWords() {
-  const user = await readAuthenticatedUser();
-  if (!user) {
-    return { success: false };
-  }
-
-  const { userId } = user;
-  const words = (await findAllNotesByUserId(userId) as any[]).map((e) => e.dictionary_words.word) as string[];
-
-  return { success: true, data: words };
-}
-
-export async function saveNote(word: string, audio: Uint8Array<ArrayBuffer> | null, user_notes: string, generated_notes: TMeaning[], wordId: number) {
-  const user = await requireAuthenticatedUser();
-  if (!user) {
-    await logOutUser();
-    return { success: false };
-  }
-
-  const { userId } = user;
-  await createUserNote(userId, word, audio, user_notes, generated_notes, wordId);
-
-  return { success: true };
-}
-
-export async function getUsersNotes() {
-  const user = await readAuthenticatedUser();
-  if (!user) {
-    return { success: false };
-  }
-
-  const { userId } = user;
-  const notes = (await findAllNotesByUserId(userId) as any[]);
-  return {
-    success: true,
-    data: notes
-  }
-}
-
-export async function getUsersLearningNotes() {
-  const user = await readAuthenticatedUser();
-  if (!user) {
-    return { success: false };
-  }
-
-  const { userId } = user;
-  const notes = (await findAllNotesByUserId(userId) as any[]);
-  return {
-    success: true,
-    data: notes.filter((w) => {
-      const res = w.is_learned == false;
-      return res;
-    })
-  };
-}
-
+// history feature
 export async function getUsersHistoryNotes() {
   const user = await readAuthenticatedUser();
   if (!user) {
@@ -81,6 +24,97 @@ export async function getUsersHistoryNotes() {
   };
 }
 
+export async function deleteNote(noteId: number) {
+  const user = await requireAuthenticatedUser();
+  if (!user) {
+    await logOutUser();
+    return { success: false };
+  }
+
+  await deleteNoteById(noteId);
+
+  return { success: true };
+}
+
+export async function restoreNoteToRecallSystemById(noteId: number) {
+  const user = await requireAuthenticatedUser();
+  if (!user) {
+    await logOutUser();
+    return { success: false };
+  }
+
+  await resetNoteReviewFactorsById(noteId, 1, 0, 2.5, addDays(new Date(), 1));
+
+  return { success: true };
+}
+
+
+
+
+
+
+
+
+
+
+
+// your words feature
+export async function getUsersLearningNotes() {
+  const user = await readAuthenticatedUser();
+  if (!user) {
+    return { success: false };
+  }
+
+  const { userId } = user;
+  const notes = (await findAllNotesByUserId(userId) as any[]);
+  return {
+    success: true,
+    data: notes.filter((w) => {
+      const res = w.is_learned == false;
+      return res;
+    })
+  };
+}
+
+
+
+
+// common
+export async function getNoteById(noteId: number) {
+  const res = await findNoteById(noteId) as any;
+
+  return { success: true, data: res };
+}
+
+export async function editNote(userNotes: string, noteId: number) {
+  const user = await requireAuthenticatedUser();
+  if (!user) {
+    await logOutUser();
+    return { success: false };
+  }
+
+  await updateNoteUserText(userNotes, noteId);
+
+  return { success: true };
+}
+
+export async function getUsersNotes() {
+  const user = await readAuthenticatedUser();
+  if (!user) {
+    return { success: false };
+  }
+
+  const { userId } = user;
+  const notes = (await findAllNotesByUserId(userId) as any[]);
+  return {
+    success: true,
+    data: notes
+  }
+}
+
+
+
+// recall feature
 export async function getRecallNotes() {
   const user = await readAuthenticatedUser();
   if (!user) {
@@ -136,44 +170,5 @@ export async function setAsLearned(noteId: number, status: boolean) {
   return { success: true };
 }
 
-export async function editNote(userNotes: string, noteId: number) {
-  const user = await requireAuthenticatedUser();
-  if (!user) {
-    await logOutUser();
-    return { success: false };
-  }
 
-  await updateNoteUserText(userNotes, noteId);
 
-  return { success: true };
-}
-
-export async function getNoteById(noteId: number) {
-  const res = await findNoteById(noteId) as any;
-
-  return { success: true, data: res };
-}
-
-export async function restoreNoteToRecallSystemById(noteId: number) {
-  const user = await requireAuthenticatedUser();
-  if (!user) {
-    await logOutUser();
-    return { success: false };
-  }
-
-  await resetNoteReviewFactorsById(noteId, 1, 0, 2.5, addDays(new Date(), 1));
-
-  return { success: true };
-}
-
-export async function deleteNote(noteId: number) {
-  const user = await requireAuthenticatedUser();
-  if (!user) {
-    await logOutUser();
-    return { success: false };
-  }
-
-  await deleteNoteById(noteId);
-
-  return { success: true };
-}

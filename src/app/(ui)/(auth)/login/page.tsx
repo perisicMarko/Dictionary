@@ -7,7 +7,7 @@ import {
   authenticateLogin,
   type LoginActionState,
 } from "@/features/auth/application/userAuth";
-import { LoginStatus } from "@/shared/auth/loginStatus";
+import { LoginStatus } from "@/features/auth/domain/loginStatus";
 import { generateVerificationMail } from "@/features/auth/application/sendVerificationEmail";
 import { X } from "lucide-react";
 

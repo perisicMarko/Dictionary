@@ -7,7 +7,7 @@ import { isBefore } from 'date-fns';
 import { issueTokensForUser } from '@/server/auth/userSession';
 import { cookies } from 'next/headers';
 import { findSubscriptionByEmail, insertActivationKey } from '@/features/schools/infrastructure/repository';
-import { LoginStatus } from '@/shared/auth/loginStatus';
+import { LoginStatus } from '@/features/auth/domain/loginStatus';
 
 type SignupFieldErrors = Partial<Record<'name' | 'lastName' | 'email' | 'password' | 'confirmPassword', string[]>>;
 
