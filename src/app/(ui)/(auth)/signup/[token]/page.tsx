@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { isBefore } from "date-fns";
-import { getUserByToken, verifyUserById } from "@/features/auth/application/userAuth";
+import { verifyUserById } from "@/features/auth/application/userAuth";
+import { getUserByToken } from "@/features/auth/application/userRetrieval";
 import NoValidToken from "./NoValidToken";
 
 type PageProps = {
@@ -17,11 +18,11 @@ export default async function Page({ params }: PageProps) {
   }
 
   const result = await getUserByToken(token);
-  if (!result.success || !result.user) {
+  if (!result.success || !result.data) {
     return <NoValidToken />;
   }
 
-  const user = result.user;
+  const user = result.data;
   const tokenExpirationDate = user.account_action_token_expires_at;
 
   const isValid =

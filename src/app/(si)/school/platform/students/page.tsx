@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getUsersBySchool } from "@/features/auth/application/users";
+import { getUsersBySchool } from "@/features/auth/application/userRetrieval";
 import StudentsView from "./StudentsView";
 import { TStudent } from "@/shared/types";
 

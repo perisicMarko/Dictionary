@@ -6,7 +6,7 @@ export async function getUserByToken(token : Base64URLString){
     const user = await findUserByAccountActionToken(token);
 
     if(!user)
-        return {success: false};
+        return {success: false, data: null};
 
     return { success: true, data: user};
 }

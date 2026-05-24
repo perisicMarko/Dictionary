@@ -11,7 +11,6 @@ import { LoginStatus } from '@/features/auth/domain/loginStatus';
 
 type SignupFieldErrors = Partial<Record<'name' | 'lastName' | 'email' | 'password' | 'confirmPassword', string[]>>;
 
-
 export type SignupActionState = {
     errors: SignupFieldErrors | null;
     name: string;
@@ -165,16 +164,6 @@ export async function resendVerificationMail(state: ResendVerificationState, for
 
     if (status)
         return { success: true };
-}
-
-export async function getUserByToken(token: Base64URLString) {
-
-    const user = await findUserByAccountActionToken(token);
-
-    if (!user)
-        return { success: false, user: undefined };
-
-    return { success: true, user };
 }
 
 export type LoginActionState = { success: boolean, errorMessage: string, status: number };

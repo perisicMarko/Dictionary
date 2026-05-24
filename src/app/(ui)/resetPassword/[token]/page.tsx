@@ -1,5 +1,5 @@
 import { isBefore } from "date-fns";
-import { getUserByToken } from "@/features/auth/application/users";
+import { getUserByToken } from "@/features/auth/application/userRetrieval";
 import NoValidToken from "./NoValidToken";
 import ChangePasswordForm from "./ChangePasswordForm";
 
