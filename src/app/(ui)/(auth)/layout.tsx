@@ -9,7 +9,7 @@ export default async function SignupLayout({
   const user = await readAuthenticatedUser();
 
   if (user) {
-    redirect("/dictionary/inputWord");
+    redirect("/notes/inputWord");
   }
 
   return children;

@@ -1,3 +1,4 @@
+'use server';
 import { readAuthenticatedUser, requireAuthenticatedUser } from "@/server/auth/userSession";
 import { logOutUser } from "@/features/auth";
 import { findAllNotesByUserId } from "../../infrastructure/repository";

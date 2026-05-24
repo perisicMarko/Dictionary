@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import Loader from "@/components/common/Loader";
+import Loader from "@/reusableComponents/Loader";
 import { authenticateLogin } from "@/features/auth/application/schoolAuth";
 
 type SchoolLoginState =

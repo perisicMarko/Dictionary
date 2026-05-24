@@ -6,7 +6,7 @@ export default async function Home() {
   const user = await readAuthenticatedUser();
 
   if (user) {
-    redirect("/dictionary/inputWord");
+    redirect("/notes/inputWord");
   }
 
   return (

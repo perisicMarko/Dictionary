@@ -2,7 +2,7 @@
 import { requestPasswordReset } from "@/features/auth/application/resetPassword";
 import { useActionState, useState } from "react";
 import Link from "next/link";
-import Loader from "@/components/common/Loader";
+import Loader from "@/reusableComponents/Loader";
 
 export default function ForgotPassword() {
   const [state, action, isPending] = useActionState(requestPasswordReset, undefined);

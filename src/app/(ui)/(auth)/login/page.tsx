@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import Loader from "@/components/common/Loader";
+import Loader from "@/reusableComponents/Loader";
 import {
   authenticateLogin,
   type LoginActionState,
@@ -33,7 +33,7 @@ export default function Login() {
         setState(result);
 
         if (result.success) {
-          router.replace("/dictionary/inputWord");
+          router.replace("/notes/inputWord");
           return;
         }
 

@@ -1,9 +1,9 @@
 "use client";
-import VerificationEmailSent from "./VerificationEmailSent";
+import VerificationEmailSent from "@/features/auth/ui/signup/VerificationEmailSent";
 import Link from "next/link";
 import { useActionState, useState } from "react";
 import { authenticateSignup } from "@/features/auth/application/userAuth";
-import Loader from "@/components/common/Loader";
+import Loader from "@/reusableComponents/Loader";
 import { X } from "lucide-react";
 
 export default function Signup() {
@@ -27,7 +27,7 @@ export default function Signup() {
       {state?.success ? (
         <VerificationEmailSent email={submittedEmail} />
       ) : (
-        <div className="mt-5 h-1/2 box-layout !p-0 relative enter-fade">
+        <div className="mt-5 h-1/2 box-layout p-0! relative enter-fade">
           <div className="collapse-window">
             <Link className="x-btn" href="/">
               <X />
@@ -153,7 +153,7 @@ export default function Signup() {
               <div className="center mt-3 enter-fade-up enter-delay-1">
                 <button
                   disabled={isPending}
-                  className="primary-btn center !w-1/2"
+                  className="primary-btn center w-1/2!"
                 >
                   {isPending ? <Loader /> : "Sign up"}
                 </button>

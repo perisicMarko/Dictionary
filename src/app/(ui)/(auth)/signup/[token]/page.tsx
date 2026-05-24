@@ -2,7 +2,7 @@ import Link from "next/link";
 import { isBefore } from "date-fns";
 import { verifyUserById } from "@/features/auth/application/userAuth";
 import { getUserByToken } from "@/features/auth/application/userRetrieval";
-import NoValidToken from "./NoValidToken";
+import NoValidToken from "@/features/auth/ui/signup/NoValidTokenUponSignUp";
 
 type PageProps = {
   params: Promise<{

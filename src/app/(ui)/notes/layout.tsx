@@ -1,6 +1,6 @@
 import "@/app/globals.css";
-import NavBar from "@/app/(si)/school/platform/NavBar";
-import { decryptSession } from "@/server/auth/schoolSession";
+import { NavBar } from "@/reusableComponents/NavBar";
+import { readAuthenticatedUser } from "@/server/auth/userSession";
 import { redirect } from "next/navigation";
 
 export default async function RootLayout({
@@ -8,15 +8,15 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await decryptSession();
+  const user = await readAuthenticatedUser();
 
-  if (!session.success) {
-    redirect("/school");
+  if (!user) {
+    redirect("/login");
   }
 
   return (
     <>
-      <NavBar/> 
+      <NavBar />
       {children}
     </>
   );

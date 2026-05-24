@@ -5,7 +5,7 @@ import { ArrowUpDown, UserSearchIcon } from "lucide-react";
 import { isBefore } from "date-fns";
 import { TStudent } from "@/shared/types";
 import StudentComponent from "./StudentComponent";
-import ZeroNotesMessage from "@/components/common/ZeroNotesMessage";
+import ZeroNotesMessage from "@/features/notes/ui/ZeroNotesMessage";
 
 const SORT = {
   BY_EXPIRATION_DATE_DESC: 0,

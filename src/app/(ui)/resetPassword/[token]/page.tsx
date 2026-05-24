@@ -1,7 +1,7 @@
 import { isBefore } from "date-fns";
 import { getUserByToken } from "@/features/auth/application/userRetrieval";
-import NoValidToken from "./NoValidToken";
-import ChangePasswordForm from "./ChangePasswordForm";
+import NoValidToken from "../../../../features/auth/ui/resetPassword/NoValidToken";
+import ChangePasswordForm from "@/features/auth/ui/resetPassword/ChangePasswordForm";
 
 export default async function ResetPassword({
   params,

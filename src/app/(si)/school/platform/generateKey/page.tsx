@@ -1,5 +1,5 @@
 "use client";
-import Loader from "@/components/common/Loader";
+import Loader from "@/reusableComponents/Loader";
 import { useActionState, useState } from "react";
 import { generateActivationKey } from "@/features/schools/application";
 

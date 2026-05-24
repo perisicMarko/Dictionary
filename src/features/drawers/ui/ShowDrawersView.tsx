@@ -1,0 +1,168 @@
+"use client";
+
+import SearchBar from "@/reusableComponents/SearchBar";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import DrawerCreator from "./DrawerCreator";
+import { TDrawer, TNoteApp } from "@/shared/types";
+import Drawer from "./Drawer";
+import OpenedDrawer from "./OpenedDrawer";
+import { AnimatePresence, motion } from "framer-motion";
+
+const EXIT_DURATION_MS = 220;
+
+export default function ShowDrawersView({
+  initialDrawers,
+  initialNotes,
+  drawerNoteMapping,
+}: {
+  initialDrawers: TDrawer[];
+  initialNotes: TNoteApp[];
+  drawerNoteMapping: { note_id: number, drawer_id: number }[];
+}) {
+  const [search, setSearch] = useState("");
+  const [openedDrawerId, setOpenedDrawerId] = useState(-1);
+  const [drawers, setDrawers] = useState(initialDrawers);
+  const router = useRouter();
+
+  useEffect(() => {
+    setDrawers(initialDrawers);
+  }, [initialDrawers]);
+
+  useEffect(() => {
+    const drawerId = sessionStorage.getItem("openedDrawerId");
+    if (drawerId != null && !isNaN(Number(drawerId))) {
+      setOpenedDrawerId(Number(drawerId));
+    }
+  }, []);
+
+  const openDrawerById = (id: number) => {
+    sessionStorage.setItem("openedDrawerId", id.toString());
+    setOpenedDrawerId(id);
+  };
+
+  let searchedDrawers = drawers;
+  if (openedDrawerId === -1) {
+    searchedDrawers = drawers.filter((d: TDrawer) =>
+      d.name.toLowerCase().includes(search.toLowerCase())
+    ) ?? [];
+  }
+
+  let notesOfOpenedDrawer = [] as TNoteApp[];
+  if (openedDrawerId !== -1) {
+    notesOfOpenedDrawer = initialNotes.filter((n) => drawerNoteMapping.some((m) => m.note_id === n.id && m.drawer_id === openedDrawerId));
+  }
+
+  const openedDrawer = drawers.find((d) => d.id === openedDrawerId);
+
+  function handleDrawerDeleted(drawerId: number) {
+    setDrawers((prev) => prev.filter((d) => d.id !== drawerId));
+    if (openedDrawerId === drawerId) {
+      openDrawerById(-1);
+    }
+    setTimeout(() => {
+      router.refresh();
+    }, EXIT_DURATION_MS);
+  }
+
+  return (
+    <>
+      <SearchBar
+        updateSearch={(e : string) => setSearch(e)}
+        placeholder={
+          openedDrawerId === -1
+            ? "Search for drawers here..."
+            : "Search for notes..."
+        }
+        // next two props are not needed for this component
+        sortBy={false}
+        changeSortBy={() => { }}
+      >
+        <p className="mt-7 enter-fade-up text-justify enter-delay-1">
+          {openedDrawerId === -1 ? (
+            <>
+              <b>
+                This is where you can recall notes organized in your custom
+                drawers.
+              </b>
+              <br />
+              <br />
+              You can add a drawer and delete it. Also you can add and remove
+              notes from drawers.
+              <br />
+              <br />
+              For example, you might have certain notes that you need for a
+              field like business economy. In that case, you can create a drawer
+              called &quot;business economy&quot; and store in it every word
+              related to that topic.
+              <br />
+              <br />
+              Bonus help: Press the F key to focus the search bar.
+            </>
+          ) : (
+            <>
+              Here are displayed only the notes that belong to a certain drawer.
+              You can edit the notes for a word or you can remove the word from
+              the drawer.
+              <br /> <br />
+              Bonus help: Press the F key to focus the search bar.
+            </>
+          )}
+        </p>
+      </SearchBar>
+
+      {openedDrawerId === -1 ? (
+        <DrawerCreator
+          drawerNames={drawers.map((d) => d.name)}
+        />
+      ) : null}
+
+      {drawers.length === 0 ? (
+        <div className="box-layout mt-5 center enter-fade">
+          <span className="text-box enter-fade-up enter-delay-1">
+            No drawers created.
+          </span>
+        </div>
+      ) : null}
+
+      {openedDrawerId === -1 ? (
+        searchedDrawers.length !== 0 ? (
+          <AnimatePresence mode="sync" initial={false}>
+            {searchedDrawers.map((d) => (
+              <motion.div
+                key={d.id}
+                layout="position"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.98, filter: "blur(2px)" }}
+                transition={{ duration: 0.22, ease: "easeOut" }}
+                className="w-full flex justify-center"
+              >
+                <Drawer
+                  drawer={d}
+                  drawerNotes={[] as TNoteApp[]}
+                  allNotes={initialNotes}
+                  onDeleted={handleDrawerDeleted}
+                  openDrawerById={(id: number) => openDrawerById(id)}
+                  isDrawerOpened={false}
+                />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        ) : drawers.length !== 0 ? (
+          <div className="box-layout text-box mt-5 enter-fade">No drawers found.</div>
+        ) : null
+      ) : (
+        // search is passed because when drawer is open search then searches for notes, not drawers
+        <OpenedDrawer
+          drawer={openedDrawer as TDrawer}
+          drawerNotes={notesOfOpenedDrawer}
+          search={search}
+          openDrawerById={(id: number) => openDrawerById(id)}
+          allNotes={initialNotes}
+          onDeleteDrawer={handleDrawerDeleted}
+        />
+      )}
+    </>
+  );
+}

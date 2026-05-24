@@ -6,7 +6,7 @@ import { TSubscription } from "@/shared/types";
 import { isBefore } from "date-fns";
 import { ArrowUpDown, KeyIcon } from "lucide-react";
 import SubscriptionComponent from "./SubscriptionComponent";
-import ZeroNotesMessage from "@/components/common/ZeroNotesMessage";
+import ZeroNotesMessage from "@/features/notes/ui/ZeroNotesMessage";
 
 const SORT = {
   BY_EXPIRATION_DATE_DESC: 0,

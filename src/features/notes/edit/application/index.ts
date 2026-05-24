@@ -1,3 +1,4 @@
+'use server';
 import { updateNoteUserText } from '../infrastructure/repository';
 import { requireAuthenticatedUser } from '@/server/auth/userSession';
 import { logOutUser } from '@/features/auth/application/userAuth';
@@ -10,7 +11,7 @@ export async function getNoteById(noteId: number) {
   return { success: true, data: res };
 }
 
-export async function editNote(userNotes: string, noteId: number) {
+export async function editUserTextNoteByNoteId(userNotes: string, noteId: number) {
   const user = await requireAuthenticatedUser();
   if (!user) {
     await logOutUser();
