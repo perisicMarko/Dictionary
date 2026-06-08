@@ -30,7 +30,7 @@ export async function GET() {
     from: process.env.EMAIL_USER,
     to: '',
     subject: 'Recall time',
-    text: 'Hey it\'s me again, it is time to recall some words.\nIt takes just a few minutes to recall your words and stay on the learning path, keep it up.\n Follow this link to the app: remindmedictionary.com/dictionary/recall.'
+    text: 'Hey it\'s me again, it is time to recall some words.\nIt takes just a few minutes to recall your words and stay on the learning path, keep it up.\n Follow this link to the app: remindmedictionary.com/notes/recall.'
   };
   for (const u of userIds) {
     const user = await findUserById(u);

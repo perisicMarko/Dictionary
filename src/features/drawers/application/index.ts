@@ -52,7 +52,7 @@ export async function updateDrawerName(state : {success : boolean } | undefined,
 
     const res = await updateDrawerNameById(drawerName, drawerId);
 
-    revalidatePath("/dictionary/yourWords");
+    revalidatePath("/notes/yourWords");
 
     return { success: true };
 }

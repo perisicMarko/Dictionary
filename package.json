@@ -30,6 +30,7 @@
     "next": "^16.0.10",
     "nodemailer": "^8.0.7",
     "normalize.css": "^8.0.1",
+    "nvm": "^0.0.4",
     "openai": "^6.34.0",
     "postgres": "^3.4.5",
     "react": "^19.2.1",

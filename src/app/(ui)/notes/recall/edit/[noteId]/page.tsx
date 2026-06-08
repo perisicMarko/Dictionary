@@ -11,16 +11,15 @@ type PageProps = {
 
 export default async function Page({ params }: PageProps) {
   const { noteId } = await params;
-  const response = await getNoteById(Number(noteId));
+  const response : { success: boolean, data?: undefined | TNoteApp } = await getNoteById(Number(noteId));
 
-  if (!response.success) {
+  if (!response?.success) {
     redirect('/login');
-    return;
   }
 
   return (
     <EditNotePage
-      pathSrc="/dictionary/recall"
+      pathSrc="/notes/recall"
       note={response.data as TNoteApp}
     />
   );

@@ -58,7 +58,7 @@ export default function RecallMenu({
       </div>
       <div className="w-full px-2 mb-1">
         <Link
-          href={"/dictionary/recall/edit/" + noteId}
+          href={"/notes/recall/edit/" + noteId}
           onClick={(e) => {
             e.stopPropagation();
             toggleMenu();

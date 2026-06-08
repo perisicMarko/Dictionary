@@ -1,13 +1,26 @@
 'use server';
 import { updateNoteUserText } from '../infrastructure/repository';
-import { requireAuthenticatedUser } from '@/server/auth/userSession';
+import { readAuthenticatedUser, requireAuthenticatedUser } from '@/server/auth/userSession';
 import { logOutUser } from '@/features/auth/application/userAuth';
 import { findNoteById } from '../../infrastructure/repository';
+import { TNoteApp } from '@/shared/types';
 
 
 export async function getNoteById(noteId: number) {
-  const res = await findNoteById(noteId) as any;
+  const authenticatedUser = await readAuthenticatedUser();
+  if (!authenticatedUser) {
+    await logOutUser();
+    return { success: false };
+  } 
 
+  const res = await findNoteById(noteId) as TNoteApp | null;
+  if(!res){
+    return { success: false }; 
+  }
+
+  if(res.user_id !== authenticatedUser.userId) {
+    return { success: false };
+  }
   return { success: true, data: res };
 }
 

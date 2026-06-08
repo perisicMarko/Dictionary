@@ -19,7 +19,7 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <EditNotePage
-      pathSrc="/dictionary/yourWords"
+      pathSrc="/notes/yourWords"
       note={response.data as TNoteApp}
     />
   );

@@ -21,7 +21,7 @@ export default function NoteMenu({
   return (
     <div className="bg-white/80 z-10 rounded-2xl p-2 enter-fade-up">
       <Link
-        href={"/dictionary/yourWords/edit/" + noteId}
+        href={"/notes/yourWords/edit/" + noteId}
         onClick={(e) => e.stopPropagation()}
         title="Edit notes"
         className="text-center w-full hover:text-text-main cursor-pointer transition-all text-text-second"
